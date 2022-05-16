@@ -1,0 +1,854 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet failOnError="false" author="Emeka" id="1648201114214-1">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sequenceExists sequenceName="application_codeset_id_seq"></sequenceExists>
+            </not>
+        </preConditions>
+        <createSequence sequenceName="application_codeset_id_seq"/>
+    </changeSet>
+
+    <changeSet failOnError="false" author="Emeka" id="1648201114214-2">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sequenceExists sequenceName="application_user_id_seq"></sequenceExists>
+            </not>
+        </preConditions>
+        <createSequence sequenceName="application_user_id_seq"/>
+    </changeSet>
+
+    <changeSet failOnError="false" author="Emeka" id="1648201114214-3">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sequenceExists sequenceName="application_user_organisation_unit_id_seq"></sequenceExists>
+            </not>
+        </preConditions>
+        <createSequence sequenceName="application_user_organisation_unit_id_seq"/>
+    </changeSet>
+
+    <changeSet failOnError="false" author="Emeka" id="1648201114214-6">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sequenceExists sequenceName="menu_id_seq"></sequenceExists>
+            </not>
+        </preConditions>
+        <createSequence sequenceName="menu_id_seq"/>
+    </changeSet>
+
+    <changeSet failOnError="false" author="Emeka" id="1648201114214-7">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sequenceExists sequenceName="module_artifact_id_seq"></sequenceExists>
+            </not>
+        </preConditions>
+        <createSequence sequenceName="module_artifact_id_seq"/>
+    </changeSet>
+
+    <changeSet failOnError="false" author="Emeka" id="1648201114214-8">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sequenceExists sequenceName="module_dependencies_id_seq"></sequenceExists>
+            </not>
+        </preConditions>
+        <createSequence sequenceName="module_dependencies_id_seq"/>
+    </changeSet>
+    <changeSet failOnError="false" author="Emeka" id="1648201114214-9">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sequenceExists sequenceName="module_id_seq"></sequenceExists>
+            </not>
+        </preConditions>
+        <createSequence sequenceName="module_id_seq"/>
+    </changeSet>
+
+    <changeSet failOnError="false" author="Emeka" id="1648201114214-10">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sequenceExists sequenceName="organisation_unit_hierarchy_id_seq"></sequenceExists>
+            </not>
+        </preConditions>
+        <createSequence sequenceName="organisation_unit_hierarchy_id_seq"/>
+    </changeSet>
+
+    <changeSet failOnError="false" author="Emeka" id="1648201114214-11">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sequenceExists sequenceName="organisation_unit_id_seq"></sequenceExists>
+            </not>
+        </preConditions>
+        <createSequence sequenceName="organisation_unit_id_seq"/>
+    </changeSet>
+
+    <changeSet failOnError="false" author="Emeka" id="1648201114214-12">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sequenceExists sequenceName="organisation_unit_identifier_id_seq"></sequenceExists>
+            </not>
+        </preConditions>
+        <createSequence sequenceName="organisation_unit_identifier_id_seq"/>
+    </changeSet>
+
+    <changeSet failOnError="false" author="Emeka" id="1648201114214-13">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sequenceExists sequenceName="organisation_unit_level_id_seq"></sequenceExists>
+            </not>
+        </preConditions>
+        <createSequence sequenceName="organisation_unit_level_id_seq"/>
+    </changeSet>
+
+    <changeSet failOnError="false" author="Emeka" id="1648201114214-14">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sequenceExists sequenceName="permission_id_seq"></sequenceExists>
+            </not>
+        </preConditions>
+        <createSequence sequenceName="permission_id_seq"/>
+    </changeSet>
+
+    <changeSet failOnError="false" author="Emeka" id="1648201114214-15">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sequenceExists sequenceName="program_id_seq"></sequenceExists>
+            </not>
+        </preConditions>
+        <createSequence sequenceName="program_id_seq"/>
+    </changeSet>
+
+    <changeSet failOnError="false" author="Emeka" id="1648201114214-16">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sequenceExists sequenceName="role_id_seq"></sequenceExists>
+            </not>
+        </preConditions>
+        <createSequence sequenceName="role_id_seq"/>
+    </changeSet>
+
+    <changeSet failOnError="false" author="Emeka" id="1648201114214-18">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sequenceExists sequenceName="web_module_id_seq"></sequenceExists>
+            </not>
+        </preConditions>
+        <createSequence sequenceName="web_module_id_seq"/>
+    </changeSet>
+
+    <changeSet failOnError="false" author="Emeka" id="1648201114214-19">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="module"/>
+            </not>
+        </preConditions>
+        <createTable tableName="module">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="pk_module"/>
+            </column>
+            <column name="name" type="VARCHAR(64)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="artifact" type="VARCHAR(512)"/>
+            <column name="umd_location" type="VARCHAR(512)"/>
+            <column name="module_map" type="VARCHAR(1024)"/>
+            <column name="version" type="VARCHAR(64)"/>
+            <column name="build_time" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="base_package" type="VARCHAR(64)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(512)"/>
+            <column name="active" type="BOOL"/>
+            <column defaultValueBoolean="true" name="in_error" type="BOOL"/>
+            <column defaultValueBoolean="true" name="install_on_boot" type="BOOL"/>
+            <column defaultValueNumeric="100" name="priority" type="INT"/>
+            <column name="archived" type="INT"/>
+        </createTable>
+    </changeSet>
+
+    <!--<changeSet failOnError="false" author="Emeka" id="1648201114214-20">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="acrossmodules"/>
+            </not>
+        </preConditions>
+        <createTable tableName="acrossmodules">
+            <column name="module_id" type="VARCHAR(120)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="installer_id" type="VARCHAR(120)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="module" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="installer" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(500)"/>
+            <column name="created" type="TIMESTAMP WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>-->
+
+    <changeSet failOnError="false" author="Emeka" id="1648201114214-21">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="application_codeset"/>
+            </not>
+        </preConditions>
+        <createTable tableName="application_codeset">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="application_codeset2_pkey"/>
+            </column>
+            <column name="codeset_group" type="VARCHAR(2147483647)"/>
+            <column name="display" type="VARCHAR(2147483647)"/>
+            <column name="language" type="VARCHAR(2147483647)"/>
+            <column name="version" type="VARCHAR(2147483647)"/>
+            <column name="code" type="VARCHAR(2147483647)"/>
+            <column name="date_created" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="created_by" type="VARCHAR(2147483647)"/>
+            <column name="date_modified" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="modified_by" type="VARCHAR(2147483647)"/>
+            <column name="archived" type="INT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet failOnError="false" author="Emeka" id="1648201114214-22">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="application_user"/>
+            </not>
+        </preConditions>
+        <sql>
+            CREATE TABLE application_user
+            (
+            id bigint NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 9223372036854775807 CACHE 1 ),
+            user_name character varying NOT NULL,
+            password character varying NOT NULL,
+            archived integer,
+            activation_key character varying ,
+            date_reset date,
+            reset_key character varying ,
+            email character varying(255) ,
+            gender character varying(255) ,
+            phone_number character varying(255) ,
+            current_organisation_unit_id bigint,
+            first_name character varying(255) ,
+            last_name character varying(255) ,
+            created_by character varying ,
+            date_created timestamp without time zone,
+            modified_by character varying ,
+            date_modified timestamp without time zone,
+            details jsonb,
+            CONSTRAINT user_pkey PRIMARY KEY (id)
+            )
+        </sql>
+    </changeSet>
+
+    <changeSet failOnError="false" author="Emeka" id="1648201114214-23">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="application_user_organisation_unit"/>
+            </not>
+        </preConditions>
+        <createTable tableName="application_user_organisation_unit">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="application_user_organisation_unit_pkey"/>
+            </column>
+            <column name="application_user_id" type="BIGINT"/>
+            <column name="organisation_unit_id" type="BIGINT"/>
+            <column name="created_by" type="VARCHAR(255)"/>
+            <column name="date_created" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="date_modified" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="modified_by" type="VARCHAR(255)"/>
+            <column name="archived" type="INT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet failOnError="false" author="Emeka" id="1648201114214-25">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="application_user_role"/>
+            </not>
+        </preConditions>
+        <createTable tableName="application_user_role">
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet failOnError="false" author="Emeka" id="1648201114214-26">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="authority"/>
+            </not>
+        </preConditions>
+        <createTable tableName="authority">
+            <column name="id" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(64)"/>
+            <column name="module_id" type="INT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet failOnError="false" author="Emeka" id="1648201114214-27">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="form"/>
+            </not>
+        </preConditions>
+        <sql>
+            CREATE TABLE form
+            (
+            id character varying(36) NOT NULL DEFAULT 'uuid()'::character varying,
+            name character varying(16) NOT NULL,
+            priority integer NOT NULL DEFAULT 1,
+            module_id integer NOT NULL,
+            path character varying(128),
+            form jsonb,
+            CONSTRAINT pk_form PRIMARY KEY (id),
+            CONSTRAINT fk_form_module_id FOREIGN KEY (module_id)
+            REFERENCES module (id) MATCH SIMPLE
+            ON UPDATE NO ACTION
+            ON DELETE NO ACTION
+            )
+        </sql>
+    </changeSet>
+
+    <changeSet failOnError="false" author="Emeka" id="1648201114214-28">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="menu"/>
+            </not>
+        </preConditions>
+        <createTable tableName="menu">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="pk_menu"/>
+            </column>
+            <column name="name" type="VARCHAR(64)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="state" type="VARCHAR(256)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type" type="VARCHAR(256)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="level" type="VARCHAR(16)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="position" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="icon" type="VARCHAR(64)"/>
+            <column name="tooltip" type="VARCHAR(256)"/>
+            <column name="breadcrumb" type="VARCHAR(256)"/>
+            <column name="disabled" type="BOOL">
+                <constraints nullable="false"/>
+            </column>
+            <column name="module_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="parent_id" type="INT"/>
+            <column name="archived" type="INT"/>
+            <column name="url" type="VARCHAR(2147483647)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet failOnError="false" author="Emeka" id="1648201114214-29">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="menu_authorities"/>
+            </not>
+        </preConditions>
+        <createTable tableName="menu_authorities">
+            <column name="menu_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="authorities" type="VARCHAR(256)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="archived" type="INT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet failOnError="false" author="Emeka" id="1648201114214-31">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="module_artifact"/>
+            </not>
+        </preConditions>
+        <createTable tableName="module_artifact">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="pk_module_artifact"/>
+            </column>
+            <column name="module_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="data" type="BYTEA">
+                <constraints nullable="false"/>
+            </column>
+            <column name="archived" type="INT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet failOnError="false" author="Emeka" id="1648201114214-32">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="module_authorities"/>
+            </not>
+        </preConditions>
+        <createTable tableName="module_authorities">
+            <column name="module_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="authorities" type="VARCHAR(256)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet failOnError="false" author="Emeka" id="1648201114214-33">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="module_dependencies"/>
+            </not>
+        </preConditions>
+        <createTable tableName="module_dependencies">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="pk_module_dependencies"/>
+            </column>
+            <column name="module_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="dependency_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="VARCHAR(8)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet failOnError="false" author="Emeka" id="1648201114214-34">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="organisation_unit"/>
+            </not>
+        </preConditions>
+        <sql>
+            CREATE TABLE organisation_unit
+            (
+            id bigint NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 9223372036854775807 CACHE 1 ),
+            name character varying(100) ,
+            description character varying(300) ,
+            organisation_unit_level_id bigint,
+            parent_organisation_unit_id bigint,
+            archived integer,
+            details jsonb,
+            date_created timestamp without time zone,
+            created_by character varying ,
+            date_modified timestamp without time zone,
+            modified_by character varying ,
+            CONSTRAINT organisation_unit_pkey PRIMARY KEY (id)
+            )
+        </sql>
+    </changeSet>
+
+    <changeSet failOnError="false" author="Emeka" id="1648201114214-35">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="organisation_unit_hierarchy"/>
+            </not>
+        </preConditions>
+        <createTable tableName="organisation_unit_hierarchy">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="organisation_unit_hierarchy_pkey"/>
+            </column>
+            <column name="organisation_unit_id" type="BIGINT"/>
+            <column name="parent_organisation_unit_id" type="BIGINT"/>
+            <column name="organisation_unit_level_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet failOnError="false" author="Emeka" id="1648201114214-36">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="organisation_unit_identifier"/>
+            </not>
+        </preConditions>
+        <createTable tableName="organisation_unit_identifier">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="organisation_unit_identifier_pkey"/>
+            </column>
+            <column name="organisation_unit_id" type="BIGINT"/>
+            <column name="code" type="VARCHAR(2147483647)"/>
+            <column name="name" type="VARCHAR(2147483647)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet failOnError="false" author="Emeka" id="1648201114214-37">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="organisation_unit_level"/>
+            </not>
+        </preConditions>
+        <createTable tableName="organisation_unit_level">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="organisational_unit_level_pkey"/>
+            </column>
+            <column name="name" type="VARCHAR(100)"/>
+            <column name="description" type="VARCHAR(300)"/>
+            <column name="archived" type="INT"/>
+            <column name="status" type="INT"/>
+            <column name="date_created" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="created_by" type="VARCHAR(2147483647)"/>
+            <column name="date_modified" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="modified_by" type="VARCHAR(2147483647)"/>
+            <column name="parent_organisation_unit_level_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet failOnError="false" author="Emeka" id="1648201114214-38">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="permission"/>
+            </not>
+        </preConditions>
+        <createTable tableName="permission">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="priviledge_pkey"/>
+            </column>
+            <column name="description" type="VARCHAR(2147483647)"/>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="date_created" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="created_by" type="VARCHAR(2147483647)"/>
+            <column name="date_modified" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="modified_by" type="VARCHAR(2147483647)"/>
+            <column name="archived" type="INT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet failOnError="false" author="Emeka" id="1648201114214-39">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="program"/>
+            </not>
+        </preConditions>
+        <createTable tableName="program">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="program_pkey"/>
+            </column>
+            <column name="name" type="VARCHAR(2147483647)"/>
+            <column name="code" type="VARCHAR(2147483647)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="module_id" type="VARCHAR(2147483647)"/>
+            <column name="archived" type="INT"/>
+            <column name="date_modified" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="modified_by" type="VARCHAR(255)"/>
+            <column name="date_created" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="created_by" type="VARCHAR(2147483647)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet failOnError="false" author="Emeka" id="1648201114214-40">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="role"/>
+            </not>
+        </preConditions>
+        <createTable tableName="role">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="role_pkey"/>
+            </column>
+            <column name="name" type="VARCHAR(2147483647)"/>
+            <column name="code" type="VARCHAR(2147483647)"/>
+            <column name="date_created" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="created_by" type="VARCHAR(2147483647)"/>
+            <column name="date_modified" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="modified_by" type="VARCHAR(2147483647)"/>
+            <column name="archived" type="INT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet failOnError="false" author="Emeka" id="1648201114214-41">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="role_permission"/>
+            </not>
+        </preConditions>
+        <createTable tableName="role_permission">
+            <column name="role_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="permission_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet failOnError="false" author="Emeka" id="1648201114214-42">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="web_module"/>
+            </not>
+        </preConditions>
+        <createTable tableName="web_module">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="pk_web_module"/>
+            </column>
+            <column name="name" type="VARCHAR(64)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="path" type="VARCHAR(512)"/>
+            <column defaultValueNumeric="99" name="position" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(512)"/>
+            <column name="title" type="VARCHAR(512)"/>
+            <column name="breadcrumb" type="VARCHAR(512)"/>
+            <column name="type" type="VARCHAR(8)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="provides_for_id" type="BIGINT"/>
+            <column name="module_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet failOnError="false" author="Emeka" id="1648201114214-43">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="web_module_authorities"/>
+            </not>
+        </preConditions>
+        <createTable tableName="web_module_authorities">
+            <column name="web_module_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="authorities" type="VARCHAR(256)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+
+    <changeSet failOnError="false" author="Emeka" id="1648201114214-45">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <primaryKeyExists primaryKeyName="application_user_roles_pkey" tableName="application_user_role"/>
+            </not>
+        </preConditions>
+        <addPrimaryKey columnNames="user_id, role_id" constraintName="application_user_roles_pkey" tableName="application_user_role"/>
+    </changeSet>
+
+    <changeSet failOnError="false" author="Emeka" id="1648201114214-46">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <primaryKeyExists primaryKeyName="authorityPK" tableName="authority"/>
+            </not>
+        </preConditions>
+        <addPrimaryKey columnNames="id" constraintName="authorityPK" tableName="authority"/>
+    </changeSet>
+
+    <changeSet failOnError="false" author="Emeka" id="1648201114214-48">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <primaryKeyExists primaryKeyName="pk_form" tableName="form"/>
+            </not>
+        </preConditions>
+        <addPrimaryKey columnNames="id" constraintName="pk_form" tableName="form"/>
+    </changeSet>
+
+    <changeSet failOnError="false" author="Emeka" id="1648201114214-49">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <primaryKeyExists primaryKeyName="role_permissions_pkey" tableName="role_permission"/>
+            </not>
+        </preConditions>
+        <addPrimaryKey columnNames="role_id, permission_id" constraintName="role_permissions_pkey" tableName="role_permission"/>
+    </changeSet>
+
+    <changeSet failOnError="false" author="Emeka" id="1648201114214-50">
+        <addUniqueConstraint columnNames="module_id, dependency_id" constraintName="module_dependencies_module_id_dependency_id_key" tableName="module_dependencies"/>
+    </changeSet>
+
+    <changeSet failOnError="false" author="Emeka" id="1648201114214-51">
+        <addUniqueConstraint columnNames="code" constraintName="program_code_key" tableName="program"/>
+    </changeSet>
+
+    <changeSet failOnError="false" author="Emeka" id="1648201114214-52">
+        <addUniqueConstraint columnNames="code" constraintName="uk_fuq6kda6folarp19oggaf02vb" tableName="program"/>
+    </changeSet>
+
+    <changeSet failOnError="false" author="Emeka" id="1648201114214-53">
+        <addUniqueConstraint columnNames="name" constraintName="unique_name" tableName="permission"/>
+    </changeSet>
+
+    <changeSet failOnError="false" author="Emeka" id="1648201114214-54">
+        <addUniqueConstraint columnNames="name" constraintName="ux_module_name" tableName="module"/>
+    </changeSet>
+
+    <changeSet failOnError="false" author="Emeka" id="1648201114214-55">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="fk_authority_module_id" />
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint baseColumnNames="module_id" baseTableName="authority" constraintName="fk_authority_module_id" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="module"/>
+    </changeSet>
+
+    <changeSet failOnError="false" author="Emeka" id="1648201114214-56">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="fk_form_module_id" />
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint baseColumnNames="module_id" baseTableName="form" constraintName="fk_form_module_id" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="module"/>
+    </changeSet>
+
+    <changeSet failOnError="false" author="Emeka" id="1648201114214-57">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="fk_menu_authorities_menu_id" />
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint baseColumnNames="menu_id" baseTableName="menu_authorities" constraintName="fk_menu_authorities_menu_id" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="menu"/>
+    </changeSet>
+
+    <changeSet failOnError="false" author="Emeka" id="1648201114214-58">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="fk_menu_module_id" />
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint baseColumnNames="module_id" baseTableName="menu" constraintName="fk_menu_module_id" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="module"/>
+    </changeSet>
+
+    <changeSet failOnError="false" author="Emeka" id="1648201114214-59">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="fk_menu_parent_id" />
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint baseColumnNames="parent_id" baseTableName="menu" constraintName="fk_menu_parent_id" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="menu"/>
+    </changeSet>
+
+    <changeSet failOnError="false" author="Emeka" id="1648201114214-60">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="fk_module_artifact_module_id" />
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint baseColumnNames="module_id" baseTableName="module_artifact" constraintName="fk_module_artifact_module_id" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="module"/>
+    </changeSet>
+
+    <changeSet failOnError="false" author="Emeka" id="1648201114214-61">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="fk_module_authorities_module_id" />
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint baseColumnNames="module_id" baseTableName="module_authorities" constraintName="fk_module_authorities_module_id" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="module"/>
+    </changeSet>
+
+    <changeSet failOnError="false" author="Emeka" id="1648201114214-62">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="fk_module_dependency_dependency_id" />
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint baseColumnNames="dependency_id" baseTableName="module_dependencies" constraintName="fk_module_dependency_dependency_id" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="module"/>
+    </changeSet>
+
+    <changeSet failOnError="false" author="Emeka" id="1648201114214-63">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="fk_module_dependency_module_id" />
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint baseColumnNames="module_id" baseTableName="module_dependencies" constraintName="fk_module_dependency_module_id" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="module"/>
+    </changeSet>
+
+    <changeSet failOnError="false" author="Emeka" id="1648201114214-64">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="fk_organisation_level" />
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint baseColumnNames="organisation_unit_level_id" baseTableName="organisation_unit" constraintName="fk_organisation_level" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="organisation_unit_level"/>
+    </changeSet>
+
+    <changeSet failOnError="false" author="Emeka" id="1648201114214-65">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="fk_web_module_authorities_web_module_id" />
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint baseColumnNames="web_module_id" baseTableName="web_module_authorities" constraintName="fk_web_module_authorities_web_module_id" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="web_module"/>
+    </changeSet>
+
+    <changeSet failOnError="false" author="Emeka" id="1648201114214-66">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="fk_web_module_module_id" />
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint baseColumnNames="module_id" baseTableName="web_module" constraintName="fk_web_module_module_id" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="module"/>
+    </changeSet>
+
+    <changeSet failOnError="false" author="Emeka" id="1648201114214-67">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="fk_web_module_provides_for_id" />
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint baseColumnNames="provides_for_id" baseTableName="web_module" constraintName="fk_web_module_provides_for_id" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="web_module"/>
+    </changeSet>
+
+    <changeSet failOnError="false" author="Emeka" id="1648201114214-68">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="organisation_unit_level_id_fk" />
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint baseColumnNames="organisation_unit_level_id" baseTableName="organisation_unit_hierarchy" constraintName="organisation_unit_level_id_fk" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="organisation_unit_level"/>
+    </changeSet>
+
+    <changeSet failOnError="false" author="Emeka" id="1648201114214-79">
+        <!--<preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="organisation_unit"/>
+            </not>
+        </preConditions>-->
+        <sql>
+            ALTER TABLE menu
+            ALTER COLUMN position DROP NOT NULL;
+
+            ALTER TABLE menu
+            ALTER COLUMN level DROP NOT NULL;
+
+            ALTER TABLE menu
+            ALTER COLUMN type DROP NOT NULL;
+
+            ALTER TABLE menu
+            ALTER COLUMN state DROP NOT NULL;
+
+            ALTER TABLE menu
+            ALTER COLUMN disabled DROP NOT NULL;
+
+            ALTER TABLE menu
+            ALTER COLUMN module_id DROP NOT NULL;
+        </sql>
+    </changeSet>
+</databaseChangeLog>
