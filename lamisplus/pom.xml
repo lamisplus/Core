@@ -29,10 +29,6 @@
 			<url>https://repository.foreach.be/nexus/repository/public/</url>
 		</repository>
 		<repository>
-			<id>mvn-repo</id>
-			<url>https://gitlab.com/mattae/artifacts/raw/maven</url>
-		</repository>
-		<repository>
 			<releases>
 				<enabled>true</enabled>
 			</releases>
