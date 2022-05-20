@@ -851,4 +851,23 @@
             ALTER COLUMN module_id DROP NOT NULL;
         </sql>
     </changeSet>
+
+    <changeSet failOnError="false" author="Emeka" id="1648201114214-81">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="module_service"/>
+            </not>
+        </preConditions>
+        <sql>
+            CREATE TABLE module_service
+            (
+            id bigint NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 9223372036854775807 CACHE 1 ),
+            code character varying NOT NULL,
+            module_name character varying NOT NULL,
+            status integer NOT NULL,
+            name character varying NOT NULL,
+            CONSTRAINT service_pkey PRIMARY KEY (id)
+            )
+        </sql>
+    </changeSet>
 </databaseChangeLog>
