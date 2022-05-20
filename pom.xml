@@ -15,11 +15,29 @@
 		<relativePath/>
 	</parent>
 
+	<properties>
+		<!-- The main class to start by executing "java -jar" -->
+		<start-class>org.lamisplus.LamisPlusApplication</start-class>
+	</properties>
+
 	<name>Lamisplus core</name>
 	<description>Lamisplus core</description>
 
 		<modules>
-			<module>base-module</module>
 			<module>lamisplus</module>
+			<module>base-module</module>
 		</modules>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<skip>true</skip>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
 </project>
