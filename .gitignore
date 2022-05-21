@@ -31,3 +31,4 @@ modules
 mvnw
 mvn
 mvnw.cmd
+application-debug.*
