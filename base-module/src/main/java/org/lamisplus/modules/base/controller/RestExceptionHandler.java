@@ -16,7 +16,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
@@ -160,11 +159,11 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return buildResponseEntity(apiError);
     }
 
-     /* Handles EntityNotFoundException. Created to encapsulate errors with more detail than javax.persistence.EntityNotFoundException.
+    /* Handles EntityNotFoundException. Created to encapsulate errors with more detail than javax.persistence.EntityNotFoundException.
      * @param ex the EntityNotFoundException
      * @return the ApiError object
      */
-    @ExceptionHandler({EntityNotFoundException.class, NoSuchElementException.class, NullPointerException.class})
+    @ExceptionHandler({EntityNotFoundException.class,NoSuchElementException.class, NullPointerException.class})
     protected ResponseEntity<Object> handleNotFound(
             Exception ex) {
         ApiError apiError = new ApiError(NOT_FOUND);
@@ -235,8 +234,8 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     /**
      * Handle java.lang.IllegalArgumentException
      */
-    @ExceptionHandler(IllegalArgumentException.class)
-    protected ResponseEntity<Object> IllegalArgumentException(IllegalArgumentException ex) {
+    @ExceptionHandler(java.lang.IllegalArgumentException.class)
+    protected ResponseEntity<Object> IllegalArgumentException(java.lang.IllegalArgumentException ex) {
         ApiError apiError = new ApiError(FORBIDDEN);
         apiError.setStatusCode(FORBIDDEN.value());
         apiError.setMessage(ex.getMessage());
@@ -275,14 +274,6 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     private ResponseEntity<Object> buildResponseEntity(ApiError apiError) {
         return new ResponseEntity<>(apiError, apiError.getStatus());
-    }
-
-    @ExceptionHandler(NoRecordFoundException.class)
-    @ResponseStatus(NOT_FOUND)
-    protected ResponseEntity<Object> handleNoRecordFoundException(NoRecordFoundException ex) {
-        ApiError apiError = new ApiError(NOT_FOUND);
-        apiError.setMessage(ex.getMessage());
-        return buildResponseEntity(apiError);
     }
 
 }
