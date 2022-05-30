@@ -1,4 +1,4 @@
-package main.java.org.lamisplus.modules.base.controller;
+package org.lamisplus.modules.base.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.lamisplus.modules.base.controller.vm.ManagedUserVM;

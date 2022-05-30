@@ -29,10 +29,6 @@
 			<url>https://repository.foreach.be/nexus/repository/public/</url>
 		</repository>
 		<repository>
-			<id>mvn-repo</id>
-			<url>https://gitlab.com/mattae/artifacts/raw/maven</url>
-		</repository>
-		<repository>
 			<releases>
 				<enabled>true</enabled>
 			</releases>
@@ -65,7 +61,6 @@
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<jjwt.version>0.11.2</jjwt.version>
 		<java.version>1.8</java.version>
-		<blaze-persistence.version>1.6.3</blaze-persistence.version>
 	</properties>
 
 	<dependencyManagement>
@@ -223,11 +218,6 @@
 			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
 
-		<!--		<dependency>-->
-		<!--			<groupId>org.springframework.boot</groupId>-->
-		<!--			<artifactId>spring-boot-starter-jdbc</artifactId>-->
-		<!--		</dependency>-->
-
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-web</artifactId>
@@ -264,11 +254,6 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-mail</artifactId>
 		</dependency>
-
-		<!--<dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-log4j2</artifactId>
-        </dependency>-->
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -515,6 +500,13 @@
 	<build>
 		<plugins>
 			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<skip>true</skip>
+				</configuration>
+			</plugin>
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
 				<version>2.6</version>
@@ -551,7 +543,7 @@
 				</configuration>
 			</plugin>
 
-			<plugin>
+			<!--<plugin>
 				<artifactId>maven-clean-plugin</artifactId>
 				<version>3.1.0</version>
 				<executions>
@@ -577,7 +569,7 @@
 						</goals>
 					</execution>
 				</executions>
-			</plugin>
+			</plugin>-->
 			<!--			<plugin>-->
 			<!--				<groupId>org.springframework.boot</groupId>-->
 			<!--				<artifactId>spring-boot-maven-plugin</artifactId>-->
