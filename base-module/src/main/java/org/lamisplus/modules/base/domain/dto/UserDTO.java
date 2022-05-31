@@ -41,6 +41,8 @@ public class UserDTO {
 
     private String gender;
 
+    private String designation;
+
     private Long currentOrganisationUnitId;
 
     @ToString.Exclude
@@ -66,6 +68,7 @@ public class UserDTO {
         this.email = user.getEmail();
         this.phoneNumber = user.getPhoneNumber();
         this.gender = user.getGender();
+        this.designation = user.getDesignation();
         this.currentOrganisationUnitId = user.getCurrentOrganisationUnitId();
         this.applicationUserOrganisationUnits = user.getApplicationUserOrganisationUnits();
         this.managedPatientCount = user.getManagedPatientCount();
@@ -84,6 +87,7 @@ public class UserDTO {
                 ", email='" + email + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", gender='" + gender + '\'' +
+                ", designation='" + designation + '\'' +
                 ", details='" + details + '\'' +
                 ", managedPatientCount='" + managedPatientCount + '\'' +
                 ", currentOrganisationUnitId='" + currentOrganisationUnitId + '\'' +

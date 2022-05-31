@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
-    <changeSet failOnError="false" author="Emeka" id="1648201114214-1">
+    <!--<changeSet failOnError="false" author="Emeka" id="1648201114214-1">
         <preConditions onFail="MARK_RAN">
             <not>
                 <sequenceExists sequenceName="application_codeset_id_seq"></sequenceExists>
@@ -132,7 +132,7 @@
             </not>
         </preConditions>
         <createSequence sequenceName="web_module_id_seq"/>
-    </changeSet>
+    </changeSet>-->
 
     <changeSet failOnError="false" author="Emeka" id="1648201114214-19">
         <preConditions onFail="MARK_RAN">
@@ -234,6 +234,7 @@
             reset_key character varying ,
             email character varying(255) ,
             gender character varying(255) ,
+            designation character varying,
             phone_number character varying(255) ,
             current_organisation_unit_id bigint,
             first_name character varying(255) ,

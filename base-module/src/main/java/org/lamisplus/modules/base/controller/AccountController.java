@@ -4,24 +4,30 @@ import lombok.RequiredArgsConstructor;
 import org.lamisplus.modules.base.controller.apierror.EntityNotFoundException;
 import org.lamisplus.modules.base.domain.dto.UserDTO;
 import org.lamisplus.modules.base.domain.entities.ApplicationUserOrganisationUnit;
+import org.lamisplus.modules.base.domain.entities.Role;
 import org.lamisplus.modules.base.domain.entities.User;
+import org.lamisplus.modules.base.domain.mapper.UserMapper;
 import org.lamisplus.modules.base.domain.repositories.ApplicationUserOrganisationUnitRepository;
+import org.lamisplus.modules.base.domain.repositories.RoleRepository;
 import org.lamisplus.modules.base.domain.repositories.UserRepository;
+import org.lamisplus.modules.base.security.SecurityUtils;
 import org.lamisplus.modules.base.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
 public class AccountController {
-    private static class AccountResourceException extends RuntimeException {
-        private AccountResourceException(String message) {
-            super(message);
-        }
-    }
+    private final RoleRepository roleRepository;
+
+    private final UserMapper userMapper;
 
     private final UserRepository userRepository;
 
@@ -56,5 +62,20 @@ public class AccountController {
         } else{
             throw new EntityNotFoundException(User.class,"Name:","User");
         }
+    }
+
+    @GetMapping("/account/roles")
+    public Set<Role> getAccountRoles(Principal principal){
+        Optional<User> optionalUser = userService.getUserWithRoles();
+        UserDTO userDTO = userService.getUserWithRoles()
+                    .map(UserDTO::new)
+                    .orElseThrow(() -> new EntityNotFoundException(User.class,"Name:","User"));
+        if(userDTO.getPermissions().contains("all_permission")){
+            return roleRepository.findAllByArchived(0).stream().map(role -> {
+                role.setPermission(null);
+                return role;
+            }).collect(Collectors.toSet());
+        } else
+            return userMapper.rolessFromStrings(userDTO.getRoles());
     }
 }

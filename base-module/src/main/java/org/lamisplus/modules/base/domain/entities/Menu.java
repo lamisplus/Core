@@ -22,7 +22,6 @@ import java.util.TreeSet;
 @EqualsAndHashCode(of = {"name", "level"})
 @ToString(of = {"id", "name", "state", "type", "subs", "level", "module", "position", "icon", "tooltip", "parentId", "parentName", "disabled", "breadcrumb", "url", "archived", "type", "level", "moduleId"})
 @Slf4j
-
 public final class Menu implements Serializable, Comparable<Menu>, Persistable<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -42,7 +42,6 @@ public class BaseModule extends AcrossModule {
                         getClass ().getPackage ().getName () + ".extensions",
                         getClass ().getPackage ().getName () + ".installers",
                         "org.springframework.web.socket"
-                        //"com.blazebit.persistence.spring.data.webmvc"
                 ));
     }
 

@@ -87,6 +87,9 @@ public class MenuService {
 
     public Menu update(Long id, MenuDTO menuDTO){
         menuRepository.findById(id).orElseThrow(()-> new EntityNotFoundException(Menu.class, "id", ""+id));
+        if(menuDTO.getId() == Long.valueOf(menuDTO.getParentId())){
+            throw new RecordExistException(Menu.class, "Menu", "Same as Parent");
+        }
         Menu menu = toMenu(menuDTO);
         menu.setId(id);
         return menuRepository.save(menu);

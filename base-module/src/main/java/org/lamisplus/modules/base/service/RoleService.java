@@ -33,8 +33,8 @@ public class RoleService {
     private final RolePermissionRepository rolePermissionRepository;
 
 
-    @PersistenceContext
-    EntityManager em;
+    /*@PersistenceContext
+    EntityManager em;*/
 
     public void save(RoleDTO roleDTO) {
         Optional<Role> RoleOptional = roleRepository.findByName(roleDTO.getName());

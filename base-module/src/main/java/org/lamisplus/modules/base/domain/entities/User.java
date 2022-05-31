@@ -95,6 +95,10 @@ public class User {
     @Column(name = "last_name")
     private String lastName;
 
+    @Basic
+    @Column(name = "designation")
+    private String designation;
+
     @ManyToMany(cascade = CascadeType.PERSIST)
     private Set<Role> role;
 

@@ -15,8 +15,6 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 public class ProgramService {
-    private static final int ARCHIVED = 1;
-    private static final int UN_ARCHIVED = 0;
     private final ProgramRepository programRepository;
 
 

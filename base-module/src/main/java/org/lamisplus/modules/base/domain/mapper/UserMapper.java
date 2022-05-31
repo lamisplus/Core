@@ -38,7 +38,7 @@ public class UserMapper {
         }
     }
 
-    private Set<Role> rolessFromStrings(Set<String> rolesAsString) {
+    public Set<Role> rolessFromStrings(Set<String> rolesAsString) {
         Set<Role> roles = new HashSet<>();
 
         if (rolesAsString != null) {
