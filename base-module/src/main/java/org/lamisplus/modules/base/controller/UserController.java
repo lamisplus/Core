@@ -23,7 +23,6 @@ import java.util.HashSet;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/users")
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
@@ -31,13 +30,16 @@ public class UserController {
     private final RoleRepository roleRepository;
     private final SessionRegistry sessionRegistry;
 
+    //Versioning through URI Path
+    private final String BASE_URL_VERSION_ONE = "/api/v1/users";
 
-    @GetMapping("/{id}")
+
+    @GetMapping(BASE_URL_VERSION_ONE + "/{id}")
     public ResponseEntity<UserDTO> get(@PathVariable Long id) {
         return ResponseEntity.ok(userRepository.findById(id).map(UserDTO::new).get());
     }
 
-    @PostMapping("/{id}/roles")
+    @PostMapping(BASE_URL_VERSION_ONE + "/{id}/roles")
     public ResponseEntity<Object[]> updateRoles(@Valid @RequestBody List<Role> roles, @PathVariable Long id) throws Exception {
         try {
             User user = userRepository.findById(id).get();
@@ -79,26 +81,26 @@ public class UserController {
         return  allPrincipals.size();
     }
 
-    @PostMapping
+    @PostMapping(BASE_URL_VERSION_ONE)
     @ResponseStatus(HttpStatus.CREATED)
     public void save(@Valid @RequestBody ManagedUserVM managedUserVM) {
         //Check Password Length
         userService.save(managedUserVM, managedUserVM.getPassword());
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(BASE_URL_VERSION_ONE + "/{id}")
     @ResponseStatus(HttpStatus.CREATED)
     public void update(@PathVariable Long id, @Valid @RequestBody ManagedUserVM managedUserVM) {
         userService.update(id, managedUserVM, managedUserVM.getPassword());
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping(BASE_URL_VERSION_ONE + "/{id}")
     @ResponseStatus(HttpStatus.CREATED)
     public void update(@PathVariable Long id) {
         userService.delete(id);
     }
 
-    @GetMapping
+    @GetMapping(BASE_URL_VERSION_ONE)
     public ResponseEntity<List<UserDTO>> getAllUsers(Pageable pageable) {
         final Page<UserDTO> page = userService.getAllManagedUsers(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);

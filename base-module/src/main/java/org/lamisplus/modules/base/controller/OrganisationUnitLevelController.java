@@ -14,44 +14,46 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/organisation-unit-levels")
 @Slf4j
 @RequiredArgsConstructor
 public class OrganisationUnitLevelController {
     private final OrganisationUnitLevelService organisationUnitLevelService;
 
-    @PostMapping("/v2")
+    //Versioning through URI Path
+    private final String BASE_URL_VERSION_ONE = "/api/v1/organisation-unit-levels";
+
+    @PostMapping(BASE_URL_VERSION_ONE + "/v2")
     @PreAuthorize("hasAnyAuthority('Super Admin','Facility Admin', 'Admin', 'Data Clerk', 'DEC', 'M&E Officer')")
     public ResponseEntity<OrganisationUnitLevelDTO> save(@Valid @RequestBody OrganisationUnitLevelDTO organisationUnitLevelDTO) {
         return ResponseEntity.ok(organisationUnitLevelService.save(organisationUnitLevelDTO));
     }
 
-    @PutMapping("/v2/{id}")
+    @PutMapping(BASE_URL_VERSION_ONE + "/v2/{id}")
     @PreAuthorize("hasAnyAuthority('Super Admin','Facility Admin', 'Admin', 'Data Clerk', 'DEC', 'M&E Officer')")
     public ResponseEntity<OrganisationUnitLevelDTO> update(@PathVariable Long id, @Valid @RequestBody OrganisationUnitLevelDTO organisationUnitLevelDTO){
         return ResponseEntity.ok(organisationUnitLevelService.update(id, organisationUnitLevelDTO));
     }
 
-    @GetMapping("/v2")
+    @GetMapping(BASE_URL_VERSION_ONE + "/v2")
     @PreAuthorize("hasAnyAuthority('Super Admin','Facility Admin', 'Admin', 'Data Clerk', 'DEC', 'M&E Officer')")
     public ResponseEntity<List<OrganisationUnitLevelDTO>> getAllOrganizationUnitLevel(@RequestParam(required = false, defaultValue = "2") Integer status) {
         return ResponseEntity.ok(organisationUnitLevelService.getAllOrganizationUnitLevel(status));
     }
 
-    @GetMapping("/v2/{id}/organisation-units")
+    @GetMapping(BASE_URL_VERSION_ONE + "/v2/{id}/organisation-units")
     @PreAuthorize("hasAnyAuthority('Super Admin','Facility Admin', 'Admin', 'Data Clerk', 'DEC', 'M&E Officer')")
     public ResponseEntity<List<OrganisationUnit>> getAllOrganisationUnitsByOrganizationUnitLevel(@PathVariable Long id) {
         return ResponseEntity.ok(organisationUnitLevelService.getAllOrganisationUnitsByOrganizationUnitLevel(id));
     }
 
-    @GetMapping("/v2/parent-organisation-unit-level/{id}/organisation-units")
+    @GetMapping(BASE_URL_VERSION_ONE + "/v2/parent-organisation-unit-level/{id}/organisation-units")
     @PreAuthorize("hasAnyAuthority('Super Admin','Facility Admin', 'Admin', 'Data Clerk', 'DEC', 'M&E Officer')")
     public ResponseEntity<List<OrganisationUnit>> getAllParentOrganisationUnitsByOrganizationUnitLevel(@PathVariable Long id) {
         return ResponseEntity.ok(organisationUnitLevelService.getAllParentOrganisationUnitsByOrganizationUnitLevel(id));
     }
 
 
-    @GetMapping("/v2/{id}")
+    @GetMapping(BASE_URL_VERSION_ONE + "/v2/{id}")
     @PreAuthorize("hasAnyAuthority('Super Admin','Facility Admin', 'Admin', 'Data Clerk', 'DEC', 'M&E Officer')")
     public ResponseEntity<OrganisationUnitLevelDTO> getOrganizationUnitLevel(@PathVariable Long id) {
         return ResponseEntity.ok(organisationUnitLevelService.getOrganizationUnitLevel(id));

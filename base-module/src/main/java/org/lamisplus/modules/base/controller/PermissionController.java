@@ -4,25 +4,28 @@ import lombok.RequiredArgsConstructor;
 import org.lamisplus.modules.base.domain.entities.Permission;
 import org.lamisplus.modules.base.domain.repositories.PermissionRepository;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/permissions")
 @RequiredArgsConstructor
 public class PermissionController {
     private final PermissionRepository permissionRepository;
 
-    @GetMapping
-    //@PreAuthorize("hasAuthority('user_read')")
+    //Versioning through URI Path
+    private final String BASE_URL_VERSION_ONE = "/api/v1/permissions";
+
+    @GetMapping(BASE_URL_VERSION_ONE)
+    @PreAuthorize("hasAnyAuthority('Super Admin','Facility Admin', 'Admin', 'Data Clerk', 'DEC', 'M&E Officer')")
     public ResponseEntity<List<Permission>> getAll() {
         return ResponseEntity.ok(this.permissionRepository.findAllByArchived(0));
     }
 
 
-    @PostMapping
-    //@PreAuthorize("hasAuthority('user_write')")
+    @PostMapping(BASE_URL_VERSION_ONE)
+    @PreAuthorize("hasAnyAuthority('Super Admin','Facility Admin', 'Admin', 'Data Clerk', 'DEC', 'M&E Officer')")
     public ResponseEntity<List<Permission>> save(@RequestBody List<Permission> permissions) {
         return ResponseEntity.ok(this.permissionRepository.saveAll(permissions));
     }

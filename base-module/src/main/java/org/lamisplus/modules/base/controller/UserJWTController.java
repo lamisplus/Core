@@ -20,11 +20,13 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/api")
 public class UserJWTController {
     private final TokenProvider tokenProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final UserService userService;
+
+    //Versioning through URI Path
+    private final String BASE_URL_VERSION_ONE = "/api/v1";
 
     public UserJWTController(TokenProvider tokenProvider, AuthenticationManagerBuilder authenticationManagerBuilder, UserService userService){
         this.tokenProvider = tokenProvider;
@@ -32,7 +34,7 @@ public class UserJWTController {
         this.userService = userService;
     }
 
-    @PostMapping("/authenticate")
+    @PostMapping(BASE_URL_VERSION_ONE + "/authenticate")
     public ResponseEntity<JWTToken> authorize(@Valid @RequestBody LoginVM loginVM) {
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                 loginVM.getUsername(),

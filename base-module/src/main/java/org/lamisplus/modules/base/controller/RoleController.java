@@ -20,14 +20,16 @@ import static org.lamisplus.modules.base.util.Constants.ArchiveStatus.UN_ARCHIVE
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/roles")
 public class RoleController {
     private final RoleService roleService;
     private final RoleRepository roleRepository;
     private final UserService userService;
 
+    //Versioning through URI Path
+    private final String BASE_URL_VERSION_ONE = "/api/v1/roles";
 
-    @GetMapping("/v2/{id}")
+
+    @GetMapping(BASE_URL_VERSION_ONE + "/v2/{id}")
     public ResponseEntity<Role> getById(@PathVariable Long id) {
         Role role = roleRepository.findById(id)
                 .orElseThrow(()-> new EntityNotFoundException(Role.class, "id", ""+id));
@@ -35,19 +37,19 @@ public class RoleController {
         return ResponseEntity.ok(role);
     }
 
-    @GetMapping
+    @GetMapping(BASE_URL_VERSION_ONE)
     public ResponseEntity<List<Role>> getAll() {
         List<Role> roles = roleRepository.findAllByArchived(UN_ARCHIVED);
         return ResponseEntity.ok(roles);
     }
 
-    @PostMapping
+    @PostMapping(BASE_URL_VERSION_ONE)
     @ResponseStatus(HttpStatus.CREATED)
     public void save(@Valid @RequestBody RoleDTO roleDTO) throws Exception {
         roleService.save(roleDTO);
     }
 
-    @PostMapping("/v2/{id}")
+    @PostMapping(BASE_URL_VERSION_ONE + "/v2/{id}")
     public ResponseEntity<Role> update(@Valid @RequestBody RoleDTO role, @PathVariable Long id) {
         try {
             Role updatedRole = new Role();
@@ -64,7 +66,7 @@ public class RoleController {
         return null;
     }
 
-    @DeleteMapping("/v2/{id}")
+    @DeleteMapping(BASE_URL_VERSION_ONE + "/v2/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteRole(@PathVariable Long id) {
         Role role = roleRepository.findById(id)
@@ -77,7 +79,7 @@ public class RoleController {
         }
     }
 
-    @GetMapping("/v2/{id}/users")
+    @GetMapping(BASE_URL_VERSION_ONE + "/v2/{id}/users")
     public ResponseEntity<List<UserDTO>> getAllUserByRole(@PathVariable Long id) {
         return ResponseEntity.ok(userService.getAllUserByRole(id));
     }

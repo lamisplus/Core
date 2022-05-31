@@ -12,38 +12,39 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/menus")
 @Slf4j
 @RequiredArgsConstructor
 public class MenuController {
     private final MenuService menuService;
+    //Versioning through URI Path
+    private final String BASE_URL_VERSION_ONE = "/api/v1/menus/";
 
     /*@PutMapping("/modules/{id}")
     public ResponseEntity<List<Menu>> update(@PathVariable Long id, @RequestBody ModuleMenuDTO moduleMenuDTO) {
         return ResponseEntity.ok(this.menuService.update(id, moduleMenuDTO));
     }*/
 
-    @GetMapping
+    @GetMapping(BASE_URL_VERSION_ONE)
     public ResponseEntity<List<MenuDTO>> getAllMenus(@RequestParam(required = false, defaultValue = "false") Boolean withChild) {
         return ResponseEntity.ok(this.menuService.getAllMenus(withChild));
     }
 
-    @GetMapping("/parent/{id}")
+    @GetMapping(BASE_URL_VERSION_ONE+"/parent/{id}")
     public ResponseEntity<List<MenuDTO>> getAllMenusByParentId(@PathVariable Integer id) {
         return ResponseEntity.ok(this.menuService.getAllMenusByParentId(id));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(BASE_URL_VERSION_ONE+"/{id}")
     public ResponseEntity<Menu> update(@PathVariable Long id, @Valid @RequestBody MenuDTO menuDTO) {
         return ResponseEntity.ok(this.menuService.update(id, menuDTO));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping(BASE_URL_VERSION_ONE+"/{id}")
     public void delete(@PathVariable Long id) {
         this.menuService.delete(id);
     }
 
-    @PostMapping
+    @PostMapping(BASE_URL_VERSION_ONE)
     public ResponseEntity<Menu> save(@Valid @RequestBody MenuDTO menuDTO, @RequestParam(required = false, defaultValue = "true") Boolean isModule) {
         return ResponseEntity.ok(this.menuService.save(menuDTO, isModule));
     }
