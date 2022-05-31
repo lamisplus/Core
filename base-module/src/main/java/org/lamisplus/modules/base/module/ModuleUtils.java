@@ -80,6 +80,7 @@ public class ModuleUtils {
                             new InputStreamReader(zin));
                     Yaml yaml = new Yaml(new Constructor(ModuleConfig.class));
                     configs.add(yaml.load(in));
+                    in.close();
                 }
                 zin.closeEntry();
             }

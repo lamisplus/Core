@@ -23,13 +23,13 @@ public class RuntimeModuleAcrossJPAConfig {
     private final AcrossContext parent;
 
     @Bean
-    @ConfigurationProperties("app.datasource.module")
+    @ConfigurationProperties("lamisplus.datasource.module")
     public DataSourceProperties moduleDataSourceProperties() {
         return new DataSourceProperties ();
     }
 
     @Bean
-    @ConfigurationProperties("app.datasource.module")
+    @ConfigurationProperties("lamisplus.datasource.module")
     public DataSource moduleDataSource() {
         return moduleDataSourceProperties ()
                 .initializeDataSourceBuilder ()
