@@ -24,7 +24,7 @@
 	<description>Lamisplus core</description>
 
 		<modules>
-			<module>lamisplus</module>
+			<module>starter-module</module>
 			<module>base-module</module>
 		</modules>
 
