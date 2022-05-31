@@ -40,7 +40,6 @@ public class BaseModule extends AcrossModule {
                         getClass ().getPackage ().getName () + ".security",
                         getClass ().getPackage ().getName () + ".interceptor",
                         getClass ().getPackage ().getName () + ".extensions",
-                        getClass ().getPackage ().getName () + ".installers",
                         "org.springframework.web.socket"
                 ));
     }
