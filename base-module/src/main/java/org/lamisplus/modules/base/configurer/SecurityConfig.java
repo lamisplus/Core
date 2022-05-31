@@ -35,7 +35,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     //Swagger interface
     private static final String[] PERMIT_LIST = {"/v2/api-docs", "/configuration/ui", "/swagger-resources",
             "/configuration/security", "/swagger-ui.html", "/webjars/**",
-            "/api/authenticate", "/api/swagger-ui.html", "/api/application-codesets/codesetGroup", "/api/updates/server",
+            "/api/v1/authenticate", "/api/swagger-ui.html", "/api/application-codesets/codesetGroup", "/api/updates/server",
             "/api/sync/**" //Permit temporarily for server
     };
 
