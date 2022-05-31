@@ -86,4 +86,11 @@ public class Module implements Serializable, Persistable<Long> {
     public boolean isNew() {
         return id == null;
     }
+
+
+    public enum Type {ERROR, SUCCESS}
+    @Transient
+    private Type type;
+    @Transient
+    private String message;
 }

@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.lamisplus.modules.base.controller.apierror.EntityNotFoundException;
 import org.lamisplus.modules.base.domain.entities.Menu;
+import org.lamisplus.modules.base.domain.entities.Module.Type;
 import org.lamisplus.modules.base.domain.entities.ModuleArtifact;
 import org.lamisplus.modules.base.domain.entities.Module;
 import org.lamisplus.modules.base.domain.entities.ModuleDependency;
@@ -33,6 +34,8 @@ import java.util.jar.Attributes;
 import java.util.jar.JarInputStream;
 import java.util.jar.Manifest;
 import java.util.stream.Collectors;
+
+import static org.lamisplus.modules.base.domain.entities.Module.Type.*;
 import static org.lamisplus.modules.base.util.Constants.ArchiveStatus.UN_ARCHIVED;
 import static org.lamisplus.modules.base.util.Constants.ArchiveStatus.ARCHIVED;
 
@@ -196,6 +199,16 @@ public class ModuleService {
             module.setUmdLocation(config.getUmdLocation());
             module.setBasePackage(config.getBasePackage());
             module.setPriority(config.getPriority());
+            if(!config.getDependencies().isEmpty()){
+                List<String> dependencies = new ArrayList<>();
+                config.getDependencies().forEach((k, v)->{
+                    dependencies.add(k +" " + v);
+                    if(!moduleManager.isInstalled(k)){
+                        module.setType(ERROR);
+                        module.setMessage(module.getName() + " depends on " +k);
+                    }
+                });
+            }
         }
         return module;
     }
