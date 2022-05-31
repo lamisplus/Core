@@ -56,7 +56,7 @@ const ModalSample = (props) => {
             }
             const onError = () => {
                 setLoading(false);
-                toast.error("Something went wrong, please contact administration");
+                //toast.error("Something went wrong, please contact administration");
                 //props.toggleModal()
             }
             if(formData.id){

@@ -5,11 +5,12 @@ import MatButton from '@material-ui/core/Button';
 import { unInstallBootstrapModule } from '../../../actions/bootstrapModule';
 import { connect } from 'react-redux';
 import {Modal} from 'react-bootstrap';
+import {useHistory} from "react-router-dom";
 
 
 
 const UnIstallModal = (props) => {
-
+    let history = useHistory();
     const datasample = props.datasample ? props.datasample : {};
 
 
@@ -17,12 +18,13 @@ const UnIstallModal = (props) => {
         const onError = () => {
         }
         const onSuccess = () => {
-
+            props.togglestatus()
+            props.loadModules()
+            history.push(`/bootstrap-modules`)
         }
         props.unInstallBootstrapModule(datasample, onSuccess, onError);
-        props.togglestatus()
-        window.location.href = "bootstrap-modules";
-       // props.history.push(`/bootstrap-modules`)
+
+
     }
 
 

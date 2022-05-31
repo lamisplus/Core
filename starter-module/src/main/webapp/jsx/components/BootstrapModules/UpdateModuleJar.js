@@ -29,6 +29,7 @@ import { Card, CardContent } from "@material-ui/core";
 import { url } from "./../../../api";
 import { createBootstrapModule, startBootstrapModule } from './../../../actions/bootstrapModule';
 import { updateBootstrapModule, fetchAllBootstrapModuleBYBatchNum } from './../../../actions/bootstrapModule';
+import RestartingApp from "./RestartModule";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -136,7 +137,8 @@ const BootstrapModule = (props) => {
     const [disabledNextButton, setDisabledNextButton] = useState(false)
     const [moduleStatus, setModuleStatus] = useState()
     const [moduleBatchNum, setModuleBatchNum] = useState()
-
+    const [restartmodal, setRestartModal] = useState(false) //Modal
+    const toggleRestartModal = () => setRestartModal(!restartmodal)
 
     useEffect(() => {
         const onSuccess = (data) => {
@@ -147,6 +149,11 @@ const BootstrapModule = (props) => {
         //props.fetchAllBootstrapModuleBYBatchNum(moduleStatus,moduleBatchNum, onSuccess,onError)
 
     }, [moduleStatus,moduleBatchNum]); //componentDidMount
+
+    const restartingModule  = (row) => {
+        setRestartModal(!restartmodal)
+    }
+
     const handleModuleBatchList = (moduleStatus,moduleBatchNum) => {
         const onSuccess = (data) => {
             console.log(data)
@@ -197,7 +204,8 @@ const BootstrapModule = (props) => {
             setInstallationOverlay(false)
             setDisableNextButtonProcess(false)
             //window.location.href = "bootstrap-modules";
-            history.push(`/bootstrap-modules`)
+            //history.push(`/bootstrap-modules`)
+            restartingModule()
         }
         const onError = () => {
             setDisabledNextButton(false)
@@ -590,6 +598,8 @@ const BootstrapModule = (props) => {
                     </Row>
                 </CardContent>
             </Card>
+
+            {/*<RestartingApp modalstatus={restartmodal} togglestatus={toggleRestartModal}  />*/}
         </>
     );
 }

@@ -20,7 +20,7 @@ import { forwardRef } from 'react';
 import {  Modal } from "react-bootstrap";
 import {  Icon, Label} from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.min.css';
-import { Link } from 'react-router-dom'
+import {Link, useHistory} from 'react-router-dom'
 import { Button} from "react-bootstrap";
 
 import AddBox from '@material-ui/icons/AddBox';
@@ -69,6 +69,7 @@ let userId = 0;
 let currentUser = {};
 
 const UserList = (props) => {
+    let history = useHistory();
   const classes = useStyles();
   const [loading, setLoading] = useState(true);
   const [modal, setModal] = useState(false);
@@ -103,7 +104,7 @@ const UserList = (props) => {
           );
         })
         .catch((error) => {
-          console.log(error);
+
         });
     }
     getCharacters();
@@ -120,7 +121,7 @@ const UserList = (props) => {
       fetchUsers()
       toast.success("User Deleted Successfully");
       setModal(false)
-      props.history.push("/users")
+      history.push("/users")
       return;
     };
     const onError = () => {
@@ -143,7 +144,7 @@ const UserList = (props) => {
           { title: "Username", field: "userName", filtering: false },
           //{ title: "Gender", field: "gender", filtering: false },
           { title: "Roles", field: "roles", filtering: false },
-          { title: "", field: "actions", filtering: false },
+          { title: "Actions", field: "actions", filtering: false },
         ]}
         isLoading={loading}
         data={props.usersList.map((row) => ({

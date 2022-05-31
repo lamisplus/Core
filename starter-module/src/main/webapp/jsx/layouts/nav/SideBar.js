@@ -7,7 +7,7 @@ import PerfectScrollbar from "react-perfect-scrollbar";
 import { Link } from "react-router-dom";
 import useScrollPosition from "use-scroll-position";
 import { ThemeContext } from "../../../context/ThemeContext";
-import {fetchAll, fetchUserPermission} from "./../../../actions/menu";
+import {fetchAllMenu, fetchUserPermission} from "./../../../actions/menu";
 import {connect} from "react-redux";
 import _ from "lodash";
 import LoadMenus from './../../components/Functions/LoadMenu'
@@ -52,7 +52,7 @@ const SideBar = (props) => {
     btn.addEventListener("click", toggleFunc);
     fetchExternalMenu()
     fetchPermisisons()
-  }, []);
+  }, []);//props.menuList to continuous checking for menu list
   let scrollPosition = useScrollPosition();
 
   function userHasRole(role){
@@ -84,24 +84,28 @@ const SideBar = (props) => {
   path = path[path.length - 1];
   ///Admin Roles
   let roles =["admin_read"]
+  //console.log(props.menuList)
+  //method to determain main sidebar menu
+  function sideBarParentUrl(menu){
+          //menu.moduleId===null || menu.url!==null? menu.url : "modules", state: menu.url
+          if(menu.moduleId===null && menu.url===null){
+            return ""
+          }else if(menu.moduleId===null && menu.url!==null){
+            return menu.url
+          }else if(menu.moduleId!==null || menu.url!==null){
+            return ` "modules",  state: menu.url`
+          }
+  }
   /// Active menu
-  let deshBoard = ["dashboard"],
-    
-    admin = [
-      "users",
-      "roles",
-      "bootstrap-modules",
-      "application-codeset",
-      "organisation-unit",
-      "application-matrics",
-      "log-configuration",
-      "health-checks",
-      "system-configuration",
-     
-    ],
+  let deshBoard = [],
+    subMainMenu = [],
     sysInfo = ["application-matrics", "log-configuration", "health-checks", "system-configuration"];
-
-    
+    const MainMenu= props.menuList.map(item => {
+        deshBoard.push(item.name)
+        return item;
+    })
+    console.log(props.menuList)
+    console.log(deshBoard)
     
   return (
     <div
@@ -118,119 +122,57 @@ const SideBar = (props) => {
     >
       <PerfectScrollbar className="deznav-scroll" style={{paddingTop:'20px'}}>
         <MM className="metismenu" id="menu" style={{fontSize:'10px'}}>
-        <li className={`${deshBoard.includes(path) ? "mm-active" : ""}`} style={{color:'#798087',padding:'2px'}}>
-            <Link to="dashboard" style={{color:'#798087',padding:'5px', backgroundColor:'white'}} >
-            <i className="flaticon-025-dashboard" style={{color:'#24a4eb'}}/>
-            <span className="nav-text" style={{color:'#24a4eb'}}>Dashboard</span>
-            </Link>
-        </li>
-        {props.menuList && props.menuList.map(({ url, name }, index) => (
+
+
+          {props.menuList && props.menuList.map((menu, index) => (
+
               <>
-              
-              <li className={`${deshBoard.includes(path) ? "mm-active" : ""}`} style={{color:'#798087',padding:'2px'}}>
-                  <Link 
-                  
-                  to ={{
-                    pathname: `modules`,
-                    state: url
-                  }} 
-                  style={{color:'#798087',padding:'5px', backgroundColor:'white'}} >
-                  <i className="flaticon-025-dashboard" style={{color:'#24a4eb'}}/>
-                  <span className="nav-text" style={{color:'#24a4eb'}}>{name}</span>
-                  </Link>
-              </li>
-              </>
-            ))
-          }
-          {/* <span className="nav-text" style={{color:'#303f9f',fontWeight:'bolder',paddingTop:'15px',paddingBottom:'5px',paddingLeft:'20px'}}>Administration</span> */}
-          {/*{!userHasRole(roles) ?*/}
-          {/*    <></>*/}
-          {/*    :*/}
+                  <li className={`${deshBoard.includes(path) ? "mm-active" : ""}`} style={{color: '#798087', padding: '2px'}}
+                      show={"false"}>
+                    <Link className={menu.subs && menu.subs.length>0 ?"has-arrow ai-icon":""}  to={{ pathname: menu.moduleId===null ? (menu.url!==null?menu.url:"#" ): "modules", state: menu.url}}
 
-              <li className={`${admin.includes(path) ? "mm-active" : ""}`} style={{color: '#798087', padding: '2px'}}
-                  show={"false"}>
-                <Link className="has-arrow ai-icon" to="#"
-                      style={{color: '#798087', padding: '1px', backgroundColor: 'white'}}>
-                  <i className="flaticon-013-checkmark" style={{color: '#24a4eb'}}/>
-                  <span className="nav-text" style={{color: '#24a4eb'}}>Administration</span>
-                </Link>
-                <ul>
-                  <li>
-                    <Link style={{color: '#798087'}} className={`${path === "users" ? "mm-active" : ""}`} to="/users">User
-                      Management</Link>
-                  </li>
-                  <li>
-                    <Link
-                        style={{color: '#798087'}}
-                        className={`${
-                            path === "bootstrap-modules" ? "mm-active" : ""
-                        }`}
-                        to="/bootstrap-modules"
-                    >
-                      Install Module
+                          style={{color: '#798087', padding: '1px', backgroundColor: 'white'}}>
+                      <i className={menu.icon!==null && menu.icon!=="wc"? menu.icon : "flaticon-087-stop"} style={{color: '#24a4eb'}}/>
+                      <span className="nav-text" style={{color: '#24a4eb'}}>{menu.name}</span>
                     </Link>
-                  </li>
+                    {menu.subs.length>0 ?
+                        menu.subs.map((subMenu, index) => (
+                            <>
+                              <ul style={{padding: "0.1rem 0 !important"}}>
+                                <li>
+                                  <Link style={{color: '#798087', padding: '-10px !important', fontSize:'12px !important'}} className={`${path === "${subMenu.name}" ? "mm-active" : ""}`} to={subMenu.moduleId && subMenu.moduleId!==null? "modules": subMenu.url  }>
+                                    <span style={{fontSize:'10px !important'}} >{subMenu.name} {subMenu.moduleId}</span>
+                                  </Link>
+                                  {subMenu.subs && subMenu.subs.length > 0 ?
+                                      subMenu.subs.map((subSubMenu, index) => (
+                                        <>
+                                          <li className="ms-2">
+                                            <Link style={{color: '#798087'}}
+                                                  className={`${path === "system-information" ? "mm-active" : ""}`} to={!subSubMenu.moduleId || subSubMenu.moduleId===null? subSubMenu.url : "modules" }>
+                                                      <span className="align-middle me-1" style={{fontSize:'10px !important'}} >
+                                                        <i className="ti-angle-right"></i>
+                                                      </span>{" "}{subSubMenu.name}
+                                            </Link>
+                                          </li>
+                                        </>
+                                      ))
+                                    :
+                                      ""
+                                  }
+                                </li>
+                              </ul>
 
-                  <li>
-                    <Link style={{color: '#798087'}} className={`${path === "roles" ? "mm-active" : ""}`} to="/roles">Roles
-                      & Privileges</Link>
-                  </li>
+                            </>
+                        ))
+                    :
+                        ""
 
-                  <li>
-                    <Link style={{color: '#798087'}} className={`${path === "organisation-unit" ? "mm-active" : ""}`}
-                          to="/organisation-unit">Organisation Unit</Link>
-                  </li>
-                  <li>
-                    <Link style={{color: '#798087'}} className={`${path === "application-codeset" ? "mm-active" : ""}`}
-                          to="/application-codeset">Application Codeset</Link>
-                  </li>
-                  <li className={`${sysInfo.includes(path) ? "mm-active" : ""}`}><Link className="has-arrow" to="#">System
-                    Information</Link>
-                    <ul className={`${sysInfo.includes(path) ? "mm-show" : ""}  list-icons`}>
-                      <li className="ms-2 ">
-                        <Link style={{color: '#798087'}}
-                              className={`${path === "system-configuration" ? "mm-active" : ""}`}
-                              to="/system-configuration">
-                              <span className="align-middle me-1">
-                                <i className="ti-angle-right"></i>
-                              </span>{" "}System Configuration
-                        </Link>
-                      </li>
-                      <li className="ms-2">
-                        <Link style={{color: '#798087'}} className={`${path === "health-checks" ? "mm-active" : ""}`}
-                              to="/health-check">
-                            <span className="align-middle me-1">
-                                <i className="ti-angle-right"></i>
-                              </span>{" "}Health Checks
-                        </Link>
-                      </li>
-                      <li className="ms-2">
-                        <Link style={{color: '#798087'}}
-                              className={`${path === "application-matrics" ? "mm-active" : ""}`}
-                              to="/application-matrics">
-                              <span className="align-middle me-1">
-                                <i className="ti-angle-right"></i>
-                              </span>{" "}Application matrics
-                        </Link>
-                      </li>
-                      <li className="ms-2">
-                        <Link style={{color: '#798087'}}
-                              className={`${path === "log-configuration" ? "mm-active" : ""}`} to="/log-configuration">
-                            <span className="align-middle me-1">
-                              <i className="ti-angle-right"></i>
-                            </span>{" "}Log Configurations
-                        </Link>
-                      </li>
-                    </ul>
-                  </li>
-                  {/* <li>
-                      <Link style={{color:'#798087'}} className={`${path === "test" ? "mm-active" : ""}`} to="/test">Test Page </Link>
-                    </li> */}
-                </ul>
-              </li>
+                    }
 
+                  </li>
+              </>
+              ))}
 
-          {/*}*/}
         </MM>
 
 
@@ -247,7 +189,7 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 const mapActionToProps = {
-  fetchAllExternalModulesMenu: fetchAll,
+  fetchAllExternalModulesMenu: fetchAllMenu,
   fetchUserPermission: fetchUserPermission
 };
 

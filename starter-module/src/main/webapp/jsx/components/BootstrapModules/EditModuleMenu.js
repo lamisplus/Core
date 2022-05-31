@@ -15,8 +15,9 @@ import {makeStyles} from "@material-ui/core/styles";
 import {toast} from "react-toastify";
 import SaveIcon from "@material-ui/icons/Save";
 import CancelIcon from "@material-ui/icons/Cancel";
-import {fetchAllBootstrapModule, getModuleMenus, updateModuleMenu} from '../../../actions/bootstrapModule';
+import { getModuleMenus,  editModuleMenu} from '../../../actions/bootstrapModule';
 import { connect } from 'react-redux';
+import {useHistory} from "react-router-dom";
 
 let menuobj=[];
 const useStyles = makeStyles(theme => ({
@@ -30,28 +31,23 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const UpdateModuleMenu = (props) => {
-
+    let history = useHistory();
     const classes = useStyles()
     const [loading, setLoading] = useState(false)
     const datasample = props.datasample ? props.datasample : {};
     const [menList, setMenuList] = useState([])
     const [errors, setErrors] = useState({});
-    const defaultValues = { }
-    const menuItems = { parentId: "", name:"", url:"", breadcrumb: "", tootip:"", icon:""}
-    //const defaultDetailValuesOtherDetails = { name: "", email:"", address:"", phone:""}
-    //const [otherDetailFields, setOtherDetailFields] = useState(false);
-    //const [locationList, setLocationList] = useState({ stateName:"", lga:""})
-    const [otherDetails, setOtherDetails] = useState(datasample);
-    const [details, setDetails] = useState(menuItems);
-    //const [otherDetailsFields, setOtherDetailsFields] = useState(defaultDetailValuesOtherDetails);
-    const [relativesLocation, setRelativesLocation] = useState([]);
-    const [locationListArray2, setLocationListArray2] = useState()
+    const [details, setDetails] = useState(props.datasample);
+    console.log(details)
+    useEffect(() => {
+        setDetails(props.datasample)
+    }, [props.datasample]);
 
     //Function to get list of module menu
     useEffect(() => {
         async function getMenus() {
             axios
-                .get(`${baseUrl}menu`)
+                .get(`${baseUrl}menus?withChild=true`)
                 .then((response) => {
                     //console.log(response)
                     setMenuList(
@@ -67,18 +63,8 @@ const UpdateModuleMenu = (props) => {
                 });
         }
         getMenus();
-    }, []);
-    useEffect(() => {
-        loadModuleMenus()
-    }, [datasample.id,props.moduleMenuList]); //componentDidMount to get module menus
-    //Method to load module menus
-    const loadModuleMenus =()=>{
-        const onSuccess = () => {
-            setRelativesLocation(props.moduleMenuList)
-        }
-        const onError = () => {}
-        props.getModuleMenus(datasample.id,onSuccess,onError );
-    }
+    }, [props.datasample]);
+
     const handleOtherFieldInputChange = e => {
         setDetails ({ ...details, [e.target.name]: e.target.value });
     }
@@ -93,37 +79,7 @@ const UpdateModuleMenu = (props) => {
         })
         return Object.values(temp).every(x => x == "")
     }
-    const addLocations2 = e => {
-        if(validate()){
 
-            //details['parentOrganisationUnitId']= otherfields.parentOrganisationUnitId
-            details['details']= otherDetails
-            //parentOrganisationUnitId
-            const allRelativesLocation = [...relativesLocation, details];
-            setRelativesLocation(allRelativesLocation);
-        }else{
-            return;
-        }
-    }
-
-    /* Remove Relative Location function **/
-    const removeRelativeLocation = index => {
-        console.log(relativesLocation)
-        relativesLocation.splice(index, 1);
-        setRelativesLocation(relativesLocation);
-        console.log(relativesLocation)
-    };
-    /* Edit Relative Location function **/
-    const editRelativeLocation = (index, relative) => {
-
-        setDetails(relative);
-        relativesLocation.splice(index, 1);
-        setRelativesLocation([...relativesLocation]);
-
-
-    };
-    //Assign menuList to MenuObj
-    menuobj = menList
     //Function to cancel the process
     const closeModal = ()=>{
         //resetForm()
@@ -133,52 +89,32 @@ const UpdateModuleMenu = (props) => {
     }
 
     //Method to update module menu
-    const UpdateModuleMenu = e => {
+    const EditMenu = e => {
         e.preventDefault()
-        if(relativesLocation.length >0 && validate()){
-            //const parentOrganisationUnitId = otherfields.parentOrganisationUnitId
-            // const orgUnitIDParam = props.orgUnitID.id
-            // console.log(orgUnitIDParam)
-            // console.log(parentOrganisationUnitId)
-            // console.log(relativesLocation)
-
+        if(validate()){
             setLoading(true);
-            // const onSuccess = () => {
-            //     props.loadOrgUnit()
-            //     setLoading(false)
-            //     setDetails(defaultDetailValues)
-            //     setOtherDetails(defaultValues)
-            //     setLocationListArray2([])
-            //     props.togglestatus()
-            //
-            //     resetForm()
-            //
-            // }
-            // const onError = () => {
-            //     setLoading(false)
-            //     setOtherDetails(defaultValues)
-            //     setDetails(defaultDetailValues)
-            //     setLocationListArray2([])
-            //     props.togglestatus()
-            // }
-            //props.createOrgUnitLevel(relativesLocation,parentOrganisationUnitId,orgUnitIDParam, onSuccess, onError);
+            const onSuccess = () => {
+                props.loadModuleMenus()
+                props.togglestatus()
+                setLoading(false)
+            }
+            const onError = () => {
+                setLoading(false)
+
+            }
+            props.editModuleMenu(details.id, details, onSuccess, onError);
             return
 
-        }else if(!validate()){
-            return
-        }else{
-            toast.error("Organisation Unit can't be empty")
         }
 
     }
-    // console.log(props.moduleMenuList)
-    // console.log(relativesLocation)
+
     return (
         <div >
 
             <Modal show={props.modalstatus} toggle={props.togglestatus} className={props.className} size="xl">
                 <Modal.Header toggle={props.togglestatus}>
-                    <Modal.Title>Update Module Menu </Modal.Title>
+                    <Modal.Title>Add Module Menu </Modal.Title>
                     <Button
                         variant=""
                         className="btn-close"
@@ -220,6 +156,24 @@ const UpdateModuleMenu = (props) => {
                                                         </select>
                                                         {errors.parentId !=="" ? (
                                                             <span className={classes.error}>{errors.parentId}</span>
+                                                        ) : "" }
+                                                    </div>
+                                                    <div className="form-group mb-3 col-md-4">
+                                                        <label>Menu Type(Position)</label>
+                                                        <select
+                                                            value={details.type}
+                                                            id="type"
+                                                            name="type"
+                                                            className="form-control"
+                                                            onChange={handleOtherFieldInputChange}
+                                                        >
+                                                            <option value="" >Choose...</option>
+                                                            <option value="sidebar" >Sidebar</option>
+                                                            <option value="component" >Component</option>
+                                                            <option value="both" >Both</option>
+                                                        </select>
+                                                        {errors.type !=="" ? (
+                                                            <span className={classes.error}>{errors.type}</span>
                                                         ) : "" }
                                                     </div>
                                                     <div className="form-group col-md-4">
@@ -268,8 +222,8 @@ const UpdateModuleMenu = (props) => {
                                                         <input
                                                             type="text"
                                                             className="form-control"
-                                                            id="iconvalue"
-                                                            name="iconvalue"
+                                                            id="icon"
+                                                            name="icon"
                                                             value={details.icon}
                                                             onChange={handleOtherFieldInputChange}
                                                         />
@@ -286,51 +240,9 @@ const UpdateModuleMenu = (props) => {
                                                         />
                                                     </div>
 
-                                                    <div className="form-group col-md-2">
-
-                                                        <LabelSui as='a' color='black'  onClick={addLocations2} size='' style={{ marginTop:35}}>
-                                                            <Icon name='plus' /> Add
-                                                        </LabelSui>
-                                                    </div>
                                                 </div>
 
-                                            {/*    array addition list when click on the Add button*/}
-                                                <Col md={12}>
-                                                    <div className="">
-                                                        {relativesLocation.length >0
-                                                            ?
-                                                            <List>
-                                                                <Table  striped responsive>
-                                                                    <thead >
-                                                                    <tr>
-                                                                        <th>Parent Menu</th>
-                                                                        <th>Menu Name</th>
-                                                                        <th >Menu Link</th>
-                                                                        <th>Menu Icon</th>
-                                                                        <th>Menu Breadcrumb</th>
-                                                                        <th >Menu Tooltip</th>
-                                                                    </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                    {relativesLocation.map((relative, index) => (
 
-                                                                        <RelativeList
-                                                                            key={index}
-                                                                            index={index}
-                                                                            relative={relative}
-                                                                            removeRelativeLocation={removeRelativeLocation}
-                                                                            editRelativeLocation={editRelativeLocation}
-                                                                        />
-                                                                    ))}
-                                                                    </tbody>
-                                                                </Table>
-                                                            </List>
-                                                            :
-                                                            ""
-                                                        }
-                                                    </div>
-                                                </Col>
-                                            {/*End of the Menu List Array */}
                                                 <MatButton
                                                     type='submit'
                                                     variant='contained'
@@ -338,7 +250,7 @@ const UpdateModuleMenu = (props) => {
                                                     className={classes.button}
                                                     startIcon={<SaveIcon />}
                                                     disabled={loading}
-                                                    onClick={UpdateModuleMenu}
+                                                    onClick={EditMenu}
 
                                                 >
 
@@ -364,42 +276,6 @@ const UpdateModuleMenu = (props) => {
     );
 }
 
-function RelativeList({
-                          relative,
-                          index,
-                          removeRelativeLocation,
-                          editRelativeLocation,
-                      }) {
-
-    function ParentName (parentID){
-        if(parentID!=="") {
-            const getactualmenu = menuobj.filter(x => x.value === parseInt(parentID))
-
-            //return getactualmenu[0].label
-        }
-    }
-
-    return (
-        <tr>
-            <th>{ParentName(relative.parentId!==null ? relative.parentId :" ")}</th>
-            <th>{relative.name}</th>
-            <th>{relative.url}</th>
-            <th><i className={relative.icon} /></th>
-            <th>{relative.breadcrumb}</th>
-            <th>{relative.tooltip}</th>
-            <th >
-                <IconButton aria-label="delete" size="small" color="error" onClick={() =>editRelativeLocation(index, relative)}>
-                    <SaveIcon fontSize="inherit" />
-                </IconButton>
-                <IconButton aria-label="delete" size="small" color="error" onClick={() =>removeRelativeLocation(index)}>
-                    <DeleteIcon fontSize="inherit" />
-                </IconButton>
-
-            </th>
-        </tr>
-    );
-}
-
 const mapStateToProps = (state, ownProps) => {
     return {
         moduleMenuList: state.boostrapmodule.moduleMenuList,
@@ -409,6 +285,6 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapActionToProps = {
     getModuleMenus: getModuleMenus,
-    updateModuleMenu: updateModuleMenu
+    editModuleMenu: editModuleMenu
 };
 export default connect(mapStateToProps, mapActionToProps)(UpdateModuleMenu);;

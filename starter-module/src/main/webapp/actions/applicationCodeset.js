@@ -1,6 +1,7 @@
 import axios from "axios";
 import { url } from "./../api";
 import * as ACTION_TYPES from "./types";
+import {toast} from "react-toastify";
 
 export const fetchApplicationCodeSet = (codesetGroup, actionType, onSuccess , onError) => dispatch => {
     console.log(actionType)
@@ -16,9 +17,9 @@ export const fetchApplicationCodeSet = (codesetGroup, actionType, onSuccess , on
         }
       })
       .catch(error => {
-          if(onError){
               onError();
-          }
+              let errorMessage = error.response.data && error.response.data.apierror.message!=="" ? error.response.data.apierror.message :  "Something went wrong, please try again";
+              toast.error(errorMessage);
       }
         
       );
@@ -37,9 +38,9 @@ export const fetchAll = (onSuccess , onError) => dispatch => {
             }
         })
         .catch(error => {
-                if(onError){
-                    onError();
-                }
+            onError();
+            let errorMessage = error.response.data && error.response.data.apierror.message!=="" ? error.response.data.apierror.message :  "Something went wrong, please try again";
+            toast.error(errorMessage);
             }
 
         );
@@ -54,9 +55,9 @@ export const createApplicationCodeset = (data, onSuccess , onError) => dispatch 
             }
         })
         .catch(error => {
-                if(onError){
-                    onError();
-                }
+            onError();
+            let errorMessage = error.response.data && error.response.data.apierror.message!=="" ? error.response.data.apierror.message :  "Something went wrong, please try again";
+            toast.error(errorMessage);
             }
 
         );
@@ -71,9 +72,9 @@ export const updateApplicationCodeset = (id, data, onSuccess , onError) => dispa
             }
         })
         .catch(error => {
-                if(onError){
-                    onError();
-                }
+            onError();
+            let errorMessage = error.response.data && error.response.data.apierror.message!=="" ? error.response.data.apierror.message :  "Something went wrong, please try again";
+            toast.error(errorMessage);
             }
 
         );
