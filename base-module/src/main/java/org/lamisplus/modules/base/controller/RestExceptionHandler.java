@@ -1,5 +1,6 @@
 package org.lamisplus.modules.base.controller;
 
+import com.foreach.across.core.annotations.Exposed;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.exception.ConstraintViolationException;
 import org.lamisplus.modules.base.controller.apierror.*;
@@ -30,6 +31,7 @@ import static org.springframework.http.HttpStatus.*;
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @ControllerAdvice
 @Slf4j
+@Exposed
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     /**

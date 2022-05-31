@@ -540,6 +540,12 @@ public class ModuleManager {
                 .anyMatch(m -> m.getName().equals(module.getName()));
     }
 
+    public boolean isInstalled(String name) {
+        return contextsHolder.getContexts().values().stream()
+                .flatMap(ctx -> ctx.getModules().stream())
+                .anyMatch(m -> m.getName().equals(name));
+    }
+
     public ModuleConfig getModuleConfig(Module module) {
         List<ModuleConfig> moduleConfigs = new ArrayList<>();
         try {
