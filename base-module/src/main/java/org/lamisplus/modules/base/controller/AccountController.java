@@ -65,17 +65,14 @@ public class AccountController {
     }
 
     @GetMapping("/account/roles")
-    public Set<Role> getAccountRoles(Principal principal){
+    public List<Role> getAccountRoles(Principal principal){
         Optional<User> optionalUser = userService.getUserWithRoles();
         UserDTO userDTO = userService.getUserWithRoles()
                     .map(UserDTO::new)
                     .orElseThrow(() -> new EntityNotFoundException(User.class,"Name:","User"));
         if(userDTO.getPermissions().contains("all_permission")){
-            return roleRepository.findAllByArchived(0).stream().map(role -> {
-                role.setPermission(null);
-                return role;
-            }).collect(Collectors.toSet());
+            return roleRepository.findAllByArchived(0);
         } else
-            return userMapper.rolessFromStrings(userDTO.getRoles());
+            return roleRepository.findAllInRolesNames(userDTO.getRoles());
     }
 }
