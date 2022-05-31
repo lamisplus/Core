@@ -22,7 +22,6 @@ import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api")
 @RequiredArgsConstructor
 public class AccountController {
     private final RoleRepository roleRepository;
@@ -35,7 +34,10 @@ public class AccountController {
 
     private final ApplicationUserOrganisationUnitRepository applicationUserOrganisationUnitRepository;
 
-    @GetMapping("/account")
+    //Versioning through URI Path
+    private final String BASE_URL_VERSION_ONE = "/api/v1";
+
+    @GetMapping(BASE_URL_VERSION_ONE + "/account")
     public UserDTO getAccount(Principal principal){
 
         Optional<User> optionalUser = userService.getUserWithRoles();
@@ -64,7 +66,7 @@ public class AccountController {
         }
     }
 
-    @GetMapping("/account/roles")
+    @GetMapping(BASE_URL_VERSION_ONE + "/account/roles")
     public List<Role> getAccountRoles(Principal principal){
         Optional<User> optionalUser = userService.getUserWithRoles();
         UserDTO userDTO = userService.getUserWithRoles()
