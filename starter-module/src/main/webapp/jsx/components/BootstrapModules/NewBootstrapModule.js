@@ -1,7 +1,7 @@
 import React, { useState, useEffect} from 'react';
 import PageTitle from "../../layouts/PageTitle";
 import { makeStyles } from '@material-ui/core/styles'
-import { Link } from 'react-router-dom';
+import {Link, useHistory} from 'react-router-dom';
 import MatButton from '@material-ui/core/Button'
 import { TiArrowBack} from 'react-icons/ti';
 import 'react-widgets/dist/css/react-widgets.css'
@@ -55,78 +55,16 @@ const useStyles = makeStyles((theme) => ({
   },
   td: { borderBottom :'#fff'}
   }));
-const CardListBlog = [
-	{ 
-		id:1, Cust_Id:"C01234",  name:"BiometricsModule", 
-		desc: "LAMIS Biometric Module", status:"Active"
-	},
-	{ 
-		id:2, Cust_Id:"C01235", name:"LAMISPatientModule", 
-		desc: "LAMIS Patient Module", 	status:"Active " 
-	},
-	{ 
-		id:3, Cust_Id:"C01236", name:"LAMISPharmacyModule", 
-		desc: "LAMIS Pharmacy Module", status:"active" 
-	},
-	
-	
-];
+
 
 function getSteps() {
     return ['Upload', 'Install'];
   }
 
 const BootstrapModule = (props) => {
+    let history = useHistory();
     const classes = useStyles()
-	const [timesession, setTimesession] = useState('July 27th - Auguts 27th, 2021');
-    const [postModal, setPostModal] = useState(false);
-    const [contacts, setContacts] = useState(CardListBlog);
-    // delete data  
-    const handleDeleteClick = (contactId) => {
-        const newContacts = [...contacts];    
-        const index = contacts.findIndex((contact)=> contact.id === contactId);
-        newContacts.splice(index, 1);
-        setContacts(newContacts);
-    }
-    //Add data 
-    const [addFormData, setAddFormData ] = useState({
-        Cust_Id:'',
-        Date_Join:'',
-        Cust_Name:'',
-        Location:'',
-		image:'',
-    }); 
-
-    const [editModal, setEditModal] = useState(false);
-    
-    // Edit function editable page loop
-    const [editContactId, setEditContactId] = useState(null);
-   
-    // Edit function button click to edit
-    const handleEditClick = ( event, contact) => {
-        event.preventDefault();
-        setEditContactId(contact.id);
-        const formValues = {
-            Cust_Id: contact.Cust_Id,
-            Date_Join: contact.Date_Join,
-            Cust_Name: contact.Cust_Name,
-            Location: contact.Location,
-			image: contact.image,
-        }
-        setEditFormData(formValues);
-        setEditModal(true);
-    };
-    
-    
-    // edit  data  
-    const [editFormData, setEditFormData] = useState({
-        Cust_Id:'',
-        Date_Join:'',
-        Cust_Name:'',
-        Location:'',
-		image:'',
-    })
-
+    const [contacts, setContacts] = useState();
     const apiURl = url + "module/";
     const dispatch = useDispatch();
     const [activeStep, setActiveStep] = React.useState(0);
@@ -182,6 +120,9 @@ const BootstrapModule = (props) => {
 
   };
   const handleBack = () => {
+
+    setDisabledUploadButton(false)
+    setuploadButtonhidden(false)
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
@@ -212,8 +153,8 @@ const BootstrapModule = (props) => {
       setDisabledNextButton(false)
       setInstallationOverlay(false) 
       setDisableNextButtonProcess(false)  
-      window.location.href = "bootstrap-modules";
-      //props.history.push(`/bootstrap-modules`)  
+      //window.location.href = "bootstrap-modules";
+      history.push(`/bootstrap-modules`)
     }
     const onError = () => {
       setDisabledNextButton(false)
@@ -250,14 +191,14 @@ const BootstrapModule = (props) => {
           
           const { fileName, filePath } = res.data;
           setUploadedFile({ fileName, filePath });
-          setMessage('File Uploaded');
+          //setMessage('File Uploaded');
           setUploadResponse(res.data===null ? {} :res.data)
           setuploadButtonhidden(true)
           setDisableNextButtonProcess(false) //Enable the next process button for the next stage 
           setInstallationMessage('')
           setActiveStep((prevActiveStep) => prevActiveStep + 1); 
       } catch (err) {
-          console.log(err)
+         // console.log(err)
           if (err.response && err.response.status === 500) {
             setDisabledUploadButton(false)
             setMessage('There was a problem in uploading file! please try again...');
@@ -513,7 +454,6 @@ const BootstrapModule = (props) => {
                       //variant="outlined"
                       color="default"
                       className={classes.button}                        
-                      className=" float-end"
                   >
                     <TiArrowBack/>{" "} Back
                 </MatButton>
@@ -562,7 +502,7 @@ const BootstrapModule = (props) => {
                           <div>
                             <Button
                               disabled={activeStep === 0}
-                              onClick={handleBack}
+                              onClick={handleBack}//handleBack
                               className={classes.backButton}
                               variant="contained"
                             >

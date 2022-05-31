@@ -384,7 +384,7 @@ console.log(otherfields)
                                             ""
                                             }
                                             {/* End of the Other Detail Fields for the Org. Unit */}
-                                         <Col md={12}>
+                                            <Col md={12}>
                                                   <div className={classes.demo}>
                                                   {relativesLocation.length >0 
                                                     ?

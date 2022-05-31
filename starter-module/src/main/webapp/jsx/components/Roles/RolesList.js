@@ -3,7 +3,7 @@ import { url as baseUrl } from "./../../../api";
 import React, { useEffect, useState } from "react";
 import MaterialTable from "material-table";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
+import {Link, useHistory} from "react-router-dom";
 import { fetchRoles, deleteRole, updateRole } from "./../../../actions/role";
 import { makeStyles } from "@material-ui/core/styles";
 import "./RolesList.css";
@@ -67,6 +67,7 @@ const useStyles = makeStyles((theme) => ({
 let roleId = 0;
 
 const RoleList = (props) => {
+  let history = useHistory();
   const classes = useStyles();
   const [loading, setLoading] = useState(true);
   const [modal, setModal] = useState(false);
@@ -96,7 +97,7 @@ const fetchRole =()=>{
       setModal(false)
       fetchRole()
       toast.success("Role Deleted Successfully");          
-      props.history.push("/roles")
+      history.push("/roles")
       //return;
     };
     const onError = () => {
@@ -119,7 +120,7 @@ const fetchRole =()=>{
           { title: "Id", field: "id", filtering: false },
           { title: "Name", field: "name" },
          
-          { title: "", field: "actions", filtering: false },
+          { title: "Actions", field: "actions", filtering: false },
         ]}
         isLoading={loading}
         data={props.rolesList.map((row) => ({

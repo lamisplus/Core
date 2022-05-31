@@ -26,12 +26,14 @@ export const register = (data, onSuccess, onError) => (dispatch) => {
       
     })
     .catch((error) => {
+        //console.log(error)
       dispatch({
         type: ACTION_TYPES.REGISTER_FAILURE,
         payload: "Something went wrong, please try again",
       });
       onError();
-      toast.error("Something went wrong, please try again");
+        let errorMessage = error.response.data && error.response.data.apierror.message!=="" ? error.response.data.apierror.message :  "Something went wrong, please try again";
+      toast.error(errorMessage);
     });
 };
 
@@ -53,7 +55,9 @@ export const update = (id, data, onSuccess, onError) => (dispatch) => {
         type: ACTION_TYPES.REGISTER_FAILURE,
         payload: "Something went wrong, please try again",
       });
-      console.log(error);
+        onError();
+        let errorMessage = error.response.data && error.response.data.apierror.message!=="" ? error.response.data.apierror.message :  "Something went wrong, please try again";
+        toast.error(errorMessage);
     });
 };
 
@@ -79,7 +83,9 @@ export const fetchUsers = (onSuccess, onError) => (dispatch) => {
         type: ACTION_TYPES.USER_ROLE_UPDATE,
         payload: "Something went wrong, please try again",
       });
-      onError();
+        onError();
+        let errorMessage = error.response.data && error.response.data.apierror.message!=="" ? error.response.data.apierror.message :  "Something went wrong, please try again";
+        toast.error(errorMessage);
     });
 };
 
@@ -92,7 +98,9 @@ export const deleteUser = (id, onSuccess, onError) => (dispatch) => {
       
     })
     .catch((error) => {
-      onError();
+        onError();
+        let errorMessage = error.response.data && error.response.data.apierror.message!=="" ? error.response.data.apierror.message :  "Something went wrong, please try again";
+        toast.error(errorMessage);
     });
 };
 // export const updateUserRole = (id, data, onSuccess, onError) => (dispatch) => {

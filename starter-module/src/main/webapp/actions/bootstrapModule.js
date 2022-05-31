@@ -35,7 +35,7 @@ export const fetchAllBootstrapModule = (onSuccess, onError) => dispatch => {
         payload: 'Something went wrong, please try again'
       })
       onError();
-      console.log(error)
+      //console.log(error)
     });
 };
 export const fetchAllBootstrapModuleBYBatchNum = (status, batchNum,onSuccess, onError) => dispatch => {
@@ -78,8 +78,9 @@ export const installBootstrapModule = (obj, onSuccess, onError)=> dispatch => {
         type: ACTION_TYPES.ERROR_INSTALL_BOOSTRAP_MODULE_BY_ID,
         payload: error
       })
-      onError && onError();
-      toast.error("Something went wrong!");
+            onError();
+            let errorMessage = error.response.data && error.response.data.apierror.message!=="" ? error.response.data.apierror.message :  "Something went wrong, please try again";
+            toast.error(errorMessage);
     }
     );
     }
@@ -104,8 +105,9 @@ export const updateBootstrapModule = (obj, onSuccess, onError)=> dispatch => {
                         type: ACTION_TYPES.ERROR_INSTALL_BOOSTRAP_MODULE_BY_ID,
                         payload: error
                     })
-                    onError && onError();
-                    toast.error("Something went wrong!");
+                onError();
+                let errorMessage = error.response.data && error.response.data.apierror.message!=="" ? error.response.data.apierror.message :  "Something went wrong, please try again";
+                toast.error(errorMessage);
                 }
             );
     }
@@ -129,8 +131,9 @@ export const unInstallBootstrapModule = (obj, onSuccess, onError)=> dispatch => 
         type: ACTION_TYPES.ERROR_UNINSTALL_BOOSTRAP_MODULE,
         payload: error
       })
-      onError && onError();
-      toast.error("Something went wrong!");
+            onError();
+            let errorMessage = error.response.data && error.response.data.apierror.message!=="" ? error.response.data.apierror.message :  "Something went wrong, please try again";
+            toast.error(errorMessage);
     }
     );
     
@@ -180,8 +183,9 @@ export const activateBootstrapModule = (data, onSuccess, onError)=> dispatch => 
         type: ACTION_TYPES.ERROR_ACTIVATE_BOOSTRAP_MODULE,
         payload: error
       })
-      onError && onError();
-      toast.error("Something went wrong!");
+            onError();
+            let errorMessage = error.response.data && error.response.data.apierror.message!=="" ? error.response.data.apierror.message :  "Something went wrong, please try again";
+            toast.error(errorMessage);
     }
     );
     
@@ -212,7 +216,9 @@ const options = {
         payload: error
       })
       //onError()
-      toast.error("Something went wrong, please try again");
+        //onError();
+        let errorMessage = error.response.data && error.response.data.apierror.message!=="" ? error.response.data.apierror.message :  "Something went wrong, please try again";
+        toast.error(errorMessage);
       
     });
   
@@ -238,8 +244,9 @@ export const startBootstrapModule = (onSuccess, onError)=> dispatch => {
         type: ACTION_TYPES.ERROR_START_BOOSTRAP_MODULE,
         payload: error
       })
-      onError && onError();
-      toast.error("Something went wrong! please try again..");
+            onError();
+            let errorMessage = error.response.data && error.response.data.apierror.message!=="" ? error.response.data.apierror.message :  "Something went wrong, please try again";
+            toast.error(errorMessage);
     }
     );
 
@@ -248,7 +255,7 @@ export const getModuleMenus = (id,onSuccess, onError)=> dispatch => {
     axios
         .get(`${baseUrl}modules/${id}/menus`)
         .then(response => {
-            //console.log(response)
+            console.log(response)
             dispatch({
                 type: ACTION_TYPES.GET_MODULE_MENU,
                 payload: response.data
@@ -285,11 +292,87 @@ export const updateModuleMenu = (id, obj, onSuccess, onError)=> dispatch => {
                     type: ACTION_TYPES.ERROR_UPDATE_MODULE_MENU,
                     payload: error
                 })
-                onError && onError();
-                //toast.error("Something went wrong! please try again..");
+            onError();
+            let errorMessage = error.response.data && error.response.data.apierror.message!=="" ? error.response.data.apierror.message :  "Something went wrong, please try again";
+            toast.error(errorMessage);
             }
         );
 
 };
 
+export const addModuleMenu = (obj, onSuccess, onError)=> dispatch => {
+    axios
+        .post(`${baseUrl}menus?isModule=true`, obj)
+        .then(response => {
+            dispatch({
+                type: ACTION_TYPES.ADD_MODULE_MENU,
+                payload: response.data
+            })
 
+            onSuccess && onSuccess();
+            toast.success("Menu added successfully!");
+        })
+        .catch(error => {
+                console.log(error)
+                dispatch({
+                    type: ACTION_TYPES.ERROR_ADD_MODULE_MENU,
+                    payload: error
+                })
+            onError();
+            let errorMessage = error.response.data && error.response.data.apierror.message!=="" ? error.response.data.apierror.message :  "Something went wrong, please try again";
+            toast.error(errorMessage);
+            }
+        );
+
+};
+
+export const deleteModuleMenu = (id, onSuccess, onError)=> dispatch => {
+    axios
+        .delete(`${baseUrl}menus/${id}`, )
+        .then(response => {
+            dispatch({
+                type: ACTION_TYPES.DELETE_MODULE_MENU,
+                payload: response.data
+            })
+
+            onSuccess && onSuccess();
+            toast.success("Module menu deleted successfully!");
+        })
+        .catch(error => {
+                console.log(error)
+                dispatch({
+                    type: ACTION_TYPES.ERROR_DELETE_MODULE_MENU,
+                    payload: error
+                })
+            onError();
+            let errorMessage = error.response.data && error.response.data.apierror.message!=="" ? error.response.data.apierror.message :  "Something went wrong, please try again";
+            toast.error(errorMessage);
+            }
+        );
+
+};
+
+export const editModuleMenu = (id, obj, onSuccess, onError)=> dispatch => {
+    axios
+        .put(`${baseUrl}menus/${id}`, obj)
+        .then(response => {
+            dispatch({
+                type: ACTION_TYPES.EDIT_MODULE_MENU,
+                payload: response.data
+            })
+            onSuccess && onSuccess();
+            toast.success("Module menu updated successfully!");
+        })
+        .catch(error => {
+                console.log(error)
+                dispatch({
+                    type: ACTION_TYPES.ERROR_EDIT_MODULE_MENU,
+                    payload: error
+                })
+            onError();
+            let errorMessage = error.response.data && error.response.data.apierror.message!=="" ? error.response.data.apierror.message :  "Something went wrong, please try again";
+            toast.error(errorMessage);
+            }
+        );
+
+};

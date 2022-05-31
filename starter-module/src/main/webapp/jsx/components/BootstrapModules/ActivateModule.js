@@ -5,25 +5,25 @@ import MatButton from '@material-ui/core/Button';
 import { activateBootstrapModule } from '../../../actions/bootstrapModule';
 import { connect } from 'react-redux';
 import {Modal, Button} from 'react-bootstrap';
+import {useHistory} from "react-router-dom";
 
 
 
 const ActivateModule = (props) => {
-
+    let history = useHistory();
     const datasample = props.datasample ? props.datasample : {};
-
 
     const activateModule = () => {
         const onError = () => {
         }
         const onSuccess = () => {
-
+            props.togglestatus()
+            //window.location.href = "bootstrap-modules";
+            props.loadModules()
+            history.push(`/bootstrap-modules`)
         }
         props.activateBootstrapModule(datasample, onSuccess, onError);
-        props.togglestatus()
-        //window.location.href = "bootstrap-modules";
-        props.loadModules()
-        props.history.push(`/bootstrap-modules`)
+
     }
 
     

@@ -150,7 +150,7 @@ return (
                     { title: ' Name', field: 'name' },
                     { title: 'Description', field: 'description' },
                     
-                    { title: 'Action', field: 'actions'},
+                    { title: 'Actions', field: 'actions'},
                     
                   ]}
                   isLoading={loading}

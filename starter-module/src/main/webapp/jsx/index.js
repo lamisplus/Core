@@ -12,9 +12,11 @@ import "./step.css";
 import Nav from "./layouts/nav";
 import Footer from "./layouts/Footer";
 /// Dashboard
+import LoginPage from './pages/LoginPage';
 import Home from "./components/Dashboard/Home";
 import Bootstrap from "./components/BootstrapModules/Home";
 import NewBootstrapModule from "./components/BootstrapModules/NewBootstrapModule";
+import ModuleMenu from "./components/BootstrapModules/ModuleMenu";
 import UpdateModuleJar from "./components/BootstrapModules/UpdateModuleJar";
 import UserList from "./components/Users/UserPage";
 import userRegsitration from "./components/Users/UserRegistration";
@@ -33,6 +35,8 @@ import Modules from "./components/Modules/Index";
 import OrganizationUnit from "./components/OrganizationUnit/Index";
 import ApplicationCodeset from "./components/ApplicationCodeset/ApplicationCodesetSearch";
 import ParentOrganizationUnit from "./components/OrganizationUnit/ParentOrganizationalUnit";
+import MenuList from "./components/Menu/MenuList";
+import SubMenuList from "./components/Menu/SubMenuList";
 import { ThemeContext } from "../context/ThemeContext";
 
 const Markup = () => {
@@ -46,6 +50,9 @@ const Markup = () => {
     { url: "bootstrap-modules", component: Bootstrap },
     { url: "upload-module", component: NewBootstrapModule },
     { url: "update-module", component: UpdateModuleJar },
+    { url: "module-menu", component: ModuleMenu },
+    { url: "submenu", component: SubMenuList },
+
     ///User and Role Management
     { url: "users", component: UserList },
     { url: "user-registration", component: userRegsitration },
@@ -64,6 +71,7 @@ const Markup = () => {
     { url: "organisation-unit", component: OrganizationUnit },
     { url: "application-codeset", component: ApplicationCodeset },
     { url: "admin-parent-organization-unit", component: ParentOrganizationUnit },
+    { url: "menu", component: MenuList },
   ];
   
   let path = window.location.pathname;
