@@ -130,7 +130,7 @@ application:
         max-pool-size: 50
         queue-capacity: 10000
 
-app:
+lamisplus:
     datasource:
         module:
             driver-class-name: org.postgresql.Driver
