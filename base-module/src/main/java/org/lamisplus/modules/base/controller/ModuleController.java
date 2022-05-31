@@ -25,7 +25,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api")
 @Slf4j
 @RequiredArgsConstructor
 public class ModuleController {
@@ -35,8 +34,11 @@ public class ModuleController {
     private final ModuleService moduleService;
     private final MenuService menuService;
 
+    //Versioning through URI Path
+    private final String BASE_URL_VERSION_ONE = "/api/v1/";
 
-    @GetMapping("/modules/{id:\\d+}/web-modules")
+
+    @GetMapping(BASE_URL_VERSION_ONE+"modules/{id:\\d+}/web-modules")
     @Timed
     //@PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     public List<WebModule> getModulesByType(@PathVariable("id") Long id) {
@@ -49,7 +51,7 @@ public class ModuleController {
         return new ArrayList<>();
     }
 
-    @GetMapping("/modules/{id:\\d+}/menus")
+    @GetMapping(BASE_URL_VERSION_ONE+"modules/{id:\\d+}/menus")
     @Timed
     //@PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     public List<MenuDTO> getModulesMenu(@PathVariable("id") Long id) {
@@ -70,7 +72,7 @@ public class ModuleController {
     }
 
 
-    @GetMapping("/modules/{id:\\d+}")
+    @GetMapping(BASE_URL_VERSION_ONE+ "modules/{id:\\d+}")
     @Timed
     public ResponseEntity<Module> getModule(@PathVariable("id") Long id) {
         LOG.debug("Getting module: {}", id);
@@ -83,7 +85,7 @@ public class ModuleController {
         return ResponseUtil.wrapOrNotFound(module);
     }
 
-    @GetMapping("/modules")
+    @GetMapping(BASE_URL_VERSION_ONE+ "modules")
     @Timed
     public List<Module> getWebModules() {
         LOG.debug("Getting all active modules");
@@ -100,37 +102,37 @@ public class ModuleController {
         return providers;
     }
 
-    @PostMapping("/modules/activate")
+    @PostMapping(BASE_URL_VERSION_ONE+ "modules/activate")
     public ModuleResponse activateModule(@RequestBody Module module) {
         return moduleService.activate(module);
     }
 
-    @PostMapping("/modules/deactivate")
+    @PostMapping(BASE_URL_VERSION_ONE+ "modules/deactivate")
     public ModuleResponse deactivateModule(@RequestBody Module module) {
         return moduleService.deactivate(module);
     }
 
-    @PostMapping("/modules/uninstall")
+    @PostMapping(BASE_URL_VERSION_ONE+"modules/uninstall")
     public ModuleResponse shutdownModule(@RequestBody Module module, Boolean uninstall) {
         return moduleService.uninstall(module, uninstall);
     }
 
-    @PostMapping("/modules/update")
+    @PostMapping(BASE_URL_VERSION_ONE+"modules/update")
     public ModuleResponse updateModule(@RequestBody Module module) {
         return moduleService.update(module, false);
     }
 
-    @PostMapping("/modules/upload")
+    @PostMapping(BASE_URL_VERSION_ONE+"modules/upload")
     public Module uploadModuleData(@RequestParam("file") MultipartFile file) {
         return moduleService.uploadModuleData(file);
     }
 
-    @PostMapping("/modules/install")
+    @PostMapping(BASE_URL_VERSION_ONE+ "modules/install")
     public ModuleResponse installModule(final @RequestBody Module module, @RequestParam Boolean install) {
         return moduleService.installModule(module, install, false);
     }
 
-    @GetMapping("/modules/menus")
+    @GetMapping(BASE_URL_VERSION_ONE + "modules/menus")
     public List<Menu> getMenus() {
         LOG.debug("Getting all menus for current user");
 
@@ -249,12 +251,12 @@ public class ModuleController {
                 .collect(Collectors.toList());
     }
 
-    @PutMapping("/modules/{id}")
+    @PutMapping(BASE_URL_VERSION_ONE + "modules/{id}")
     public ModuleResponse updateDetails(@PathVariable Long id, @RequestBody Module module) {
         return moduleService.updateDetails(id, module);
     }
 
-    @PutMapping("/modules/{id}/menus")
+    @PutMapping(BASE_URL_VERSION_ONE + "modules/{id}/menus")
     public ResponseEntity<List<Menu>> updateModuleMenu(@PathVariable Long id, @RequestBody ModuleMenuDTO moduleMenuDTO) {
         return ResponseEntity.ok(this.menuService.updateModuleMenu(id, moduleMenuDTO));
     }

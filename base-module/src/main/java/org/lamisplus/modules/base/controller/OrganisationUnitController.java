@@ -27,26 +27,29 @@ public class OrganisationUnitController {
 
     private final OrganisationUnitService organisationUnitService;
 
-    @PostMapping("/v2")
+    //Versioning through URI Path
+    private final String BASE_URL_VERSION_ONE = "/api/v1/organisation-units";
+
+    @PostMapping(BASE_URL_VERSION_ONE + "/v2")
     @PreAuthorize("hasAnyAuthority('Super Admin','Facility Admin', 'Admin', 'Data Clerk', 'DEC', 'M&E Officer')")
     public ResponseEntity<List<OrganisationUnit>> save(@RequestParam Long parentOrganisationUnitId, @RequestParam Long organisationUnitLevelId,
                                                        @Valid @RequestBody List<OrganisationUnitDTO> organisationUnitDTOS) {
         return ResponseEntity.ok(organisationUnitService.save(parentOrganisationUnitId, organisationUnitLevelId, organisationUnitDTOS));
     }
 
-    @PutMapping("/v2/{id}")
+    @PutMapping(BASE_URL_VERSION_ONE + "/v2/{id}")
     @PreAuthorize("hasAnyAuthority('Super Admin','Facility Admin', 'Admin', 'Data Clerk', 'DEC', 'M&E Officer')")
     public ResponseEntity<OrganisationUnit> update(@PathVariable Long id, @RequestBody OrganisationUnitDTO organisationUnitDTO) {
         return ResponseEntity.ok(organisationUnitService.update(id, organisationUnitDTO));
     }
 
-    @GetMapping("/v2/{id}")
+    @GetMapping(BASE_URL_VERSION_ONE + "/v2/{id}")
     @PreAuthorize("hasAnyAuthority('Super Admin','Facility Admin', 'Admin', 'Data Clerk', 'DEC', 'M&E Officer')")
     public ResponseEntity<OrganisationUnit> getOrganizationUnit(@PathVariable Long id) {
         return ResponseEntity.ok(organisationUnitService.getOrganizationUnit(id));
     }
 
-    @GetMapping("/v2")
+    @GetMapping(BASE_URL_VERSION_ONE + "/v2")
     public ResponseEntity<List<OrganisationUnit>> getAllOrganizationUnit(@PageableDefault(value = 100) Pageable pageable) {
 
         Page page = organisationUnitService.getAllOrganizationUnit(pageable);
@@ -54,7 +57,7 @@ public class OrganisationUnitController {
         return new ResponseEntity<>(organisationUnitService.getAllOrganizationUnit(page), headers, HttpStatus.OK);
     }
 
-    @GetMapping ("/parent-organisation-units/{id}")
+    @GetMapping (BASE_URL_VERSION_ONE + "/parent-organisation-units/{id}")
     public  ResponseEntity<List<OrganisationUnit>>  getOrganisationUnitByParentOrganisationUnitId(@PathVariable Long id) {
         return ResponseEntity.ok(this.organisationUnitService.getOrganisationUnitByParentOrganisationUnitId(id));
     }
@@ -65,14 +68,14 @@ public class OrganisationUnitController {
         return ResponseEntity.ok(this.organisationUnitService.getOrganisationUnitByParentOrganisationUnitIdAndOrganisationUnitLevelId(id, lid));
     }*/
 
-    @GetMapping ("/parent-organisation-units/{id}/organisation-units-level/{lid}/hierarchy")
+    @GetMapping (BASE_URL_VERSION_ONE + "/parent-organisation-units/{id}/organisation-units-level/{lid}/hierarchy")
     public  ResponseEntity<List<OrganisationUnitDTO>>  getOrganisationUnitSubsetByParentOrganisationUnitIdAndOrganisationUnitLevelId(
             @PathVariable Long id, @PathVariable Long lid) {
         return ResponseEntity.ok(this.organisationUnitService.
                 getOrganisationUnitSubsetByParentOrganisationUnitIdAndOrganisationUnitLevelId(id, lid));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping(BASE_URL_VERSION_ONE + "/{id}")
     public ResponseEntity<Integer> delete(@PathVariable Long id) {
         return ResponseEntity.ok(organisationUnitService.delete(id));
     }

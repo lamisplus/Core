@@ -12,13 +12,15 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/program")
 @Slf4j
 @RequiredArgsConstructor
 public class ProgramController {
     private final ProgramService programService;
 
-    @GetMapping
+    //Versioning through URI Path
+    private final String BASE_URL_VERSION_ONE = "/api/v1/programs";
+
+    @GetMapping(BASE_URL_VERSION_ONE)
     public ResponseEntity<List<Program>> getAllModulePrograms() {
         return ResponseEntity.ok(programService.getAllModulePrograms());
     }

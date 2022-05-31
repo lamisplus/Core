@@ -63,7 +63,7 @@ spring:
     datasource:
         driver-class-name: org.postgresql.Driver
         username: postgres
-        password: admin
+        password: emeka
         url: jdbc:postgresql://localhost:5432/core
         hibernate:
             ddl-auto: none
@@ -135,7 +135,7 @@ lamisplus:
         module:
             driver-class-name: org.postgresql.Driver
             username: postgres
-            password: admin
+            password: emeka
             url: jdbc:postgresql://localhost:5432/core
             hikari:
                     auto-commit: true
@@ -146,3 +146,5 @@ lamisplus:
                         useServerPrepStmts: true
                     maximum-pool-size: 5
                     minimum-idle: 3
+    base-url:
+        version-one: "/api/v1/"
