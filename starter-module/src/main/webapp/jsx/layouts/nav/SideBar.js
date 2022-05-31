@@ -11,6 +11,7 @@ import {fetchAllMenu, fetchUserPermission} from "./../../../actions/menu";
 import {connect} from "react-redux";
 import _ from "lodash";
 import LoadMenus from './../../components/Functions/LoadMenu'
+import { fontSize } from "@mui/system";
 
 // Image
 //import profile from "../../../images/profile/pic1.jpg";
@@ -104,8 +105,8 @@ const SideBar = (props) => {
         deshBoard.push(item.name)
         return item;
     })
-    console.log(props.menuList)
-    console.log(deshBoard)
+    // console.log(props.menuList)
+    // console.log(deshBoard)
     
   return (
     <div
@@ -139,19 +140,19 @@ const SideBar = (props) => {
                         menu.subs.map((subMenu, index) => (
                             <>
                               <ul style={{padding: "0.1rem 0 !important"}}>
-                                <li>
-                                  <Link style={{color: '#798087', padding: '-10px !important', fontSize:'12px !important'}} className={`${path === "${subMenu.name}" ? "mm-active" : ""}`} to={subMenu.moduleId && subMenu.moduleId!==null? "modules": subMenu.url  }>
-                                    <span style={{fontSize:'10px !important'}} >{subMenu.name} {subMenu.moduleId}</span>
+                                <li   style={{ marginLeft:"-15px", marginTop:"-12px",  marginBottom:"-12px"}}>
+                                  <Link to={subMenu.moduleId && subMenu.moduleId!==null? "modules": subMenu.url  }>
+                                    <span style={{fontSize:'13px'}} >{subMenu.name} {subMenu.moduleId}</span>
                                   </Link>
                                   {subMenu.subs && subMenu.subs.length > 0 ?
                                       subMenu.subs.map((subSubMenu, index) => (
                                         <>
-                                          <li className="ms-2">
+                                          <li className="">
                                             <Link style={{color: '#798087'}}
                                                   className={`${path === "system-information" ? "mm-active" : ""}`} to={!subSubMenu.moduleId || subSubMenu.moduleId===null? subSubMenu.url : "modules" }>
-                                                      <span className="align-middle me-1" style={{fontSize:'10px !important'}} >
-                                                        <i className="ti-angle-right"></i>
-                                                      </span>{" "}{subSubMenu.name}
+                                                      <span className="align-middle me-1" style={{fontSize:'14px !important'}} >
+                                                        <i className="ti-angle-right " size="xs"></i>
+                                                      </span>{" "}<span style={{fontSize:'12px'}} >{subSubMenu.name}</span>
                                             </Link>
                                           </li>
                                         </>

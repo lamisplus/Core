@@ -32,6 +32,7 @@ import momentLocalizer from "react-widgets-moment";
 import moment from "moment";
 import PageTitle from "./../../layouts/PageTitle";
 import Select from "react-select";
+import DualListBox from "react-dual-listbox";
 
 Moment.locale("en");
 momentLocalizer();
@@ -91,9 +92,7 @@ const UserRegistration = (props) => {
   const [validPasswordClass, setValidPasswordClass] = useState("");
   const [saving, setSaving] = useState(false);
   const [selectedOption, setSelectedOption] = useState();
-  //const [setArr, setSetArr] = useState([]);  
-  // console.log(selectedOption)
-    // console.log(props.location.state.user.role)
+
 
   useEffect(() => {
     async function getCharacters() {
@@ -119,9 +118,9 @@ const UserRegistration = (props) => {
   useEffect(() => {
     async function getCharacters() {
       axios
-        .get(`${baseUrl}roles`)
+        .get(`${baseUrl}account/roles`)
         .then((response) => {
-          
+          console.log(response.data)
           setRole(
             Object.entries(response.data).map(([key, value]) => ({
               label: value.name,
@@ -171,6 +170,8 @@ const UserRegistration = (props) => {
     values["dateOfBirth"] = dateOfBirth;
     //values["roles"] = [values["role"]]
     let roleArr = []
+    console.log(selectedOption)
+    return;
     selectedOption.forEach(function (value, index, array) {
       roleArr.push(value['label'])
     })
@@ -190,7 +191,10 @@ const UserRegistration = (props) => {
    
   };
 
-  //console.log(saving)
+  const onPermissionSelect = (selectedValues) => {
+    setSelectedOption(selectedValues);
+  };
+  console.log(role)
 
   return (
     <>
@@ -380,10 +384,18 @@ const UserRegistration = (props) => {
                     />
                     <FormFeedback>Passwords do not match</FormFeedback>
                   </FormGroup>
-                  
-                    
                     </div>
-                   
+                    <div className="form-group mb-12 col-md-12">
+                      <FormGroup>
+                        <Label for="permissions">Role*</Label>
+                        <DualListBox
+                          //canFilter
+                          options={role}
+                          onChange={onPermissionSelect}
+                          selected={selectedOption}
+                        />
+                      </FormGroup>
+                    </div>
                   </div>
                 
                   {saving ? <Spinner /> : ""}
