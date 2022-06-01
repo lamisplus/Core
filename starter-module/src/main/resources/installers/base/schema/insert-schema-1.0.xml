@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
-    <changeSet failOnError="false" author="Chukwuemeka Ilozue" id="1648201114214-70">
+    <changeSet failOnError="false" author="Chukwuemeka Ilozue" id="16482011142141-core-insert-schema-70">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">
                 SELECT COUNT(*) FROM application_codeset WHERE id=1;
@@ -13,7 +13,7 @@
                  stripComments="true"/>
     </changeSet>
 
-    <changeSet failOnError="false" author="Chukwuemeka Ilozue" id="1648201114214-71">
+    <changeSet failOnError="false" author="Chukwuemeka Ilozue" id="16482011142141-core-insert-schema-71">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">
                 SELECT COUNT(*) FROM organisation_unit_level WHERE id=1;
@@ -26,7 +26,7 @@
                  stripComments="true"/>
     </changeSet>
 
-    <changeSet failOnError="false" author="Chukwuemeka Ilozue" id="1648201114214-72">
+    <changeSet failOnError="false" author="Chukwuemeka Ilozue" id="16482011142141-core-insert-schema-72">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">
                 SELECT COUNT(*) FROM organisation_unit WHERE id=1;
@@ -39,7 +39,7 @@
                  stripComments="true"/>
     </changeSet>
 
-    <changeSet failOnError="false" author="Chukwuemeka Ilozue" id="1648201114214-73">
+    <changeSet failOnError="false" author="Chukwuemeka Ilozue" id="16482011142141-core-insert-schema-73">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">
                 SELECT COUNT(*) FROM organisation_unit_hierarchy WHERE id=1;
@@ -52,7 +52,7 @@
                  stripComments="true"/>
     </changeSet>
 
-    <changeSet failOnError="false" author="Chukwuemeka Ilozue" id="1648201114214-74">
+    <changeSet failOnError="false" author="Chukwuemeka Ilozue" id="16482011142141-core-insert-schema-74">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">
                 SELECT COUNT(*) FROM role WHERE id=1;
@@ -65,7 +65,7 @@
                  stripComments="true"/>
     </changeSet>
 
-    <changeSet failOnError="false" author="Chukwuemeka Ilozue" id="1648201114214-75">
+    <changeSet failOnError="false" author="Chukwuemeka Ilozue" id="16482011142141-core-insert-schema-75">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">
                 SELECT COUNT(*) FROM permission WHERE id=1;
@@ -78,7 +78,7 @@
                  stripComments="true"/>
     </changeSet>
 
-    <changeSet failOnError="false" author="Chukwuemeka Ilozue" id="1648201114214-76">
+    <changeSet failOnError="false" author="Chukwuemeka Ilozue" id="16482011142141-core-insert-schema-76">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">
                 SELECT COUNT(*) FROM role_permission WHERE role_id=1;
@@ -91,7 +91,7 @@
                  stripComments="true"/>
     </changeSet>
 
-    <changeSet failOnError="false" author="Chukwuemeka Ilozue" id="1648201114214-77">
+    <changeSet failOnError="false" author="Chukwuemeka Ilozue" id="16482011142141-core-insert-schema-77">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">
                 SELECT COUNT(*) FROM application_user WHERE id=1;
@@ -104,7 +104,7 @@
                  stripComments="true"/>
     </changeSet>
 
-    <changeSet failOnError="false" author="Chukwuemeka Ilozue" id="1648201114214-78">
+    <changeSet failOnError="false" author="Chukwuemeka Ilozue" id="16482011142141-core-insert-schema-78">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">
                 SELECT COUNT(*) FROM application_user_role WHERE user_id=1;
@@ -117,7 +117,7 @@
                  stripComments="true"/>
     </changeSet>
 
-    <changeSet failOnError="false" author="Chukwuemeka Ilozue" id="1648201114214-80">
+    <changeSet failOnError="false" author="Chukwuemeka Ilozue" id="16482011142141-core-insert-schema-80">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">
                 SELECT COUNT(*) FROM menu WHERE id=15;
@@ -125,6 +125,32 @@
         </preConditions>
         <sqlFile dbms="postgresql"
                  path="sql/menu.sql"
+                 relativeToChangelogFile="true"
+                 splitStatements="false"
+                 stripComments="true"/>
+    </changeSet>
+
+    <changeSet failOnError="false" author="Chukwuemeka Ilozue" id="16482011142141-core-insert-schema-81">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM standard_codeset_source WHERE id=1;
+            </sqlCheck>
+        </preConditions>
+        <sqlFile dbms="postgresql"
+                 path="sql/standard_codeset_source.sql"
+                 relativeToChangelogFile="true"
+                 splitStatements="false"
+                 stripComments="true"/>
+    </changeSet>
+
+    <changeSet failOnError="false" author="Chukwuemeka Ilozue" id="16482011142141-core-insert-schema-82">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM standard_codeset WHERE id=1;
+            </sqlCheck>
+        </preConditions>
+        <sqlFile dbms="postgresql"
+                 path="sql/standard_codeset.sql"
                  relativeToChangelogFile="true"
                  splitStatements="false"
                  stripComments="true"/>
