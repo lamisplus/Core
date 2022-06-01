@@ -21,7 +21,7 @@ public class ApplicationCodeSetController {
     private final ApplicationCodesetService applicationCodesetService;
 
     //Versioning through URI Path
-    private final String BASE_URL_VERSION_ONE = "/api/v1/application-codesets/";
+    private final String BASE_URL_VERSION_ONE = "/api/v1/application-codesets";
 
     @GetMapping(BASE_URL_VERSION_ONE +"/v2/{codesetGroup}")
     public ResponseEntity<List<ApplicationCodesetDTO>> getApplicationCodeByCodeSetGroup(@PathVariable String codesetGroup) {

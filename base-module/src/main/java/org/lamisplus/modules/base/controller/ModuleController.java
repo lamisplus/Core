@@ -35,10 +35,10 @@ public class ModuleController {
     private final MenuService menuService;
 
     //Versioning through URI Path
-    private final String BASE_URL_VERSION_ONE = "/api/v1/";
+    private final String BASE_URL_VERSION_ONE = "/api/v1";
 
 
-    @GetMapping(BASE_URL_VERSION_ONE+"modules/{id:\\d+}/web-modules")
+    @GetMapping(BASE_URL_VERSION_ONE+"/modules/{id:\\d+}/web-modules")
     @Timed
     //@PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     public List<WebModule> getModulesByType(@PathVariable("id") Long id) {
@@ -51,7 +51,7 @@ public class ModuleController {
         return new ArrayList<>();
     }
 
-    @GetMapping(BASE_URL_VERSION_ONE+"modules/{id:\\d+}/menus")
+    @GetMapping(BASE_URL_VERSION_ONE+"/modules/{id:\\d+}/menus")
     @Timed
     //@PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     public List<MenuDTO> getModulesMenu(@PathVariable("id") Long id) {
@@ -72,7 +72,7 @@ public class ModuleController {
     }
 
 
-    @GetMapping(BASE_URL_VERSION_ONE+ "modules/{id:\\d+}")
+    @GetMapping(BASE_URL_VERSION_ONE+ "/modules/{id:\\d+}")
     @Timed
     public ResponseEntity<Module> getModule(@PathVariable("id") Long id) {
         LOG.debug("Getting module: {}", id);
@@ -85,7 +85,7 @@ public class ModuleController {
         return ResponseUtil.wrapOrNotFound(module);
     }
 
-    @GetMapping(BASE_URL_VERSION_ONE+ "modules")
+    @GetMapping(BASE_URL_VERSION_ONE+ "/modules")
     @Timed
     public List<Module> getWebModules() {
         LOG.debug("Getting all active modules");
@@ -102,37 +102,37 @@ public class ModuleController {
         return providers;
     }
 
-    @PostMapping(BASE_URL_VERSION_ONE+ "modules/activate")
+    @PostMapping(BASE_URL_VERSION_ONE+ "/modules/activate")
     public ModuleResponse activateModule(@RequestBody Module module) {
         return moduleService.activate(module);
     }
 
-    @PostMapping(BASE_URL_VERSION_ONE+ "modules/deactivate")
+    @PostMapping(BASE_URL_VERSION_ONE+ "/modules/deactivate")
     public ModuleResponse deactivateModule(@RequestBody Module module) {
         return moduleService.deactivate(module);
     }
 
-    @PostMapping(BASE_URL_VERSION_ONE+"modules/uninstall")
+    @PostMapping(BASE_URL_VERSION_ONE+"/modules/uninstall")
     public ModuleResponse shutdownModule(@RequestBody Module module, Boolean uninstall) {
         return moduleService.uninstall(module, uninstall);
     }
 
-    @PostMapping(BASE_URL_VERSION_ONE+"modules/update")
+    @PostMapping(BASE_URL_VERSION_ONE+"/modules/update")
     public ModuleResponse updateModule(@RequestBody Module module) {
         return moduleService.update(module, false);
     }
 
-    @PostMapping(BASE_URL_VERSION_ONE+"modules/upload")
+    @PostMapping(BASE_URL_VERSION_ONE+"/modules/upload")
     public Module uploadModuleData(@RequestParam("file") MultipartFile file) {
         return moduleService.uploadModuleData(file);
     }
 
-    @PostMapping(BASE_URL_VERSION_ONE+ "modules/install")
+    @PostMapping(BASE_URL_VERSION_ONE+ "/modules/install")
     public ModuleResponse installModule(final @RequestBody Module module, @RequestParam Boolean install) {
         return moduleService.installModule(module, install, false);
     }
 
-    @GetMapping(BASE_URL_VERSION_ONE + "modules/menus")
+    @GetMapping(BASE_URL_VERSION_ONE + "/modules/menus")
     public List<Menu> getMenus() {
         LOG.debug("Getting all menus for current user");
 
@@ -239,7 +239,7 @@ public class ModuleController {
         return menuItems.stream().distinct().collect(Collectors.toList());
     }
 
-    @GetMapping("/modules/installed")
+    @GetMapping(BASE_URL_VERSION_ONE + "/modules/installed")
     @Cacheable(cacheNames = "modules")
     public List<Module> getModules() {
         LOG.debug("Get all installed modules");
@@ -251,12 +251,12 @@ public class ModuleController {
                 .collect(Collectors.toList());
     }
 
-    @PutMapping(BASE_URL_VERSION_ONE + "modules/{id}")
+    @PutMapping(BASE_URL_VERSION_ONE + "/modules/{id}")
     public ModuleResponse updateDetails(@PathVariable Long id, @RequestBody Module module) {
         return moduleService.updateDetails(id, module);
     }
 
-    @PutMapping(BASE_URL_VERSION_ONE + "modules/{id}/menus")
+    @PutMapping(BASE_URL_VERSION_ONE + "/modules/{id}/menus")
     public ResponseEntity<List<Menu>> updateModuleMenu(@PathVariable Long id, @RequestBody ModuleMenuDTO moduleMenuDTO) {
         return ResponseEntity.ok(this.menuService.updateModuleMenu(id, moduleMenuDTO));
     }
