@@ -34,7 +34,7 @@ public class UserJWTController {
         this.userService = userService;
     }
 
-    @PostMapping("/api/authenticate")
+    @PostMapping(BASE_URL_VERSION_ONE + "/authenticate")
     public ResponseEntity<JWTToken> authorize(@Valid @RequestBody LoginVM loginVM) {
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                 loginVM.getUsername(),
