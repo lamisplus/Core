@@ -20,7 +20,7 @@ public interface RoleRepository extends JpaRepository<Role, Long>, JpaSpecificat
 
     List<Role> findAllByArchived(int archived);
 
-    @Query(value = "SELECT * FROM roles WHERE name in (?1) AND archived=0", nativeQuery = true)
+    @Query(value = "SELECT * FROM role WHERE name in (?1) AND archived=0", nativeQuery = true)
     List<Role> findAllInRolesNames(Set<String> names);
 
 
