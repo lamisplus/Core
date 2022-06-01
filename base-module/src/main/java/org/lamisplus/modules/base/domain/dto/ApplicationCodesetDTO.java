@@ -27,6 +27,9 @@ public class ApplicationCodesetDTO {
 
     private String code;
 
+    public ApplicationCodesetDTO(){
+    }
+
     public ApplicationCodesetDTO(Long id, String display, String code){
         this.id = id;
         this.display = display;
