@@ -71,6 +71,7 @@ public class UserService {
         newUser.setPassword(encryptedPassword);
         newUser.setFirstName(userDTO.getFirstName());
         newUser.setLastName(userDTO.getLastName());
+        newUser.setDesignation(userDTO.getDesignation());
         if (userDTO.getDetails() != null) {
             newUser.setDetails(userDTO.getDetails());
         }
