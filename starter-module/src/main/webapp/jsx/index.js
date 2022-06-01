@@ -20,6 +20,7 @@ import ModuleMenu from "./components/BootstrapModules/ModuleMenu";
 import UpdateModuleJar from "./components/BootstrapModules/UpdateModuleJar";
 import UserList from "./components/Users/UserPage";
 import userRegsitration from "./components/Users/UserRegistration";
+import userAccount from "./components/Users/UserAccount";
 import EditUser from "./components/Users/EditUser";
 import SystemConfiguration from "./components/SystemConfiguration/Index";
 import HealthCheck from "./components/HealthCheck/Index";
@@ -56,6 +57,7 @@ const Markup = () => {
     ///User and Role Management
     { url: "users", component: UserList },
     { url: "user-registration", component: userRegsitration },
+    { url: "account", component: userAccount },
     { url: "edit-user", component: EditUser },
     { url: "roles", component: RoleList },
     { url: "add-role", component: AddRole },
