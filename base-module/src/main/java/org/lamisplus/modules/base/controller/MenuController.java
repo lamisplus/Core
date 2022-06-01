@@ -17,7 +17,7 @@ import java.util.List;
 public class MenuController {
     private final MenuService menuService;
     //Versioning through URI Path
-    private final String BASE_URL_VERSION_ONE = "/api/v1/menus/";
+    private final String BASE_URL_VERSION_ONE = "/api/v1/menus";
 
     /*@PutMapping("/modules/{id}")
     public ResponseEntity<List<Menu>> update(@PathVariable Long id, @RequestBody ModuleMenuDTO moduleMenuDTO) {
