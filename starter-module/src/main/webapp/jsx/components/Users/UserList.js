@@ -143,7 +143,7 @@ const UserList = (props) => {
           { title: "Name", field: "name" },
           { title: "Username", field: "userName", filtering: false },
           //{ title: "Gender", field: "gender", filtering: false },
-          { title: "Roles", field: "roles", filtering: false },
+          { title: "Designation", field: "designation", filtering: false },
           { title: "Actions", field: "actions", filtering: false },
         ]}
         isLoading={loading}
@@ -151,7 +151,7 @@ const UserList = (props) => {
           name: row.firstName + " " + row.lastName,
           userName: row.userName,
           //gender: row.gender,
-          roles: ( <Badge variant="primary badge-xs light">{row.roles.toString()}</Badge>),
+          designation: ( <Badge variant="primary badge-xs light">{row.designation}</Badge>),
           actions: (
             <div>
                 <Link to={{pathname: "/edit-user", state: { user: row, defRole: roles  }}}

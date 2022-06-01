@@ -5,6 +5,7 @@ export const initialfieldState_userRegistration = {
     email: '',
     phone: '',
     role: '',
+    designation:'',
     gender: '',
     dateOfBirth: new Date(),
     password: '',

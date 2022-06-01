@@ -1,8 +1,7 @@
 import React, { useState, useEffect} from 'react';
 import {Link, useHistory} from 'react-router-dom';
-import {Dropdown, Alert} from 'react-bootstrap';
+import {Dropdown} from 'react-bootstrap';
 /// Bootstrap
-
 import { Badge} from "react-bootstrap";
 import PageTitle from "../../layouts/PageTitle";
 import { useSelector, useDispatch } from 'react-redux';
@@ -16,6 +15,7 @@ import UpdateModuleMenuPosition from './UpdateModuleMenuPosition'
 import {  FaPlus } from "react-icons/fa";
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
+import { Alert, AlertTitle } from '@material-ui/lab';
 //import BootstrapSwitchButton from 'bootstrap-switch-button-react'
 // import RestartingApp from './RestartModule'
 
@@ -52,8 +52,7 @@ const PostPage = (props) => {
     const toggleRestartModal = () => setRestartModal(!restartmodal)
 
     useEffect(() => {
-        loadModules()
-  
+        loadModules()  
     }, []); //componentDidMount
 
     const loadModules =()=>{
@@ -249,13 +248,11 @@ const PostPage = (props) => {
                 <>
                 <div className="row">
                     <div  className="col-xl-12 col-xxl-12 col-lg-12 col-md-12 col-sm-12" >
-                        <Alert
-                        
-                        variant="info"
-                        className="alert-dismissible alert-alt fade show"
-                        
-                        >
-                        <strong>NO Module Found</strong> 
+                        <br/><br/>
+                        <Alert severity="info">
+                            <AlertTitle>
+                            <strong>NO Module Found</strong> 
+                            </AlertTitle>
                         </Alert>
                     </div>
                 </div>

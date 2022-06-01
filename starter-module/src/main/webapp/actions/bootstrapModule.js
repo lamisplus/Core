@@ -190,6 +190,32 @@ export const activateBootstrapModule = (data, onSuccess, onError)=> dispatch => 
     );
     
 };
+export const updateModuleDetail = (id,data, onSuccess, onError)=> dispatch => {
+
+  axios
+    .put(`${baseUrl}modules/${id}`, data)
+    .then(response => {
+      dispatch({
+        type: ACTION_TYPES.UDATE_MODULE_DETAIL,
+        payload: response.data
+      })
+
+      onSuccess && onSuccess();
+      toast.success("Module Activate Successfully!");
+    })
+    .catch(error => {
+      dispatch({
+        type: ACTION_TYPES.ERROR_UDATE_MODULE_DETAIL,
+        payload: error
+      })
+            onError();
+            let errorMessage = error.response.data && error.response.data.apierror.message!=="" ? error.response.data.apierror.message :  "Something went wrong, please try again";
+            toast.error(errorMessage);
+    }
+    );
+    
+};
+
 export const createBootstrapModule = (data) => dispatch => {
 
 const options = {

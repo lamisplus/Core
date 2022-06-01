@@ -281,6 +281,8 @@ export const TOTAL_PATIENTS = 'TOTAL_PATIENTS'
 export const TOTAL_PATIENTS_ERROR = 'TOTAL_PATIENTS_ERROR'
 
 export const MENU_FETCH_ALL = 'MENU_FETCH_ALL'
+export const UDATE_MODULE_DETAIL = 'UDATE_MODULE_DETAIL'
+export const ERROR_UDATE_MODULE_DETAIL = 'ERROR_UDATE_MODULE_DETAIL'
 /**
  * @TYPES
  * ===============================================

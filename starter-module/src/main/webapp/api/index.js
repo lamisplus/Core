@@ -5,6 +5,6 @@
 
 //Local Server
 export const url =  'http://localhost:8282/api/v1/';
-//export const url = '/api/'
+//export const url = '/api/v1/'
 
 

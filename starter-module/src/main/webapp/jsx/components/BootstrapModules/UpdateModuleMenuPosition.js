@@ -70,7 +70,7 @@ const UpdateModuleMenu = (props) => {
     }, []);
     useEffect(() => {
         loadModuleMenus()
-    }, [datasample.id,props.moduleMenuList]); //componentDidMount to get module menus
+    }, [datasample.id]); //props.moduleMenuList //componentDidMount to get module menus
     //Method to load module menus
     const loadModuleMenus =()=>{
         const onSuccess = () => {

@@ -156,7 +156,7 @@ const BootstrapModule = (props) => {
 
     const handleModuleBatchList = (moduleStatus,moduleBatchNum) => {
         const onSuccess = (data) => {
-            console.log(data)
+
             setUploadResponse([data])
             setActiveStep((prevActiveStep) => prevActiveStep + 1); //auotmatically move to the next phase of installation in the wizard
         }
@@ -173,6 +173,8 @@ const BootstrapModule = (props) => {
 
     };
     const handleBack = () => {
+        setDisabledUploadButton(false)
+        setuploadButtonhidden(false)
         setActiveStep((prevActiveStep) => prevActiveStep - 1);
     };
 
@@ -181,7 +183,6 @@ const BootstrapModule = (props) => {
     };
 
     const startModule = () => {
-
         const onSuccess = () => {
             setTimeout(() => {
                 history.push(`/bootstrap-modules`)
@@ -274,10 +275,8 @@ const BootstrapModule = (props) => {
 
 
     const sampleAction = (obj) =>{
-
         return (
-
-            <ButtonSematic content='Install Module' labelPosition='left' icon='cogs' primary  size='mini' compact onClick={() => handleInstallModule(obj)}/>
+            <ButtonSematic content='Update Module' labelPosition='left' icon='cogs' primary  size='mini' compact onClick={() => handleInstallModule(obj)}/>
         )
     }
 
@@ -291,40 +290,7 @@ const BootstrapModule = (props) => {
                         <Card className="mb-12">
                             <CardBody>
                                 <br />
-                                <Row>
-                                    <Col>
-
-                                        <Alert severity="info">
-                                            {props.location && props.location.ModuleDetail!=="" ?
-
-                                                (
-                                                    <>
-                                                        <AlertTitle>
-                                                            {/* Update : { props.location.ModuleDetail!==""  ? props.location.ModuleDetail.name :"" } */}
-                                                        </AlertTitle>
-
-                                                        <br/>
-
-                                                    </>
-                                                )
-                                                :
-                                                (
-                                                    <>
-                                                        <AlertTitle>Instructions to add new module</AlertTitle>
-
-                                                        <br/>
-                                                        <strong>NOTE:</strong> This wizard will lead you step by step through the installation of your module.
-                                                        <br/>
-                                                        <strong>Click Next to continue, or Cancel to exit Setup.</strong>
-                                                        <br/>
-                                                    </>
-                                                )
-
-                                            }
-
-                                        </Alert>
-                                    </Col>
-                                </Row>
+                                
                                 <Row>
                                     <Col sm={12}>
                                         {message ? <Message msg={message} /> : null}
@@ -354,40 +320,7 @@ const BootstrapModule = (props) => {
                 return (
                     <>
                         <ToastContainer autoClose={3000} hideProgressBar />
-                        <Row>
-                            <Col>
-                                <Alert severity="info">
-                                    {props.location && props.location.ModuleDetail!=="" ?
-
-                                        (
-                                            <>
-                                                <AlertTitle>
-                                                    {/* Update : {props.location.ModuleDetail.name } */}
-                                                </AlertTitle>
-
-                                                <br/>
-
-                                            </>
-                                        )
-                                        :
-                                        (
-                                            <>
-                                                <AlertTitle>Instructions to add new module</AlertTitle>
-
-                                                <br/>
-                                                <strong>NOTE:</strong> This wizard will lead you step by step through the installation of your module.
-                                                <br/>
-                                                <strong>Click Next to continue, or Cancel to exit Setup.</strong>
-                                                <br/>
-                                            </>
-                                        )
-
-                                    }
-
-                                </Alert>
-                            </Col>
-
-                        </Row>
+                       
                         <Card className="mb-12">
                             <CardBody>
                                 <br />
@@ -401,35 +334,55 @@ const BootstrapModule = (props) => {
                                             backgroundColor={'black'} // default is black
                                             opacity=".4" // default is .9
                                         >
-                                            <Table striped>
-                                                <thead style={{  backgroundColor:'#9F9FA5' }}>
-                                                <tr>
+                                            {uploadResponse.type==='ERROR'? 
+                                   <>
+                                    <Alert severity="error">
+                                      <AlertTitle>
+                                        <b>{uploadResponse.message}</b>
+                                      </AlertTitle>
+                                    </Alert>
+                                   </> 
+                                   : 
+                                   <>
+                                   <Alert severity="success">
+                                      <AlertTitle>
+                                        <b>No dependecy issue</b>
+                                      </AlertTitle>
+                                    </Alert>
+                                   </>
+                                   }
+                                   <br/>
+                                    <Table striped>
+                                    <thead style={{  backgroundColor:'#000000', color:'#ffffff', height:"5px !important" }}>
+                                        <tr style={{ height:"5px !important" }}>
+                                            <th>Module Name</th>
+                                            <th>Description</th>
+                                            <th>Version</th>
+                                            <th>Status</th>
+                                            <th>Action</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
 
-                                                    <th>Module Name</th>
-                                                    <th>Description</th>
+                                        {[uploadResponse].map((row) => (
+                                            <tr key={row.id}>
+                                                <td>{row.name===""?" ":row.name}</td>
+                                                <td>{row.description===""?" ":row.description}</td>
 
-                                                    <th>Version</th>
-                                                    <th>Status</th>
-                                                    <th>Action</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                {console.log(uploadResponse)}
-                                                {[uploadResponse].map((row) => (
-                                                    <tr key={row.id}>
-                                                        <td>{row.name===""?" ":row.name}</td>
-                                                        <td>{row.description===""?" ":row.description}</td>
+                                                <td>{row.version===""?" ":row.version}</td>
+                                                <td>{row.status!==2 ? "Uploaded":"Uploaded"}</td>
+                                                <td>
+                                                    {row.type==='ERROR'? 
+                                                    ( <ButtonSematic content="Can't Install" labelPosition='left' icon='fork' color='red' size='mini' compact />)
+                                                    : sampleAction(row)}
+                                                </td>
+                                            </tr>
 
-                                                        <td>{row.version===""?" ":row.version}</td>
-                                                        <td>{row.status!==2 ? "Uploaded":"Uploaded"}</td>
-                                                        <td>{sampleAction(row)}</td>
-                                                    </tr>
+                                        ))
+                                        }
 
-                                                ))
-                                                }
-
-                                                </tbody>
-                                            </Table>
+                                        </tbody>
+                                    </Table>
                                         </OverlayLoader>
                                     </Col>
                                 </Row>
@@ -503,7 +456,6 @@ const BootstrapModule = (props) => {
                     variant='contained'
                     //variant="outlined"
                     color="default"
-                    className={classes.button}
                     className=" float-end"
                 >
                     <TiArrowBack/>{" "} Back
@@ -515,7 +467,7 @@ const BootstrapModule = (props) => {
                     <br/>
                     <Row>
                         <Col>
-                            <h3>New Module
+                            <h3>Update Module
 
                             </h3>
                             <Card className="mb-12">
@@ -569,24 +521,7 @@ const BootstrapModule = (props) => {
                                                         >
                                                             Upload Module
                                                         </Button>
-                                                        {/* <Button
-                              variant="contained"
-                              color="primary"
-                              onClick={handleStartModule}
-                              hidden={hiddeStartModuleFinishButton}
-                              >
-                              Finish/Start
-                            </Button> */}
 
-                                                        {/* <Button
-                              hidden={disableNextButtonProcess}
-                              variant="contained"
-                              color="primary"
-                              onClick={activeStep === steps.length - 1 ? startModule : handleNext}
-                              disabled={disabledNextButton}
-                              >
-                              {activeStep === steps.length - 1 ? 'Finish/Start Module' : 'Next'}
-                            </Button> */}
                                                     </div>
                                                 </div>
                                             )}
