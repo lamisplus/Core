@@ -38,7 +38,7 @@ const UpdateModuleMenu = (props) => {
     const [menList, setMenuList] = useState([])
     const [errors, setErrors] = useState({});
     const defaultValues = { }
-    const menuItems = { parentId: "", name:"", url:"", breadcrumb: "", tooltip:"", icon:"", type:"", level:"",state:"", disabled: true,}
+    const menuItems = { parentId: "", name:"", url:"", breadcrumb: "", menuCode:"", tooltip:"", icon:"", type:"", level:"",state:"", disabled: true,}
     const [details, setDetails] = useState(menuItems);
 
     //Function to get list of module menu
@@ -47,7 +47,9 @@ const UpdateModuleMenu = (props) => {
             axios
                 .get(`${baseUrl}menus`)
                 .then((response) => {
-                    //console.log(response)
+                    //console.log(response.data)
+                    //console.log(datasample)
+                    //const filterMenuId=response.data.filter((x)=> x.moduleId!==props.datasample.id)
                     setMenuList(
                         Object.entries(response.data).map(([key, value]) => ({
                             label: value.name,
@@ -188,6 +190,17 @@ const UpdateModuleMenu = (props) => {
                                                         {errors.name !=="" ? (
                                                             <span className={classes.error}>{errors.name}</span>
                                                         ) : "" }
+                                                    </div>
+                                                    <div className="form-group col-md-4">
+                                                        <label>Menu Code</label>
+                                                        <input
+                                                            type="text"
+                                                            name="menuCode"
+                                                            id="menuCode"
+                                                            className="form-control"
+                                                            value={details.menuCode}
+                                                            onChange={handleOtherFieldInputChange}
+                                                        />
                                                     </div>
                                                     <div className="form-group col-md-4">
                                                         <label>Menu Link/Url</label>

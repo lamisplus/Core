@@ -169,7 +169,19 @@ const AddRole = (props) => {
                 </Col>
                 <Col md={12}>
                   <FormGroup>
-                    <Label for="permissions">Permissions</Label>
+                    <Label for="permissions"><b>Permissions</b></Label>
+                    <DualListBox
+                      canFilter
+                      options={permissions}
+                      onChange={onPermissionSelect}
+                      selected={selectedPermissions}
+                    />
+                  </FormGroup>
+                </Col>
+                <br/>
+                <Col md={12}>
+                  <FormGroup>
+                    <Label for="permissions"><b>Menu Items</b></Label>
                     <DualListBox
                       canFilter
                       options={permissions}
