@@ -350,6 +350,8 @@
                 <constraints nullable="false"/>
             </column>
             <column name="icon" type="VARCHAR(64)"/>
+            <column name="code" type="VARCHAR(256)"/>
+            <column name="uuid" type="VARCHAR(256)"/>
             <column name="tooltip" type="VARCHAR(256)"/>
             <column name="breadcrumb" type="VARCHAR(256)"/>
             <column name="disabled" type="BOOL">

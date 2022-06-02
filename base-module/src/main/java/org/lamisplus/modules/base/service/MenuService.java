@@ -10,6 +10,8 @@ import org.lamisplus.modules.base.domain.entities.Menu;
 import org.lamisplus.modules.base.domain.entities.Module;
 import org.lamisplus.modules.base.domain.repositories.MenuRepository;
 import org.lamisplus.modules.base.domain.repositories.ModuleRepository;
+import org.lamisplus.modules.base.domain.repositories.RoleMenuRepository;
+import org.lamisplus.modules.base.domain.repositories.RoleRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +27,7 @@ import static org.lamisplus.modules.base.util.Constants.ArchiveStatus.UN_ARCHIVE
 public class MenuService {
     private final MenuRepository menuRepository;
     private final ModuleRepository moduleRepository;
+    private final UserService userService;
 
 
     public List<Menu> updateModuleMenu(Long moduleId, ModuleMenuDTO moduleMenuDTO) {
@@ -47,28 +50,53 @@ public class MenuService {
         if(withChild) {
             return menuRepository.findAllByArchivedOrderByPositionAsc(UN_ARCHIVED).stream().
                     map(menu -> {
-                        MenuDTO menuDTO = toMenuDTO(menu);
+                        MenuDTO menuDTO = toMenuDTO(menu, null);
                         Menu parent = menu.getParent();
                         if (parent != null) menuDTO.setParentName(parent.getName());
                         return menuDTO;
                     }).sorted(Comparator.comparingInt(MenuDTO::getPosition))
                     .collect(Collectors.toList());
         }
-        return menuRepository.findAllByArchivedAndParentIdOrderByPositionAsc(UN_ARCHIVED, null).stream().
-                map(menu -> {
-                    MenuDTO menuDTO = toMenuDTO(menu);
+        Set<Menu> menus = filterMenuByCurrentUser();
+        return menus.stream()
+                .map(menu -> {
+                    MenuDTO menuDTO = toMenuDTO(menu, menus);
                     Menu parent = menu.getParent();
                     if (parent != null) menuDTO.setParentName(parent.getName());
                     return menuDTO;
                 }).sorted(Comparator.comparingInt(MenuDTO::getPosition))
                 .collect(Collectors.toList());
     }
+    private Set<Menu> filterMenuByCurrentUser() {
+        HashSet<Menu> menus = new HashSet<>();
+        userService.getUserWithRoles().ifPresent(user -> {
+            user.getRole().forEach(role -> {
+                role.getMenu().forEach(menu -> {
+                    if(menu.getParent() == null) {
+                        menus.add(menu);
+                    }
+                });
+            });
+        });
+        return menus;
+
+        /*List<Long> roleId = roleRepository.findAllInRolesNames(userDTO.getRoles())
+                .stream()
+                .map(role -> role.getId())
+                .collect(Collectors.toList());
+
+
+        roleMenuRepository.findAllInRolesId(roleId).stream()
+                .filter(roleMenu -> roleMenu.getMenuId() == menu.getId())
+                .collect(Collectors.toList());*/
+
+    }
 
     public List<MenuDTO> getAllMenusByParentId(Integer parentId) {
         if(parentId == 0) parentId = null;
         return menuRepository.findAllByArchivedAndParentIdOrderByIdDesc(UN_ARCHIVED, parentId).stream().
                 map(menu -> {
-                    MenuDTO menuDTO =  toMenuDTO(menu);
+                    MenuDTO menuDTO =  toMenuDTO(menu, null);
                     Menu parent = menu.getParent();
                     if(parent != null)menuDTO.setParentName(parent.getName());
                     return menuDTO;
@@ -98,6 +126,11 @@ public class MenuService {
     }
 
     public Menu save(MenuDTO menuDTO, Boolean isModule){
+
+        menuRepository.findByNameAndParentId(menuDTO.getName(), menuDTO.getParentId()).ifPresent(menu -> {
+            throw new EntityNotFoundException(Module.class, "parent with name already exist", "" + menuDTO.getName());
+        });
+
         if(isModule) {
             if(menuDTO.getModuleId() == null){
                 throw new EntityNotFoundException(Module.class, "moduleId", "" + "moduleId is null");
@@ -148,7 +181,7 @@ public class MenuService {
         return menu;
     }
 
-    public MenuDTO toMenuDTO(Menu menu) {
+    public MenuDTO toMenuDTO(Menu menu, Set<Menu> menus) {
         if ( menu == null ) {
             return null;
         }

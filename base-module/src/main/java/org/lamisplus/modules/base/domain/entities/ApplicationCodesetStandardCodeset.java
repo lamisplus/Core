@@ -1,7 +1,8 @@
 package org.lamisplus.modules.base.domain.entities;
 
-import lombok.Data;
+/*import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.lamisplus.modules.base.service.ApplicationCodesetService;
 
 import javax.persistence.*;
 
@@ -15,11 +16,11 @@ public class ApplicationCodesetStandardCodeset {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Basic
-    @Column(name = "application_codeset_id")
-    private Long applicationCodesetId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "application_codeset_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private ApplicationCodeSet applicationCodesetId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "standard_codeset_id", referencedColumnName = "id", insertable = false, updatable = false)
     private StandardCodeset standardCodesetByStandardCodesetId;
-}
+}*/

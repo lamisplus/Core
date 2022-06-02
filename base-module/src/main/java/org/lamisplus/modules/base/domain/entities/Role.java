@@ -46,6 +46,11 @@ public class Role extends Audit<String> {
     @ManyToMany(cascade = CascadeType.PERSIST)
     private Set<Permission> permission;
 
+    @Getter
+    @Setter
+    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    private Set<Menu> menu;
+
     @Override
     public int hashCode() {
         if (id != null) {

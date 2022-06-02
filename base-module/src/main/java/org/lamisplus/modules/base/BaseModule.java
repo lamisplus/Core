@@ -33,6 +33,7 @@ public class BaseModule extends AcrossModule {
                         getClass ().getPackage ().getName () + ".module",
                         getClass ().getPackage ().getName () + ".controller",
                         getClass ().getPackage ().getName () + ".domain",
+                        getClass ().getPackage ().getName () + ".domain.mapper",
                         getClass ().getPackage ().getName () + ".repositories",
                         getClass ().getPackage ().getName () + ".service",
                         getClass ().getPackage ().getName () + ".yml",

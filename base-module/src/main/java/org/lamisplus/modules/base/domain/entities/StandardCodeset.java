@@ -30,15 +30,15 @@ public class StandardCodeset extends Audit<String> {
     @Column(name = "standard_codeset_source_id")
     private Long standardCodesetSourceId;
 
-    @OneToMany(mappedBy = "standardCodesetByStandardCodesetId")
+    /*@OneToMany(mappedBy = "standardCodesetByStandardCodesetId", fetch = FetchType.LAZY)
     @JsonIgnore
     @ToString.Exclude
     private List<ApplicationCodesetStandardCodeset> applicationCodesetStandardCodesetsById;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "standard_codeset_source_id", referencedColumnName = "id", insertable = false, updatable = false)
     @ToString.Exclude
-    private StandardCodesetSource standardCodesetSourceByStandardCodesetSourceId;
+    private StandardCodesetSource standardCodesetSourceByStandardCodesetSourceId;*/
 
     @Basic
     @Column(name = "archived")
