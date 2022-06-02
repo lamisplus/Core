@@ -88,6 +88,10 @@ const SideBar = (props) => {
   //console.log(props.menuList)
   //method to determain main sidebar menu
   function sideBarParentUrl(menu){
+
+      // if(subMenu.url){
+        
+      // }
           //menu.moduleId===null || menu.url!==null? menu.url : "modules", state: menu.url
           if(menu.moduleId===null && menu.url===null){
             return ""
@@ -130,19 +134,24 @@ const SideBar = (props) => {
               <>
                   <li className={`${deshBoard.includes(path) ? "mm-active" : ""}`} style={{color: '#798087', padding: '2px'}}
                       show={"false"}>
-                    <Link className={menu.subs && menu.subs.length>0 ?"has-arrow ai-icon":""}  to={{ pathname: menu.moduleId===null ? (menu.url!==null?menu.url:"#" ): "modules", state: menu.url}}
+                    <Link className={menu.subs && menu.subs.length>0 ?"has-arrow ai-icon":""}  
+                    to={{ pathname: menu.moduleId===null ? (menu.url!==null?menu.url:"" ): "modules", state: menu.url}}
 
                           style={{color: '#798087', padding: '1px', backgroundColor: 'white'}}>
-                      <i className={menu.icon!==null && menu.icon!=="wc"? menu.icon : "flaticon-087-stop"} style={{color: '#24a4eb'}}/>
+                      <i className={menu.icon!==null && menu.icon!=="wc"? menu.icon : "flaticon-087-stop"} style={{color: '#24a4eb'}} size="xs"/>
                       <span className="nav-text" style={{color: '#24a4eb'}}>{menu.name}</span>
                     </Link>
                     {menu.subs.length>0 ?
                         menu.subs.map((subMenu, index) => (
+
                             <>
                               <ul style={{padding: "0.1rem 0 !important"}}>
+
                                 <li   style={{ marginLeft:"-15px", marginTop:"-12px",  marginBottom:"-12px"}}>
-                                  <Link to={subMenu.moduleId && subMenu.moduleId!==null? "modules": subMenu.url  }>
-                                    <span style={{fontSize:'13px'}} >{subMenu.name} {subMenu.moduleId}</span>
+                                  <Link                      
+                                      to={{ pathname:  !subMenu.moduleId ? subMenu.url: "modules", state: subMenu.url}}
+                                  >
+                                    <span style={{fontSize:'13px'}} >{subMenu.name} </span>
                                   </Link>
                                   {subMenu.subs && subMenu.subs.length > 0 ?
                                       subMenu.subs.map((subSubMenu, index) => (

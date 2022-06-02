@@ -9,6 +9,8 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface StandardCodesetMapper {
     StandardCodesetDTO toStandardCodesetDTO(StandardCodeset standardCodeset);
+
     StandardCodeset toStandardCodeset(StandardCodesetDTO standardCodesetDTO);
+
     List<StandardCodesetDTO> toStandardCodesetDTOList(List<StandardCodeset> standardCodesets);
 }
