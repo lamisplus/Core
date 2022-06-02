@@ -68,9 +68,14 @@ export const installBootstrapModule = (obj, onSuccess, onError)=> dispatch => {
         type: ACTION_TYPES.INSTALL_BOOSTRAP_MODULE_BY_ID,
         payload: response.data
       })
-
-      onSuccess && onSuccess(response.data);
-      toast.success("Module installed successfully!");
+        if(response.data.type==='ERROR'){
+          onError();
+          toast.error(response.data.message);
+        }else{
+          onSuccess && onSuccess(response.data);
+          toast.success("Module installed successfully!");
+        }
+      
     })
     .catch(error => {
       console.log(error)
