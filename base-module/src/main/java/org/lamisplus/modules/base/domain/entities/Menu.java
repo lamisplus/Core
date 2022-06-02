@@ -100,7 +100,7 @@ public final class Menu implements Serializable, Comparable<Menu>, Persistable<L
     @Override
     public int compareTo(Menu o) {
         if (id.equals(o.id)) {
-            return name.compareTo(o.name);
+            return id.compareTo(o.id);
         }
         return id.compareTo(o.id);
     }
@@ -144,4 +144,7 @@ public final class Menu implements Serializable, Comparable<Menu>, Persistable<L
         }
         uuid = UUID.randomUUID().toString();
     }
+
+    /*@Transient
+    private String parentName;*/
 }

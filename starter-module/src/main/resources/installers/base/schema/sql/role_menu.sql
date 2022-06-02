@@ -11,4 +11,3 @@ INSERT INTO role_menu (role_id, menu_id) VALUES (1, 23);
 INSERT INTO role_menu (role_id, menu_id) VALUES (1, 24);
 INSERT INTO role_menu (role_id, menu_id) VALUES (1, 25);
 INSERT INTO role_menu (role_id, menu_id) VALUES (1, 26);
-INSERT INTO role_menu (role_id, menu_id) VALUES (1, 27);

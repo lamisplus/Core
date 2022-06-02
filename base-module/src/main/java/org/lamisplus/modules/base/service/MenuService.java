@@ -57,10 +57,12 @@ public class MenuService {
                     }).sorted(Comparator.comparingInt(MenuDTO::getPosition))
                     .collect(Collectors.toList());
         }
-        Set<Menu> menus = filterMenuByCurrentUser();
-        return menus.stream()
-                .map(menu -> {
-                    MenuDTO menuDTO = toMenuDTO(menu, menus);
+        return menuRepository.findAllByArchivedAndParentIdOrderByPositionAsc(UN_ARCHIVED, null).stream().
+                map(menu -> {
+                    MenuDTO menuDTO = toMenuDTO(menu, filterMenuByCurrentUser());
+                    if(menuDTO == null){
+                        return null;
+                    }
                     Menu parent = menu.getParent();
                     if (parent != null) menuDTO.setParentName(parent.getName());
                     return menuDTO;
@@ -68,13 +70,13 @@ public class MenuService {
                 .collect(Collectors.toList());
     }
     private Set<Menu> filterMenuByCurrentUser() {
-        HashSet<Menu> menus = new HashSet<>();
+        TreeSet<Menu> menus = new TreeSet<>();
         userService.getUserWithRoles().ifPresent(user -> {
             user.getRole().forEach(role -> {
                 role.getMenu().forEach(menu -> {
-                    if(menu.getParent() == null) {
+                    //if(menu.getParent() == null) {
                         menus.add(menu);
-                    }
+                    //}
                 });
             });
         });
@@ -187,6 +189,7 @@ public class MenuService {
         }
 
         MenuDTO menuDTO = new MenuDTO();
+
         menuDTO.setId( menu.getId() );
         menuDTO.setName( menu.getName() );
         menuDTO.setState( menu.getState() );
@@ -204,12 +207,25 @@ public class MenuService {
         menuDTO.setParentId( menu.getParentId() );
         menuDTO.setModuleId( menu.getModuleId() );
         menuDTO.setType( menu.getType() );
-        Set<Menu> set1 = menu.getSubs();
-        if ( set1 != null ) {
-            menuDTO.setSubs( new HashSet<Menu>( set1 ) );
+        Set<Menu> menuSet = new HashSet<>();
+
+        boolean found = false;
+        if(menus != null && !menus.isEmpty()) {
+            for (Menu menu1 : menus) {
+                menu.getSubs().forEach(menu2 -> {
+                    if (menu2.getId() == menu1.getId()) {
+                        menuSet.add(menu2);
+                    }
+                });
+                if (menu1.getId() == menu.getId()) {
+                    found = true;
+                }
+            }
         }
-
-        return menuDTO;
+        if(found){
+            menuDTO.setSubs(menuSet);
+            return menuDTO;
+        }
+        return null;
     }
-
 }
