@@ -81,17 +81,6 @@ public class MenuService {
             });
         });
         return menus;
-
-        /*List<Long> roleId = roleRepository.findAllInRolesNames(userDTO.getRoles())
-                .stream()
-                .map(role -> role.getId())
-                .collect(Collectors.toList());
-
-
-        roleMenuRepository.findAllInRolesId(roleId).stream()
-                .filter(roleMenu -> roleMenu.getMenuId() == menu.getId())
-                .collect(Collectors.toList());*/
-
     }
 
     public List<MenuDTO> getAllMenusByParentId(Integer parentId) {
