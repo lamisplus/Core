@@ -3,8 +3,10 @@ import {  Row,Col,Card,CardBody
 } from 'reactstrap';
 import MatButton from '@material-ui/core/Button';
 import {Modal, Button} from 'react-bootstrap';
-import { Badge} from "react-bootstrap";
 import { useHistory } from "react-router-dom";
+import { updateModuleDetail } from '../../../actions/bootstrapModule';
+import { connect } from 'react-redux';
+
 
 const UpdateModuleInformation = (props) => {
     let history = useHistory();
@@ -21,17 +23,16 @@ const UpdateModuleInformation = (props) => {
         setModuleInformation ({ ...moduleInformation, [e.target.name]: e.target.value });
     }
 
-    const updateModuleInformation = () => {
-        const onError = () => {
-        }
+    const updateInformation = (e) => {
+        e.preventDefault();
+        const onError = () => {}
         const onSuccess = () => {
-
+            props.loadModules()
+            props.togglestatus()
         }
-        props.activateBootstrapModule(datasample, onSuccess, onError);
-        props.togglestatus()
-        //window.location.href = "bootstrap-modules";
-        props.loadModules()
-        history.push(`/bootstrap-modules`)
+        props.updateModuleDetail(moduleInformation.id, moduleInformation, onSuccess, onError);
+
+        //history.push(`/bootstrap-modules`)
     }
 
 
@@ -53,8 +54,9 @@ const UpdateModuleInformation = (props) => {
                 <Modal.Body>
                     <Card>
                         <CardBody>
+                            <form>
                             <div className="basic-form">
-
+                            
                             <Row style={{ marginTop: '20px'}}>
                                 <Col xs="12">
                                     <div className="card-body p-0 pb-3">
@@ -69,6 +71,7 @@ const UpdateModuleInformation = (props) => {
                                                         name={"name"}
                                                         onChange={handleOtherFieldInputChange}
                                                         value={moduleInformation.name}
+                                                        disabled
                                                     />
                                                 </div>
 
@@ -97,6 +100,7 @@ const UpdateModuleInformation = (props) => {
                                                             className="form-control input-rounded"
                                                             name={"basePackage"}
                                                             value={moduleInformation.basePackage}
+                                                            disabled
                                                         />
                                                       </div>
 
@@ -116,11 +120,11 @@ const UpdateModuleInformation = (props) => {
                                 variant='contained'
                                 color='primary'
                                 //className={classes.button}
-                                onClick={()=> updateModuleInformation()}
+                                onClick={updateInformation}
                                 className=" float-right ms-2"
 
                             >
-                                Yes
+                                Save
                             </MatButton>
                             <MatButton
                                 variant='contained'
@@ -132,6 +136,7 @@ const UpdateModuleInformation = (props) => {
                                 Cancel
                             </MatButton>
                           </div>
+                          </form>
                         </CardBody>
                     </Card>
                 </Modal.Body>
@@ -141,5 +146,5 @@ const UpdateModuleInformation = (props) => {
 }
 
 
+export default connect(null, {updateModuleDetail })(UpdateModuleInformation);
 
-export default UpdateModuleInformation;

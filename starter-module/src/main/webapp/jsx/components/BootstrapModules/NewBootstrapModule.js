@@ -15,7 +15,8 @@ import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import { Table } from 'reactstrap';
+//import { Table } from 'reactstrap';
+import { Table } from 'react-bootstrap';
 //import {Menu,MenuList,MenuButton,MenuItem,} from "@reach/menu-button";
 //import "@reach/menu-button/styles.css";
 import { Button as ButtonSematic} from 'semantic-ui-react';
@@ -178,15 +179,15 @@ const BootstrapModule = (props) => {
             'Content-Type': 'multipart/form-data',
           },
           
-        onUploadProgress: progressEvent => {
-          setUploadPercentage(
-            parseInt(
-              Math.round((progressEvent.loaded * 100) / progressEvent.total)
-            )
-          );
-              // Clear percentage
-              setTimeout(() => setUploadPercentage(0), 10000);
-            }
+              onUploadProgress: progressEvent => {
+                setUploadPercentage(
+                  parseInt(
+                    Math.round((progressEvent.loaded * 100) / progressEvent.total)
+                  )
+                );
+                // Clear percentage
+                setTimeout(() => setUploadPercentage(0), 10000);
+              }
           });
           
           const { fileName, filePath } = res.data;
@@ -241,64 +242,31 @@ const BootstrapModule = (props) => {
                   <Card className="mb-12">  
                     <CardBody>                   
                       <br />
-                      <Row>
-                          <Col>
-                              
-                          <Alert severity="info">
-                                {props.location && props.location.ModuleDetail!=="" ? 
-                                
-                                (
-                                    <>
-                                    <AlertTitle>
-                                        {/* Update : { props.location.ModuleDetail!==""  ? props.location.ModuleDetail.name :"" } */}
-                                    </AlertTitle>
+    
+                          <Row>
+                          <Col sm={12}>
+                              {message ? <Message msg={message} /> : null}
+                              <DropzoneArea
+                                  //onChange={(files) => console.log('Files:', files)}
+                                  onChange = {(file) => setFileToUpload(file)}
+                                  showFileNames="true"
+                                  //acceptedFiles={['jar']}
+                                  maxFileSize ={'1000000000000000000'}
+      
+                              />
+                          </Col>  
                                     
-                                    <br/>
-
-                                    </>
-                                )
-                                :
-                                (
-                                <>
-                                <AlertTitle>Instructions to add new module</AlertTitle>
-                    
-                                    <br/>
-                                    <strong>NOTE:</strong> This wizard will lead you step by step through the installation of your module.
-                                    <br/>
-                                    <strong>Click Next to continue, or Cancel to exit Setup.</strong> 
-                                    <br/>
-                                    </>
-                                )
-                                
-                                }
-                  
-                                </Alert>
-                                            </Col>
-                                    </Row>
-                                    <Row>
-                                    <Col sm={12}>
-                                        {message ? <Message msg={message} /> : null}
-                                        <DropzoneArea
-                                            //onChange={(files) => console.log('Files:', files)}
-                                            onChange = {(file) => setFileToUpload(file)}
-                                            showFileNames="true"
-                                            //acceptedFiles={['jar']}
-                                            maxFileSize ={'1000000000000000000'}
-                
-                                        />
-                                    </Col>  
-                                    
-                                    </Row>
-                                    <Row>
+                            </Row>
+                            <Row>
                                     <Col sm={12}>
                                         <Progress percentage={uploadPercentage} />
                                         <br/>
                                         <strong>{installationMessage}</strong>
                                     </Col>
-                                    </Row>
-                                </CardBody>
-                                </Card>
-                            </Form> 
+                            </Row>
+                        </CardBody>
+                        </Card>
+                    </Form> 
                         );
                     case 1:
                         return (
@@ -306,14 +274,12 @@ const BootstrapModule = (props) => {
                         <ToastContainer autoClose={3000} hideProgressBar />
                         <Row>
                             <Col>                  
-                                <Alert severity="info">
+                                {/* <Alert severity="info">
                                 {props.location && props.location.ModuleDetail!=="" ? 
                                 
                                 (
                                     <>
-                                    <AlertTitle>
-                                        {/* Update : {props.location.ModuleDetail.name } */}
-                                    </AlertTitle>
+                                    
                                     
                                     <br/>
 
@@ -334,13 +300,12 @@ const BootstrapModule = (props) => {
                                 
                                 }
                                 
-                                </Alert>
+                                </Alert> */}
                             </Col>
                                 
                         </Row>
                         <Card className="mb-12">  
                         <CardBody>                   
-                            <br />
                             <Row>
                                 <Col>
                                 <OverlayLoader 
@@ -351,20 +316,37 @@ const BootstrapModule = (props) => {
                                     backgroundColor={'black'} // default is black
                                     opacity=".4" // default is .9  
                                 >
-                                    <Table striped>
-                                        <thead style={{  backgroundColor:'#9F9FA5' }}>
-                                        <tr>
+                                   {uploadResponse.type==='ERROR'? 
+                                   <>
+                                    <Alert severity="error">
+                                      <AlertTitle>
+                                        <b>{uploadResponse.message}</b>
+                                      </AlertTitle>
+                                    </Alert>
+                                   </> 
+                                   : 
+                                   <>
+                                   <Alert severity="success">
+                                      <AlertTitle>
+                                        <b>No dependecy issue</b>
+                                      </AlertTitle>
+                                    </Alert>
+                                   </>
+                                   }
+                                   <br/>
+                                    <Table striped size="sm">
+                                        <thead style={{  backgroundColor:'#000000', color:'#ffffff', height:"5px !important" }}>
+                                        <tr style={{ height:"5px !important" }}>
                                         
                                         <th>Module Name</th>
                                         <th>Description</th>
-
                                         <th>Version</th>
                                         <th>Status</th>
                                         <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {console.log(uploadResponse)}
+                                       
                                         {[uploadResponse].map((row) => (
                                         <tr key={row.id}>
                                             <td>{row.name===""?" ":row.name}</td>
@@ -372,7 +354,10 @@ const BootstrapModule = (props) => {
 
                                             <td>{row.version===""?" ":row.version}</td>
                                             <td>{row.status!==2 ? "Uploaded":"Uploaded"}</td>
-                                            <td>{sampleAction(row)}</td>
+                                            <td>{row.type==='ERROR'? 
+                                                  ( <ButtonSematic content="Can't Install" labelPosition='left' icon='fork' color='red' size='mini' compact />)
+                                                 : sampleAction(row)}
+                                            </td>
                                         </tr>
 
                                         ))
@@ -402,7 +387,7 @@ const BootstrapModule = (props) => {
                             <br/>
                             <br/>
                             <Table striped>
-                                        <thead style={{  backgroundColor:'#9F9FA5' }}>
+                                        <thead style={{  backgroundColor:'#9F9FA5'}} >
                                         <tr>
                                         
                                         <th>Module Name</th>
@@ -450,10 +435,10 @@ const BootstrapModule = (props) => {
                 >
                 <MatButton
                       type='submit'
-                      variant='contained'
-                      //variant="outlined"
-                      color="default"
-                      className={classes.button}                        
+                      variant="contained"
+                      color="primary"
+                      
+                      className="me-2 float-end"                        
                   >
                     <TiArrowBack/>{" "} Back
                 </MatButton>
@@ -464,13 +449,8 @@ const BootstrapModule = (props) => {
               <br/>
             <Row>
             <Col>
-              <h3>New Module
-                
-                </h3>
-                <Card className="mb-12">
-                 <CardBody>
-                 
-                <div className={classes.root}>
+              <h3>New Module</h3>                
+                  <div className={classes.root}>
                     <Stepper activeStep={activeStep} alternativeLabel>
                       {steps.map((label) => (
                         <Step key={label}>
@@ -484,8 +464,7 @@ const BootstrapModule = (props) => {
                           <Alert color="info">
                           <Typography className={classes.instructions}>All steps completed</Typography>
                           </Alert>
-                          <br/>
-                          <br/>
+                          
                           <Button variant="contained" 
                             onClick={handleReset} 
                             color="secondary">
@@ -540,9 +519,7 @@ const BootstrapModule = (props) => {
                         </div>
                       )}
                     </div>
-                    </div>
-                </CardBody>
-              </Card>
+                  </div>
             </Col>
         </Row>
         </CardContent>

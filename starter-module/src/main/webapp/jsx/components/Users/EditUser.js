@@ -31,7 +31,8 @@ import Moment from "moment";
 import momentLocalizer from "react-widgets-moment";
 import moment from "moment";
 import PageTitle from "./../../layouts/PageTitle";
-import Select from "react-select";
+//import Select from "react-select";
+import DualListBox from "react-dual-listbox";
 
 Moment.locale("en");
 momentLocalizer();
@@ -90,22 +91,22 @@ const UserRegistration = (props) => {
   const [matchingPasswordClass, setMatchingPasswordClass] = useState("");
   const [validPasswordClass, setValidPasswordClass] = useState("");
   const [saving, setSaving] = useState(false);
-  const [selectedOption, setSelectedOption] = useState();
+  const [selectedOption, setSelectedOption] = useState(props.location.state.user.roles);
   const [setArr, setSetArr] = useState([]);  
-
+  const [designation, setDesignation] = useState([]);
 
   useEffect(() => {
     async function getCharacters() {
       axios
-        .get(`${baseUrl}application-codesets/codesetGroup?codesetGroup=GENDER`)
-        .then((response) => {
-          
-          setGender(
-            Object.entries(response.data).map(([key, value]) => ({
-              label: value.display,
-              value: value.display,
-            }))
-          );
+      .get(`${baseUrl}application-codesets/v2/DESIGNATION`)
+      .then((response) => {
+        
+        setDesignation(
+          Object.entries(response.data).map(([key, value]) => ({
+            label: value.display,
+            value: value.display,
+          }))
+        );
         })
         .catch((error) => {
           console.log(error);
@@ -114,11 +115,12 @@ const UserRegistration = (props) => {
     getCharacters();
   }, []);
 
+  
   /* Get list of Role parameter from the endpoint */
   useEffect(() => {
     async function getCharacters() {
       axios
-        .get(`${baseUrl}roles`)
+        .get(`${baseUrl}account/roles`)
         .then((response) => {
           
           setRole(
@@ -127,18 +129,19 @@ const UserRegistration = (props) => {
               value: value.name,
             }))
           );
+          //console.log(props.location.state.user.roles)
           //setSelectedOption(role.filter(x => x.value in(props.location.state.user.roles)))
-          props.location.state.user.roles.forEach(function (value, index, array) {
-            for(var i=0; i<rolesDef.length; i++){
-              if (rolesDef[i].label===value ){
-              
-              arrVal.push(rolesDef[i])
-              }
+        //   props.location.state.user.roles.forEach(function (value, index, array) {
+        //     for(var i=0; i<rolesDef.length; i++){
+        //       if (rolesDef[i].label===value ){
+        //         console.log(rolesDef)
+        //         arrVal.push(rolesDef[i])
+        //       }
                           
-            }
+        //     }
             
-        });
-        setSelectedOption(arrVal)
+        // });
+        //setSelectedOption(arrVal)
         })
         .catch((error) => {
           console.log(error);
@@ -146,7 +149,9 @@ const UserRegistration = (props) => {
     }
     getCharacters();
   }, []);
- 
+  const onPermissionSelect = (selectedValues) => {
+    setSelectedOption(selectedValues);
+  };
 
   // check if password and confirm password match
   const handleConfirmPassword = (e, setConfirmPassword = true) => {
@@ -179,11 +184,11 @@ const UserRegistration = (props) => {
     const dateOfBirth = moment(values.dateOfBirth).format("YYYY-MM-DD");
     values["dateOfBirth"] = dateOfBirth;
     //values["roles"] = [values["role"]]
-    let roleArr = []
-    const newRoleList =selectedOption.forEach(function (value, index, array) {
-      roleArr.push(value['label'])
-    })
-    values["roles"] = roleArr
+    // let roleArr = []
+    // const newRoleList =selectedOption.forEach(function (value, index, array) {
+    //   roleArr.push(value['label'])
+    // })
+    values["roles"] = selectedOption
     setSaving(true);
     const onSuccess = () => {
       setSaving(false);
@@ -290,97 +295,98 @@ const UserRegistration = (props) => {
                   </FormGroup>
                    
                     </div>
-                    <div className="form-group mb-3 col-md-6">
+                    {/* <div className="form-group mb-3 col-md-6">
                     <FormGroup>
-                    <Label for="role">Role *</Label>
-                    
-                    <Select
-                          onChange={setSelectedOption}
-                          value={selectedOption}
-                          options={role}
-                          isMulti="true"
-                          noOptionsMessage="true"
+                      <Label for="role">Role *</Label>
+                      
+                      <Select
+                            onChange={setSelectedOption}
+                            value={selectedOption}
+                            options={role}
+                            isMulti="true"
+                            noOptionsMessage="true"
                       />
-                  </FormGroup>
-                   
+                    </FormGroup>                   
+                    </div> */}
+                    <div className="form-group mb-3 col-md-6">
+                      <FormGroup>
+                      <Label for="gender">Designation </Label>
+                      <Input
+                        type="select"
+                        name="designation"
+                        id="designation"
+                        value={values.designation}
+                        onChange={handleInputChange}
+                        required
+                      >
+                       
+                        {designation.map(({ label, value }) => (
+                          <option key={value} value={value}>
+                            {label}
+                          </option>
+                        ))}
+                      </Input>
+                    </FormGroup>                  
                     </div>
                     <div className="form-group mb-3 col-md-6">
-                    <FormGroup>
-                    <Label for="gender">Gender </Label>
-                    <Input
-                      type="select"
-                      name="gender"
-                      id="gender"
-                      value={values.gender}
-                      onChange={handleInputChange}
-                      //required
-                    >
-                      <option value=""> </option>
-                      <option value="Female"> Female</option>
-                      <option value="Male"> Male</option>
-                      {/* {gender.map(({ label, value }) => (
-                        <option key={value} value={value}>
-                          {label}
-                        </option>
-                      ))} */}
-                    </Input>
-                  </FormGroup>
-                   
+                      <FormGroup>
+                      <Label for="phoneNumber">Phone Number *</Label>
+                      <Input
+                        type="number"
+                        name="phoneNumber"
+                        id="phoneNumber"
+                        onChange={handleInputChange}
+                        value={values.phoneNumber}
+                        required
+                      />
+                      </FormGroup>                                     
                     </div>
                     <div className="form-group mb-3 col-md-6">
-                    <FormGroup>
-                    <Label for="password">Password *</Label>
-                    <Input
-                      type="password"
-                      name="password"
-                      id="password"
-                      onChange={handlePassword}
-                      value={values.password}
-                      required
-                      className={validPasswordClass}
-                    />
-                    <FormFeedback>
-                      Password must be atleast 6 characters
-                    </FormFeedback>
-                  </FormGroup>
-                   
+                        <FormGroup>
+                        <Label for="password">Password *</Label>
+                          <Input
+                            type="password"
+                            name="password"
+                            id="password"
+                            onChange={handlePassword}
+                            value={values.password}
+                            required
+                            className={validPasswordClass}
+                          />
+                        <FormFeedback>
+                          Password must be atleast 6 characters
+                        </FormFeedback>
+                        </FormGroup>
                     </div>
                     <div className="form-group mb-3 col-md-6">
-                    <FormGroup>
-                    <Label for="phoneNumber">Phone Number *</Label>
-                    <Input
-                      type="number"
-                      name="phoneNumber"
-                      id="phoneNumber"
-                      onChange={handleInputChange}
-                      value={values.phoneNumber}
-                      required
-                    />
-                  </FormGroup>
-                    
-                   
+                      <FormGroup>
+                      <Label for="confirm">Confirm Password *</Label>
+                      <Input
+                        type="password"
+                        name="confirm"
+                        id="confirm"
+                        onChange={handleConfirmPassword}
+                        value={confirm}
+                        required
+                        className={matchingPasswordClass}
+                      />
+                      <FormFeedback>Passwords do not match</FormFeedback>
+                      </FormGroup> 
                     </div>
+
                   </div>
-                  <div className="row">
-                    <div className="form-group mb-3 col-md-4">
-                    <FormGroup>
-                    <Label for="confirm">Confirm Password *</Label>
-                    <Input
-                      type="password"
-                      name="confirm"
-                      id="confirm"
-                      onChange={handleConfirmPassword}
-                      value={confirm}
-                      required
-                      className={matchingPasswordClass}
-                    />
-                    <FormFeedback>Passwords do not match</FormFeedback>
-                  </FormGroup>
-                  
-                    
+
+                  <div className="form-group mb-12 col-md-12">
+                      <FormGroup>
+                        <Label for="permissions">Role*</Label>
+                        <DualListBox
+                          //canFilter
+                          options={role}
+                          onChange={onPermissionSelect}
+                          selected={selectedOption}
+                        />
+                      </FormGroup>
                     </div>
-                   
-                  </div>
                 
                   {saving ? <Spinner /> : ""}
               <br />

@@ -31,7 +31,7 @@ import Moment from "moment";
 import momentLocalizer from "react-widgets-moment";
 import moment from "moment";
 import PageTitle from "./../../layouts/PageTitle";
-import Select from "react-select";
+//import Select from "react-select";
 import DualListBox from "react-dual-listbox";
 
 Moment.locale("en");
@@ -92,15 +92,15 @@ const UserRegistration = (props) => {
   const [validPasswordClass, setValidPasswordClass] = useState("");
   const [saving, setSaving] = useState(false);
   const [selectedOption, setSelectedOption] = useState();
-
+  const [designation, setDesignation] = useState([]);
 
   useEffect(() => {
     async function getCharacters() {
       axios
-        .get(`${baseUrl}application-codesets/v2/GENDER`)
+        .get(`${baseUrl}application-codesets/v2/DESIGNATION`)
         .then((response) => {
           
-          setGender(
+          setDesignation(
             Object.entries(response.data).map(([key, value]) => ({
               label: value.display,
               value: value.display,
@@ -120,11 +120,11 @@ const UserRegistration = (props) => {
       axios
         .get(`${baseUrl}account/roles`)
         .then((response) => {
-          console.log(response.data)
+          //console.log(response.data)
           setRole(
             Object.entries(response.data).map(([key, value]) => ({
               label: value.name,
-              value: value.id,
+              value: value.name,
             }))
           );
          
@@ -169,13 +169,15 @@ const UserRegistration = (props) => {
     const dateOfBirth = moment(values.dateOfBirth).format("YYYY-MM-DD");
     values["dateOfBirth"] = dateOfBirth;
     //values["roles"] = [values["role"]]
-    let roleArr = []
-    console.log(selectedOption)
-    return;
-    selectedOption.forEach(function (value, index, array) {
-      roleArr.push(value['label'])
-    })
-    values["roles"] = roleArr
+    // let roleArr = []
+  
+    // selectedOption.forEach(function (value, index, array) {
+    //   roleArr.push(value['label'])
+    // })
+    values["roles"] = selectedOption
+    //console.log(selectedOption)
+    //console.log(values)
+    //return;
     setSaving(true);
     const onSuccess = () => {
       setSaving(false);
@@ -194,7 +196,7 @@ const UserRegistration = (props) => {
   const onPermissionSelect = (selectedValues) => {
     setSelectedOption(selectedValues);
   };
-  console.log(role)
+ 
 
   return (
     <>
@@ -284,34 +286,38 @@ const UserRegistration = (props) => {
                   </FormGroup>
                    
                     </div>
+                   
                     <div className="form-group mb-3 col-md-6">
                     <FormGroup>
-                    <Label for="role">Role *</Label>
-                    {/* <Input
+                    <Label for="role">Designation *</Label>
+                    <Input
                       type="select"
-                      name="role"
-                      id="role"
-                      value={values.role}
+                      name="designation"
+                      id="designation"
+                      value={values.designation}
                       onChange={handleInputChange}
                       required
                     >
-                      <option value=""> </option>
-                      {role.map(({ label, value }) => (
+                      <option value="">Select </option>
+                      {designation.map(({ label, value }) => (
                         <option key={value} value={value}>
                           {label}
                         </option>
                       ))}
-                    </Input> */}
-                    <Select
+                    </Input>
+                    </FormGroup> 
+                    {/* <Select
                           onChange={setSelectedOption}
                           value={selectedOption}
                           options={role}
                           isMulti="true"
                           noOptionsMessage="true"
-                      />
-                  </FormGroup>
+                      /> 
+                    
+                    */}
+
+                  </div>
                    
-                    </div>
                     {/* <div className="form-group mb-3 col-md-6">
                     <FormGroup>
                     <Label for="gender">Gender </Label>
