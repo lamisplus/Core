@@ -27,7 +27,7 @@ target
 db
 .DS_Store
 local-data
-modules
+modules/runtime
 mvnw
 mvn
 mvnw.cmd

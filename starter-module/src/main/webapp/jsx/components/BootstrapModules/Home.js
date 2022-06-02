@@ -17,7 +17,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import { Alert, AlertTitle } from '@material-ui/lab';
 //import BootstrapSwitchButton from 'bootstrap-switch-button-react'
-// import RestartingApp from './RestartModule'
+
 
 const useStyles = makeStyles((theme) => ({
     card: {

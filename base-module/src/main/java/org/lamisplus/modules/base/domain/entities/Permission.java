@@ -1,9 +1,11 @@
 package org.lamisplus.modules.base.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.lamisplus.modules.base.domain.entities.Audit;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Data
 @Entity
@@ -23,8 +25,18 @@ public class Permission extends Audit<String> {
 
     private int archived;
 
+    /*@ManyToOne
+    @JsonIgnore
+    private Menu menu;*/
+
     /*@OneToMany(mappedBy = "permissionByPermissionId")
     @ToString.Exclude
     @JsonIgnore
     public List<RolePermission> rolePermissionsById;*/
+
+    @PrePersist
+    public void update(){
+        archived = 0;
+        name = description.replace(" ", "_") + "_"+ LocalDateTime.now();
+    }
 }

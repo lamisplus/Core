@@ -29,7 +29,7 @@ import { Card, CardContent } from "@material-ui/core";
 import { url } from "./../../../api";
 import { createBootstrapModule, startBootstrapModule } from './../../../actions/bootstrapModule';
 import { updateBootstrapModule, fetchAllBootstrapModuleBYBatchNum } from './../../../actions/bootstrapModule';
-import RestartingApp from "./RestartModule";
+//import RestartingApp from "./RestartModule";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -534,7 +534,7 @@ const BootstrapModule = (props) => {
                 </CardContent>
             </Card>
 
-            {/*<RestartingApp modalstatus={restartmodal} togglestatus={toggleRestartModal}  />*/}
+
         </>
     );
 }

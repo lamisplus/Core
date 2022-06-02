@@ -63,7 +63,7 @@ public class ApplicationInitializedListener {
         });
         int port = event.getApplicationContext().getWebServer().getPort();
 
-        String url = "http://localhost:" + port + "/LOGin";
+        String url = "http://localhost:" + port + "/login";
         new BareBonesBrowserLaunch().openURL(url);
         messagingTemplate.convertAndSend("/topic/modules-changed", "Application started");
     }
