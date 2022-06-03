@@ -64,7 +64,7 @@ public class ModuleController {
         }
         return menuRepository.findByModuleId(module.getId()).stream().
                 map(menu -> {
-                    MenuDTO menuDTO = menuService.toMenuDTO(menu);
+                    MenuDTO menuDTO = menuService.toMenuDTO(menu, null);
                     Menu parent = menu.getParent();
                     if(parent != null)menuDTO.setParentName(parent.getName());
                     return menuDTO;

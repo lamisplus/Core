@@ -11,9 +11,9 @@ import java.util.Optional;
 @Repository
 public interface RolePermissionRepository extends JpaRepository<RolePermission, Long> {
 
-    Optional<RolePermission> findByRolePermissionPK(RolePermissionPK permissionPK);
+    /*Optional<RolePermission> findByRolePermissionPK(RolePermissionPK permissionPK);
 
     List<RolePermission> findAllByRolePermissionPKContaining(Long roleId);
 
-    void deleteByRolePermissionPKContaining(Long roleId);
+    void deleteByRolePermissionPKContaining(Long roleId);*/
 }

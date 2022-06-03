@@ -4,10 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.lamisplus.modules.base.domain.entities.ApplicationUserOrganisationUnit;
-import org.lamisplus.modules.base.domain.entities.Permission;
-import org.lamisplus.modules.base.domain.entities.Role;
-import org.lamisplus.modules.base.domain.entities.User;
+import org.lamisplus.modules.base.domain.entities.*;
 
 import javax.validation.constraints.NotBlank;
 import java.util.HashSet;
@@ -51,7 +48,6 @@ public class UserDTO {
     private String currentOrganisationUnitName;
     private int managedPatientCount;
     private Object details;
-
 
 
     public UserDTO(User user) {

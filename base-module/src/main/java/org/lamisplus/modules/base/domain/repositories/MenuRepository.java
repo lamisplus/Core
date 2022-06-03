@@ -37,4 +37,6 @@ public interface MenuRepository extends JpaRepository<Menu, Long>, JpaSpecificat
     List<Menu> findAllByArchivedAndParentIdOrderByPositionAsc(int archived, Integer parentId);
 
     List<Menu> findAllByArchivedOrderByPositionAsc(int archived);
+
+    Optional<Menu> findByNameAndParentId(String name, Integer parentId);
 }

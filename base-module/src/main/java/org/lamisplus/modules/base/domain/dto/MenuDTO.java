@@ -38,6 +38,8 @@ public final class MenuDTO {
 
     private Integer parentId;
 
+    private String code;
+
     private String parentName;
 
     //@NotNull(message = "moduleId is mandatory")

@@ -6,11 +6,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.lamisplus.modules.base.controller.apierror.EntityNotFoundException;
 import org.lamisplus.modules.base.controller.apierror.RecordExistException;
 import org.lamisplus.modules.base.domain.dto.RoleDTO;
-import org.lamisplus.modules.base.domain.entities.Permission;
-import org.lamisplus.modules.base.domain.entities.Role;
-import org.lamisplus.modules.base.domain.entities.RolePermission;
-import org.lamisplus.modules.base.domain.entities.RolePermissionPK;
+import org.lamisplus.modules.base.domain.entities.*;
 import org.lamisplus.modules.base.domain.repositories.PermissionRepository;
+import org.lamisplus.modules.base.domain.repositories.RoleMenuRepository;
 import org.lamisplus.modules.base.domain.repositories.RolePermissionRepository;
 import org.lamisplus.modules.base.domain.repositories.RoleRepository;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +29,7 @@ public class RoleService {
     private final RoleRepository roleRepository;
     private final PermissionRepository permissionRepository;
     private final RolePermissionRepository rolePermissionRepository;
+    private final RoleMenuRepository roleMenuRepository;
 
 
     /*@PersistenceContext
@@ -39,6 +38,7 @@ public class RoleService {
     public void save(RoleDTO roleDTO) {
         Optional<Role> RoleOptional = roleRepository.findByName(roleDTO.getName());
         if (RoleOptional.isPresent()) throw new RecordExistException(Role.class, "Name", roleDTO.getName());
+
         Role role = new Role();
         role.setName(roleDTO.getName());
         HashSet<Permission> permissions = getPermissions(roleDTO.getPermissions());
@@ -50,15 +50,27 @@ public class RoleService {
         List<RolePermission> rolePermissions = new ArrayList<>();
         RolePermission rolePermission = new RolePermission();
 
+        List<RoleMenu> roleMenus = new ArrayList<>();
+        RoleMenu roleMenu = new RoleMenu();
+
         permissions.forEach(permission -> {
-            RolePermissionPK rolePermissionPK =  new RolePermissionPK ();
+            /*RolePermissionPK rolePermissionPK =  new RolePermissionPK ();
             rolePermissionPK.setRoleId (savedRole.getId ());
-            rolePermissionPK.setPermissionId (permission.getId());
-            //rolePermission.setPermissionId(permission.getId());
-            //rolePermission.setRoleId(savedRole.getId());
+            rolePermissionPK.setPermissionId (permission.getId());*/
+            rolePermission.setPermissionId(permission.getId());
+            rolePermission.setRoleId(savedRole.getId());
             rolePermissions.add(rolePermission);
         });
         rolePermissionRepository.saveAll(rolePermissions);
+
+        roleDTO.getMenus().forEach(menu -> {
+            roleMenu.setRoleId(savedRole.getId());
+            roleMenu.setMenuId(menu.getId());
+            roleMenus.add(roleMenu);
+        });
+
+        roleMenuRepository.saveAll(roleMenus);
+
     }
 
     public Role get(Long id) {

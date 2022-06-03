@@ -10,6 +10,8 @@ import org.lamisplus.modules.base.domain.entities.Menu;
 import org.lamisplus.modules.base.domain.entities.Module;
 import org.lamisplus.modules.base.domain.repositories.MenuRepository;
 import org.lamisplus.modules.base.domain.repositories.ModuleRepository;
+import org.lamisplus.modules.base.domain.repositories.RoleMenuRepository;
+import org.lamisplus.modules.base.domain.repositories.RoleRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +27,7 @@ import static org.lamisplus.modules.base.util.Constants.ArchiveStatus.UN_ARCHIVE
 public class MenuService {
     private final MenuRepository menuRepository;
     private final ModuleRepository moduleRepository;
+    private final UserService userService;
 
 
     public List<Menu> updateModuleMenu(Long moduleId, ModuleMenuDTO moduleMenuDTO) {
@@ -47,7 +50,7 @@ public class MenuService {
         if(withChild) {
             return menuRepository.findAllByArchivedOrderByPositionAsc(UN_ARCHIVED).stream().
                     map(menu -> {
-                        MenuDTO menuDTO = toMenuDTO(menu);
+                        MenuDTO menuDTO = toMenuDTO(menu, null);
                         Menu parent = menu.getParent();
                         if (parent != null) menuDTO.setParentName(parent.getName());
                         return menuDTO;
@@ -56,19 +59,35 @@ public class MenuService {
         }
         return menuRepository.findAllByArchivedAndParentIdOrderByPositionAsc(UN_ARCHIVED, null).stream().
                 map(menu -> {
-                    MenuDTO menuDTO = toMenuDTO(menu);
+                    MenuDTO menuDTO = toMenuDTO(menu, filterMenuByCurrentUser());
+                    if(menuDTO == null){
+                        return null;
+                    }
                     Menu parent = menu.getParent();
                     if (parent != null) menuDTO.setParentName(parent.getName());
                     return menuDTO;
                 }).sorted(Comparator.comparingInt(MenuDTO::getPosition))
                 .collect(Collectors.toList());
     }
+    private Set<Menu> filterMenuByCurrentUser() {
+        TreeSet<Menu> menus = new TreeSet<>();
+        userService.getUserWithRoles().ifPresent(user -> {
+            user.getRole().forEach(role -> {
+                role.getMenu().forEach(menu -> {
+                    //if(menu.getParent() == null) {
+                        menus.add(menu);
+                    //}
+                });
+            });
+        });
+        return menus;
+    }
 
     public List<MenuDTO> getAllMenusByParentId(Integer parentId) {
         if(parentId == 0) parentId = null;
         return menuRepository.findAllByArchivedAndParentIdOrderByIdDesc(UN_ARCHIVED, parentId).stream().
                 map(menu -> {
-                    MenuDTO menuDTO =  toMenuDTO(menu);
+                    MenuDTO menuDTO =  toMenuDTO(menu, null);
                     Menu parent = menu.getParent();
                     if(parent != null)menuDTO.setParentName(parent.getName());
                     return menuDTO;
@@ -98,6 +117,11 @@ public class MenuService {
     }
 
     public Menu save(MenuDTO menuDTO, Boolean isModule){
+
+        menuRepository.findByNameAndParentId(menuDTO.getName(), menuDTO.getParentId()).ifPresent(menu -> {
+            throw new EntityNotFoundException(Module.class, "parent with name already exist", "" + menuDTO.getName());
+        });
+
         if(isModule) {
             if(menuDTO.getModuleId() == null){
                 throw new EntityNotFoundException(Module.class, "moduleId", "" + "moduleId is null");
@@ -148,12 +172,13 @@ public class MenuService {
         return menu;
     }
 
-    public MenuDTO toMenuDTO(Menu menu) {
+    public MenuDTO toMenuDTO(Menu menu, Set<Menu> menus) {
         if ( menu == null ) {
             return null;
         }
 
         MenuDTO menuDTO = new MenuDTO();
+
         menuDTO.setId( menu.getId() );
         menuDTO.setName( menu.getName() );
         menuDTO.setState( menu.getState() );
@@ -171,12 +196,25 @@ public class MenuService {
         menuDTO.setParentId( menu.getParentId() );
         menuDTO.setModuleId( menu.getModuleId() );
         menuDTO.setType( menu.getType() );
-        Set<Menu> set1 = menu.getSubs();
-        if ( set1 != null ) {
-            menuDTO.setSubs( new HashSet<Menu>( set1 ) );
+        Set<Menu> menuSet = new HashSet<>();
+
+        boolean found = false;
+        if(menus != null && !menus.isEmpty()) {
+            for (Menu menu1 : menus) {
+                menu.getSubs().forEach(menu2 -> {
+                    if (menu2.getId() == menu1.getId()) {
+                        menuSet.add(menu2);
+                    }
+                });
+                if (menu1.getId() == menu.getId()) {
+                    found = true;
+                }
+            }
         }
-
-        return menuDTO;
+        if(found){
+            menuDTO.setSubs(menuSet);
+            return menuDTO;
+        }
+        return null;
     }
-
 }

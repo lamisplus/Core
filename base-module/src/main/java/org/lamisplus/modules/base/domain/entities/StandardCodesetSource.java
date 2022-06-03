@@ -26,10 +26,10 @@ public class StandardCodesetSource extends Audit<String> {
     @Column(name = "description")
     private String description;
 
-    @OneToMany(mappedBy = "standardCodesetSourceByStandardCodesetSourceId")
+    /*@OneToMany(mappedBy = "standardCodesetSourceByStandardCodesetSourceId", fetch = FetchType.LAZY)
     @JsonIgnore
     @ToString.Exclude
-    private List<StandardCodeset> standardCodesetsById;
+    private List<StandardCodeset> standardCodesetsById;*/
 
     @Basic
     @Column(name = "archived")

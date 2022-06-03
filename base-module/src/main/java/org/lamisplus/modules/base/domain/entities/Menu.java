@@ -14,6 +14,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.UUID;
 
 @Data
 @Entity
@@ -50,6 +51,11 @@ public final class Menu implements Serializable, Comparable<Menu>, Persistable<L
 
     private String icon;
 
+    @Column(name = "code")
+    private String code;
+
+    private String uuid;
+
     private String tooltip;
 
     private String breadcrumb;
@@ -83,7 +89,7 @@ public final class Menu implements Serializable, Comparable<Menu>, Persistable<L
     private Integer parentId;
 
 
-    @OneToMany(mappedBy = "parent", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY)
     private Set<Menu> subs = new TreeSet<>();
 
     @Override
@@ -93,10 +99,10 @@ public final class Menu implements Serializable, Comparable<Menu>, Persistable<L
 
     @Override
     public int compareTo(Menu o) {
-        if (position.equals(o.position)) {
-            return name.compareTo(o.name);
+        if (id.equals(o.id)) {
+            return id.compareTo(o.id);
         }
-        return position.compareTo(o.position);
+        return id.compareTo(o.id);
     }
 
     @PostLoad
@@ -136,5 +142,9 @@ public final class Menu implements Serializable, Comparable<Menu>, Persistable<L
         if(icon == null){
             icon = "flaticon-087-stop";
         }
+        uuid = UUID.randomUUID().toString();
     }
+
+    /*@Transient
+    private String parentName;*/
 }
