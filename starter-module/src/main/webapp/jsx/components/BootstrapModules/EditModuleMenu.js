@@ -194,10 +194,10 @@ const UpdateModuleMenu = (props) => {
                                                         <label>Menu Code</label>
                                                         <input
                                                             type="text"
-                                                            name="menuCode"
-                                                            id="menuCode"
+                                                            name="code"
+                                                            id="code"
                                                             className="form-control"
-                                                            value={details.menuCode}
+                                                            value={details.code}
                                                             onChange={handleOtherFieldInputChange}
                                                         />
                                                     </div>

@@ -38,7 +38,7 @@ const UpdateModuleMenu = (props) => {
     const [menList, setMenuList] = useState([])
     const [errors, setErrors] = useState({});
     const defaultValues = { }
-    const menuItems = { parentId: "", name:"", url:"", breadcrumb: "", menuCode:"", tooltip:"", icon:"", type:"", level:"",state:"", disabled: true,}
+    const menuItems = { parentId: "", name:"", url:"", breadcrumb: "", code:"", tooltip:"", icon:"", type:"", level:"",state:"", disabled: true,}
     const [details, setDetails] = useState(menuItems);
 
     //Function to get list of module menu
@@ -195,10 +195,10 @@ const UpdateModuleMenu = (props) => {
                                                         <label>Menu Code</label>
                                                         <input
                                                             type="text"
-                                                            name="menuCode"
-                                                            id="menuCode"
+                                                            name="code"
+                                                            id="code"
                                                             className="form-control"
-                                                            value={details.menuCode}
+                                                            value={details.code}
                                                             onChange={handleOtherFieldInputChange}
                                                         />
                                                     </div>
