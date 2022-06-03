@@ -20,7 +20,6 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/organisation-units")
 @Slf4j
 @RequiredArgsConstructor
 public class OrganisationUnitController {
