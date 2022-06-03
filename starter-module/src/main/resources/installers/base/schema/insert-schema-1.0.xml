@@ -156,31 +156,6 @@
                  stripComments="true"/>
     </changeSet>
 
-    <changeSet failOnError="false" author="Emeka" id="16482011142141-core-insert-schema-83">
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <tableExists tableName="role_menu"/>
-            </not>
-        </preConditions>
-        <createTable tableName="role_menu">
-            <column name="role_id" type="BIGINT">
-                <constraints nullable="false"/>
-            </column>
-            <column name="menu_id" type="BIGINT">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-    </changeSet>
-
-    <changeSet failOnError="false" author="Emeka" id="16482011142141-core-insert-schema-84">
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <primaryKeyExists primaryKeyName="role_menu_pkey" tableName="role_menu"/>
-            </not>
-        </preConditions>
-        <addPrimaryKey columnNames="role_id, menu_id" constraintName="role_menu_pkey" tableName="role_menu"/>
-    </changeSet>
-
     <changeSet failOnError="false" author="Chukwuemeka Ilozue" id="16482011142141-core-insert-schema-85">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">
