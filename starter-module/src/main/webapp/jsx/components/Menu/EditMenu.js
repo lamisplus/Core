@@ -38,7 +38,7 @@ const UpdateModuleMenu = (props) => {
     const [menList, setMenuList] = useState([])
     const [errors, setErrors] = useState({});
     const [details, setDetails] = useState(props.datasample);
-    console.log(details)
+
     useEffect(() => {
         setDetails(props.datasample)
     }, [props.datasample]);
@@ -191,6 +191,17 @@ const UpdateModuleMenu = (props) => {
                                                         {errors.name !=="" ? (
                                                             <span className={classes.error}>{errors.name}</span>
                                                         ) : "" }
+                                                    </div>
+                                                    <div className="form-group col-md-4">
+                                                        <label>Menu Code</label>
+                                                        <input
+                                                            type="text"
+                                                            name="code"
+                                                            id="code"
+                                                            className="form-control"
+                                                            value={details.code}
+                                                            onChange={handleOtherFieldInputChange}
+                                                        />
                                                     </div>
                                                     <div className="form-group col-md-4">
                                                         <label>Menu Link/Url</label>

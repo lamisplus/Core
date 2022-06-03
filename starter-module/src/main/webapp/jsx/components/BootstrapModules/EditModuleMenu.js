@@ -191,6 +191,17 @@ const UpdateModuleMenu = (props) => {
                                                         ) : "" }
                                                     </div>
                                                     <div className="form-group col-md-4">
+                                                        <label>Menu Code</label>
+                                                        <input
+                                                            type="text"
+                                                            name="code"
+                                                            id="code"
+                                                            className="form-control"
+                                                            value={details.code}
+                                                            onChange={handleOtherFieldInputChange}
+                                                        />
+                                                    </div>
+                                                    <div className="form-group col-md-4">
                                                         <label>Menu Link/Url</label>
                                                         <input
                                                             type="text"

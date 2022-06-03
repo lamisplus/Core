@@ -39,7 +39,6 @@ public class LamisPlusApplication  {
 
     public static String modulePath = System.getProperty ("user.dir");
 
-
     public static void main(String[] args) {
 
         context = SpringApplication.run (LamisPlusApplication.class, args);

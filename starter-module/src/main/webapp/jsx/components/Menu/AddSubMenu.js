@@ -38,7 +38,7 @@ const UpdateModuleMenu = (props) => {
     const [menList, setMenuList] = useState([])
     const [errors, setErrors] = useState({});
     const defaultValues = { }
-    const menuItems = { parentId: props.parentObj.id, name:"", url:"", breadcrumb: "", tooltip:"", icon:"", type:"", level:"",state:"", disabled: true,}
+    const menuItems = { parentId: props.parentObj.id, name:"", url:"", code:"", breadcrumb: "", tooltip:"", icon:"", type:"", level:"",state:"", disabled: true,}
     const [details, setDetails] = useState(menuItems);
 
     //Function to get list of module menu
@@ -71,7 +71,7 @@ const UpdateModuleMenu = (props) => {
         temp.parentId = details.parentId ? "" : "This field is required"
         temp.url = details.url ? "" : "This field is required"
         temp.name = details.name ? "" : "This field is required"
-
+        //temp.code = details.code ? "" : "This field is required"
         setErrors({
             ...temp
         })
@@ -161,6 +161,18 @@ const UpdateModuleMenu = (props) => {
                                                         {errors.name !=="" ? (
                                                             <span className={classes.error}>{errors.name}</span>
                                                         ) : "" }
+                                                    </div>
+                                                    <div className="form-group col-md-4">
+                                                        <label>Menu Code</label>
+                                                        <input
+                                                            type="text"
+                                                            name="code"
+                                                            id="code"
+                                                            className="form-control"
+                                                            value={details.code}
+                                                            onChange={handleOtherFieldInputChange}
+                                                        />
+                                                        
                                                     </div>
                                                     <div className="form-group col-md-4">
                                                         <label>Menu Link/Url</label>
