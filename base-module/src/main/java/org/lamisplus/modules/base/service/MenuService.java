@@ -57,16 +57,19 @@ public class MenuService {
                     }).sorted(Comparator.comparingInt(MenuDTO::getPosition))
                     .collect(Collectors.toList());
         }
+        Set<Menu> menus = filterMenuByCurrentUser();
         return menuRepository.findAllByArchivedAndParentIdOrderByPositionAsc(UN_ARCHIVED, null).stream().
                 map(menu -> {
-                    MenuDTO menuDTO = toMenuDTO(menu, filterMenuByCurrentUser());
-                    if(menuDTO == null){
+                    MenuDTO menuDTO = toMenuDTO(menu, menus);
+                    /*if(menuDTO == null){
                         return null;
-                    }
+                    }*/
                     Menu parent = menu.getParent();
                     if (parent != null) menuDTO.setParentName(parent.getName());
                     return menuDTO;
-                }).sorted(Comparator.comparingInt(MenuDTO::getPosition))
+                })
+                .filter(menuDTO -> menuDTO.getId() != null)
+                .sorted(Comparator.comparingInt(MenuDTO::getPosition))
                 .collect(Collectors.toList());
     }
     private Set<Menu> filterMenuByCurrentUser() {
@@ -215,6 +218,6 @@ public class MenuService {
             menuDTO.setSubs(menuSet);
             return menuDTO;
         }
-        return null;
+        return new MenuDTO();
     }
 }
