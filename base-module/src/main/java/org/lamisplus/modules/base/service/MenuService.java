@@ -50,7 +50,7 @@ public class MenuService {
         if(withChild) {
             return menuRepository.findAllByArchivedOrderByPositionAsc(UN_ARCHIVED).stream().
                     map(menu -> {
-                        MenuDTO menuDTO = toMenuDTO(menu, null);
+                        MenuDTO menuDTO = toMenuDTO(menu, null, true);
                         Menu parent = menu.getParent();
                         if (parent != null) menuDTO.setParentName(parent.getName());
                         return menuDTO;
@@ -60,7 +60,7 @@ public class MenuService {
         Set<Menu> menus = filterMenuByCurrentUser();
         return menuRepository.findAllByArchivedAndParentIdOrderByPositionAsc(UN_ARCHIVED, null).stream().
                 map(menu -> {
-                    MenuDTO menuDTO = toMenuDTO(menu, menus);
+                    MenuDTO menuDTO = toMenuDTO(menu, menus, false);
                     /*if(menuDTO == null){
                         return null;
                     }*/
@@ -90,7 +90,7 @@ public class MenuService {
         if(parentId == 0) parentId = null;
         return menuRepository.findAllByArchivedAndParentIdOrderByIdDesc(UN_ARCHIVED, parentId).stream().
                 map(menu -> {
-                    MenuDTO menuDTO =  toMenuDTO(menu, null);
+                    MenuDTO menuDTO =  toMenuDTO(menu, null, true);
                     Menu parent = menu.getParent();
                     if(parent != null)menuDTO.setParentName(parent.getName());
                     return menuDTO;
@@ -175,7 +175,7 @@ public class MenuService {
         return menu;
     }
 
-    public MenuDTO toMenuDTO(Menu menu, Set<Menu> menus) {
+    public MenuDTO toMenuDTO(Menu menu, Set<Menu> menus, Boolean withChild) {
         if ( menu == null ) {
             return null;
         }
@@ -202,22 +202,31 @@ public class MenuService {
         Set<Menu> menuSet = new HashSet<>();
 
         boolean found = false;
-        if(menus != null && !menus.isEmpty()) {
-            for (Menu menu1 : menus) {
-                menu.getSubs().forEach(menu2 -> {
-                    if (menu2.getId() == menu1.getId()) {
-                        menuSet.add(menu2);
+        if(withChild == true){
+            Set<Menu> set1 = menu.getSubs();
+            if ( set1 != null ) {
+                menuDTO.setSubs( new HashSet<Menu>( set1 ) );
+            }
+            return menuDTO;
+        } else {
+            if (menus != null && !menus.isEmpty()) {
+                for (Menu menu1 : menus) {
+                    menu.getSubs().forEach(menu2 -> {
+                        if (menu2.getId() == menu1.getId()) {
+                            menuSet.add(menu2);
+                        }
+                    });
+                    if (menu1.getId() == menu.getId()) {
+                        found = true;
                     }
-                });
-                if (menu1.getId() == menu.getId()) {
-                    found = true;
                 }
             }
+            if(found){
+                menuDTO.setSubs(menuSet);
+                return menuDTO;
+            }
         }
-        if(found){
-            menuDTO.setSubs(menuSet);
-            return menuDTO;
-        }
+
         return new MenuDTO();
     }
 }
