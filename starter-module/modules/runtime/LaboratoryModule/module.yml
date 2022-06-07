@@ -1,0 +1,15 @@
+basePackage: org.lamisplus.modules.laboratory
+name: LaboratoryModule
+store: true
+menus:
+  - icon: flaticon-087-stop
+    disabled: false
+    name: Laboratory
+    state: laboratory
+    url: /across/resources/static/laboratory/index.html
+umdLocation: /across/resources/static/laboratory/index.html
+webModules:
+  - breadcrumb: laboratory
+    name: LaboratoryModule
+    path: laboratory
+    position: 99
