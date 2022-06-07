@@ -37,6 +37,8 @@ import OrganizationUnit from "./components/OrganizationUnit/Index";
 import ApplicationCodeset from "./components/ApplicationCodeset/ApplicationCodesetSearch";
 import ParentOrganizationUnit from "./components/OrganizationUnit/ParentOrganizationalUnit";
 import MenuList from "./components/Menu/MenuList";
+import BiometricList from "./components/Biometric/BiometricList";
+
 import SubMenuList from "./components/Menu/SubMenuList";
 import { ThemeContext } from "../context/ThemeContext";
 
@@ -74,6 +76,7 @@ const Markup = () => {
     { url: "application-codeset", component: ApplicationCodeset },
     { url: "admin-parent-organization-unit", component: ParentOrganizationUnit },
     { url: "menu", component: MenuList },
+    { url: "biometrics", component: BiometricList },
   ];
   
   let path = window.location.pathname;

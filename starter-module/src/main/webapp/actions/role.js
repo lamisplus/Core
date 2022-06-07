@@ -35,7 +35,7 @@ export const addRole = (data, onSuccess, onError) => (dispatch) => {
 
 export const updateRole = (id, data, onSuccess, onError) => (dispatch) => {
   axios
-    .post(`${baseUrl}roles/v2/${id}`, data)
+    .put(`${baseUrl}roles/${id}`, data)
     .then((response) => {
       
         dispatch({

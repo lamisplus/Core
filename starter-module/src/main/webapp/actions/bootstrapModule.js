@@ -283,6 +283,7 @@ export const startBootstrapModule = (onSuccess, onError)=> dispatch => {
 
 };
 export const getModuleMenus = (id,onSuccess, onError)=> dispatch => {
+  if(id){
     axios
         .get(`${baseUrl}modules/${id}/menus`)
         .then(response => {
@@ -303,7 +304,7 @@ export const getModuleMenus = (id,onSuccess, onError)=> dispatch => {
                 //toast.error("Something went wrong! please try again..");
             }
         );
-
+    }
 };
 export const updateModuleMenu = (id, obj, onSuccess, onError)=> dispatch => {
     axios

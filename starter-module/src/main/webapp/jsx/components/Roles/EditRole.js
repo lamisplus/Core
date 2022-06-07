@@ -72,22 +72,29 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const AddRole = (props) => {
-  //console.log(props.location.state.row)
+  console.log(props.location.state.row)
   const classes = useStyles();
   const { values, setValues, handleInputChange, resetForm } = useForm({
     name: props.location && props.location.state.row ? props.location.state.row.name : "",
     permissions: props.location && props.location.state.row ? props.location.state.row.permission :[],
+    menus:props.location && props.location.state.row ? props.location.state.row.menu :[],
   });
   const [permissions, setPermissions] = useState([]);
   const [selectedPermissions, setselectedPermissions] = useState([]);
+  const [menList, setMenuList] = useState([])
+  const [selectedMenuList, setselectedMenuList] = useState([]);
   const [saving, setSaving] = useState(false);
  
   useEffect(() => {
-    const y = props.location.state.row && props.location.state.row.permission
+        //Get list of permission selected
+        const y = props.location.state.row && props.location.state.row.permission
         ? props.location.state.row.permission.map((x) => (x.name)) : [];
-
         setselectedPermissions(y);
-}, [props.location.state.row.permission]);
+        //Get list of selected menu items
+        const z = props.location.state.row && props.location.state.row.menu
+        ? props.location.state.row.menu.map((x) => (x.id)) : [];
+        setselectedMenuList(z);
+}, [props.location.state.row.permission, props.location.state.row.menu]);
   /* Get list of Permissions from the server */
   useEffect(() => {
     async function getCharacters() {
@@ -108,11 +115,34 @@ const AddRole = (props) => {
     }
     getCharacters();
   }, []);
+  //Function to get list of  menu
+  useEffect(() => {
+    async function getMenus() {
+        axios
+            .get(`${baseUrl}menus?withChild=true`)
+            .then((response) => {
+                //console.log(response.data)
+                setMenuList(
+                    Object.entries(response.data).map(([key, value]) => ({
+                        label: value.name,
+                        value: value.id,
+                    }))
+                );
+                //menuobj = menList
+            })
+            .catch((error) => {
+                //console.log(error);
+            });
+      }
+      getMenus();
+  }, []);
 
   const onPermissionSelect = (selectedValues) => {
     setselectedPermissions(selectedValues);
   };
-
+  const onMenuItemSelect = (selectedValues) => {
+    setselectedMenuList(selectedValues);
+  };
   const handleSubmit = (e) => {
     e.preventDefault();
     let permissions = [];
@@ -121,11 +151,20 @@ const AddRole = (props) => {
       permission.name = p;
       permissions.push(permission);
     });
+    //values["permissions"] = permissions;
+    //get list of selected Menu Items with the id
+    let menuItems = [];
+    selectedMenuList.map((item) => {
+      const menuId = { id: null };
+      menuId.id = item;
+      menuItems.push(menuId);
+    });
     values["permissions"] = permissions;
+    values["menus"] = menuItems;
     setSaving(true);
     const onSuccess = () => {
       setSaving(false);
-      toast.success("Role Saved Successfully");
+      //toast.success("Role Saved Successfully");
       resetForm();
       props.history.push("/roles")
     };
@@ -185,6 +224,18 @@ const AddRole = (props) => {
                       options={permissions}
                       onChange={onPermissionSelect}
                       selected={selectedPermissions}
+                    />
+                  </FormGroup>
+                </Col>
+                <br/>
+                <Col md={12}>
+                  <FormGroup>
+                    <Label for="permissions"><b>Menu Items</b></Label>
+                    <DualListBox
+                      canFilter
+                      options={menList}
+                      onChange={onMenuItemSelect}
+                      selected={selectedMenuList}
                     />
                   </FormGroup>
                 </Col>
