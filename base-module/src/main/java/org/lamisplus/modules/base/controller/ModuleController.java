@@ -262,7 +262,7 @@ public class ModuleController {
     }
 
     @GetMapping(BASE_URL_VERSION_ONE + "/modules/check")
-    public Boolean getMenus(@RequestParam String moduleName) {
+    public Boolean exist(@RequestParam String moduleName) {
         return this.menuService.exist(moduleName);
     }
 }

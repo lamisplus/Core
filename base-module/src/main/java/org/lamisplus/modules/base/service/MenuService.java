@@ -241,9 +241,6 @@ public class MenuService {
 
     public boolean exist(String moduleName){
         moduleName = "%"+moduleName+"%";
-        if(moduleRepository.findLikeByMenu(moduleName).isPresent()){
-            return true;
-        }
-        else return false;
+        return moduleRepository.findLikeByMenu(moduleName).isPresent();
     }
 }
