@@ -32,3 +32,4 @@ mvnw
 mvn
 mvnw.cmd
 application-debug.*
+node_modules
