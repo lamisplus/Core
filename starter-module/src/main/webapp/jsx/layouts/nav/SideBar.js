@@ -138,7 +138,7 @@ const SideBar = (props) => {
                     to={{ pathname: menu.moduleId===null ? (menu.url!==null?menu.url:"" ): "modules", state: menu.url}}
 
                           style={{color: '#798087', padding: '1px', backgroundColor: 'white'}}>
-                      <i className={menu.icon!==null && menu.icon!=="wc"? menu.icon : "flaticon-087-stop"} style={{color: '#24a4eb'}} size="xs"/>
+                      <i className={menu.icon} style={{color: '#24a4eb'}} size="xs"/>
                       <span className="nav-text" style={{color: '#24a4eb'}}>{menu.name}</span>
                     </Link>
                     {menu.subs.length>0 ?
