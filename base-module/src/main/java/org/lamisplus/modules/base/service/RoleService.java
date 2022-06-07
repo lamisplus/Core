@@ -7,10 +7,7 @@ import org.lamisplus.modules.base.controller.apierror.EntityNotFoundException;
 import org.lamisplus.modules.base.controller.apierror.RecordExistException;
 import org.lamisplus.modules.base.domain.dto.RoleDTO;
 import org.lamisplus.modules.base.domain.entities.*;
-import org.lamisplus.modules.base.domain.repositories.PermissionRepository;
-import org.lamisplus.modules.base.domain.repositories.RoleMenuRepository;
-import org.lamisplus.modules.base.domain.repositories.RolePermissionRepository;
-import org.lamisplus.modules.base.domain.repositories.RoleRepository;
+import org.lamisplus.modules.base.domain.repositories.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +27,7 @@ public class RoleService {
     private final PermissionRepository permissionRepository;
     private final RolePermissionRepository rolePermissionRepository;
     private final RoleMenuRepository roleMenuRepository;
+    private final MenuRepository menuRepository;
 
 
     /*@PersistenceContext
@@ -64,6 +62,15 @@ public class RoleService {
         rolePermissionRepository.saveAll(rolePermissions);
 
         roleDTO.getMenus().forEach(menu -> {
+            for(int i =0; i < 3; i++){
+                if(menu.getParent() != null){
+                    Menu parent = menu.getParent();
+                    roleMenu.setRoleId(savedRole.getId());
+                    roleMenu.setMenuId(menu.getId());
+                    roleMenus.add(roleMenu);
+                    menu = parent.getParent();
+                }
+            }
             roleMenu.setRoleId(savedRole.getId());
             roleMenu.setMenuId(menu.getId());
             roleMenus.add(roleMenu);
@@ -115,5 +122,33 @@ public class RoleService {
             }
         }
         return permissionsSet;
+    }
+
+    private HashSet<Menu> getMenusById(List<Menu> menus) {
+        HashSet<Menu> menuList = new HashSet<>();
+        menus.forEach(menu ->{
+            Menu menu1 = menuRepository.findByIdAndArchived(menu.getId(), UN_ARCHIVED).orElse(new Menu());
+            if(menu1.getId() == null){
+                return;
+            }
+            for(int i =0; i < 3; i++){
+                if(menu1.getParent() != null){
+                    Menu parent = menu1.getParent();
+                    menuList.add(parent);
+                    menu1 = parent.getParent();
+                }
+            }
+            menuList.add(menu1);
+        });
+        return menuList;
+    }
+
+    public Role updateMenus(Long id, List<Menu> menus) {
+        getMenusById(menus);
+        Role updatedRole = roleRepository.findById(id)
+                .orElseThrow(()-> new EntityNotFoundException(Role.class, "Id", id +""));
+        HashSet<Menu> menuHashSet = this.getMenusById(menus);
+        updatedRole.setMenu(menuHashSet);
+        return roleRepository.save(updatedRole);
     }
 }

@@ -49,7 +49,7 @@ public class RoleController {
         roleService.save(roleDTO);
     }
 
-    @PostMapping(BASE_URL_VERSION_ONE + "/v2/{id}")
+    @PutMapping(BASE_URL_VERSION_ONE + "{id}")
     public ResponseEntity<Role> update(@Valid @RequestBody RoleDTO role, @PathVariable Long id) {
         try {
             Role updatedRole = new Role();
@@ -59,6 +59,9 @@ public class RoleController {
             if (role.getName() != null){
                 updatedRole = roleService.updateName(id, role.getName());
             }
+            if(!role.getMenus().isEmpty()){
+                updatedRole = roleService.updateMenus(id, role.getMenus());
+            }
             return ResponseEntity.ok(updatedRole);
         } catch (Exception e) {
             ResponseEntity.status(HttpStatus.BAD_REQUEST);
@@ -66,7 +69,7 @@ public class RoleController {
         return null;
     }
 
-    @DeleteMapping(BASE_URL_VERSION_ONE + "/v2/{id}")
+    @DeleteMapping(BASE_URL_VERSION_ONE + "/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteRole(@PathVariable Long id) {
         Role role = roleRepository.findById(id)
