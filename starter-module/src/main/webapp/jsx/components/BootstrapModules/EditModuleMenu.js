@@ -38,7 +38,7 @@ const UpdateModuleMenu = (props) => {
     const [menList, setMenuList] = useState([])
     const [errors, setErrors] = useState({});
     const [details, setDetails] = useState(props.datasample);
-    console.log(details)
+    //console.log(details)
     useEffect(() => {
         setDetails(props.datasample)
     }, [props.datasample]);
@@ -49,7 +49,7 @@ const UpdateModuleMenu = (props) => {
             axios
                 .get(`${baseUrl}menus?withChild=true`)
                 .then((response) => {
-                    //console.log(response)
+                    //console.log(response.data)
                     setMenuList(
                         Object.entries(response.data).map(([key, value]) => ({
                             label: value.name,
@@ -114,7 +114,7 @@ const UpdateModuleMenu = (props) => {
 
             <Modal show={props.modalstatus} toggle={props.togglestatus} className={props.className} size="xl">
                 <Modal.Header toggle={props.togglestatus}>
-                    <Modal.Title>Add Module Menu </Modal.Title>
+                    <Modal.Title>Edit Module Menu </Modal.Title>
                     <Button
                         variant=""
                         className="btn-close"

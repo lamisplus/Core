@@ -88,7 +88,8 @@ const ModuleMenu = (props) => {
     const [loading, setLoading] = useState(true);
     const [modal, setModal] = useState(false);
     const datasample = props.location && props.location.state? props.location.state.datasample : {};
-    const moduleName= datasample.name + " Menu List"
+    const moduleName= datasample.name + " Menu List";
+    
     useEffect(() => {
         loadModuleMenus()
     }, [props.location.state.datasample.id]); //componentDidMount to get module menus

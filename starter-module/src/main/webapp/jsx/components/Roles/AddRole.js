@@ -74,9 +74,12 @@ const AddRole = (props) => {
   const { values, setValues, handleInputChange, resetForm } = useForm({
     name: "",
     permissions: [],
+    menus: [],
   });
   const [permissions, setPermissions] = useState([]);
   const [selectedPermissions, setselectedPermissions] = useState([]);
+  const [menList, setMenuList] = useState([])
+  const [selectedMenuList, setselectedMenuList] = useState([]);
   const [saving, setSaving] = useState(false);
 
   /* Get list of Permissions from the server */
@@ -99,20 +102,53 @@ const AddRole = (props) => {
     }
     getCharacters();
   }, []);
+  //Function to get list of  menu
+  useEffect(() => {
+    async function getMenus() {
+        axios
+            .get(`${baseUrl}menus?withChild=true`)
+            .then((response) => {
+                //console.log(response.data)
+                setMenuList(
+                    Object.entries(response.data).map(([key, value]) => ({
+                        label: value.name,
+                        value: value.id,
+                    }))
+                );
+                //menuobj = menList
+            })
+            .catch((error) => {
+                //console.log(error);
+            });
+    }
+    getMenus();
+}, []);
 
   const onPermissionSelect = (selectedValues) => {
     setselectedPermissions(selectedValues);
   };
+  const onMenuItemSelect = (selectedValues) => {
+    setselectedMenuList(selectedValues);
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    //get list of selected permissions with the name
     let permissions = [];
     selectedPermissions.map((p) => {
       const permission = { name: null };
       permission.name = p;
       permissions.push(permission);
     });
+    //get list of selected Menu Items with the id
+    let menuItems = [];
+    selectedMenuList.map((item) => {
+      const menuId = { id: null };
+      menuId.id = item;
+      menuItems.push(menuId);
+    });
     values["permissions"] = permissions;
+    values["menus"] = menuItems;
     setSaving(true);
     const onSuccess = () => {
       setSaving(false);
@@ -184,9 +220,9 @@ const AddRole = (props) => {
                     <Label for="permissions"><b>Menu Items</b></Label>
                     <DualListBox
                       canFilter
-                      options={permissions}
-                      onChange={onPermissionSelect}
-                      selected={selectedPermissions}
+                      options={menList}
+                      onChange={onMenuItemSelect}
+                      selected={selectedMenuList}
                     />
                   </FormGroup>
                 </Col>
