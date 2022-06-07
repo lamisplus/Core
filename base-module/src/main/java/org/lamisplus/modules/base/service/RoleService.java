@@ -40,44 +40,16 @@ public class RoleService {
         Role role = new Role();
         role.setName(roleDTO.getName());
         HashSet<Permission> permissions = getPermissions(roleDTO.getPermissions());
+        HashSet<Menu> menus = getMenusById(roleDTO.getMenus());
+
+        role.setPermission(permissions);
+        role.setMenu(menus);
         role.setArchived(UN_ARCHIVED);
+
         if(StringUtils.isBlank(role.getCode())) {
             role.setCode(UUID.randomUUID().toString());
         }
         Role savedRole =  roleRepository.save(role);
-        List<RolePermission> rolePermissions = new ArrayList<>();
-        RolePermission rolePermission = new RolePermission();
-
-        List<RoleMenu> roleMenus = new ArrayList<>();
-        RoleMenu roleMenu = new RoleMenu();
-
-        permissions.forEach(permission -> {
-            /*RolePermissionPK rolePermissionPK =  new RolePermissionPK ();
-            rolePermissionPK.setRoleId (savedRole.getId ());
-            rolePermissionPK.setPermissionId (permission.getId());*/
-            rolePermission.setPermissionId(permission.getId());
-            rolePermission.setRoleId(savedRole.getId());
-            rolePermissions.add(rolePermission);
-        });
-        rolePermissionRepository.saveAll(rolePermissions);
-
-        roleDTO.getMenus().forEach(menu -> {
-            for(int i =0; i < 3; i++){
-                if(menu.getParent() != null){
-                    Menu parent = menu.getParent();
-                    roleMenu.setRoleId(savedRole.getId());
-                    roleMenu.setMenuId(menu.getId());
-                    roleMenus.add(roleMenu);
-                    menu = parent.getParent();
-                }
-            }
-            roleMenu.setRoleId(savedRole.getId());
-            roleMenu.setMenuId(menu.getId());
-            roleMenus.add(roleMenu);
-        });
-
-        roleMenuRepository.saveAll(roleMenus);
-
     }
 
     public Role get(Long id) {
@@ -128,23 +100,15 @@ public class RoleService {
         HashSet<Menu> menuList = new HashSet<>();
         menus.forEach(menu ->{
             Menu menu1 = menuRepository.findByIdAndArchived(menu.getId(), UN_ARCHIVED).orElse(new Menu());
-            if(menu1.getId() == null){
-                return;
+            while(menu1 != null && menu1.getId() != null){
+                menuList.add(menu1);
+                menu1 = menu1.getParent();
             }
-            for(int i =0; i < 3; i++){
-                if(menu1.getParent() != null){
-                    Menu parent = menu1.getParent();
-                    menuList.add(parent);
-                    menu1 = parent.getParent();
-                }
-            }
-            menuList.add(menu1);
         });
         return menuList;
     }
 
     public Role updateMenus(Long id, List<Menu> menus) {
-        getMenusById(menus);
         Role updatedRole = roleRepository.findById(id)
                 .orElseThrow(()-> new EntityNotFoundException(Role.class, "Id", id +""));
         HashSet<Menu> menuHashSet = this.getMenusById(menus);
