@@ -261,5 +261,8 @@ public class ModuleController {
         return ResponseEntity.ok(this.menuService.updateModuleMenu(id, moduleMenuDTO));
     }
 
-
+    @GetMapping(BASE_URL_VERSION_ONE + "/modules/check")
+    public Boolean getMenus(@RequestParam String moduleName) {
+        return this.menuService.exist(moduleName);
+    }
 }
