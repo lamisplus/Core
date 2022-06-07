@@ -8,6 +8,7 @@ import org.lamisplus.modules.base.domain.dto.MenuDTO;
 import org.lamisplus.modules.base.domain.dto.ModuleMenuDTO;
 import org.lamisplus.modules.base.domain.entities.Menu;
 import org.lamisplus.modules.base.domain.entities.Module;
+import org.lamisplus.modules.base.domain.entities.Permission;
 import org.lamisplus.modules.base.domain.repositories.MenuRepository;
 import org.lamisplus.modules.base.domain.repositories.ModuleRepository;
 import org.lamisplus.modules.base.domain.repositories.RoleMenuRepository;
@@ -28,6 +29,7 @@ public class MenuService {
     private final MenuRepository menuRepository;
     private final ModuleRepository moduleRepository;
     private final UserService userService;
+    private final static String ALL_PERMISSION = "all_permission";
 
 
     public List<Menu> updateModuleMenu(Long moduleId, ModuleMenuDTO moduleMenuDTO) {
@@ -47,6 +49,13 @@ public class MenuService {
     }
 
     public List<MenuDTO> getAllMenus(Boolean withChild) {
+        Set<String> permissions = new HashSet<>();
+        userService.getUserWithRoles().ifPresent(user -> {
+            user.getRole().forEach(roles1 ->{
+                permissions.addAll(roles1.getPermission().stream().filter(p -> p.getArchived() == 0)
+                        .map(Permission::getName).collect(Collectors.toSet()));
+            });
+        });
         if(withChild) {
             return menuRepository.findAllByArchivedOrderByPositionAsc(UN_ARCHIVED).stream().
                     map(menu -> {
@@ -60,10 +69,12 @@ public class MenuService {
         Set<Menu> menus = filterMenuByCurrentUser();
         return menuRepository.findAllByArchivedAndParentIdOrderByPositionAsc(UN_ARCHIVED, null).stream().
                 map(menu -> {
-                    MenuDTO menuDTO = toMenuDTO(menu, menus, false);
-                    /*if(menuDTO == null){
-                        return null;
-                    }*/
+                    MenuDTO menuDTO = new MenuDTO();
+                    if(permissions.contains(ALL_PERMISSION)) {
+                        menuDTO = toMenuDTO(menu, null, true);
+                    }else {
+                        menuDTO = toMenuDTO(menu, menus, false);
+                    }
                     Menu parent = menu.getParent();
                     if (parent != null) menuDTO.setParentName(parent.getName());
                     return menuDTO;
@@ -77,9 +88,7 @@ public class MenuService {
         userService.getUserWithRoles().ifPresent(user -> {
             user.getRole().forEach(role -> {
                 role.getMenu().forEach(menu -> {
-                    //if(menu.getParent() == null) {
                         menus.add(menu);
-                    //}
                 });
             });
         });
@@ -228,5 +237,13 @@ public class MenuService {
         }
 
         return new MenuDTO();
+    }
+
+    public boolean exist(String moduleName){
+        moduleName = "%"+moduleName+"%";
+        if(moduleRepository.findLikeByMenu(moduleName).isPresent()){
+            return true;
+        }
+        else return false;
     }
 }

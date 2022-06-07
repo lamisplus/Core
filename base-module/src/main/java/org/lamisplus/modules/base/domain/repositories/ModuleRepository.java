@@ -69,4 +69,7 @@ public interface ModuleRepository extends JpaRepository<Module, Long> {
     @Modifying
     @Query(value = "delete from module_artifact where module_id = ?1", nativeQuery = true)
     void deleteArtifact(Long moduleId);
+
+    @Query(value = "SELECT * from module where name ilike ?1 Limit 1", nativeQuery = true)
+    Optional<Module> findLikeByMenu(String moduleName);
 }
