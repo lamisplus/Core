@@ -495,6 +495,12 @@
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-core</artifactId>
 		</dependency>
+
+		<dependency>
+			<groupId>secugen</groupId>
+			<artifactId>FDxSDKPro</artifactId>
+			<version>1.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>
