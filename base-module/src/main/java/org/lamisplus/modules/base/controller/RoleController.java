@@ -49,7 +49,7 @@ public class RoleController {
         roleService.save(roleDTO);
     }
 
-    @PutMapping(BASE_URL_VERSION_ONE + "{id}")
+    @PutMapping(BASE_URL_VERSION_ONE + "/{id}")
     public ResponseEntity<Role> update(@Valid @RequestBody RoleDTO role, @PathVariable Long id) {
         try {
             Role updatedRole = new Role();
