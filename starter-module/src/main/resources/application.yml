@@ -91,8 +91,8 @@ spring:
         jndi-name:
     servlet:
         multipart:
-            max-file-size: 100MB
-            max-request-size: 100MB
+            max-file-size: 1000MB
+            max-request-size: 1000MB
     jackson:
         jackson:
             serialization:
@@ -148,3 +148,9 @@ lamisplus:
                     minimum-idle: 3
     base-url:
         version-one: "/api/v1/"
+    secugen:
+        biometrics:
+            server-url: http://localhost:8282
+            server-port: 8282
+            timeout: 3000
+            quality: 80

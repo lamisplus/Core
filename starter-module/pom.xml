@@ -529,6 +529,7 @@
 				</executions>
 				<configuration>
 					<skip>false</skip>
+					<includeSystemScope>true</includeSystemScope>
 				</configuration>
 			</plugin>
 			<plugin>

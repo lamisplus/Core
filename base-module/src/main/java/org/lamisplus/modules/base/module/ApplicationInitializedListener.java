@@ -52,10 +52,7 @@ public class ApplicationInitializedListener {
             if (!started.contains(module)) {
                 started.add(module);
                 try {
-                    boolean install = false;
-                    if (module.getInstallOnBoot() != null && module.getInstallOnBoot()) {
-                        install = true;
-                    }
+                    boolean install = module.getInstallOnBoot() != null && module.getInstallOnBoot();
                     moduleService.installModule(module, install, true);
                 } catch (Exception ignored) {
                 }
