@@ -43,7 +43,4 @@ public class RuntimeModuleAcrossJPAConfig {
         LOG.info ("data source from parent : {}", parent.getDataSource ());
         return new JdbcTemplate (parent.getDataSource ());
     }
-
-
-
 }

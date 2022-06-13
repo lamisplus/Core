@@ -638,7 +638,6 @@ public class ModuleManager {
         }
         return context;
     }
-
     private VersionInfo getVersionInfo(AcrossModule clazz) {
         Class<?> c = ClassUtils.getUserClass(clazz);
 
