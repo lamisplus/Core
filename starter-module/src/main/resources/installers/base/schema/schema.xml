@@ -972,19 +972,16 @@
     <changeSet failOnError="true" author="Emeka" id="1648201114214-core-schema-88">
         <sql>
             ALTER TABLE permission
-                ADD COLUMN module_code character varying;
+                ADD COLUMN module_name character varying;
 
-            ALTER TABLE module
-                ADD COLUMN code character varying;
-
-            ALTER TABLE public.permission
-                ADD CONSTRAINT module_name_fk FOREIGN KEY (module_code)
-                    REFERENCES public.module (name) MATCH SIMPLE
+            ALTER TABLE permission
+                ADD CONSTRAINT module_name_fk FOREIGN KEY (module_name)
+                    REFERENCES module (name) MATCH SIMPLE
                     ON UPDATE NO ACTION
                     ON DELETE CASCADE
                 NOT VALID;
 
-            ALTER TABLE public.role_permission
+            ALTER TABLE role_permission
                 ADD CONSTRAINT permission_id_fk FOREIGN KEY (permission_id)
                     REFERENCES permission (id) MATCH SIMPLE
                     ON UPDATE NO ACTION
