@@ -69,6 +69,7 @@ public class ModuleUtils {
     }
 
     public static void loadModuleConfig(InputStream zip, String name, List<ModuleConfig> configs) {
+        BufferedReader in = null;
         try (ZipInputStream zin = new ZipInputStream(zip)) {
             ZipEntry entry;
             while ((entry = zin.getNextEntry()) != null) {
@@ -76,17 +77,24 @@ public class ModuleUtils {
                     loadModuleConfig(zin, name, configs);
                 }
                 if (entry.getName().equals(name)) {
-                    BufferedReader in = new BufferedReader(
+                    in = new BufferedReader(
                             new InputStreamReader(zin));
                     Yaml yaml = new Yaml(new Constructor(ModuleConfig.class));
                     configs.add(yaml.load(in));
-                    //in.close();
                 }
                 zin.closeEntry();
             }
         } catch (IOException e) {
             e.printStackTrace();
             LOG.error("Could not load module.yml");
+        }finally {
+            if(in != null){
+                try {
+                    in.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
