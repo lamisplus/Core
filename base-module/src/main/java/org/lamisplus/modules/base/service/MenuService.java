@@ -63,7 +63,7 @@ public class MenuService {
                         Menu parent = menu.getParent();
                         if (parent != null) menuDTO.setParentName(parent.getName());
                         return menuDTO;
-                    }).sorted(Comparator.comparingInt(MenuDTO::getPosition))
+                    }).sorted(this.comparePositionAndId())
                     .collect(Collectors.toList());
         }
         Set<Menu> menus = filterMenuByCurrentUser();
@@ -242,5 +242,11 @@ public class MenuService {
     public boolean exist(String moduleName){
         moduleName = "%"+moduleName+"%";
         return moduleRepository.findLikeByMenu(moduleName).isPresent();
+    }
+
+    private Comparator<MenuDTO> comparePositionAndId(){
+        //Compare by first position and then id
+        return Comparator.comparing(MenuDTO::getPosition)
+                .thenComparing(MenuDTO::getId);
     }
 }

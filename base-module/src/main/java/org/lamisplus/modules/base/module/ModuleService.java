@@ -310,4 +310,9 @@ public class ModuleService {
         response.setModule(module);
         return response;
     }
+
+    public boolean exist(String moduleName){
+        moduleName = "%"+moduleName+"%";
+        return moduleRepository.findLikeByMenu(moduleName).isPresent();
+    }
 }
