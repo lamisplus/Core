@@ -132,6 +132,7 @@ public class ModuleManager {
                 IOUtils.copy(new ByteArrayInputStream(data), new FileOutputStream(tmpFile.toFile()));
                 ModuleUtils.copyPathFromJar(tmpFile.toUri().toURL(), "/", moduleRuntimePath);
                 FileUtils.deleteQuietly(tmpFile.toFile());
+                FileUtils.forceDeleteOnExit(tmpFile.toFile());
             } else {
                 try {
                     storageService.readFile(module.getArtifact());

@@ -66,7 +66,6 @@ public class ApplicationInitializedListener {
     }
 
     static class BareBonesBrowserLaunch {
-
         final String[] browsers = {"x-www-browser", "google-chrome",
                 "firefox", "opera", "epiphany", "konqueror", "conkeror", "midori",
                 "kazehakase", "mozilla"};
