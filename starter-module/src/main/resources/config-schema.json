@@ -2,7 +2,7 @@
     "$schema": "http://json-schema.org/draft-07/schema#",
     "$id": "#",
     "type": "object",
-    "title": "The Schema LAMIS Module configuration",
+    "title": "The Schema LAMISPLUS Module configuration",
     "required": [
         "name",
         "version",
@@ -254,14 +254,20 @@
         },
         "permission": {
             "required": [
-                "name"
+                "name",
+                "description",
+                "moduleName"
             ],
             "properties": {
                 "name": {
                     "type": "string",
-                    "maxLength": 50
+                    "maxLength": 128
                 },
                 "description": {
+                    "type": "string",
+                    "maxLength": 128
+                },
+                "moduleName": {
                     "type": "string",
                     "maxLength": 128
                 }
