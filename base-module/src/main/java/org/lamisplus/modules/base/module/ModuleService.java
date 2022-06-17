@@ -7,11 +7,8 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.lamisplus.modules.base.controller.apierror.EntityNotFoundException;
-import org.lamisplus.modules.base.domain.entities.Menu;
+import org.lamisplus.modules.base.domain.entities.*;
 import org.lamisplus.modules.base.domain.entities.Module.Type;
-import org.lamisplus.modules.base.domain.entities.ModuleArtifact;
-import org.lamisplus.modules.base.domain.entities.Module;
-import org.lamisplus.modules.base.domain.entities.ModuleDependency;
 import org.lamisplus.modules.base.domain.repositories.MenuRepository;
 import org.lamisplus.modules.base.domain.repositories.ModuleArtifactRepository;
 import org.lamisplus.modules.base.domain.repositories.ModuleDependencyRepository;
@@ -26,10 +23,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.jar.Attributes;
 import java.util.jar.JarInputStream;
 import java.util.jar.Manifest;
@@ -155,6 +149,7 @@ public class ModuleService {
                 byte[] data = IOUtils.toByteArray(stream);
                 artifact.setData(data);
                 moduleArtifactRepository.save(artifact);
+                stream.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -181,10 +176,16 @@ public class ModuleService {
     public Module uploadModuleData(MultipartFile file) {
         List<ModuleConfig> configs = new ArrayList<>();
         Module module = new Module();
+        InputStream inputStream = null;
         try {
-            ModuleUtils.loadModuleConfig(file.getInputStream(), "module.yml", configs);
+            inputStream = file.getInputStream();
+            ModuleUtils.loadModuleConfig(inputStream, "module.yml", configs);
         } catch (IOException e) {
             e.printStackTrace();
+        }finally {
+            if (inputStream != null){
+                inputStream.close();
+            }
         }
 
         if (configs.size() > 0) {
@@ -198,14 +199,18 @@ public class ModuleService {
             module.setDescription(versionInfo.projectName);
             module.setUmdLocation(config.getUmdLocation());
             module.setBasePackage(config.getBasePackage());
+            module.setPermissions(new HashSet<>(config.getPermissions()));
             module.setPriority(config.getPriority());
             if(!config.getDependencies().isEmpty()){
-                List<String> dependencies = new ArrayList<>();
+                //List<String> dependencies = new ArrayList<>();
                 config.getDependencies().forEach((k, v)->{
-                    dependencies.add(k +" " + v);
+                    //dependencies.add(k +" "+ v);
                     if(!moduleManager.isInstalled(k)){
                         module.setType(ERROR);
-                        module.setMessage(module.getName() + " depends on " +k);
+                        module.setMessage(module.getName() + " depends on " + k +" "+ v);
+                    } else  if(!moduleRepository.findByNameAndVersionAndActive(k, v, true).isPresent()){
+                        module.setType(ERROR);
+                        module.setMessage(module.getName() + " depends on " + k +" "+ v);
                     }
                 });
             }
@@ -296,6 +301,7 @@ public class ModuleService {
 
                 }
             }
+            jarStream.close();
         }
         return versionInfo;
     }

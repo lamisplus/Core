@@ -4,12 +4,15 @@ import com.foreach.across.config.AcrossApplication;
 import com.foreach.across.modules.web.AcrossWebModule;
 import lombok.extern.slf4j.Slf4j;
 import org.lamisplus.modules.base.BaseModule;
+import org.lamisplus.restart.RestartModule;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -20,34 +23,26 @@ import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @AcrossApplication(
         modules = {
                 AcrossWebModule.NAME,
-                BaseModule.NAME
-
+                BaseModule.NAME,
+                RestartModule.NAME
         })
 @Slf4j
 @EnableSwagger2
 @EnableAsync
 @EnableScheduling
 public class LamisPlusApplication  {
-
-
     private static ConfigurableApplicationContext context;
-
-    public static String modulePath = System.getProperty ("user.dir");
+    //public static String modulePath = System.getProperty ("user.dir");
 
     public static void main(String[] args) {
-
         context = SpringApplication.run (LamisPlusApplication.class, args);
     }
-
-//    @Override
-//    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-//        return application.sources (LamisPlusApplication.class);
-//    }
 
     /*
      * Provides sensible defaults and convenience methods for configuration.
@@ -105,44 +100,14 @@ public class LamisPlusApplication  {
     }
 
     public static void restart() {
-        ApplicationArguments args = context.getBean (ApplicationArguments.class);
-        Thread thread = new Thread (() -> {
-            context.close ();
-            SpringApplication springApplication = new SpringApplication (LamisPlusApplication.class);
-            //springApplication.setDefaultProperties(Collections.singletonMap("spring.config.additional-location", modulePath + File.separator +"config.yml"));
-            context = springApplication.run (args.getSourceArgs ());
+        ApplicationArguments args = (ApplicationArguments)context.getBean(ApplicationArguments.class);
+        Thread thread = new Thread(() -> {
+            context.close();
+            SpringApplication springApplication = new SpringApplication(new Class[]{LamisPlusApplication.class});
+            //springApplication.setDefaultProperties(Collections.singletonMap("spring.config.additional-location", "${user.home}/dev-configs/lamis-application.yml"));
+            context = springApplication.run(args.getSourceArgs());
         });
-        thread.setDaemon (false);
-        thread.start ();
+        thread.setDaemon(false);
+        thread.start();
     }
-
-    /*@Bean
-    public void loadJar(){
-        URLClassLoader classLoader = (URLClassLoader) ClassLoader.getSystemClassLoader();
-        Class clazz= URLClassLoader.class;
-
-        // Use reflection
-        Method method= null;
-        try {
-            method = clazz.getDeclaredMethod("addURL", URL.class);
-
-        method.setAccessible(true);
-
-        String jarPath = modulePath + File.separator;
-        ArrayList<String> jarFileList = new ArrayList<String>();
-        jarFileList.add(jarPath+"database-entities-1.0.0.jar");
-
-        for(String jar : jarFileList){
-            File f = new File(jar);
-            if(f.exists() == false){
-                throw new Exception("File [" + jar + "] doesn't exist!");
-            }
-
-            System.out.println("Adding jar [" + jar + "]");
-            method.invoke(classLoader, f.toURL());
-        }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }*/
 }
