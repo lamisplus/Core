@@ -11,7 +11,8 @@ import RecentEvenList from '../Ventic/Home/RecentEvenList';
 import Latestsaleblog from '../Ventic/Home/Latestsaleblog';
 import SalesRevenueTab from '../Ventic/Home/Revenue/SalesRevenueTab';
 import UpcomingEventSection from '../Ventic/Home/UpcomingEventSection';
-
+import landingPageImage from '../../../images/lamisPlus/emr-landingpage.jpg'
+import avatar from "../../../images/avatar/1.jpg";
 
 const TicketsLineApex = loadable(() =>
 	pMinDelay(import("../Ventic/Home/TicketsLineApex"), 1000)
@@ -35,20 +36,20 @@ const Home = () => {
 
 	return(
 		<>
-			<div className="form-head mb-4 d-flex flex-wrap align-items-center">
+{/*			<div className="form-head mb-4 d-flex flex-wrap align-items-center">
 				<div className="me-auto">
 					<h2 className="font-w600 mb-0">Dashboard</h2>
-					{/* <p className="text-light">Lorem ipsum  dolor sit amet </p> */}
+					 <p className="text-light">Lorem ipsum  dolor sit amet </p>
 				</div>	
 				
 				
-			</div>
+			</div>*/}
 			
 			<div className="row">
 				<div className="col-xl-12">
 					<div className="row">
-					
-						<div className="col-xl-3 col-xxl-6 col-sm-6 " >
+						<img src={landingPageImage} width={10} alt="" style={{width:'100%'}} />
+{/*						<div className="col-xl-3 col-xxl-6 col-sm-6 " >
 							<div className="card" style={{borderRadius:"6px"}}>
 								<div className="card-header border-0 pb-0">
 									<div className="d-flex align-items-center">
@@ -103,7 +104,7 @@ const Home = () => {
 								</div>
 							</div>
 						</div>
-						
+						*/}
 					</div>
 				</div>
 				

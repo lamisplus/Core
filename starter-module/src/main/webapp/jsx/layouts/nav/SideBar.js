@@ -111,7 +111,7 @@ const SideBar = (props) => {
     })
     // console.log(props.menuList)
     // console.log(deshBoard)
-    
+    console.log(_.sortBy(props.menuList, ["id", "position"]))
   return (
     <div
       className={`deznav ${iconHover} ${
@@ -142,11 +142,9 @@ const SideBar = (props) => {
                       <span className="nav-text" style={{color: '#24a4eb'}}>{menu.name}</span>
                     </Link>
                     {menu.subs.length>0 ?
-                        menu.subs.map((subMenu, index) => (
-
+                        _.sortBy(menu.subs, ["parentId", "position"]).map((subMenu, index) => (
                             <>
                               <ul style={{padding: "0.1rem 0 !important"}}>
-
                                 <li   style={{ marginLeft:"-15px", marginTop:"-12px",  marginBottom:"-12px"}}>
                                   <Link                      
                                       to={{ pathname:  !subMenu.moduleId ? subMenu.url: "modules", state: subMenu.url}}

@@ -97,7 +97,7 @@ const Markup = () => {
         <div className={`${!pagePath ? "content-body" : ""}`} style={{paddingTop: '4rem',backgroundColor:'#f2f7f8'}}>
           <div
             className={`${!pagePath ? "container-fluid" : ""}`}
-            style={{ minHeight: window.screen.height - 60, padding:'5px' }}
+            style={{ minHeight: window.screen.height - 260, padding:'5px' }}
           >
             <Switch>
               {routes.map((data, i) => (
