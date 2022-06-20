@@ -72,4 +72,6 @@ public interface ModuleRepository extends JpaRepository<Module, Long> {
 
     @Query(value = "SELECT * from module where name ilike ?1 Limit 1", nativeQuery = true)
     Optional<Module> findLikeByMenu(String moduleName);
+
+    Optional<Module> findByNameAndVersionAndActive(String name, String version, boolean active);
 }

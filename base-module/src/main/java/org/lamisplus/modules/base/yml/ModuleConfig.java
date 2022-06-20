@@ -3,6 +3,7 @@ package org.lamisplus.modules.base.yml;
 import lombok.Data;
 import org.lamisplus.modules.base.domain.entities.Authority;
 import org.lamisplus.modules.base.domain.entities.Menu;
+import org.lamisplus.modules.base.domain.entities.Permission;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,4 +28,5 @@ public class ModuleConfig {
     private List<ComponentForm> componentForms = new ArrayList<>();
     private List<Dependency> deps = new ArrayList<>();
     private String summary;
+    private List<Permission> permissions = new ArrayList<>();
 }

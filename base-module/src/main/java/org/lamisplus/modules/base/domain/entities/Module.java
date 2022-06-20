@@ -11,6 +11,7 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -81,16 +82,16 @@ public class Module implements Serializable, Persistable<Long> {
     @OneToMany(mappedBy = "module", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     @JsonIgnore
     private Set<Form> templates = new HashSet<>();
-
     @Override
     public boolean isNew() {
         return id == null;
     }
-
-
     public enum Type {ERROR, SUCCESS}
     @Transient
     private Type type;
     @Transient
     private String message;
+
+    @OneToMany(mappedBy = "module", cascade = {CascadeType.ALL})
+    private Set<Permission> Permissions = new HashSet<>();
 }

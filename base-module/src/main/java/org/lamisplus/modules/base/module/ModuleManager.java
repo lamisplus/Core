@@ -129,13 +129,18 @@ public class ModuleManager {
             if (moduleArtifact.isPresent()) {
                 byte[] data = moduleArtifact.get().getData();
                 Path tmpFile = Files.createTempFile("", ".jar");
-                IOUtils.copy(new ByteArrayInputStream(data), new FileOutputStream(tmpFile.toFile()));
+                FileOutputStream fileOutputStream = new FileOutputStream(tmpFile.toFile());
+                ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(data);
+                IOUtils.copy(byteArrayInputStream, fileOutputStream);
                 ModuleUtils.copyPathFromJar(tmpFile.toUri().toURL(), "/", moduleRuntimePath);
+                fileOutputStream.flush();
+                fileOutputStream.close();
+                byteArrayInputStream.close();
                 FileUtils.deleteQuietly(tmpFile.toFile());
                 FileUtils.forceDeleteOnExit(tmpFile.toFile());
             } else {
                 try {
-                    storageService.readFile(module.getArtifact());
+                    storageService.readFile(module.getArtifact()).close();
                 } catch (FileNotFoundException e) {
                     response.setMessage(String.format("Module artifact for %s not found", module.getName()));
                     response.setType(ModuleResponse.Type.ERROR);
