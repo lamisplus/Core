@@ -10,10 +10,10 @@ const NavHader = () => {
     ThemeContext
   );
   return (
-    <div className="nav-header" style={{ backgroundColor: '#f2f7f8',height:'55px' }}>
+    <div className="nav-header" style={{ backgroundColor: '#f2f7f8',height:'65px' }}>
       <Link to="/dashboard" className="brand-logo" >
 			<Fragment style={{padding:'5px'}}>
-                <img src={logo} alt="" className="logo-abbr"  width="50" height="40"/>
+                <img src={logo} alt="" className="logo-abbr"  width="60" height="60"/>
                 {"  "}
                 <text style={{color:'#303f9f'}}>{!toggle?'LamisPlus':''}</text>
 			</Fragment>

@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { Dropdown } from "react-bootstrap";
 import {url as baseUrl} from "./../../../api";
 /// Image
-import avatar from "../../../images/avatar/1.jpg";
+import avatar from "../../../images/avatar/user-avatar.png";
 import LogoutPage from './Logout';
 import {  toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -89,7 +89,8 @@ const Header = (props) => {
 
 
   return (
-    <div className="header" style={{ backgroundColor: '#303f9f', height:'55px' }}>
+    /*<div className="header" style={{ backgroundColor: '#303f9f', height:'55px' }}>*/
+    <div className="header" style={{ backgroundColor: 'rgb(4, 196, 217)', height:'65px' }}>
       <div className="header-content">
         <nav className="navbar navbar-expand">
           <div className="collapse navbar-collapse justify-content-between">
@@ -107,7 +108,7 @@ const Header = (props) => {
                               
                               <small className="text-end fs-14 font-w400" style={{ color: '#ffffff' }}>{currentUser.name}</small>
                             </div>
-                            <img src={avatar} width={20} alt="" />
+                            <img src={avatar} alt="" style={{height:'45px',width:'45px'}} />
                                   </Dropdown.Toggle>
 
                                   <Dropdown.Menu align="right" className="mt-2 dropdown-menu-end">
