@@ -30,8 +30,8 @@ export default function ExternalModules(props) {
       <>
       {/* <iframe  style={{width:"100%", height:"100%", border:"none", margin:0, padding:0}} src={src + "?jwt="+encodeURIComponent(userToken)} ></iframe> */}
       <embed src={src+ "?jwt="+encodeURIComponent(userToken)}
-      width="1000" 
-      height="1000" 
+      width="100%"
+      height="1000"
       onerror="alert('URL invalid !!');"
       />
       </>
