@@ -184,8 +184,9 @@ const AddRole = (props) => {
             color="primary"
             className=" float-end ms-2"
             startIcon={<TiArrowBack />}
+            style={{backgroundColor:'rgb(4, 196, 217)'}}
           >
-            <span style={{ textTransform: "capitalize" }}>Back </span>
+            <span style={{ textTransform: "capitalize" }} >Back </span>
           </Button>
         </Link>
         <br />
@@ -205,20 +206,21 @@ const AddRole = (props) => {
               <Row form>
                 <Col md={12}>
                   <FormGroup>
-                    <Label for="name">Name *</Label>
+                    <Label for="name" style={{color:'rgb(4, 196, 217)',fontWeight:'bolder'}}>Name *</Label>
                     <Input
                       type="text"
                       name="name"
                       id="name"
                       value={values.name}
                       onChange={handleInputChange}
+                      style={{height:"40px",border:'solid 1px rgb(4, 196, 217)',borderRadius:'5px'}}
                       required
                     />
                   </FormGroup>
                 </Col>
                 <Col md={12}>
                   <FormGroup>
-                    <Label for="permissions">Permissions</Label>
+                    <Label for="permissions" style={{color:'rgb(4, 196, 217)',fontWeight:'bolder'}}>Permissions</Label>
                     <DualListBox
                         canFilter
                       options={permissions}
@@ -230,7 +232,7 @@ const AddRole = (props) => {
                 <br/>
                 <Col md={12}>
                   <FormGroup>
-                    <Label for="permissions"><b>Menu Items</b></Label>
+                    <Label for="permissions" style={{color:'rgb(4, 196, 217)',fontWeight:'bolder'}}><b>Menu Items</b></Label>
                     <DualListBox
                       canFilter
                       options={menList}
@@ -248,6 +250,7 @@ const AddRole = (props) => {
                 color="primary"
                 className={classes.button}
                 startIcon={<SaveIcon />}
+                style={{backgroundColor:'rgb(4, 196, 217)'}}
                 disabled={saving}
               >
                 {!saving ? (
@@ -260,10 +263,11 @@ const AddRole = (props) => {
               <MatButton
                 variant="contained"
                 className={classes.button}
-                startIcon={<CancelIcon />}
+                startIcon={<CancelIcon style={{color:'#fff'}} />}
+                style={{backgroundColor:'#3f51b5'}}
                 onClick={resetForm}
               >
-                <span style={{ textTransform: "capitalize" }}>Cancel</span>
+                <span style={{ textTransform: "capitalize", color:'#fff' }}>Cancel</span>
               </MatButton>
               </Link>
             </CardContent>

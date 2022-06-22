@@ -14,6 +14,7 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import {makeStyles} from "@material-ui/core/styles";
 import {toast} from "react-toastify";
 import SaveIcon from "@material-ui/icons/Save";
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import CancelIcon from "@material-ui/icons/Cancel";
 import { getModuleMenus,  editModuleMenu} from '../../../actions/bootstrapModule';
 import { connect } from 'react-redux';
@@ -109,43 +110,46 @@ const UpdateModuleMenu = (props) => {
         }
 
     }
+    const CaretDownIcon = () => {
+        return <ArrowDropDownIcon/>;
+    };
 
     return (
         <div >
 
-            <Modal show={props.modalstatus} toggle={props.togglestatus} className={props.className} size="xl">
-                <Modal.Header toggle={props.togglestatus}>
-                    <Modal.Title>Edit  Menu </Modal.Title>
+            <Modal show={props.modalstatus} toggle={props.togglestatus} className={props.className} size="xl" style={{padding:'0px'}}>
+                <Modal.Header toggle={props.togglestatus} >
+                    <Modal.Title style={{color:'rgb(4, 196, 217)', fontWeight:'bolder'}}>Edit  Menu </Modal.Title>
                     <Button
                         variant=""
                         className="btn-close"
                         onClick={props.togglestatus}
                     ></Button>
                 </Modal.Header>
-                <Modal.Body>
-                    <Card>
-                        <CardBody>
+                <Modal.Body style={{padding:'0.875rem'}}>
+                    <Card style={{padding:'0px'}}>
+                        <CardBody style={{padding:'0px'}}>
 
                             <div className="col-xl-12 col-lg-12">
-                                <div className="card">
+                                <div className="card" style={{padding:'0px'}}>
                                     <div className="card-header">
-                                        <h5 className="card-title">{datasample.name}</h5>
+                                        <h5 className="card-title" style={{color:'rgb(4, 196, 217)',fontWeight:'bolder'}}>{datasample.name}</h5>
                                     </div>
                                     <div className="card-body">
                                         <div className="basic-form">
                                             <form onSubmit={(e) => e.preventDefault()}>
 
                                                 <br/>
-                                                <div className="row">
+                                                <div className="row" style={{paddingBottom:"35px"}}>
                                                     <div className="form-group mb-3 col-md-4">
-                                                        <label>Parent Menu</label>
+                                                        <label style={{color:'rgb(4, 196, 217)',fontWeight:'bolder'}}>Parent Menu</label>
                                                         <select
                                                             value={details.parentId}
                                                             id="parentId"
                                                             name="parentId"
                                                             className="form-control"
                                                             onChange={handleOtherFieldInputChange}
-
+                                                            style={{height:"40px",border:'solid 1px rgb(4, 196, 217)',borderRadius:'5px', fontWeight:'bolder',appearance:'auto'}}
                                                         >
                                                             <option value=" " >
                                                                 Choose...
@@ -179,7 +183,7 @@ const UpdateModuleMenu = (props) => {
                                                     {/*    ) : "" }*/}
                                                     {/*</div>*/}
                                                     <div className="form-group col-md-4">
-                                                        <label>Menu Name</label>
+                                                        <label style={{color:'rgb(4, 196, 217)',fontWeight:'bolder'}}>Menu Name</label>
                                                         <input
                                                             type="text"
                                                             name="name"
@@ -187,13 +191,14 @@ const UpdateModuleMenu = (props) => {
                                                             className="form-control"
                                                             value={details.name}
                                                             onChange={handleOtherFieldInputChange}
+                                                            style={{height:"40px",border:'solid 1px rgb(4, 196, 217)',borderRadius:'5px', fontWeight:'bolder'}}
                                                         />
                                                         {errors.name !=="" ? (
                                                             <span className={classes.error}>{errors.name}</span>
                                                         ) : "" }
                                                     </div>
                                                     <div className="form-group col-md-4">
-                                                        <label>Menu Code</label>
+                                                        <label style={{color:'rgb(4, 196, 217)',fontWeight:'bolder'}}>Menu Code</label>
                                                         <input
                                                             type="text"
                                                             name="code"
@@ -201,10 +206,11 @@ const UpdateModuleMenu = (props) => {
                                                             className="form-control"
                                                             value={details.code}
                                                             onChange={handleOtherFieldInputChange}
+                                                            style={{height:"40px",border:'solid 1px rgb(4, 196, 217)',borderRadius:'5px', fontWeight:'bolder'}}
                                                         />
                                                     </div>
                                                     <div className="form-group col-md-4">
-                                                        <label>Menu Link/Url</label>
+                                                        <label style={{color:'rgb(4, 196, 217)',fontWeight:'bolder'}}>Menu Link/Url</label>
                                                         <input
                                                             type="text"
                                                             name="url"
@@ -212,6 +218,7 @@ const UpdateModuleMenu = (props) => {
                                                             className="form-control"
                                                             value={details.url}
                                                             onChange={handleOtherFieldInputChange}
+                                                            style={{height:"40px",border:'solid 1px rgb(4, 196, 217)',borderRadius:'5px', fontWeight:'bolder'}}
                                                         />
                                                         {errors.url !=="" ? (
                                                             <span className={classes.error}>{errors.url}</span>
@@ -231,7 +238,7 @@ const UpdateModuleMenu = (props) => {
                                                     {/*    />*/}
                                                     {/*</div>*/}
                                                     <div className="form-group col-md-3">
-                                                        <label> Icon</label>
+                                                        <label style={{color:'rgb(4, 196, 217)',fontWeight:'bolder'}}> Icon</label>
                                                         <input
                                                             type="text"
                                                             className="form-control"
@@ -239,6 +246,7 @@ const UpdateModuleMenu = (props) => {
                                                             name="icon"
                                                             value={details.icon}
                                                             onChange={handleOtherFieldInputChange}
+                                                            style={{height:"40px",border:'solid 1px rgb(4, 196, 217)',borderRadius:'5px', fontWeight:'bolder'}}
                                                         />
                                                     </div>
                                                     {/*<div className="form-group col-md-3">*/}
@@ -264,6 +272,7 @@ const UpdateModuleMenu = (props) => {
                                                     startIcon={<SaveIcon />}
                                                     disabled={loading}
                                                     onClick={EditMenu}
+                                                    style={{backgroundColor:'rgb(4, 196, 217)'}}
 
                                                 >
 
@@ -273,8 +282,10 @@ const UpdateModuleMenu = (props) => {
                                                     variant='contained'
                                                     color='default'
                                                     onClick={closeModal}
-                                                    startIcon={<CancelIcon />}>
-                                                    <span style={{textTransform: 'capitalize'}}>Cancel</span>
+                                                    startIcon={<CancelIcon style={{color:'#fff'}} />}
+                                                    style={{backgroundColor:'#3f51b5'}}
+                                                >
+                                                    <span style={{textTransform: 'capitalize', color:'#fff'}}>Cancel</span>
                                                 </MatButton>
                                             </form>
                                         </div>

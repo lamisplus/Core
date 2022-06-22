@@ -6,7 +6,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import { Link } from 'react-router-dom'
 import 'react-widgets/dist/css/react-widgets.css'
 import MaterialTable from 'material-table';
-import {  MdDelete, MdModeEdit, MdRemoveRedEye } from "react-icons/md";
+import {MdDelete, MdModeEdit, MdPerson, MdRemoveRedEye} from "react-icons/md";
 import DeleteOrgUnit from "./DeleteOrgUnit";
 import UpdateOrganisationUnit from "./UpdateOrganisationUnit";
 import CreateParentOrgUnit from "./CreateParentOrgUnit";
@@ -16,7 +16,7 @@ import Breadcrumbs from "@material-ui/core/Breadcrumbs";
 import Typography from "@material-ui/core/Typography";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { FaPlusCircle, FaPlus} from 'react-icons/fa';
+import {FaPlusCircle, FaPlus, FaEye} from 'react-icons/fa';
 import { connect } from "react-redux";
 import { Icon, Label} from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.min.css';
@@ -37,6 +37,9 @@ import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 import { forwardRef } from 'react';
+import SplitActionButton from "../Button/SplitActionButton";
+import MatButton from "@material-ui/core/Button";
+import {TiArrowBack} from "react-icons/ti";
 
 
 
@@ -128,7 +131,30 @@ const useStyles = makeStyles({
       setModal2(!modal2) 
     }
 
-    
+      function actionItems(row){
+          return  [
+              {
+                  type:'link',
+                  name:'View',
+                  icon:<FaEye  size="22"/>,
+                  to:{
+                      pathname: "#",
+                  }
+              },
+              {
+                  type:'button',
+                  name:'Edit',
+                  icon:<MdPerson size="20" color='rgb(4, 196, 217)' />,
+                  onClick:(() => updateOrgUnit(row))
+              },
+              {
+                  type:'button',
+                  name:'Delete',
+                  icon:<MdModeEdit size="20" color='rgb(4, 196, 217)' />,
+                  onClick:(() => deleteModule( row))
+              }
+          ]
+      }
 
 return (
     <div >
@@ -137,20 +163,33 @@ return (
 
                             <Card body>
                             <Breadcrumbs aria-label="breadcrumb">
-                              <Link color="inherit" to={{pathname: "/organisation-unit"}} >
+                              <Link color="inherit" to={{pathname: "/organisation-unit"}} style={{color:'rgb(4, 196, 217)', fontWeight:'bolder'}} >
                                   Organisational Unit Level
                               </Link>
-                              <Link color="inherit"  >
+                              <Link color="inherit" style={{color:'rgb(4, 196, 217)', fontWeight:'bolder'}}  >
                                  Organisational Unit 
                               </Link>
-                              <Typography color="textPrimary">{parentOrganisationUnitId.name} </Typography>
+                              <Typography color="textPrimary" style={{color:'#3f51b5', fontWeight:'bolder'}} >{parentOrganisationUnitId.name} </Typography>
                              </Breadcrumbs>
                               <br/>
                                   <div className={"d-flex justify-content-end pb-2"}>
+                                      <Link to={"/organisation-unit"} >
+                                          <MatButton
+                                              variant="contained"
+                                              color="primary"
+                                              className="float-end ms-2"
+                                              style={{backgroundColor:'#04C4D9',fontWeight:"bolder"}}
+                                              startIcon={<TiArrowBack />}
+                                          >
+                                              <span style={{ textTransform: "capitalize" }}>Back</span>
+                                          </MatButton>
+                                      </Link>
                                       <Button variant="contained"
                                               color="primary"
                                               startIcon={<FaPlus />}
-                                              onClick={() => createParentOrgUnit()}>
+                                              onClick={() => createParentOrgUnit()}
+                                              style={{backgroundColor:'rgb(4, 196, 217)',marginLeft:'5px'}}
+                                      >
                                           <span style={{textTransform: 'capitalize'}}>New Org. Unit</span>
                                       </Button>
                                </div>
@@ -175,13 +214,13 @@ return (
                                     
                                     actions: (
                                         <div>
-
-                                          <Label as='a' color='blue' onClick={() => updateOrgUnit(row)}  size='mini'>
+                                            <SplitActionButton actions={actionItems(row)} />
+{/*                                          <Label as='a' color='blue' onClick={() => updateOrgUnit(row)}  size='mini'>
                                               <Icon name='pencil' /> Edit
                                           </Label>
                                           <Label as='a' color='red' onClick={() => deleteModule( row)} size='mini'>
                                               <Icon name='trash' /> Delete
-                                          </Label>
+                                          </Label>*/}
                                         </div>
                                     )
                                 }))}

@@ -8,7 +8,7 @@ import { fetchRoles, deleteRole, updateRole } from "./../../../actions/role";
 import { makeStyles } from "@material-ui/core/styles";
 import "./RolesList.css";
 import { Menu, MenuList, MenuButton, MenuItem } from "@reach/menu-button";
-import { MdDeleteForever, MdModeEdit } from "react-icons/md";
+import {MdDeleteForever, MdModeEdit, MdPerson} from "react-icons/md";
 import SaveIcon from "@material-ui/icons/Save";
 import CancelIcon from "@material-ui/icons/Cancel";
 import MatButton from "@material-ui/core/Button";
@@ -38,6 +38,8 @@ import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
+import SplitActionButton from "../Button/SplitActionButton";
+import {FaEye} from "react-icons/fa";
 
 const tableIcons = {
 Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -108,7 +110,34 @@ const fetchRole =()=>{
       
       
   };
-
+  function actionItems(row){
+    return  [
+      {
+        type:'link',
+        name:'View',
+        icon:<FaEye  size="22"/>,
+        to:{
+          pathname: "/edit-role",
+          state: { row: row }
+        }
+      },
+      {
+        type:'link',
+        name:'Edit',
+        icon:<MdPerson size="20" color='rgb(4, 196, 217)' />,
+        to:{
+          pathname: "/edit-role",
+          state: { row: row }
+        }
+      },
+      {
+        type:'button',
+        name:'Delete',
+        icon:<MdModeEdit size="20" color='rgb(4, 196, 217)' />,
+        onClick:(() =>  deleteRoleModal(row.id))
+      }
+    ]
+  }
   
   return (
     <div>
@@ -129,7 +158,8 @@ const fetchRole =()=>{
          
           actions: (
             <div>
-              <Link to={{pathname: "/edit-role", state: { row: row }}}
+              <SplitActionButton actions={actionItems(row)} />
+{/*              <Link to={{pathname: "/edit-role", state: { row: row }}}
               >
               <Label as='a' color='blue' className="ms-1" size='mini'>
                 <Icon name='pencil' /> Edit
@@ -139,7 +169,7 @@ const fetchRole =()=>{
                 <Icon name='trash' /> Delete
               </Label>
 
-             
+             */}
             </div>
           ),
         }))}

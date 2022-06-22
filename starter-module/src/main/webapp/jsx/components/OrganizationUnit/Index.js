@@ -10,7 +10,7 @@ import { Link } from 'react-router-dom'
 import 'react-widgets/dist/css/react-widgets.css'
 import "@reach/menu-button/styles.css";
 import MaterialTable from 'material-table';
-import { FaPlus} from 'react-icons/fa'
+import {FaEye, FaPlus} from 'react-icons/fa'
 import DeleteOrgUnitLevel from "./DeleteOrgUnitLevel";
 import CreateOrganizationUnitLevel from "./CreateOrganizationUnitLevel";
 import UpdateOrganisationUnitLevel from "./UpdateOrganisationUnitLevel";
@@ -41,6 +41,8 @@ import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
+import {MdModeEdit, MdPerson} from "react-icons/md";
+import SplitActionButton from "../Button/SplitActionButton";
 
 const tableIcons = {
 Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -125,7 +127,31 @@ const useStyles = makeStyles({
       setModal4(!modal4)
        
     }
-
+      function actionItems(row){
+          return  [
+              {
+                  type:'link',
+                  name:'View',
+                  icon:<FaEye  size="22"/>,
+                  to:{
+                      pathname: "/admin-parent-organization-unit",
+                      state: { orgUnitLevel: row  }
+                  }
+              },
+              {
+                  type:'button',
+                  name:'Edit',
+                  icon:<MdPerson size="20" color='rgb(4, 196, 217)' />,
+                  onClick:(() => updateOrgUnitLevel(row))
+              },
+              {
+                  type:'button',
+                  name:'Delete',
+                  icon:<MdModeEdit size="20" color='rgb(4, 196, 217)' />,
+                  onClick:(() => deleteModule( row))
+              }
+          ]
+      }
 return (
     <div >
       <ToastContainer autoClose={3000} hideProgressBar />
@@ -138,7 +164,10 @@ return (
                   <MButton variant="contained"
                           color="primary"
                           startIcon={<FaPlus size="10"/>}
-                          onClick={() => createOrgUnit()}>
+                          onClick={() => createOrgUnit()}
+                           style={{backgroundColor:'rgb(4, 196, 217)'}}
+                  >
+
                       <span style={{textTransform: 'capitalize'}}>New Org. Unit Level</span>
                   </MButton>
 
@@ -160,7 +189,8 @@ return (
                         
                         actions: 
                           <div>
-                              <Link to={{pathname: "/admin-parent-organization-unit", state: { orgUnitLevel: row  }}}                              >
+                              <SplitActionButton actions={actionItems(row)} />
+{/*                              <Link to={{pathname: "/admin-parent-organization-unit", state: { orgUnitLevel: row  }}}                              >
                                   <Label as='a' color='black' className="ms-1" size='mini'>
                                       <Icon name='eye' /> View
                                   </Label>
@@ -170,7 +200,7 @@ return (
                               </Label>
                               <Label as='a' color='red' onClick={() => deleteModule( row)} size='mini'>
                                   <Icon name='trash' /> Delete
-                              </Label>
+                              </Label>*/}
 
                         </div>,
                     }))}

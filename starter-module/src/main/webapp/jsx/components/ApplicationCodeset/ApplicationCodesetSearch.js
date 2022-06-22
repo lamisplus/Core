@@ -10,7 +10,7 @@ import Breadcrumbs from "@material-ui/core/Breadcrumbs";
 import Typography from "@material-ui/core/Typography";
 import { Link } from 'react-router-dom'
 import ButtonMui from "@material-ui/core/Button";
-import { FaPlus } from "react-icons/fa";
+import {FaEye, FaPlus} from "react-icons/fa";
 import NewApplicationCodeset from "./NewApplicationCodeset";
 import SaveIcon from "@material-ui/icons/Delete";
 import CancelIcon from "@material-ui/icons/Cancel";
@@ -35,6 +35,8 @@ import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 import {Icon, Label} from "semantic-ui-react";
+import {MdModeEdit, MdPerson, MdDelete} from "react-icons/md";
+import SplitActionButton from "../Button/SplitActionButton";
 // import EditIcon from "@material-ui/icons/Edit";
 // import DeleteIcon from "@material-ui/icons/Delete";
 
@@ -110,6 +112,28 @@ const processDelete = (id) => {
         setCurrentCodeset(row);
         toggleDeleteModal();
     }
+    function actionItems(row){
+        return  [
+            {
+                type:'link',
+                name:'View',
+                icon:<FaEye  size="22"/>,
+                to:{}
+            },
+            {
+                type:'button',
+                name:'Edit',
+                icon:<MdModeEdit size="20" color='rgb(4, 196, 217)' />,
+                onClick:(() => openApplicationCodeset(row))
+            },
+            {
+                type:'button',
+                name:'Delete',
+                icon:<MdDelete size="20" color='rgb(4, 196, 217)' />,
+                onClick:(() => deleteApplicationCodeset( row))
+            }
+        ]
+    }
     return (
         <div>
         <PageTitle activeMenu="Application Codeset List" motherMenu="Application Codeset" />
@@ -121,8 +145,10 @@ const processDelete = (id) => {
                         <ButtonMui variant="contained"
                           color="primary"
                           startIcon={<FaPlus size="10"/>}
-                          onClick={() => openApplicationCodeset(null)}>
-                            <span style={{textTransform: 'capitalize'}}>New Application Codeset</span>
+                          onClick={() => openApplicationCodeset(null)}
+                                   style={{backgroundColor:'rgb(4, 196, 217)'}}
+                        >
+                            <span style={{textTransform: 'capitalize'}}>Codeset</span>
                         </ButtonMui>
 
                     </div>
@@ -148,14 +174,14 @@ const processDelete = (id) => {
                             version: row.version,
                             action:
                             <div>
-
-                                <Label as='a' color='blue' className="ms-1" size='mini' onClick={() => openApplicationCodeset(row)}>
+                                <SplitActionButton actions={actionItems(row)} />
+{/*                                <Label as='a' color='blue' className="ms-1" size='mini' onClick={() => openApplicationCodeset(row)}>
                                     <Icon name='pencil' /> Edit
                                 </Label>
 
                                 <Label as='a' color='red' onClick={() => deleteApplicationCodeset( row)} size='mini'>
                                     <Icon name='trash' /> Delete
-                                </Label>
+                                </Label>*/}
 
                             </div>
 

@@ -43,7 +43,9 @@ import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
-
+import {FaEye, FaUserPlus} from "react-icons/fa";
+import { MdDashboard, MdDeleteForever, MdModeEdit,MdPerson} from "react-icons/md";
+import SplitActionButton from "../Button/SplitActionButton";
 
 const tableIcons = {
     Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -128,7 +130,31 @@ const MainMenuList = (props) => {
         setEditModuleMenuModal(!editModuleMenuModal)
     }
 
-
+    function actionItems(row){
+        return  [
+            {
+                type:'link',
+                name:'View',
+                icon:<FaEye  size="22"/>,
+                to:{
+                    pathname: "/submenu",
+                    state: {parent: row}
+                }
+            },
+            {
+                type:'button',
+                name:'Edit',
+                icon:<MdPerson size="20" color='rgb(4, 196, 217)' />,
+                onClick:(() =>  editModuleMenu(row))
+            },
+            {
+                type:'button',
+                name:'Delete',
+                icon:<MdModeEdit size="20" color='rgb(4, 196, 217)' />,
+                onClick:(() =>  deleteMenuModal(row.id, row.name))
+            }
+        ]
+    }
     return (
         <div>
             <ToastContainer autoClose={3000} hideProgressBar />
@@ -142,6 +168,7 @@ const MainMenuList = (props) => {
                             className=" float-end ms-2"
                             startIcon={<FaPlus size="10"/>}
                             onClick={()=>updateModuleMenuPosition(datasample)}
+                            style={{backgroundColor:'rgb(4, 196, 217)'}}
                         >
                             <span style={{ textTransform: "capitalize" }}>New </span>
                             &nbsp;&nbsp;
@@ -173,6 +200,8 @@ const MainMenuList = (props) => {
                     tooltip: row.tooltip,
                     actions: (
                         <div>
+                            <SplitActionButton actions={actionItems(row)} />
+{/*
                             {row.subs && row.subs.length ? (
                                     <Link to={{pathname: "/submenu", state: {parent: row}}}>
                                         <Label as='a' color='black' className="ms-1" size='mini'>
@@ -188,8 +217,9 @@ const MainMenuList = (props) => {
                             </Label>
 
                             <Label as='a' color='red' onClick={() =>  deleteMenuModal(row.id, row.name)}  size='mini'>
-                                <Icon name='trash' /> Delete
+                                <Icon name='trash' /> Deletes
                             </Label>
+*/}
 
 
                         </div>
