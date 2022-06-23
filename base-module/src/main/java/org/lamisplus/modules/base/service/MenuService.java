@@ -94,7 +94,6 @@ public class MenuService {
         });
         return menus;
     }
-
     public List<MenuDTO> getAllMenusByParentId(Integer parentId) {
         if(parentId == 0) parentId = null;
         return menuRepository.findAllByArchivedAndParentIdOrderByIdDesc(UN_ARCHIVED, parentId).stream().
@@ -105,9 +104,6 @@ public class MenuService {
                     return menuDTO;
                 }).collect(Collectors.toList());
     }
-
-
-
     public void delete(Long id){
         Menu menu = menuRepository.findById(id).orElseThrow(()-> new EntityNotFoundException(Menu.class, "id", ""+id));
         if(!menu.getSubs().isEmpty()){
@@ -115,7 +111,6 @@ public class MenuService {
         }
         menuRepository.delete(menu);
     }
-
     public Menu update(Long id, MenuDTO menuDTO){
         menuRepository.findById(id).orElseThrow(()-> new EntityNotFoundException(Menu.class, "id", ""+id));
         if(menuDTO.getParentId() != null) {
@@ -127,7 +122,6 @@ public class MenuService {
         menu.setId(id);
         return menuRepository.save(menu);
     }
-
     public Menu save(MenuDTO menuDTO, Boolean isModule){
 
         menuRepository.findByNameAndParentId(menuDTO.getName(), menuDTO.getParentId()).ifPresent(menu -> {
@@ -144,15 +138,11 @@ public class MenuService {
         menuRepository.findByName(menuDTO.getName()).ifPresent(menu -> {
             throw new RecordExistException(Menu.class, "Menu ", menu.getName() +"");
         });
-
         //menuDTO.setModuleId(null);
         Menu menu = toMenu(menuDTO);
         menu.setId(null);
         return menuRepository.save(menu);
     }
-
-
-
     public Menu toMenu(MenuDTO menuDTO) {
         if ( menuDTO == null ) {
             return null;

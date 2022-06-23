@@ -2,10 +2,14 @@ package org.lamisplus.modules.base.domain.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import lombok.extern.java.Log;
 import org.lamisplus.modules.base.domain.entities.Audit;
 
 import javax.persistence.*;
+import java.sql.SQLOutput;
 import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.List;
 
 @Data
 @Entity
@@ -23,7 +27,11 @@ public class Permission extends Audit<String> {
 
     private String description;
 
-    private int archived;
+    @JsonIgnore
+    private int archived=0;
+
+    @Column(name = "module_name")
+    private String moduleName;
 
     /*@ManyToOne
     @JsonIgnore
@@ -37,6 +45,13 @@ public class Permission extends Audit<String> {
     @PrePersist
     public void update(){
         archived = 0;
-        name = description.replace(" ", "_") + "_"+ LocalDateTime.now();
+        if(name ==null) {
+            name = description.replace(" ", "_") + "_" + LocalDateTime.now();
+        }
     }
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "module_name", referencedColumnName = "name", insertable = false, updatable = false)
+    @JsonIgnore
+    private Module module;
 }

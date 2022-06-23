@@ -35,6 +35,13 @@
 			<id>infobelt-nexus</id>
 			<url>https://nexus.jx.infobelt.com/repository/maven-releases/</url>
 		</repository>
+		<repository>
+			<id>mvn-repo</id>
+			<url>https://raw.github.com/lamisplus/maven-repo/master</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+		</repository>
 	</repositories>
 
 	<distributionManagement>
@@ -500,8 +507,6 @@
 			<groupId>secugen</groupId>
 			<artifactId>FDxSDKPro</artifactId>
 			<version>1.0</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/src/main/resources/libs/FDxSDKPro.jar</systemPath>
 		</dependency>
 	</dependencies>
 
