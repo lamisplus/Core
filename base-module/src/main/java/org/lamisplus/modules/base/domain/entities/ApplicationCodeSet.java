@@ -10,7 +10,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @EqualsAndHashCode
-@Table(name = "application_codeset")
+@Table(name = "base_application_codeset")
 public class ApplicationCodeSet extends Audit<String> {
     @Id
     @Column(name = "id", updatable = false)

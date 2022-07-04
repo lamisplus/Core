@@ -15,10 +15,8 @@ import javax.persistence.PersistenceContext;
 
 @Service
 public class UserDetailService implements UserDetailsService {
-
     @Autowired
     UserRepository userRepository;
-
     @PersistenceContext
     public void setEntityManager(EntityManager entityManager) {
         this.entityManager = entityManager;

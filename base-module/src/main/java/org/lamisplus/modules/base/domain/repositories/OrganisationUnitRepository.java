@@ -24,23 +24,23 @@ public interface OrganisationUnitRepository extends JpaRepository<OrganisationUn
 
     List<OrganisationUnit> findAllByOrganisationUnitLevelIdIn(List<Long> organisationUnitLevelId);
 
-    @Query(value = "SELECT id from organisation_unit WHERE name ilike ?1" +
+    @Query(value = "SELECT id from base_organisation_unit WHERE name ilike ?1" +
             " AND description ilike '%local%'AND " +
-            "parent_organisation_unit_id = (SELECT id from organisation_unit WHERE name = ?2 " +
+            "parent_organisation_unit_id = (SELECT id from base_organisation_unit WHERE name = ?2 " +
             "AND organisation_unit_level_id=2)", nativeQuery = true)
     Long findByOrganisationDetails(String parentOrganisationUnitName, String parentsParentOrganisationUnitName);
 
-    @Query(value = "SELECT name FROM organisation_unit WHERE organisation_unit_level_id=2", nativeQuery = true)
+    @Query(value = "SELECT name FROM base_organisation_unit WHERE organisation_unit_level_id=2", nativeQuery = true)
     List<String> findAllState();
 
-    @Query(value = "SELECT name FROM organisation_unit WHERE organisation_unit_level_id=3", nativeQuery = true)
+    @Query(value = "SELECT name FROM base_organisation_unit WHERE organisation_unit_level_id=3", nativeQuery = true)
     List<String> findAllProvince();
 
-    @Query(value = "select * from organisation_unit org where  org.id in (select distinct ps.organisation_unit_id from patient ps)", nativeQuery = true)
+    @Query(value = "select * from base_organisation_unit org where  org.id in (select distinct ps.organisation_unit_id from patient ps)", nativeQuery = true)
     List<OrganisationUnit> findOrganisationUnitWithRecords();
 
     //TODO: optimized to only give necessary fields ie id and name
-    @Query(value = "SELECT * FROM organisation_unit ou WHERE ou.organisation_unit_level_id = ?1 " +
+    @Query(value = "SELECT * FROM base_organisation_unit ou WHERE ou.organisation_unit_level_id = ?1 " +
             "AND ou.archived = ?2", nativeQuery = true)
     List<OrganisationUnit> findByOrganisationsByLevelAndArchived(Long organisationUnitLevelId, int archived);
 }

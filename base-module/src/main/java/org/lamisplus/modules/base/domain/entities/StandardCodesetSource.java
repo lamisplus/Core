@@ -11,7 +11,7 @@ import java.util.List;
 @Data
 @Entity
 @EqualsAndHashCode
-@Table(name = "standard_codeset_source")
+@Table(name = "base_standard_codeset_source")
 public class StandardCodesetSource extends Audit<String> {
     @Id
     @Column(name = "id", updatable = false)

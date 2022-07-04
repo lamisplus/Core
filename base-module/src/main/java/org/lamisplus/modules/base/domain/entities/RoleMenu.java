@@ -11,7 +11,7 @@ import java.io.Serializable;
 @Getter
 @Setter
 @EqualsAndHashCode
-@Table(name = "role_menu")
+@Table(name = "base_role_menu")
 @IdClass(RoleMenuPK.class)
 public class RoleMenu implements Serializable {
     @Column(name = "role_id")

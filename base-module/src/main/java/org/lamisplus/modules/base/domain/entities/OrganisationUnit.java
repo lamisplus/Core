@@ -14,7 +14,7 @@ import java.util.List;
 @Data
 @Entity
 @EqualsAndHashCode
-@Table(name = "organisation_unit")
+@Table(name = "base_organisation_unit")
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrganisationUnit extends JsonBEntity implements Serializable {

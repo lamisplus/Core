@@ -1,56 +1,56 @@
 package org.lamisplus.modules.base;
 
+import com.foreach.across.config.AcrossContextConfigurer;
 import com.foreach.across.core.AcrossContext;
-import com.foreach.across.core.context.AcrossApplicationContextHolder;
-import com.foreach.across.core.context.configurer.ApplicationContextConfigurer;
-import com.foreach.across.core.filters.BeanFilter;
-import com.foreach.across.core.installers.InstallerSettings;
-import com.foreach.across.core.transformers.ExposedBeanDefinitionTransformer;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
+import com.foreach.across.test.AcrossTestConfiguration;
+import com.foreach.across.test.AcrossWebAppConfiguration;
+import io.zonky.test.db.AutoConfigureEmbeddedDatabase;
+import io.zonky.test.db.postgres.junit5.SingleInstancePostgresExtension;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.slf4j.Logger;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestExecutionListeners;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
+import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
+import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
-import java.util.Properties;
-import java.util.Set;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import static org.mockito.Mockito.*;
+@ExtendWith({SpringExtension.class, SingleInstancePostgresExtension.class})
+@DirtiesContext
+@ContextConfiguration
+@AcrossWebAppConfiguration
+@AutoConfigureEmbeddedDatabase(beanName = "acrossDataSource")
+@TestExecutionListeners({
+        DependencyInjectionTestExecutionListener.class,
+        DirtiesContextTestExecutionListener.class,
+        TransactionalTestExecutionListener.class
+})
+@Slf4j
+public class BaseModuleTest {
 
-class BaseModuleTest {
-    @Mock
-    Logger LOG;
-    @Mock
-    Set<ApplicationContextConfigurer> applicationContextConfigurers;
-    @Mock
-    Set<ApplicationContextConfigurer> installerContextConfigurers;
-    @Mock
-    Set<String> runtimeDependencies;
-    @Mock
-    AcrossContext context;
-    @Mock
-    BeanFilter exposeFilter;
-    @Mock
-    ExposedBeanDefinitionTransformer exposeTransformer;
-    @Mock
-    InstallerSettings installerSettings;
-    @Mock
-    AcrossApplicationContextHolder acrossApplicationContextHolder;
-    @Mock
-    Properties properties;
-    @InjectMocks
-    BaseModule baseModule;
-
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.initMocks(this);
-    }
+    @Autowired
+    AcrossContext acrossContext;
 
     @Test
-    void testGetDescription() {
-        String result = baseModule.getDescription();
-        Assertions.assertEquals("Module containing LAMISPlus", result);
+    public void should_initialize_module() {
+        assertNotNull(acrossContext.getModule(BaseModule.NAME));
+    }
+
+    @Configuration
+    @AcrossTestConfiguration
+    @PropertySource(value = "classpath:across-test.properties")
+    static class Config implements AcrossContextConfigurer {
+
+        @Override
+        public void configure(AcrossContext context) {
+            context.addModule(new BaseModule());
+        }
     }
 }

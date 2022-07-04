@@ -9,7 +9,7 @@ import java.io.Serializable;
 @Getter
 @Setter
 @EqualsAndHashCode
-@Table(name = "role_permission")
+@Table(name = "base_role_permission")
 @IdClass(RolePermissionPK.class)
 public class RolePermission implements Serializable {
 

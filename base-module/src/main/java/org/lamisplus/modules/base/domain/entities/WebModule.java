@@ -14,7 +14,7 @@ import java.util.Set;
 
 @Entity
 @Data
-@Table(name = "web_module")
+@Table(name = "base_web_module")
 @EqualsAndHashCode(of = {"id", "name"})
 public final class WebModule implements Persistable<Long>, Serializable, Comparable<WebModule> {
     @Id

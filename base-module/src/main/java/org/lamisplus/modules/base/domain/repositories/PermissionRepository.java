@@ -10,7 +10,7 @@ import java.util.Optional;
 public interface PermissionRepository extends JpaRepository<Permission, Long> {
     Optional<Permission> findByNameAndArchived(String name, int archived);
 
-    @Query(value = "SELECT * FROM permission where name ilike ?1 AND archived=0", nativeQuery = true)
+    @Query(value = "SELECT * FROM base_permission where name ilike ?1 AND archived=0", nativeQuery = true)
     List<Permission> findAllByNameIsLike(String name);
 
     List<Permission> findByNameNotIn(List<String> name);

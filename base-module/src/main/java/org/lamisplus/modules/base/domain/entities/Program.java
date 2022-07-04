@@ -11,7 +11,7 @@ import java.io.Serializable;
 @Data
 @Entity
 @EqualsAndHashCode
-@Table(name = "module_service")
+@Table(name = "base_program")
 @AllArgsConstructor
 @NoArgsConstructor
 public class Program implements Serializable {
