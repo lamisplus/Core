@@ -19,7 +19,7 @@ import java.util.UUID;
 @Data
 @Entity
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-@Table(name = "menu")
+@Table(name = "base_menu")
 @EqualsAndHashCode(of = {"name", "level"})
 @ToString(of = {"id", "name", "state", "type", "subs", "level", "module", "position", "icon", "tooltip", "parentId", "parentName", "disabled", "breadcrumb", "url", "archived", "type", "level", "moduleId"})
 @Slf4j
@@ -66,7 +66,7 @@ public final class Menu implements Serializable, Comparable<Menu>, Persistable<L
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(
-            name = "menu_authorities",
+            name = "base_menu_authorities",
             joinColumns = @JoinColumn(name = "menu_id"))
     private Set<String> authorities = new HashSet<>();
 

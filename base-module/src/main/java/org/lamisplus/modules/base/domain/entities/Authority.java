@@ -13,7 +13,7 @@ import java.util.Objects;
 
 
 @Entity
-@Table(name = "authority")
+@Table(name = "base_authority")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Data
 public final class Authority implements Serializable, Persistable<String> {

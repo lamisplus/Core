@@ -1,6 +1,8 @@
 package org.lamisplus;
 
 import com.foreach.across.config.AcrossApplication;
+import com.foreach.across.core.AcrossModule;
+import com.foreach.across.modules.hibernate.jpa.AcrossHibernateJpaModule;
 import com.foreach.across.modules.web.AcrossWebModule;
 import lombok.extern.slf4j.Slf4j;
 import org.lamisplus.modules.base.BaseModule;
@@ -28,8 +30,8 @@ import java.util.List;
 
 @AcrossApplication(
         modules = {
-                AcrossWebModule.NAME,
                 BaseModule.NAME,
+                AcrossHibernateJpaModule.NAME,
                 RestartModule.NAME
         })
 @Slf4j

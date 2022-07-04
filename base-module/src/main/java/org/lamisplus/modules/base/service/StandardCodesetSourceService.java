@@ -24,7 +24,6 @@ public class StandardCodesetSourceService {
     public static final int UN_ARCHIVED = 0;
     public static final int ARCHIVED = 1;
 
-
     public List<StandardCodesetSourceDTO> getAllStandardCodesetSource() {
         return this.toStandardCodesetSourceDTOList(standardCodesetSourceRepository.findAllByArchivedOrderByIdDesc(UN_ARCHIVED));
     }

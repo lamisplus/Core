@@ -85,6 +85,11 @@
 		</dependency>
 
 		<dependency>
+			<groupId>com.foreach.across.modules</groupId>
+			<artifactId>application-info-module</artifactId>
+		</dependency>
+
+		<dependency>
 			<groupId>io.zonky.test</groupId>
 			<artifactId>embedded-database-spring-test</artifactId>
 			<version>1.6.2</version>
@@ -124,20 +129,10 @@
 
 		<dependency>
 			<groupId>com.foreach.across</groupId>
-			<artifactId>across-core</artifactId>
-			<exclusions>
-				<exclusion>
-					<groupId>ch.qos.logback</groupId>
-					<artifactId>logback-classic</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.springframework</groupId>
-					<artifactId>spring-core</artifactId>
-				</exclusion>
-			</exclusions>
+			<artifactId>across-autoconfigure</artifactId>
 		</dependency>
 
-		<dependency>
+		<!--<dependency>
 			<groupId>com.foreach.across</groupId>
 			<artifactId>across-web</artifactId>
 			<scope>provided</scope>
@@ -151,7 +146,7 @@
 					<artifactId>spring-core</artifactId>
 				</exclusion>
 			</exclusions>
-		</dependency>
+		</dependency>-->
 
 		<dependency>
 			<groupId>org.postgresql</groupId>
@@ -172,11 +167,11 @@
 			<scope>test</scope>
 		</dependency>
 
-		<dependency>
+		<!--<dependency>
 			<groupId>com.foreach.across.modules</groupId>
 			<artifactId>across-hibernate-module</artifactId>
 			<version>4.1.0.RELEASE</version>
-		</dependency>
+		</dependency>-->
 
 		<dependency>
 			<groupId>org.projectlombok</groupId>
@@ -479,11 +474,11 @@
 			<artifactId>springfox-swagger-ui</artifactId>
 			<version>2.8.0</version>
 		</dependency>
-		<dependency>
+		<!--<dependency>
 			<groupId>com.foreach.across</groupId>
 			<artifactId>across-test</artifactId>
 			<scope>test</scope>
-		</dependency>
+		</dependency>-->
 
 		<dependency>
 			<groupId>jakarta.validation</groupId>
@@ -572,7 +567,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>-->
-			<plugin>
+			<!--<plugin>
 				<groupId>com.github.eirslett</groupId>
 				<artifactId>frontend-maven-plugin</artifactId>
 				<version>1.12.1</version>
@@ -624,7 +619,7 @@
 						</goals>
 					</execution>
 				</executions>
-			</plugin>
+			</plugin>-->
 		</plugins>
 	</build>
 </project>

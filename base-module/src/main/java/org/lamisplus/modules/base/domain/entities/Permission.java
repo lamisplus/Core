@@ -16,6 +16,7 @@ import java.util.List;
 @EqualsAndHashCode
 @NoArgsConstructor
 @RequiredArgsConstructor
+@Table(name = "base_permission")
 public class Permission extends Audit<String> {
     @Id
     @Column(name = "id", updatable = false)

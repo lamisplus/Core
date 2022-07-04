@@ -216,13 +216,16 @@
         "menu": {
             "required": [
                 "name",
-                "type"
+                "url"
             ],
             "properties": {
                 "name": {
                     "type": "string"
                 },
                 "state": {
+                    "type": "string"
+                },
+                "url": {
                     "type": "string"
                 },
                 "type": {
@@ -255,8 +258,7 @@
         "permission": {
             "required": [
                 "name",
-                "description",
-                "moduleName"
+                "description"
             ],
             "properties": {
                 "name": {
@@ -264,10 +266,6 @@
                     "maxLength": 128
                 },
                 "description": {
-                    "type": "string",
-                    "maxLength": 128
-                },
-                "moduleName": {
                     "type": "string",
                     "maxLength": 128
                 }

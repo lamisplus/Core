@@ -31,11 +31,8 @@ import static org.lamisplus.modules.base.util.Constants.ArchiveStatus.ARCHIVED;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
-
     private final PasswordEncoder passwordEncoder;
-
     private final RoleRepository roleRepository;
-
     private final UserMapper userMapper;
 
     @Transactional

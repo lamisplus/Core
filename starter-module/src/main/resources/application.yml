@@ -63,11 +63,11 @@ spring:
     datasource:
         driver-class-name: org.postgresql.Driver
         username: postgres
-        password: 1
-        url: jdbc:postgresql://localhost:5432/lamisplus_7
+        password: emeka
+        url: jdbc:postgresql://localhost:5432/base_core
         hibernate:
             ddl-auto: none
-            event.merge.enty_copy_observer: allow
+            event.merge.entity_copy_observer: allow
         hikari:
             auto-commit: true
             data-source-properties:
@@ -135,8 +135,8 @@ lamisplus:
         module:
             driver-class-name: org.postgresql.Driver
             username: postgres
-            password: 1
-            url: jdbc:postgresql://localhost:5432/lamisplus_7
+            password: emeka
+            url: jdbc:postgresql://localhost:5432/base_core
             hikari:
                     auto-commit: true
                     data-source-properties:
@@ -150,7 +150,7 @@ lamisplus:
         version-one: "/api/v1/"
     secugen:
         biometrics:
-            server-url: http://localhost:8282
+            server-url: http://localhost:8282/
             server-port: 8282
             timeout: 3000
             quality: 80

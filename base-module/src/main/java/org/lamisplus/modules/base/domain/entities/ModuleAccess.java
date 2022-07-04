@@ -7,7 +7,7 @@ import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
-@Table(name = "module_access")
+@Table(name = "base_module_access")
 @Entity
 @Data
 public class ModuleAccess extends BaseEntity {

@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Data
 @Entity
 @EqualsAndHashCode
-@Table(name = "organisation_unit_hierarchy")
+@Table(name = "base_organisation_unit_hierarchy")
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrganisationUnitHierarchy {

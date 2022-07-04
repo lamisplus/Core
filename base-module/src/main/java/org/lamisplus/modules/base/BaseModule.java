@@ -14,8 +14,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @AcrossDepends(
         required = {
-                AcrossHibernateJpaModule.NAME,
-               // AcrossWebModule.NAME
+                AcrossHibernateJpaModule.NAME, AcrossWebModule.NAME
         })
 @Slf4j
 @EnableSwagger2

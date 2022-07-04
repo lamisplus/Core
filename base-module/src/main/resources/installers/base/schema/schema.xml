@@ -1,146 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
-    <!--<changeSet failOnError="false" author="Emeka" id="1648201114214-core-schema-1">
+    <changeSet failOnError="true" author="Emeka" id="1648201114214-core-schema-19">
         <preConditions onFail="MARK_RAN">
             <not>
-                <sequenceExists sequenceName="application_codeset_id_seq"></sequenceExists>
+                <tableExists tableName="base_module"/>
             </not>
         </preConditions>
-        <createSequence sequenceName="application_codeset_id_seq"/>
-    </changeSet>
-
-    <changeSet failOnError="false" author="Emeka" id="1648201114214-core-schema-2">
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <sequenceExists sequenceName="application_user_id_seq"></sequenceExists>
-            </not>
-        </preConditions>
-        <createSequence sequenceName="application_user_id_seq"/>
-    </changeSet>
-
-    <changeSet failOnError="false" author="Emeka" id="1648201114214-core-schema-3">
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <sequenceExists sequenceName="application_user_organisation_unit_id_seq"></sequenceExists>
-            </not>
-        </preConditions>
-        <createSequence sequenceName="application_user_organisation_unit_id_seq"/>
-    </changeSet>
-
-    <changeSet failOnError="false" author="Emeka" id="1648201114214-core-schema-6">
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <sequenceExists sequenceName="menu_id_seq"></sequenceExists>
-            </not>
-        </preConditions>
-        <createSequence sequenceName="menu_id_seq"/>
-    </changeSet>
-
-    <changeSet failOnError="false" author="Emeka" id="1648201114214-core-schema-7">
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <sequenceExists sequenceName="module_artifact_id_seq"></sequenceExists>
-            </not>
-        </preConditions>
-        <createSequence sequenceName="module_artifact_id_seq"/>
-    </changeSet>
-
-    <changeSet failOnError="false" author="Emeka" id="1648201114214-core-schema-8">
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <sequenceExists sequenceName="module_dependencies_id_seq"></sequenceExists>
-            </not>
-        </preConditions>
-        <createSequence sequenceName="module_dependencies_id_seq"/>
-    </changeSet>
-    <changeSet failOnError="false" author="Emeka" id="1648201114214-core-schema-9">
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <sequenceExists sequenceName="module_id_seq"></sequenceExists>
-            </not>
-        </preConditions>
-        <createSequence sequenceName="module_id_seq"/>
-    </changeSet>
-
-    <changeSet failOnError="false" author="Emeka" id="1648201114214-core-schema-10">
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <sequenceExists sequenceName="organisation_unit_hierarchy_id_seq"></sequenceExists>
-            </not>
-        </preConditions>
-        <createSequence sequenceName="organisation_unit_hierarchy_id_seq"/>
-    </changeSet>
-
-    <changeSet failOnError="false" author="Emeka" id="1648201114214-core-schema-11">
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <sequenceExists sequenceName="organisation_unit_id_seq"></sequenceExists>
-            </not>
-        </preConditions>
-        <createSequence sequenceName="organisation_unit_id_seq"/>
-    </changeSet>
-
-    <changeSet failOnError="false" author="Emeka" id="1648201114214-core-schema-12">
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <sequenceExists sequenceName="organisation_unit_identifier_id_seq"></sequenceExists>
-            </not>
-        </preConditions>
-        <createSequence sequenceName="organisation_unit_identifier_id_seq"/>
-    </changeSet>
-
-    <changeSet failOnError="false" author="Emeka" id="1648201114214-core-schema-13">
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <sequenceExists sequenceName="organisation_unit_level_id_seq"></sequenceExists>
-            </not>
-        </preConditions>
-        <createSequence sequenceName="organisation_unit_level_id_seq"/>
-    </changeSet>
-
-    <changeSet failOnError="false" author="Emeka" id="1648201114214-core-schema-14">
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <sequenceExists sequenceName="permission_id_seq"></sequenceExists>
-            </not>
-        </preConditions>
-        <createSequence sequenceName="permission_id_seq"/>
-    </changeSet>
-
-    <changeSet failOnError="false" author="Emeka" id="1648201114214-core-schema-15">
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <sequenceExists sequenceName="program_id_seq"></sequenceExists>
-            </not>
-        </preConditions>
-        <createSequence sequenceName="program_id_seq"/>
-    </changeSet>
-
-    <changeSet failOnError="false" author="Emeka" id="1648201114214-core-schema-16">
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <sequenceExists sequenceName="role_id_seq"></sequenceExists>
-            </not>
-        </preConditions>
-        <createSequence sequenceName="role_id_seq"/>
-    </changeSet>
-
-    <changeSet failOnError="false" author="Emeka" id="1648201114214-core-schema-18">
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <sequenceExists sequenceName="web_module_id_seq"></sequenceExists>
-            </not>
-        </preConditions>
-        <createSequence sequenceName="web_module_id_seq"/>
-    </changeSet>-->
-
-    <changeSet failOnError="false" author="Emeka" id="1648201114214-core-schema-19">
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <tableExists tableName="module"/>
-            </not>
-        </preConditions>
-        <createTable tableName="module">
+        <createTable tableName="base_module">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints primaryKey="true" primaryKeyName="pk_module"/>
             </column>
@@ -164,42 +30,13 @@
         </createTable>
     </changeSet>
 
-    <!--<changeSet failOnError="false" author="Emeka" id="1648201114214-core-schema-20">
+    <changeSet failOnError="true" author="Emeka" id="1648201114214-core-schema-21">
         <preConditions onFail="MARK_RAN">
             <not>
-                <tableExists tableName="acrossmodules"/>
+                <tableExists tableName="base_application_codeset"/>
             </not>
         </preConditions>
-        <createTable tableName="acrossmodules">
-            <column name="module_id" type="VARCHAR(120)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="installer_id" type="VARCHAR(120)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="module" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="installer" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="version" type="INT">
-                <constraints nullable="false"/>
-            </column>
-            <column name="description" type="VARCHAR(500)"/>
-            <column name="created" type="TIMESTAMP WITHOUT TIME ZONE">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-    </changeSet>-->
-
-    <changeSet failOnError="false" author="Emeka" id="1648201114214-core-schema-21">
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <tableExists tableName="application_codeset"/>
-            </not>
-        </preConditions>
-        <createTable tableName="application_codeset">
+        <createTable tableName="base_application_codeset">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints primaryKey="true" primaryKeyName="application_codeset2_pkey"/>
             </column>
@@ -216,14 +53,14 @@
         </createTable>
     </changeSet>
 
-    <changeSet failOnError="false" author="Emeka" id="1648201114214-core-schema-22">
+    <changeSet failOnError="true" author="Emeka" id="1648201114214-core-schema-22">
         <preConditions onFail="MARK_RAN">
             <not>
-                <tableExists tableName="application_user"/>
+                <tableExists tableName="base_application_user"/>
             </not>
         </preConditions>
         <sql>
-            CREATE TABLE application_user
+            CREATE TABLE base_application_user
             (
             id bigint NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 9223372036854775807 CACHE 1 ),
             user_name character varying NOT NULL,
@@ -249,13 +86,13 @@
         </sql>
     </changeSet>
 
-    <changeSet failOnError="false" author="Emeka" id="1648201114214-core-schema-23">
+    <changeSet failOnError="true" author="Emeka" id="1648201114214-core-schema-23">
         <preConditions onFail="MARK_RAN">
             <not>
-                <tableExists tableName="application_user_organisation_unit"/>
+                <tableExists tableName="base_application_user_organisation_unit"/>
             </not>
         </preConditions>
-        <createTable tableName="application_user_organisation_unit">
+        <createTable tableName="base_application_user_organisation_unit">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints primaryKey="true" primaryKeyName="application_user_organisation_unit_pkey"/>
             </column>
@@ -269,13 +106,13 @@
         </createTable>
     </changeSet>
 
-    <changeSet failOnError="false" author="Emeka" id="1648201114214-core-schema-25">
+    <changeSet failOnError="true" author="Emeka" id="1648201114214-core-schema-25">
         <preConditions onFail="MARK_RAN">
             <not>
-                <tableExists tableName="application_user_role"/>
+                <tableExists tableName="base_application_user_role"/>
             </not>
         </preConditions>
-        <createTable tableName="application_user_role">
+        <createTable tableName="base_application_user_role">
             <column name="user_id" type="BIGINT">
                 <constraints nullable="false"/>
             </column>
@@ -285,13 +122,13 @@
         </createTable>
     </changeSet>
 
-    <changeSet failOnError="false" author="Emeka" id="1648201114214-core-schema-26">
+    <changeSet failOnError="true" author="Emeka" id="1648201114214-core-schema-26">
         <preConditions onFail="MARK_RAN">
             <not>
-                <tableExists tableName="authority"/>
+                <tableExists tableName="base_authority"/>
             </not>
         </preConditions>
-        <createTable tableName="authority">
+        <createTable tableName="base_authority">
             <column name="id" type="VARCHAR(50)">
                 <constraints nullable="false"/>
             </column>
@@ -300,14 +137,14 @@
         </createTable>
     </changeSet>
 
-    <changeSet failOnError="false" author="Emeka" id="1648201114214-core-schema-27">
+    <changeSet failOnError="true" author="Emeka" id="1648201114214-core-schema-27">
         <preConditions onFail="MARK_RAN">
             <not>
-                <tableExists tableName="form"/>
+                <tableExists tableName="base_form"/>
             </not>
         </preConditions>
         <sql>
-            CREATE TABLE form
+            CREATE TABLE base_form
             (
             id character varying(36) NOT NULL DEFAULT 'uuid()'::character varying,
             name character varying(16) NOT NULL,
@@ -317,20 +154,20 @@
             form jsonb,
             CONSTRAINT pk_form PRIMARY KEY (id),
             CONSTRAINT fk_form_module_id FOREIGN KEY (module_id)
-            REFERENCES module (id) MATCH SIMPLE
+            REFERENCES base_module (id) MATCH SIMPLE
             ON UPDATE NO ACTION
             ON DELETE NO ACTION
             )
         </sql>
     </changeSet>
 
-    <changeSet failOnError="false" author="Emeka" id="1648201114214-core-schema-28">
+    <changeSet failOnError="true" author="Emeka" id="1648201114214-core-schema-28">
         <preConditions onFail="MARK_RAN">
             <not>
-                <tableExists tableName="menu"/>
+                <tableExists tableName="base_menu"/>
             </not>
         </preConditions>
-        <createTable tableName="menu">
+        <createTable tableName="base_menu">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints primaryKey="true" primaryKeyName="pk_menu"/>
             </column>
@@ -366,13 +203,13 @@
         </createTable>
     </changeSet>
 
-    <changeSet failOnError="false" author="Emeka" id="1648201114214-core-schema-29">
+    <changeSet failOnError="true" author="Emeka" id="1648201114214-core-schema-29">
         <preConditions onFail="MARK_RAN">
             <not>
-                <tableExists tableName="menu_authorities"/>
+                <tableExists tableName="base_menu_authorities"/>
             </not>
         </preConditions>
-        <createTable tableName="menu_authorities">
+        <createTable tableName="base_menu_authorities">
             <column name="menu_id" type="INT">
                 <constraints nullable="false"/>
             </column>
@@ -383,13 +220,13 @@
         </createTable>
     </changeSet>
 
-    <changeSet failOnError="false" author="Emeka" id="1648201114214-core-schema-31">
+    <changeSet failOnError="true" author="Emeka" id="1648201114214-core-schema-31">
         <preConditions onFail="MARK_RAN">
             <not>
-                <tableExists tableName="module_artifact"/>
+                <tableExists tableName="base_module_artifact"/>
             </not>
         </preConditions>
-        <createTable tableName="module_artifact">
+        <createTable tableName="base_module_artifact">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints primaryKey="true" primaryKeyName="pk_module_artifact"/>
             </column>
@@ -403,13 +240,13 @@
         </createTable>
     </changeSet>
 
-    <changeSet failOnError="false" author="Emeka" id="1648201114214-core-schema-32">
+    <changeSet failOnError="true" author="Emeka" id="1648201114214-core-schema-32">
         <preConditions onFail="MARK_RAN">
             <not>
-                <tableExists tableName="module_authorities"/>
+                <tableExists tableName="base_module_authorities"/>
             </not>
         </preConditions>
-        <createTable tableName="module_authorities">
+        <createTable tableName="base_module_authorities">
             <column name="module_id" type="INT">
                 <constraints nullable="false"/>
             </column>
@@ -419,13 +256,13 @@
         </createTable>
     </changeSet>
 
-    <changeSet failOnError="false" author="Emeka" id="1648201114214-core-schema-33">
+    <changeSet failOnError="true" author="Emeka" id="1648201114214-core-schema-33">
         <preConditions onFail="MARK_RAN">
             <not>
-                <tableExists tableName="module_dependencies"/>
+                <tableExists tableName="base_module_dependencies"/>
             </not>
         </preConditions>
-        <createTable tableName="module_dependencies">
+        <createTable tableName="base_module_dependencies">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints primaryKey="true" primaryKeyName="pk_module_dependencies"/>
             </column>
@@ -441,14 +278,14 @@
         </createTable>
     </changeSet>
 
-    <changeSet failOnError="false" author="Emeka" id="1648201114214-core-schema-34">
+    <changeSet failOnError="true" author="Emeka" id="1648201114214-core-schema-34">
         <preConditions onFail="MARK_RAN">
             <not>
-                <tableExists tableName="organisation_unit"/>
+                <tableExists tableName="base_organisation_unit"/>
             </not>
         </preConditions>
         <sql>
-            CREATE TABLE organisation_unit
+            CREATE TABLE base_organisation_unit
             (
             id bigint NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 9223372036854775807 CACHE 1 ),
             name character varying(100) ,
@@ -458,21 +295,21 @@
             archived integer,
             details jsonb,
             date_created timestamp without time zone,
-            created_by character varying ,
+            created_by character varying,
             date_modified timestamp without time zone,
-            modified_by character varying ,
+            modified_by character varying,
             CONSTRAINT organisation_unit_pkey PRIMARY KEY (id)
             )
         </sql>
     </changeSet>
 
-    <changeSet failOnError="false" author="Emeka" id="1648201114214-core-schema-35">
-        <preConditions onFail="MARK_RAN">
+    <changeSet failOnError="true" author="Emeka" id="1648201114214-core-schema-35">
+        <preConditions onFail="HALT">
             <not>
-                <tableExists tableName="organisation_unit_hierarchy"/>
+                <tableExists tableName="base_organisation_unit_hierarchy"/>
             </not>
         </preConditions>
-        <createTable tableName="organisation_unit_hierarchy">
+        <createTable tableName="base_organisation_unit_hierarchy">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints primaryKey="true" primaryKeyName="organisation_unit_hierarchy_pkey"/>
             </column>
@@ -482,13 +319,13 @@
         </createTable>
     </changeSet>
 
-    <changeSet failOnError="false" author="Emeka" id="1648201114214-core-schema-36">
+    <changeSet failOnError="true" author="Emeka" id="1648201114214-core-schema-36">
         <preConditions onFail="MARK_RAN">
             <not>
-                <tableExists tableName="organisation_unit_identifier"/>
+                <tableExists tableName="base_organisation_unit_identifier"/>
             </not>
         </preConditions>
-        <createTable tableName="organisation_unit_identifier">
+        <createTable tableName="base_organisation_unit_identifier">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints primaryKey="true" primaryKeyName="organisation_unit_identifier_pkey"/>
             </column>
@@ -498,13 +335,13 @@
         </createTable>
     </changeSet>
 
-    <changeSet failOnError="false" author="Emeka" id="1648201114214-core-schema-37">
+    <changeSet failOnError="true" author="Emeka" id="1648201114214-core-schema-37">
         <preConditions onFail="MARK_RAN">
             <not>
-                <tableExists tableName="organisation_unit_level"/>
+                <tableExists tableName="base_organisation_unit_level"/>
             </not>
         </preConditions>
-        <createTable tableName="organisation_unit_level">
+        <createTable tableName="base_organisation_unit_level">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints primaryKey="true" primaryKeyName="organisational_unit_level_pkey"/>
             </column>
@@ -516,17 +353,18 @@
             <column name="created_by" type="VARCHAR(2147483647)"/>
             <column name="date_modified" type="TIMESTAMP WITHOUT TIME ZONE"/>
             <column name="modified_by" type="VARCHAR(2147483647)"/>
+			<column name="uuid" type="VARCHAR(2147483647)"/>
             <column name="parent_organisation_unit_level_id" type="BIGINT"/>
         </createTable>
     </changeSet>
 
-    <changeSet failOnError="false" author="Emeka" id="1648201114214-core-schema-38">
+    <changeSet failOnError="true" author="Emeka" id="1648201114214-core-schema-38">
         <preConditions onFail="MARK_RAN">
             <not>
-                <tableExists tableName="permission"/>
+                <tableExists tableName="base_permission"/>
             </not>
         </preConditions>
-        <createTable tableName="permission">
+        <createTable tableName="base_permission">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints primaryKey="true" primaryKeyName="priviledge_pkey"/>
             </column>
@@ -540,13 +378,13 @@
         </createTable>
     </changeSet>
 
-    <changeSet failOnError="false" author="Emeka" id="1648201114214-core-schema-39">
+    <changeSet failOnError="true" author="Emeka" id="1648201114214-core-schema-39">
         <preConditions onFail="MARK_RAN">
             <not>
-                <tableExists tableName="program"/>
+                <tableExists tableName="base_program"/>
             </not>
         </preConditions>
-        <createTable tableName="program">
+        <createTable tableName="base_program">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints primaryKey="true" primaryKeyName="program_pkey"/>
             </column>
@@ -563,13 +401,13 @@
         </createTable>
     </changeSet>
 
-    <changeSet failOnError="false" author="Emeka" id="1648201114214-core-schema-40">
+    <changeSet failOnError="true" author="Emeka" id="1648201114214-core-schema-40">
         <preConditions onFail="MARK_RAN">
             <not>
-                <tableExists tableName="role"/>
+                <tableExists tableName="base_role"/>
             </not>
         </preConditions>
-        <createTable tableName="role">
+        <createTable tableName="base_role">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints primaryKey="true" primaryKeyName="role_pkey"/>
             </column>
@@ -583,13 +421,13 @@
         </createTable>
     </changeSet>
 
-    <changeSet failOnError="false" author="Emeka" id="1648201114214-core-schema-41">
+    <changeSet failOnError="true" author="Emeka" id="1648201114214-core-schema-41">
         <preConditions onFail="MARK_RAN">
             <not>
-                <tableExists tableName="role_permission"/>
+                <tableExists tableName="base_role_permission"/>
             </not>
         </preConditions>
-        <createTable tableName="role_permission">
+        <createTable tableName="base_role_permission">
             <column name="role_id" type="BIGINT">
                 <constraints nullable="false"/>
             </column>
@@ -599,13 +437,13 @@
         </createTable>
     </changeSet>
 
-    <changeSet failOnError="false" author="Emeka" id="1648201114214-core-schema-42">
+    <changeSet failOnError="true" author="Emeka" id="1648201114214-core-schema-42">
         <preConditions onFail="MARK_RAN">
             <not>
-                <tableExists tableName="web_module"/>
+                <tableExists tableName="base_web_module"/>
             </not>
         </preConditions>
-        <createTable tableName="web_module">
+        <createTable tableName="base_web_module">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints primaryKey="true" primaryKeyName="pk_web_module"/>
             </column>
@@ -629,13 +467,13 @@
         </createTable>
     </changeSet>
 
-    <changeSet failOnError="false" author="Emeka" id="1648201114214-core-schema-43">
+    <changeSet failOnError="true" author="Emeka" id="1648201114214-core-schema-43">
         <preConditions onFail="MARK_RAN">
             <not>
-                <tableExists tableName="web_module_authorities"/>
+                <tableExists tableName="base_web_module_authorities"/>
             </not>
         </preConditions>
-        <createTable tableName="web_module_authorities">
+        <createTable tableName="base_web_module_authorities">
             <column name="web_module_id" type="INT">
                 <constraints nullable="false"/>
             </column>
@@ -646,222 +484,195 @@
     </changeSet>
 
 
-    <changeSet failOnError="false" author="Emeka" id="1648201114214-core-schema-45">
+    <changeSet failOnError="true" author="Emeka" id="1648201114214-core-schema-45">
         <preConditions onFail="MARK_RAN">
             <not>
-                <primaryKeyExists primaryKeyName="application_user_roles_pkey" tableName="application_user_role"/>
+                <primaryKeyExists primaryKeyName="application_user_roles_pkey" tableName="base_application_user_role"/>
             </not>
         </preConditions>
-        <addPrimaryKey columnNames="user_id, role_id" constraintName="application_user_roles_pkey" tableName="application_user_role"/>
+        <addPrimaryKey columnNames="user_id, role_id" constraintName="application_user_roles_pkey" tableName="base_application_user_role"/>
     </changeSet>
 
-    <changeSet failOnError="false" author="Emeka" id="1648201114214-core-schema-46">
+    <changeSet failOnError="true" author="Emeka" id="1648201114214-core-schema-46">
         <preConditions onFail="MARK_RAN">
             <not>
-                <primaryKeyExists primaryKeyName="authorityPK" tableName="authority"/>
+                <primaryKeyExists primaryKeyName="authorityPK" tableName="base_authority"/>
             </not>
         </preConditions>
-        <addPrimaryKey columnNames="id" constraintName="authorityPK" tableName="authority"/>
+        <addPrimaryKey columnNames="id" constraintName="authorityPK" tableName="base_authority"/>
     </changeSet>
 
-    <changeSet failOnError="false" author="Emeka" id="1648201114214-core-schema-48">
+    <changeSet failOnError="true" author="Emeka" id="1648201114214-core-schema-49">
         <preConditions onFail="MARK_RAN">
             <not>
-                <primaryKeyExists primaryKeyName="pk_form" tableName="form"/>
+                <primaryKeyExists primaryKeyName="role_permissions_pkey" tableName="base_role_permission"/>
             </not>
         </preConditions>
-        <addPrimaryKey columnNames="id" constraintName="pk_form" tableName="form"/>
+        <addPrimaryKey columnNames="role_id, permission_id" constraintName="role_permissions_pkey" tableName="base_role_permission"/>
     </changeSet>
 
-    <changeSet failOnError="false" author="Emeka" id="1648201114214-core-schema-49">
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <primaryKeyExists primaryKeyName="role_permissions_pkey" tableName="role_permission"/>
-            </not>
-        </preConditions>
-        <addPrimaryKey columnNames="role_id, permission_id" constraintName="role_permissions_pkey" tableName="role_permission"/>
+    <changeSet failOnError="true" author="Emeka" id="1648201114214-core-schema-50">
+        <addUniqueConstraint columnNames="module_id, dependency_id" constraintName="module_dependencies_module_id_dependency_id_key" tableName="base_module_dependencies"/>
     </changeSet>
 
-    <changeSet failOnError="false" author="Emeka" id="1648201114214-core-schema-50">
-        <addUniqueConstraint columnNames="module_id, dependency_id" constraintName="module_dependencies_module_id_dependency_id_key" tableName="module_dependencies"/>
+    <changeSet failOnError="true" author="Emeka" id="1648201114214-core-schema-51">
+        <addUniqueConstraint columnNames="code" constraintName="program_code_key" tableName="base_program"/>
     </changeSet>
 
-    <changeSet failOnError="false" author="Emeka" id="1648201114214-core-schema-51">
-        <addUniqueConstraint columnNames="code" constraintName="program_code_key" tableName="program"/>
+    <changeSet failOnError="true" author="Emeka" id="1648201114214-core-schema-53">
+        <addUniqueConstraint columnNames="name" constraintName="unique_name" tableName="base_permission"/>
     </changeSet>
 
-    <changeSet failOnError="false" author="Emeka" id="1648201114214-core-schema-52">
-        <addUniqueConstraint columnNames="code" constraintName="uk_fuq6kda6folarp19oggaf02vb" tableName="program"/>
+    <changeSet failOnError="true" author="Emeka" id="1648201114214-core-schema-54">
+        <addUniqueConstraint columnNames="name" constraintName="ux_module_name" tableName="base_module"/>
     </changeSet>
 
-    <changeSet failOnError="false" author="Emeka" id="1648201114214-core-schema-53">
-        <addUniqueConstraint columnNames="name" constraintName="unique_name" tableName="permission"/>
-    </changeSet>
-
-    <changeSet failOnError="false" author="Emeka" id="1648201114214-core-schema-54">
-        <addUniqueConstraint columnNames="name" constraintName="ux_module_name" tableName="module"/>
-    </changeSet>
-
-    <changeSet failOnError="false" author="Emeka" id="1648201114214-core-schema-55">
+    <changeSet failOnError="true" author="Emeka" id="1648201114214-core-schema-55">
         <preConditions onFail="MARK_RAN">
             <not>
                 <foreignKeyConstraintExists foreignKeyName="fk_authority_module_id" />
             </not>
         </preConditions>
-        <addForeignKeyConstraint baseColumnNames="module_id" baseTableName="authority" constraintName="fk_authority_module_id" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="module"/>
+        <addForeignKeyConstraint baseColumnNames="module_id" baseTableName="base_authority" constraintName="fk_authority_module_id" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="base_module"/>
     </changeSet>
 
-    <changeSet author="Emeka" id="1648201114214-core-schema-56">
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <foreignKeyConstraintExists foreignKeyName="fk_form_module_id" />
-            </not>
-        </preConditions>
-        <addForeignKeyConstraint baseColumnNames="module_id" baseTableName="form" constraintName="fk_form_module_id" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="module"/>
-    </changeSet>
-
-    <changeSet failOnError="false" author="Emeka" id="1648201114214-core-schema-57">
+    <changeSet failOnError="true" author="Emeka" id="1648201114214-core-schema-57">
         <preConditions onFail="MARK_RAN">
             <not>
                 <foreignKeyConstraintExists foreignKeyName="fk_menu_authorities_menu_id" />
             </not>
         </preConditions>
-        <addForeignKeyConstraint baseColumnNames="menu_id" baseTableName="menu_authorities" constraintName="fk_menu_authorities_menu_id" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="menu"/>
+        <addForeignKeyConstraint baseColumnNames="menu_id" baseTableName="base_menu_authorities" constraintName="fk_menu_authorities_menu_id" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="base_menu"/>
     </changeSet>
 
-    <changeSet failOnError="false" author="Emeka" id="1648201114214-core-schema-58">
+    <changeSet failOnError="true" author="Emeka" id="1648201114214-core-schema-58">
         <preConditions onFail="MARK_RAN">
             <not>
                 <foreignKeyConstraintExists foreignKeyName="fk_menu_module_id" />
             </not>
         </preConditions>
-        <addForeignKeyConstraint baseColumnNames="module_id" baseTableName="menu" constraintName="fk_menu_module_id" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="module"/>
+        <addForeignKeyConstraint baseColumnNames="module_id" baseTableName="base_menu" constraintName="fk_menu_module_id" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="base_module"/>
     </changeSet>
 
-    <changeSet failOnError="false" author="Emeka" id="1648201114214-core-schema-59">
+    <changeSet failOnError="true" author="Emeka" id="1648201114214-core-schema-59">
         <preConditions onFail="MARK_RAN">
             <not>
                 <foreignKeyConstraintExists foreignKeyName="fk_menu_parent_id" />
             </not>
         </preConditions>
-        <addForeignKeyConstraint baseColumnNames="parent_id" baseTableName="menu" constraintName="fk_menu_parent_id" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="menu"/>
+        <addForeignKeyConstraint baseColumnNames="parent_id" baseTableName="base_menu" constraintName="fk_menu_parent_id" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="base_menu"/>
     </changeSet>
 
-    <changeSet failOnError="false" author="Emeka" id="1648201114214-core-schema-60">
+    <changeSet failOnError="true" author="Emeka" id="1648201114214-core-schema-60">
         <preConditions onFail="MARK_RAN">
             <not>
                 <foreignKeyConstraintExists foreignKeyName="fk_module_artifact_module_id" />
             </not>
         </preConditions>
-        <addForeignKeyConstraint baseColumnNames="module_id" baseTableName="module_artifact" constraintName="fk_module_artifact_module_id" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="module"/>
+        <addForeignKeyConstraint baseColumnNames="module_id" baseTableName="base_module_artifact" constraintName="fk_module_artifact_module_id" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="base_module"/>
     </changeSet>
 
-    <changeSet failOnError="false" author="Emeka" id="1648201114214-core-schema-61">
+    <changeSet failOnError="true" author="Emeka" id="1648201114214-core-schema-61">
         <preConditions onFail="MARK_RAN">
             <not>
                 <foreignKeyConstraintExists foreignKeyName="fk_module_authorities_module_id" />
             </not>
         </preConditions>
-        <addForeignKeyConstraint baseColumnNames="module_id" baseTableName="module_authorities" constraintName="fk_module_authorities_module_id" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="module"/>
+        <addForeignKeyConstraint baseColumnNames="module_id" baseTableName="base_module_authorities" constraintName="fk_module_authorities_module_id" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="base_module"/>
     </changeSet>
 
-    <changeSet failOnError="false" author="Emeka" id="1648201114214-core-schema-62">
+    <changeSet failOnError="true" author="Emeka" id="1648201114214-core-schema-62">
         <preConditions onFail="MARK_RAN">
             <not>
                 <foreignKeyConstraintExists foreignKeyName="fk_module_dependency_dependency_id" />
             </not>
         </preConditions>
-        <addForeignKeyConstraint baseColumnNames="dependency_id" baseTableName="module_dependencies" constraintName="fk_module_dependency_dependency_id" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="module"/>
+        <addForeignKeyConstraint baseColumnNames="dependency_id" baseTableName="base_module_dependencies" constraintName="fk_module_dependency_dependency_id" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="base_module"/>
     </changeSet>
 
-    <changeSet failOnError="false" author="Emeka" id="1648201114214-core-schema-63">
+    <changeSet failOnError="true" author="Emeka" id="1648201114214-core-schema-63">
         <preConditions onFail="MARK_RAN">
             <not>
                 <foreignKeyConstraintExists foreignKeyName="fk_module_dependency_module_id" />
             </not>
         </preConditions>
-        <addForeignKeyConstraint baseColumnNames="module_id" baseTableName="module_dependencies" constraintName="fk_module_dependency_module_id" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="module"/>
+        <addForeignKeyConstraint baseColumnNames="module_id" baseTableName="base_module_dependencies" constraintName="fk_module_dependency_module_id" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="base_module"/>
     </changeSet>
 
-    <changeSet failOnError="false" author="Emeka" id="1648201114214-core-schema-64">
+    <changeSet failOnError="true" author="Emeka" id="1648201114214-core-schema-64">
         <preConditions onFail="MARK_RAN">
             <not>
                 <foreignKeyConstraintExists foreignKeyName="fk_organisation_level" />
             </not>
         </preConditions>
-        <addForeignKeyConstraint baseColumnNames="organisation_unit_level_id" baseTableName="organisation_unit" constraintName="fk_organisation_level" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="organisation_unit_level"/>
+        <addForeignKeyConstraint baseColumnNames="organisation_unit_level_id" baseTableName="base_organisation_unit" constraintName="fk_organisation_level" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="base_organisation_unit_level"/>
     </changeSet>
 
-    <changeSet failOnError="false" author="Emeka" id="1648201114214-core-schema-65">
+    <changeSet failOnError="true" author="Emeka" id="1648201114214-core-schema-65">
         <preConditions onFail="MARK_RAN">
             <not>
                 <foreignKeyConstraintExists foreignKeyName="fk_web_module_authorities_web_module_id" />
             </not>
         </preConditions>
-        <addForeignKeyConstraint baseColumnNames="web_module_id" baseTableName="web_module_authorities" constraintName="fk_web_module_authorities_web_module_id" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="web_module"/>
+        <addForeignKeyConstraint baseColumnNames="web_module_id" baseTableName="base_web_module_authorities" constraintName="fk_web_module_authorities_web_module_id" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="base_web_module"/>
     </changeSet>
 
-    <changeSet failOnError="false" author="Emeka" id="1648201114214-core-schema-66">
+    <changeSet failOnError="true" author="Emeka" id="1648201114214-core-schema-66">
         <preConditions onFail="MARK_RAN">
             <not>
                 <foreignKeyConstraintExists foreignKeyName="fk_web_module_module_id" />
             </not>
         </preConditions>
-        <addForeignKeyConstraint baseColumnNames="module_id" baseTableName="web_module" constraintName="fk_web_module_module_id" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="module"/>
+        <addForeignKeyConstraint baseColumnNames="module_id" baseTableName="base_web_module" constraintName="fk_web_module_module_id" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="base_module"/>
     </changeSet>
 
-    <changeSet failOnError="false" author="Emeka" id="1648201114214-core-schema-67">
+    <changeSet failOnError="true" author="Emeka" id="1648201114214-core-schema-67">
         <preConditions onFail="MARK_RAN">
             <not>
                 <foreignKeyConstraintExists foreignKeyName="fk_web_module_provides_for_id" />
             </not>
         </preConditions>
-        <addForeignKeyConstraint baseColumnNames="provides_for_id" baseTableName="web_module" constraintName="fk_web_module_provides_for_id" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="web_module"/>
+        <addForeignKeyConstraint baseColumnNames="provides_for_id" baseTableName="base_web_module" constraintName="fk_web_module_provides_for_id" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="base_web_module"/>
     </changeSet>
 
-    <changeSet failOnError="false" author="Emeka" id="1648201114214-core-schema-68">
+    <changeSet failOnError="true" author="Emeka" id="1648201114214-core-schema-68">
         <preConditions onFail="MARK_RAN">
             <not>
                 <foreignKeyConstraintExists foreignKeyName="organisation_unit_level_id_fk" />
             </not>
         </preConditions>
-        <addForeignKeyConstraint baseColumnNames="organisation_unit_level_id" baseTableName="organisation_unit_hierarchy" constraintName="organisation_unit_level_id_fk" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="organisation_unit_level"/>
+        <addForeignKeyConstraint baseColumnNames="organisation_unit_level_id" baseTableName="base_organisation_unit_hierarchy" constraintName="organisation_unit_level_id_fk" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="base_organisation_unit_level"/>
     </changeSet>
 
-    <changeSet failOnError="false" author="Emeka" id="1648201114214-core-schema-79">
-        <!--<preConditions onFail="MARK_RAN">
-            <not>
-                <tableExists tableName="organisation_unit"/>
-            </not>
-        </preConditions>-->
+    <changeSet failOnError="true" author="Emeka" id="1648201114214-core-schema-79">
         <sql>
-            ALTER TABLE menu
+            ALTER TABLE base_menu
             ALTER COLUMN position DROP NOT NULL;
 
-            ALTER TABLE menu
+            ALTER TABLE base_menu
             ALTER COLUMN level DROP NOT NULL;
 
-            ALTER TABLE menu
+            ALTER TABLE base_menu
             ALTER COLUMN type DROP NOT NULL;
 
-            ALTER TABLE menu
+            ALTER TABLE base_menu
             ALTER COLUMN state DROP NOT NULL;
 
-            ALTER TABLE menu
+            ALTER TABLE base_menu
             ALTER COLUMN disabled DROP NOT NULL;
 
-            ALTER TABLE menu
+            ALTER TABLE base_menu
             ALTER COLUMN module_id DROP NOT NULL;
         </sql>
     </changeSet>
 
-    <changeSet failOnError="false" author="Emeka Ilozue" id="1648201114214-core-schema-81">
+    <changeSet failOnError="true" author="Emeka Ilozue" id="1648201114214-core-schema-81">
         <preConditions onFail="MARK_RAN">
             <not>
-                <tableExists tableName="standard_codeset_source"/>
+                <tableExists tableName="base_standard_codeset_source"/>
             </not>
         </preConditions>
-        <createTable tableName="standard_codeset_source">
+        <createTable tableName="base_standard_codeset_source">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints primaryKey="true" primaryKeyName="standard_codeset_source_pkey"/>
             </column>
@@ -875,13 +686,13 @@
         </createTable>
     </changeSet>
 
-    <changeSet failOnError="false" author="Emeka Ilozue" id="1648201114214-core-schema-82">
+    <changeSet failOnError="true" author="Emeka Ilozue" id="1648201114214-core-schema-82">
         <preConditions onFail="MARK_RAN">
             <not>
-                <tableExists tableName="standard_codeset"/>
+                <tableExists tableName="base_standard_codeset"/>
             </not>
         </preConditions>
-        <createTable tableName="standard_codeset">
+        <createTable tableName="base_standard_codeset">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints primaryKey="true" primaryKeyName="standard_codeset_pkey"/>
             </column>
@@ -896,13 +707,13 @@
         </createTable>
     </changeSet>
 
-    <changeSet failOnError="false" author="Emeka Ilozue" id="1648201114214-core-schema-83">
+    <changeSet failOnError="true" author="Emeka Ilozue" id="1648201114214-core-schema-83">
         <preConditions onFail="MARK_RAN">
             <not>
-                <tableExists tableName="application_codeset_standard_codeset"/>
+                <tableExists tableName="base_application_codeset_standard_codeset"/>
             </not>
         </preConditions>
-        <createTable tableName="application_codeset_standard_codeset">
+        <createTable tableName="base_application_codeset_standard_codeset">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints primaryKey="true" primaryKeyName="application_codeset_standard_codeset_pkey"/>
             </column>
@@ -911,22 +722,22 @@
         </createTable>
     </changeSet>
 
-    <changeSet failOnError="false" author="Emeka Ilozue" id="1648201114214-core-schema-84">
+    <changeSet failOnError="true" author="Emeka Ilozue" id="1648201114214-core-schema-84">
         <preConditions onFail="MARK_RAN">
             <not>
                 <foreignKeyConstraintExists foreignKeyName="fk_standard_codeset_id" />
             </not>
         </preConditions>
-        <addForeignKeyConstraint baseColumnNames="standard_codeset_id" baseTableName="application_codeset_standard_codeset" constraintName="fk_standard_codeset_id" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="standard_codeset"/>
+        <addForeignKeyConstraint baseColumnNames="standard_codeset_id" baseTableName="base_application_codeset_standard_codeset" constraintName="fk_standard_codeset_id" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="base_standard_codeset"/>
     </changeSet>
 
-    <changeSet failOnError="false" author="Emeka" id="1648201114214-core-schema-85">
+    <changeSet failOnError="true" author="Emeka" id="1648201114214-core-schema-85">
         <preConditions onFail="MARK_RAN">
             <not>
-                <tableExists tableName="role_menu"/>
+                <tableExists tableName="base_role_menu"/>
             </not>
         </preConditions>
-        <createTable tableName="role_menu">
+        <createTable tableName="base_role_menu">
             <column name="role_id" type="BIGINT">
                 <constraints nullable="false"/>
             </column>
@@ -936,33 +747,33 @@
         </createTable>
     </changeSet>
 
-    <changeSet failOnError="false" author="Emeka" id="1648201114214-core-schema-86">
+    <changeSet failOnError="true" author="Emeka" id="1648201114214-core-schema-86">
         <preConditions onFail="MARK_RAN">
             <not>
-                <primaryKeyExists primaryKeyName="role_menu_pkey" tableName="role_menu"/>
+                <primaryKeyExists primaryKeyName="role_menu_pkey" tableName="base_role_menu"/>
             </not>
         </preConditions>
-        <addPrimaryKey columnNames="role_id, menu_id" constraintName="role_menu_pkey" tableName="role_menu"/>
+        <addPrimaryKey columnNames="role_id, menu_id" constraintName="role_menu_pkey" tableName="base_role_menu"/>
     </changeSet>
 
 
-    <changeSet failOnError="false" author="Emeka" id="1648201114214-core-schema-87">
+    <changeSet failOnError="true" author="Emeka" id="1648201114214-core-schema-87">
         <preConditions onFail="MARK_RAN">
             <not>
                 <foreignKeyConstraintExists foreignKeyName="role_id_fk" />
             </not>
         </preConditions>
         <sql>
-            ALTER TABLE role_menu
+            ALTER TABLE base_role_menu
             ADD CONSTRAINT role_id_fk FOREIGN KEY (role_id)
-            REFERENCES role (id) MATCH SIMPLE
+            REFERENCES base_role (id) MATCH SIMPLE
             ON UPDATE NO ACTION
             ON DELETE CASCADE
             NOT VALID;
 
-            ALTER TABLE role_menu
+            ALTER TABLE base_role_menu
             ADD CONSTRAINT menu_id_fk FOREIGN KEY (menu_id)
-            REFERENCES menu (id) MATCH SIMPLE
+            REFERENCES base_menu (id) MATCH SIMPLE
             ON UPDATE NO ACTION
             ON DELETE CASCADE
             NOT VALID;
@@ -971,26 +782,26 @@
 
     <changeSet failOnError="true" author="Emeka" id="1648201114214-core-schema-88">
         <sql>
-            ALTER TABLE permission
+            ALTER TABLE base_permission
                 ADD COLUMN module_name character varying;
 
-            ALTER TABLE permission
+            ALTER TABLE base_permission
                 ADD CONSTRAINT module_name_fk FOREIGN KEY (module_name)
-                    REFERENCES module (name) MATCH SIMPLE
+                    REFERENCES base_module (name) MATCH SIMPLE
                     ON UPDATE NO ACTION
                     ON DELETE CASCADE
                 NOT VALID;
 
-            ALTER TABLE role_permission
+            ALTER TABLE base_role_permission
                 ADD CONSTRAINT permission_id_fk FOREIGN KEY (permission_id)
-                    REFERENCES permission (id) MATCH SIMPLE
+                    REFERENCES base_permission (id) MATCH SIMPLE
                     ON UPDATE NO ACTION
                     ON DELETE CASCADE
                 NOT VALID;
 
-            ALTER TABLE role_permission
+            ALTER TABLE base_role_permission
                 ADD CONSTRAINT role_id_fk FOREIGN KEY (role_id)
-                    REFERENCES role (id) MATCH SIMPLE
+                    REFERENCES base_role (id) MATCH SIMPLE
                     ON UPDATE NO ACTION
                     ON DELETE NO ACTION
                 NOT VALID;

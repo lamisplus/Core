@@ -148,11 +148,8 @@ public class ModuleManager {
                 }
                 ModuleUtils.copyPathFromJar(storageService.getURL(module.getArtifact()), "/", moduleRuntimePath);
             }
-            ClassLoader classLoader = ModuleLifecycle.class.getClassLoader();
-            Thread.currentThread().setContextClassLoader(classLoader);
-
-            ModuleUtils.addClassPathUrl(moduleRuntimePath.toUri().toURL(), ClassLoader.getSystemClassLoader());
-
+            ModuleUtils.addClassPathUrl(moduleRuntimePath.toUri().toURL(), ModuleLifecycle.class.getClassLoader());
+            LOG.info("MODULE IS HERE {}", moduleRuntimePath.toUri().toURL());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -598,7 +595,7 @@ public class ModuleManager {
                     if (moduleConfig != null) {
                         savedModule[0] = moduleRepository.save(module);
                         if (!module.isNew()) {
-                            jdbcTemplate.update("delete from module_dependencies where module_id = ?", module.getId());
+                            jdbcTemplate.update("delete from base_module_dependencies where module_id = ?", module.getId());
                         }
                         moduleConfigProcessor.processModuleConfig(moduleConfig, savedModule[0]);
 

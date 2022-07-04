@@ -12,6 +12,7 @@ import java.io.Serializable;
 @Entity
 @Data
 @ToString(of = "id")
+@Table(name = "base_module_artifact")
 public class ModuleArtifact implements Serializable, Persistable<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

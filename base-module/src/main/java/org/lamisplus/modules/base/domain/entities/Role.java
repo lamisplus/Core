@@ -13,6 +13,7 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @RequiredArgsConstructor
+@Table(name = "base_role")
 public class Role extends Audit<String> {
     @Id
     @Getter
