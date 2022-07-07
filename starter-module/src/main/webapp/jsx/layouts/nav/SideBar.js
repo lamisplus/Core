@@ -90,7 +90,7 @@ const SideBar = (props) => {
   function sideBarParentUrl(menu){
 
       // if(subMenu.url){
-        
+
       // }
           //menu.moduleId===null || menu.url!==null? menu.url : "modules", state: menu.url
           if(menu.moduleId===null && menu.url===null){
@@ -128,46 +128,71 @@ const SideBar = (props) => {
       <PerfectScrollbar className="deznav-scroll" style={{paddingTop:'20px'}}>
         <MM className="metismenu" id="menu" style={{fontSize:'10px'}}>
 
-
+          <li className={`${deshBoard.includes(path) ? "mm-active" : ""}`}>
+            <Link className="has-arrow ai-icon" to="#" >
+              <i className="flaticon-025-dashboard"></i>
+              <span className="nav-text">Dashboard</span>
+            </Link>
+            <ul >
+              <li><Link className={`${path === "" ? "mm-active" : "dashboard"}`} to="/dashboard"> Dashboard Light</Link></li>
+              <li><Link className={`${path === "dashboard-dark" ? "mm-active" : ""}`} to="/dashboard-dark"> Dashboard Dark</Link></li>
+              <li><Link className={`${path === "order-list" ? "mm-active" : ""}`} to="/order-list">Orders List</Link></li>
+              <li><Link className={`${path === "event" ? "mm-active" : ""}`} to="/event">Event</Link></li>
+              <li><Link className={`${path === "customer" ? "mm-active" : ""}`} to="/customer">Customers</Link></li>
+              <li><Link className={`${path === "analytics" ? "mm-active" : ""}`} to="/analytics">Analytics</Link></li>
+              <li><Link className={`${path === "reviews" ? "mm-active" : ""}`} to="/reviews">Reviews</Link></li>
+              <li><Link className={`${path === "task" ? "mm-active" : ""}`} to="/task">Task</Link></li>
+            </ul>
+          </li>
           {props.menuList && props.menuList.map((menu, index) => (
 
               <>
-                  <li className={`${deshBoard.includes(path) ? "mm-active" : ""}`} style={{color: '#798087', padding: '2px'}}
+                  <li className={`${deshBoard.includes(path) ? "mm-active" : ""}`} style={{color: '#798087', padding: '5px'}}
                       show={"false"}>
-                    <Link className={menu.subs && menu.subs.length>0 ?"has-arrow ai-icon":""}  
+                    <Link className={menu.subs && menu.subs.length>0 ?"has-arrow ai-icon":""}
                     to={{ pathname: menu.moduleId===null ? (menu.url!==null?menu.url:"" ): "modules", state: menu.url}}
 
-                          style={{color: '#798087', padding: '1px', backgroundColor: 'white'}}>
-                      <i className={menu.icon!==null && menu.icon!=="wc"? menu.icon : "flaticon-087-stop"} style={{color: '#24a4eb'}} size="xs"/>
-                      <span className="nav-text" style={{color: '#24a4eb'}}>{menu.name}</span>
+                          style={{color: '#526785', padding: '1px',paddingBottom:'1px', backgroundColor: 'white'}}>
+                      <i className={menu.icon!==null && menu.icon!=="wc"? menu.icon : "flaticon-087-stop"} style={{color: '#27ABF4'}} size="xs"/>
+                      <span className="nav-text" style={{color: 'rgb(4, 196, 217)',fontWeight:'600'}}>{menu.name}</span>
                     </Link>
                     {menu.subs.length>0 ?
                         _.sortBy(menu.subs, ["parentId", "position"]).map((subMenu, index) => (
                             <>
-                              <ul style={{padding: "0.1rem 0 !important"}}>
-                                <li   style={{ marginLeft:"-15px", marginTop:"-12px",  marginBottom:"-12px"}}>
-                                  <Link                      
+                              <ul className="mm-collapse" style={{padding: "0.1rem 0 !important"}}>
+                                <ul  style={{ marginLeft:"-15px", marginTop:"-22px",  marginBottom:"-12px"}}>
+                                  <Link
                                       to={{ pathname:  !subMenu.moduleId ? subMenu.url: "modules", state: subMenu.url}}
                                   >
-                                    <span style={{fontSize:'13px'}} >{subMenu.name} </span>
+                                    <div>
+                                      <i className="fa-solid fa-ellipsis" style={{color: 'rgb(4, 196, 217)'}} />{" "} {" "}
+                                      <span style={{fontSize:'14px',color:"#526785"}} >{subMenu.name} </span>{" "}
+                                      <span className="align-middle me-1" style={{fontSize:'14px !important'}} >
+                                        {subMenu.subs && subMenu.subs.length > 0 &&(
+                                            <i className="fa-solid fa-angle-right fa-sm" size="20" style={{float:"right",marginTop:'5%'}}></i>
+                                        )}
+
+                                    </span>
+                                    </div>
+
                                   </Link>
                                   {subMenu.subs && subMenu.subs.length > 0 ?
                                       subMenu.subs.map((subSubMenu, index) => (
                                         <>
-                                          <li className="">
+                                          <ul className="mm-collapse" style={{ marginTop:"-18px",  marginBottom:"-22px", marginLeft:'10px'}}>
                                             <Link style={{color: '#798087'}}
-                                                  className={`${path === "system-information" ? "mm-active" : ""}`} to={!subSubMenu.moduleId || subSubMenu.moduleId===null? subSubMenu.url : "modules" }>
+                                                  className={`${path === "system-information" ? "mm-collapse" : ""}`} to={!subSubMenu.moduleId || subSubMenu.moduleId===null? subSubMenu.url : "modules" }>
                                                       <span className="align-middle me-1" style={{fontSize:'14px !important'}} >
-                                                        <i className="ti-angle-right " size="xs"></i>
-                                                      </span>{" "}<span style={{fontSize:'12px'}} >{subSubMenu.name}</span>
+                                                        <i className="fa-solid fa-arrow-right fa-2xs" size="20"></i>
+                                                      </span>{" "}<span style={{fontSize:'13px'}} >{subSubMenu.name}</span>
                                             </Link>
-                                          </li>
+                                          </ul>
                                         </>
                                       ))
                                     :
                                       ""
                                   }
-                                </li>
+                                </ul>
                               </ul>
 
                             </>
