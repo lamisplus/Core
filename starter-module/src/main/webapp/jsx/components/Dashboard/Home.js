@@ -45,7 +45,7 @@ const Home = () => {
 				
 			</div>*/}
 			
-			<div className="row">
+			<div className="row" st>
 				<div className="col-xl-12">
 					<div className="row">
 						<img src={landingPageImage} width={10} alt="" style={{width:'100%'}} />

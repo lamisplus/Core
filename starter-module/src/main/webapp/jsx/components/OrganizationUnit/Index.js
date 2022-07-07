@@ -208,7 +208,8 @@ return (
                     headerStyle: {
                       //backgroundColor: "#9F9FA5",
                       color: "#000",
-                      margin: "auto"
+                      margin: "auto",
+                        zIndex:'3'
                       },
                       searchFieldStyle: {
                         width : '150%',

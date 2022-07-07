@@ -91,7 +91,7 @@ const Header = (props) => {
   return (
     /*<div className="header" style={{ backgroundColor: '#303f9f', height:'55px' }}>*/
     <div className="header" style={{ backgroundColor: 'rgb(4, 196, 217)', height:'65px' }}>
-      <div className="header-content">
+      <div className="header-content" style={{borderLeft: "solid 1px #fff"}}>
         <nav className="navbar navbar-expand">
           <div className="collapse navbar-collapse justify-content-between">
             <div className="header-left">

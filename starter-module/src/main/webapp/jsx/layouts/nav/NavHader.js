@@ -10,7 +10,8 @@ const NavHader = () => {
     ThemeContext
   );
   return (
-    <div className="nav-header" style={{ backgroundColor: '#f2f7f8',height:'65px' }}>
+  /*  <div className="nav-header" style={{ backgroundColor: '#f2f7f8',height:'65px' }}>*/
+    <div className="nav-header" style={{ backgroundColor: '#fff',height:'65px', border:'solid 2px #ddd',marginRight:'1px' }}>
       <Link to="/dashboard" className="brand-logo" >
 			<Fragment style={{padding:'5px'}}>
                 <img src={logo} alt="" className="logo-abbr"  width="60" height="60"/>

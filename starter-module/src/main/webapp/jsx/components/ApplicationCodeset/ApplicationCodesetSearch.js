@@ -192,7 +192,7 @@ const processDelete = (id) => {
                         components={props.actions}
                         options={{
                             headerStyle: {
-                            
+                                zIndex:'3',
                                 color: "#000",
                             },
                             searchFieldStyle: {

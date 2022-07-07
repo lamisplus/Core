@@ -202,7 +202,7 @@ const UserList = (props) => {
         }))}
         options={{
           headerStyle: {
-            
+              zIndex:'3',
             color: "#000",
           },
           searchFieldStyle: {

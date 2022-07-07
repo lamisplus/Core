@@ -111,106 +111,112 @@ const SideBar = (props) => {
     })
     // console.log(props.menuList)
     // console.log(deshBoard)
-    console.log(_.sortBy(props.menuList, ["id", "position"]))
+    //console.log(_.sortBy(props.menuList, ["id", "position"]))
+  const toggleSubmenu = (menu_subs,parent_id) =>{
+      if(menu_subs!== undefined){
+        if( document.getElementById('menu_'+parent_id).classList.contains('mm-selected-menu')){
+
+          document.getElementById('menu_'+parent_id).classList.remove('mm-selected-menu');
+          menu_subs.map(function (menu){
+            document.getElementById('menu_'+menu.id).classList.remove('mm-show');
+          })
+        }else{
+          document.getElementById('menu_'+parent_id).classList.add('mm-selected-menu');
+          menu_subs.map(function (menu){
+            document.getElementById('menu_'+menu.id).classList.add('mm-show');
+            //alert(document.getElementById('menu_'+menu.id).parentNode.id);
+          })
+        }
+      }
+  }
   return (
-    <div
+
+  <div
       className={`deznav ${iconHover} ${
-        sidebarposition.value === "fixed" &&
-        sidebarLayout.value === "horizontal" &&
-        headerposition.value === "static"
-          ? scrollPosition > 120
-            ? "fixed"
-            : ""
-          : ""
+          sidebarposition.value === "fixed" &&
+          sidebarLayout.value === "horizontal" &&
+          headerposition.value === "static"
+              ? scrollPosition > 120
+                  ? "fixed"
+                  : ""
+              : ""
       }`}
-      style={{top:'52px'}}
-    >
-      <PerfectScrollbar className="deznav-scroll" style={{paddingTop:'20px'}}>
-        <MM className="metismenu" id="menu" style={{fontSize:'10px'}}>
+      style={{top:'39px',borderRight:'solid 2px #ddd'}}
+  >
+    <PerfectScrollbar className="deznav-scroll" style={{paddingTop:'20px'}}>
+      <MM className="metismenu" id="menu" style={{fontSize:'10px'}}>
+        {props.menuList && props.menuList.map((menu, index) => (
 
-          <li className={`${deshBoard.includes(path) ? "mm-active" : ""}`}>
-            <Link className="has-arrow ai-icon" to="#" >
-              <i className="flaticon-025-dashboard"></i>
-              <span className="nav-text">Dashboard</span>
-            </Link>
-            <ul >
-              <li><Link className={`${path === "" ? "mm-active" : "dashboard"}`} to="/dashboard"> Dashboard Light</Link></li>
-              <li><Link className={`${path === "dashboard-dark" ? "mm-active" : ""}`} to="/dashboard-dark"> Dashboard Dark</Link></li>
-              <li><Link className={`${path === "order-list" ? "mm-active" : ""}`} to="/order-list">Orders List</Link></li>
-              <li><Link className={`${path === "event" ? "mm-active" : ""}`} to="/event">Event</Link></li>
-              <li><Link className={`${path === "customer" ? "mm-active" : ""}`} to="/customer">Customers</Link></li>
-              <li><Link className={`${path === "analytics" ? "mm-active" : ""}`} to="/analytics">Analytics</Link></li>
-              <li><Link className={`${path === "reviews" ? "mm-active" : ""}`} to="/reviews">Reviews</Link></li>
-              <li><Link className={`${path === "task" ? "mm-active" : ""}`} to="/task">Task</Link></li>
-            </ul>
-          </li>
-          {props.menuList && props.menuList.map((menu, index) => (
+            <>
+              <li id={"menu_"+menu.id} className={`${deshBoard.includes(path) ? "mm-active" : ""}`} style={{color: '#992E62', padding: '5px'}}
+                  show={"false"}
 
-              <>
-                  <li className={`${deshBoard.includes(path) ? "mm-active" : ""}`} style={{color: '#798087', padding: '5px'}}
-                      show={"false"}>
-                    <Link className={menu.subs && menu.subs.length>0 ?"has-arrow ai-icon":""}
-                    to={{ pathname: menu.moduleId===null ? (menu.url!==null?menu.url:"" ): "modules", state: menu.url}}
-
-                          style={{color: '#526785', padding: '1px',paddingBottom:'1px', backgroundColor: 'white'}}>
-                      <i className={menu.icon!==null && menu.icon!=="wc"? menu.icon : "flaticon-087-stop"} style={{color: '#27ABF4'}} size="xs"/>
-                      <span className="nav-text" style={{color: 'rgb(4, 196, 217)',fontWeight:'600'}}>{menu.name}</span>
-                    </Link>
-                    {menu.subs.length>0 ?
-                        _.sortBy(menu.subs, ["parentId", "position"]).map((subMenu, index) => (
-                            <>
-                              <ul className="mm-collapse" style={{padding: "0.1rem 0 !important"}}>
-                                <ul  style={{ marginLeft:"-15px", marginTop:"-22px",  marginBottom:"-12px"}}>
-                                  <Link
-                                      to={{ pathname:  !subMenu.moduleId ? subMenu.url: "modules", state: subMenu.url}}
-                                  >
-                                    <div>
-                                      <i className="fa-solid fa-ellipsis" style={{color: 'rgb(4, 196, 217)'}} />{" "} {" "}
-                                      <span style={{fontSize:'14px',color:"#526785"}} >{subMenu.name} </span>{" "}
-                                      <span className="align-middle me-1" style={{fontSize:'14px !important'}} >
+              >
+                <Link
+                    onClick={()=>toggleSubmenu(menu.subs,menu.id)}
+                    className={menu.subs && menu.subs.length>0 ?"has-arrow ai-icon":""}
+                      to={{ pathname: menu.moduleId===null ? (menu.url!==null?menu.url:"" ): "modules", state: menu.url}}
+                      style={{color: '#992E62', padding: '1px',paddingBottom:'1px', backgroundColor: 'white'}}>
+                  <i className={menu.icon!==null && menu.icon!=="wc"? menu.icon : "flaticon-087-stop"} style={{color: '#0F697D'}} size="xs"/>
+                  <span className="nav-text" style={{color: '#992E62',fontWeight:'600', fontFamily:'Trebuchet'}}>{menu.name}</span>
+                </Link>
+                {menu.subs.length>0 ?
+                    _.sortBy(menu.subs, ["parentId", "position"]).map((subMenu, index) => (
+                        <>
+                          <ul  id={'menu_'+subMenu.id}  className="mm-collapse" style={{padding: "0.1rem 0 !important"}}>
+                            <ul  style={{ marginLeft:"-15px", marginTop:"-22px",  marginBottom:"-12px"}}>
+                              <Link
+                                  to={{ pathname:  !subMenu.moduleId ? subMenu.url: "modules", state: subMenu.url}}
+                                  onClick={()=>toggleSubmenu(subMenu.subs,subMenu.id)}
+                              >
+                                <div>
+                                  <i className="fa-solid fa-ellipsis" style={{color: 'rgb(153, 46, 98)'}} />{" "} {" "}
+                                  <span style={{fontSize:'14px',color:"rgb(25, 56, 59)",fontWeight:"bold",fontFamily:'Trebuchet'}} >{subMenu.name} </span>{" "}
+                                  <span className="align-middle me-1" style={{fontSize:'14px !important'}} >
                                         {subMenu.subs && subMenu.subs.length > 0 &&(
                                             <i className="fa-solid fa-angle-right fa-sm" size="20" style={{float:"right",marginTop:'5%'}}></i>
                                         )}
 
                                     </span>
-                                    </div>
+                                </div>
 
-                                  </Link>
-                                  {subMenu.subs && subMenu.subs.length > 0 ?
-                                      subMenu.subs.map((subSubMenu, index) => (
-                                        <>
-                                          <ul className="mm-collapse" style={{ marginTop:"-18px",  marginBottom:"-22px", marginLeft:'10px'}}>
-                                            <Link style={{color: '#798087'}}
-                                                  className={`${path === "system-information" ? "mm-collapse" : ""}`} to={!subSubMenu.moduleId || subSubMenu.moduleId===null? subSubMenu.url : "modules" }>
+                              </Link>
+                              {subMenu.subs && subMenu.subs.length > 0 ?
+                                  subMenu.subs.map((subSubMenu, index) => (
+                                      <>
+                                        <ul id={'menu_'+subSubMenu.id} className="mm-collapse" style={{ marginTop:"-18px",  marginBottom:"-22px", marginLeft:'10px'}}>
+                                          <Link style={{color: '#0E6073'}}
+                                                className={`${path === "system-information" ? "mm-collapse" : ""}`} to={!subSubMenu.moduleId || subSubMenu.moduleId===null? subSubMenu.url : "modules" }>
                                                       <span className="align-middle me-1" style={{fontSize:'14px !important'}} >
                                                         <i className="fa-solid fa-arrow-right fa-2xs" size="20"></i>
-                                                      </span>{" "}<span style={{fontSize:'13px'}} >{subSubMenu.name}</span>
-                                            </Link>
-                                          </ul>
-                                        </>
-                                      ))
-                                    :
-                                      ""
-                                  }
-                                </ul>
-                              </ul>
+                                                      </span>{" "}<span style={{fontSize:'13px',fontFamily:'Trebuchet'}} >{subSubMenu.name} {subSubMenu.id}</span>
+                                          </Link>
+                                        </ul>
+                                      </>
+                                  ))
+                                  :
+                                  ""
+                              }
+                            </ul>
+                          </ul>
 
-                            </>
-                        ))
+                        </>
+                    ))
                     :
-                        ""
+                    ""
 
-                    }
+                }
 
-                  </li>
-              </>
-              ))}
+              </li>
+            </>
+        ))}
 
-        </MM>
+      </MM>
 
 
-      </PerfectScrollbar>
-    </div>
+    </PerfectScrollbar>
+  </div>
+
   );
 };
 
