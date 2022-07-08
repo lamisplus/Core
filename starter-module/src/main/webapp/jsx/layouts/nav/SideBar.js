@@ -17,6 +17,11 @@ import { fontSize } from "@mui/system";
 //import profile from "../../../images/profile/pic1.jpg";
 
 class MM extends Component {
+    super(props);
+    this.state = {
+      current_parent_id:''
+    }
+  }
   componentDidMount() {
     this.$el = this.el;
     this.mm = new Metismenu(this.$el);
@@ -112,16 +117,31 @@ const SideBar = (props) => {
     // console.log(props.menuList)
     // console.log(deshBoard)
     //console.log(_.sortBy(props.menuList, ["id", "position"]))
-  const toggleSubmenu = (menu_subs,parent_id) =>{
-      if(menu_subs!== undefined){
-        if( document.getElementById('menu_'+parent_id).classList.contains('mm-selected-menu')){
+  const toggleSubmenu = (menu_subs,menu_id,parent_id) =>{
+      console.log(menu_subs)
+      console.log(parent_id)
 
-          document.getElementById('menu_'+parent_id).classList.remove('mm-selected-menu');
+      if(parent_id == null  && !document.getElementById('menu_'+menu_id).classList.contains('mm-selected-menu')){
+        var parentMenus = document.querySelectorAll('.mm-selected-menu');
+        parentMenus.forEach(parentMenu => {
+          parentMenu.classList.remove('mm-selected-menu');
+        });
+
+        var childMenus = document.querySelectorAll('.mm-collapse');
+        childMenus.forEach(childMenu => {
+          childMenu.classList.remove('mm-show');
+        });
+
+      }
+      if(menu_subs!== undefined){
+        //this.setState({current_parent_id:parent_id})
+        if( document.getElementById('menu_'+menu_id).classList.contains('mm-selected-menu')){
+          document.getElementById('menu_'+menu_id).classList.remove('mm-selected-menu');
           menu_subs.map(function (menu){
             document.getElementById('menu_'+menu.id).classList.remove('mm-show');
           })
         }else{
-          document.getElementById('menu_'+parent_id).classList.add('mm-selected-menu');
+          document.getElementById('menu_'+menu_id).classList.add('mm-selected-menu');
           menu_subs.map(function (menu){
             document.getElementById('menu_'+menu.id).classList.add('mm-show');
             //alert(document.getElementById('menu_'+menu.id).parentNode.id);
@@ -153,7 +173,7 @@ const SideBar = (props) => {
 
               >
                 <Link
-                    onClick={()=>toggleSubmenu(menu.subs,menu.id)}
+                    onClick={()=>toggleSubmenu(menu.subs,menu.id,menu.parentId)}
                     className={menu.subs && menu.subs.length>0 ?"has-arrow ai-icon":""}
                       to={{ pathname: menu.moduleId===null ? (menu.url!==null?menu.url:"" ): "modules", state: menu.url}}
                       style={{color: '#992E62', padding: '1px',paddingBottom:'1px', backgroundColor: 'white'}}>
@@ -167,7 +187,7 @@ const SideBar = (props) => {
                             <ul  style={{ marginLeft:"-15px", marginTop:"-22px",  marginBottom:"-12px"}}>
                               <Link
                                   to={{ pathname:  !subMenu.moduleId ? subMenu.url: "modules", state: subMenu.url}}
-                                  onClick={()=>toggleSubmenu(subMenu.subs,subMenu.id)}
+                                  onClick={()=>toggleSubmenu(subMenu.subs,subMenu.id,subMenu.parentId)}
                               >
                                 <div>
                                   <i className="fa-solid fa-ellipsis" style={{color: 'rgb(153, 46, 98)'}} />{" "} {" "}
@@ -189,7 +209,7 @@ const SideBar = (props) => {
                                                 className={`${path === "system-information" ? "mm-collapse" : ""}`} to={!subSubMenu.moduleId || subSubMenu.moduleId===null? subSubMenu.url : "modules" }>
                                                       <span className="align-middle me-1" style={{fontSize:'14px !important'}} >
                                                         <i className="fa-solid fa-arrow-right fa-2xs" size="20"></i>
-                                                      </span>{" "}<span style={{fontSize:'13px',fontFamily:'Trebuchet'}} >{subSubMenu.name} {subSubMenu.id}</span>
+                                                      </span>{" "}<span style={{fontSize:'14px',fontFamily:'Trebuchet'}} >{subSubMenu.name}</span>
                                           </Link>
                                         </ul>
                                       </>
