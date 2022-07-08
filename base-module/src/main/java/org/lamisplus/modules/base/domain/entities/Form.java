@@ -13,7 +13,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
-@Table(name = "form")
+@Table(name = "base_form")
 @Entity
 @Data
 @EqualsAndHashCode(of = "id")

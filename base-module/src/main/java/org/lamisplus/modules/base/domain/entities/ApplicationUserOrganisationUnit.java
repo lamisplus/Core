@@ -10,7 +10,7 @@ import javax.persistence.*;
 @Data
 @Entity
 @EqualsAndHashCode
-@Table(name = "application_user_organisation_unit")
+@Table(name = "base_application_user_organisation_unit")
 public class ApplicationUserOrganisationUnit extends Audit<String> {
 
     @Id

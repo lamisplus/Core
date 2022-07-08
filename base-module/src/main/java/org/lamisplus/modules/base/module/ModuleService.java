@@ -1,5 +1,8 @@
 package org.lamisplus.modules.base.module;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +17,7 @@ import org.lamisplus.modules.base.domain.repositories.ModuleArtifactRepository;
 import org.lamisplus.modules.base.domain.repositories.ModuleDependencyRepository;
 import org.lamisplus.modules.base.domain.repositories.ModuleRepository;
 import org.lamisplus.modules.base.util.UnsatisfiedDependencyException;
+import org.lamisplus.modules.base.yml.ConfigSchemaValidator;
 import org.lamisplus.modules.base.yml.ModuleConfig;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,6 +50,13 @@ public class ModuleService {
     private final ModuleDependencyRepository moduleDependencyRepository;
     private final ModuleDeleteService moduleDeleteService;
     private final ModuleFileStorageService storageService;
+    private static final ObjectMapper MAPPER;
+
+    static {
+        MAPPER = new ObjectMapper(new YAMLFactory());
+        MAPPER.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        MAPPER.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
+    }
 
     @Transactional
     public ModuleResponse activate(Module module) {
@@ -190,6 +201,13 @@ public class ModuleService {
 
         if (configs.size() > 0) {
             ModuleConfig config = configs.get(0);
+            /*String yaml = MAPPER.writeValueAsString(config);
+            if(!ConfigSchemaValidator.isValid(yaml)){
+                module.setType(ERROR);
+                module.setMessage("module.yml not well formed and validation failed");
+                return module;
+            }*/
+
             String fileName = storageService.store(config.getName(), file);
             ModuleUtils.loadModuleConfig(storageService.readFile(fileName), "module.yml", configs);
             ModuleManager.VersionInfo versionInfo = readVersionInfo(storageService.readFile(fileName));
@@ -199,7 +217,11 @@ public class ModuleService {
             module.setDescription(versionInfo.projectName);
             module.setUmdLocation(config.getUmdLocation());
             module.setBasePackage(config.getBasePackage());
-            module.setPermissions(new HashSet<>(config.getPermissions()));
+            module.setPermissions(config.getPermissions()
+                    .stream()
+                    .map(permission -> {permission.setModuleName(config.getName()); return permission;})
+                            .collect(Collectors.toSet()));
+            //module.setPermissions(new HashSet<>(config.getPermissions()));
             module.setPriority(config.getPriority());
             if(!config.getDependencies().isEmpty()){
                 //List<String> dependencies = new ArrayList<>();

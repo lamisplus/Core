@@ -10,7 +10,7 @@ import java.io.Serializable;
 
 @Entity
 @Data
-@Table(name = "module_dependencies")
+@Table(name = "base_module_dependencies")
 @ToString(of = {"id", "version", "module", "dependency"})
 public class ModuleDependency implements Serializable, Persistable<Long> {
     @Id

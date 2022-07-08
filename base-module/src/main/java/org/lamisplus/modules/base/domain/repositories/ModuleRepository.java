@@ -39,23 +39,23 @@ public interface ModuleRepository extends JpaRepository<Module, Long> {
     List<Module> findAllWithoutProviders();
 
     @Modifying
-    @Query(value = "delete from form where module_id = ?1", nativeQuery = true)
+    @Query(value = "delete from base_form where module_id = ?1", nativeQuery = true)
     void deleteViewTemplates(Long moduleId);
 
     @Modifying
-    @Query(value = "delete from menu where module_id = ?1", nativeQuery = true)
+    @Query(value = "delete from base_menu where module_id = ?1", nativeQuery = true)
     void deleteMenus(Long moduleId);
 
     @Modifying
-    @Query(value = "delete from menu where id = ?1", nativeQuery = true)
+    @Query(value = "delete from base_menu where id = ?1", nativeQuery = true)
     void deleteMenu(Long menuId);
 
     @Modifying
-    @Query(value = "delete from web_module where module_id = ?1", nativeQuery = true)
+    @Query(value = "delete from base_web_module where module_id = ?1", nativeQuery = true)
     void deleteWebModule(Long moduleId);
 
     @Modifying
-    @Query(value = "delete from menu_authorities where menu_id = ?1", nativeQuery = true)
+    @Query(value = "delete from base_menu_authorities where menu_id = ?1", nativeQuery = true)
     void deleteMenuAuthorities(Long menuId);
 
     @Modifying
@@ -63,14 +63,14 @@ public interface ModuleRepository extends JpaRepository<Module, Long> {
     void deleteAuthorities(Long moduleId);
 
     @Modifying
-    @Query(value = "delete from module_dependencies where module_id = ?1", nativeQuery = true)
+    @Query(value = "delete from base_module_dependencies where module_id = ?1", nativeQuery = true)
     void deleteDependency(Long moduleId);
 
     @Modifying
-    @Query(value = "delete from module_artifact where module_id = ?1", nativeQuery = true)
+    @Query(value = "delete from base_module_artifact where module_id = ?1", nativeQuery = true)
     void deleteArtifact(Long moduleId);
 
-    @Query(value = "SELECT * from module where name ilike ?1 Limit 1", nativeQuery = true)
+    @Query(value = "SELECT * from base_module where name ilike ?1 Limit 1", nativeQuery = true)
     Optional<Module> findLikeByMenu(String moduleName);
 
     Optional<Module> findByNameAndVersionAndActive(String name, String version, boolean active);

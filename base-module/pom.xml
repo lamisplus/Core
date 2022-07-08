@@ -37,10 +37,13 @@
 		</repository>
 		<repository>
 			<id>mvn-repo</id>
-			<url>https://raw.github.com/lamisplus/maven-repo/master</url>
+			<url>https://raw.github.com/Data-Fi-Nigeria-LAMISPlus/maven-repo/master</url>
 			<releases>
 				<enabled>true</enabled>
 			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
 		</repository>
 	</repositories>
 
@@ -129,10 +132,10 @@
 					<groupId>ch.qos.logback</groupId>
 					<artifactId>logback-classic</artifactId>
 				</exclusion>
-				<exclusion>
+				<!--<exclusion>
 					<groupId>org.springframework</groupId>
 					<artifactId>spring-core</artifactId>
-				</exclusion>
+				</exclusion>-->
 			</exclusions>
 		</dependency>
 
@@ -508,17 +511,28 @@
 			<artifactId>FDxSDKPro</artifactId>
 			<version>1.0</version>
 		</dependency>
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.dataformat</groupId>
+			<artifactId>jackson-dataformat-yaml</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.networknt</groupId>
+			<artifactId>json-schema-validator</artifactId>
+			<version>1.0.47</version>
+		</dependency>
 	</dependencies>
 
 	<build>
 		<plugins>
-			<plugin>
+			<!--<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
 					<skip>true</skip>
 				</configuration>
-			</plugin>
+			</plugin>-->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>

@@ -16,7 +16,7 @@ import java.util.Set;
 
 @Entity
 @Data
-@Table(name = "module")
+@Table(name = "base_module")
 @EqualsAndHashCode(of = "name", callSuper = false)
 @ToString(of = {"id", "name"})
 public class Module implements Serializable, Persistable<Long> {
