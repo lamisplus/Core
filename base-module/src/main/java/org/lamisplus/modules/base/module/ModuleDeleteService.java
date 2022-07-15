@@ -41,7 +41,7 @@ public class ModuleDeleteService {
             moduleRepository.deleteAuthorities (module.getId ());
             moduleRepository.deleteViewTemplates (module.getId ());
             moduleRepository.deleteArtifact (module.getId ());
-            jdbcTemplate.update ("delete from module where id = ?", module.getId ());
+            jdbcTemplate.update ("delete from base_module where id = ?", module.getId ());
             return null;
         });
     }
