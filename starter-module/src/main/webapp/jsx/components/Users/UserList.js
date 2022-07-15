@@ -38,6 +38,9 @@ import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
+import {FaEye} from "react-icons/fa";
+import {MdModeEdit, MdPerson} from "react-icons/md";
+import SplitActionButton from "../Button/SplitActionButton";
 
 const tableIcons = {
 Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -132,7 +135,34 @@ const UserList = (props) => {
       
       
   };
-
+    function actionItems(row){
+        return  [
+            {
+                type:'link',
+                name:'View',
+                icon:<FaEye  size="22"/>,
+                to:{
+                    pathname: "/edit-user",
+                    state: { user: row, defRole: roles  }
+                }
+            },
+            {
+                type:'link',
+                name:'Edit',
+                icon:<MdPerson size="20" color='rgb(4, 196, 217)' />,
+                to:{
+                    pathname: "/edit-user",
+                    state: { user: row, defRole: roles  }
+                }
+            },
+            {
+                type:'button',
+                name:'Delete',
+                icon:<MdModeEdit size="20" color='rgb(4, 196, 217)' />,
+                onClick:(() => deleteUserModal( row.id))
+            }
+        ]
+    }
   return (
     <div>
       <ToastContainer autoClose={3000} hideProgressBar />
@@ -154,7 +184,8 @@ const UserList = (props) => {
           designation: ( <Badge variant="primary badge-xs light">{row.designation}</Badge>),
           actions: (
             <div>
-                <Link to={{pathname: "/edit-user", state: { user: row, defRole: roles  }}}
+                <SplitActionButton actions={actionItems(row)} />
+{/*                <Link to={{pathname: "/edit-user", state: { user: row, defRole: roles  }}}
                 >
                 <Label as='a' color='blue' className="ms-1" size='mini'>
                     <Icon name='pencil' /> Edit
@@ -162,7 +193,7 @@ const UserList = (props) => {
                 </Link>
                 <Label as='a' color='red' onClick={() => deleteUserModal( row.id)} size='mini'>
                     <Icon name='trash' /> Delete
-                </Label>
+                </Label>*/}
 
              
             </div>
@@ -171,7 +202,7 @@ const UserList = (props) => {
         }))}
         options={{
           headerStyle: {
-            
+              zIndex:'3',
             color: "#000",
           },
           searchFieldStyle: {

@@ -1,9 +1,7 @@
 package org.lamisplus;
 
 import com.foreach.across.config.AcrossApplication;
-import com.foreach.across.core.AcrossModule;
 import com.foreach.across.modules.hibernate.jpa.AcrossHibernateJpaModule;
-import com.foreach.across.modules.web.AcrossWebModule;
 import lombok.extern.slf4j.Slf4j;
 import org.lamisplus.modules.base.BaseModule;
 import org.lamisplus.restart.RestartModule;
@@ -13,8 +11,6 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -40,17 +36,17 @@ import java.util.List;
 @EnableScheduling
 public class LamisPlusApplication  {
     private static ConfigurableApplicationContext context;
-    //public static String modulePath = System.getProperty ("user.dir");
+    public static String userDir = System.getProperty ("user.dir");
 
     public static void main(String[] args) {
-        context = SpringApplication.run (LamisPlusApplication.class, args);
+        SpringApplication springApplication = new SpringApplication(new Class[]{LamisPlusApplication.class});
+        springApplication.setDefaultProperties(Collections.singletonMap("spring.config.additional-location", userDir + "/db-config.yml"));
+        context = springApplication.run(args);
     }
-
     /*
      * Provides sensible defaults and convenience methods for configuration.
      * @return a Docket
      */
-
     @Bean
     public Docket api() {
         return new Docket (DocumentationType.SWAGGER_2)
@@ -62,12 +58,10 @@ public class LamisPlusApplication  {
                 .paths (PathSelectors.any ())
                 .build ();
     }
-
     /*
      *
      * @return ApiInfo for documentation
      */
-
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder ()
                 .title ("Lamisplus")
@@ -78,18 +72,15 @@ public class LamisPlusApplication  {
                 .version ("1.0.0").contact (new Contact ("Development Team", "http://lamisplus.org/base-module", "info@lamisplus.org"))
                 .build ();
     }
-
     private SecurityContext securityContext() {
         return SecurityContext.builder ().securityReferences (defaultAuth ()).build ();
     }
-
     private List<SecurityReference> defaultAuth() {
         AuthorizationScope authorizationScope = new AuthorizationScope ("global", "accessEverything");
         AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
         authorizationScopes[0] = authorizationScope;
         return Arrays.asList (new SecurityReference ("JWT", authorizationScopes));
     }
-
     /*
      * @Param name
      * @Param keyName
@@ -100,13 +91,12 @@ public class LamisPlusApplication  {
     private ApiKey apiKey() {
         return new ApiKey ("JWT", "Authorization", "header");
     }
-
     public static void restart() {
-        ApplicationArguments args = (ApplicationArguments)context.getBean(ApplicationArguments.class);
+        ApplicationArguments args = context.getBean(ApplicationArguments.class);
         Thread thread = new Thread(() -> {
             context.close();
             SpringApplication springApplication = new SpringApplication(new Class[]{LamisPlusApplication.class});
-            //springApplication.setDefaultProperties(Collections.singletonMap("spring.config.additional-location", "${user.home}/dev-configs/lamis-application.yml"));
+            springApplication.setDefaultProperties(Collections.singletonMap("spring.config.additional-location", "${user.home}/db-config.yml"));
             context = springApplication.run(args.getSourceArgs());
         });
         thread.setDaemon(false);

@@ -9,6 +9,8 @@ import CreatOrgUnitByUpload from "./CreatOrgUnitByUpload";
 import {createOrganisationUnit} from './../../../actions/organizationalUnit'
 import { connect } from "react-redux";
 import { url  } from "../../../api";
+import SaveIcon from "@material-ui/icons/Save";
+import CancelIcon from "@material-ui/icons/Cancel";
 
 const useStyles = makeStyles(theme => ({
     card: {
@@ -133,7 +135,7 @@ const saveOrgName = (e) => {
               <Form onSubmit={saveOrgName}> 
                   <Modal.Header toggle={props.togglestatus}>
                       
-                      <Modal.Title>Create Organization Unit Level</Modal.Title>
+                      <Modal.Title style={{color:'rgb(4, 196, 217)',fontWeight:'bolder'}}>Create Organization Unit Level</Modal.Title>
                     <Button
                       variant=""
                       className="btn-close"
@@ -149,7 +151,7 @@ const saveOrgName = (e) => {
                               <Row>
                               <Col md={6}>
                                 <FormGroup>
-                                              <Label for="">Parent Organisation  Unit Level</Label>
+                                              <Label for="" style={{color:'rgb(4, 196, 217)',fontWeight:'bolder'}}>Parent Organisation  Unit Level</Label>
 
                                               <Input
                                                         type="select"
@@ -157,6 +159,7 @@ const saveOrgName = (e) => {
                                                         id="parentOrganisationUnitLevelId"
                                                         value={otherfields.parentOrganisationUnitLevelId} 
                                                         onChange={handleOtherFieldInputChange}
+                                                        style={{height:"40px",border:'solid 1px rgb(4, 196, 217)',borderRadius:'5px', fontWeight:'bolder',appearance:'auto'}}
                                                         required
                                                         >
                                                             <option ></option>
@@ -172,7 +175,7 @@ const saveOrgName = (e) => {
                                 <Row>
                                   <Col md={6}>
                                     <FormGroup>
-                                        <Label for="">Name</Label>
+                                        <Label for="" style={{color:'rgb(4, 196, 217)',fontWeight:'bolder'}}>Name</Label>
                                               <Input
                                                   type="text"
                                                   name="name"
@@ -180,6 +183,7 @@ const saveOrgName = (e) => {
                                                   
                                                   value={otherfields.name}
                                                   onChange={handleOtherFieldInputChange}
+                                                  style={{height:"40px",border:'solid 1px rgb(4, 196, 217)',borderRadius:'5px'}}
                                                   {...(errors.name && { invalid: true})}
                                                   
                                               />
@@ -189,7 +193,7 @@ const saveOrgName = (e) => {
 
                                   <Col md={6}>
                                     <FormGroup>
-                                        <Label for="">Description</Label>
+                                        <Label for="" style={{color:'rgb(4, 196, 217)',fontWeight:'bolder'}}>Description</Label>
                                               <Input
                                                   type="text"
                                                   name="description"
@@ -197,6 +201,7 @@ const saveOrgName = (e) => {
                                                   
                                                   value={otherfields.description}
                                                   onChange={handleOtherFieldInputChange}
+                                                  style={{height:"40px",border:'solid 1px rgb(4, 196, 217)',borderRadius:'5px'}}
                                                   {...(errors.description && { invalid: true})}
                                                   
                                               />
@@ -204,8 +209,8 @@ const saveOrgName = (e) => {
                                       </FormGroup>
                                   </Col>
                                 <Col md={12}>
-                                <FormGroup check>
-                                        <Label check>
+                                <FormGroup check >
+                                        <Label check style={{color:'rgb(4, 196, 217)',fontWeight:'bolder'}}>
                                         <Input 
                                         type="checkbox"
                                         name="status"
@@ -214,7 +219,7 @@ const saveOrgName = (e) => {
                                         onChange={handleCheckedBox}/>{' '}
                                             Has no sublevel
                                             <br/>
-                                            <Alert color="primary">
+                                            <Alert color="primary" style={{marginTop:'10px'}}>
                                                  This organisational unit level has no lower level
                                             </Alert>
                                           
@@ -234,7 +239,8 @@ const saveOrgName = (e) => {
                                         //className={classes.button}
                                         disabled={loading}
                                         className=" float-left mr-1"
-                                        
+                                        startIcon={<SaveIcon />}
+                                        style={{backgroundColor:'rgb(4, 196, 217)'}}
                                     >
                                         <span style={{textTransform: 'capitalize'}}>Save</span> 
                                     </MatButton> { " "} { " "} { " "} { " "} { " "}
@@ -243,10 +249,11 @@ const saveOrgName = (e) => {
                                         color='default'
                                         onClick={props.togglestatus}
                                         //className={classes.button}
-                                        
+                                        startIcon={<CancelIcon style={{color:'#fff'}} />}
+                                        style={{backgroundColor:'#3f51b5'}}
                                         className=" float-left mr-1"
                                     >
-                                        <span style={{textTransform: 'capitalize'}}>Cancel</span> 
+                                        <span style={{textTransform: 'capitalize', color:'#fff'}}>Cancel</span>
                                    </MatButton>
                             </Col>
                             </Row>

@@ -17,6 +17,12 @@ import { fontSize } from "@mui/system";
 //import profile from "../../../images/profile/pic1.jpg";
 
 class MM extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      current_parent_id:''
+    }
+  }
   componentDidMount() {
     this.$el = this.el;
     this.mm = new Metismenu(this.$el);
@@ -90,7 +96,7 @@ const SideBar = (props) => {
   function sideBarParentUrl(menu){
 
       // if(subMenu.url){
-        
+
       // }
           //menu.moduleId===null || menu.url!==null? menu.url : "modules", state: menu.url
           if(menu.moduleId===null && menu.url===null){
@@ -111,81 +117,127 @@ const SideBar = (props) => {
     })
     // console.log(props.menuList)
     // console.log(deshBoard)
-    console.log(_.sortBy(props.menuList, ["id", "position"]))
+    //console.log(_.sortBy(props.menuList, ["id", "position"]))
+  const toggleSubmenu = (menu_subs,menu_id,parent_id) =>{
+      console.log(menu_subs)
+      console.log(parent_id)
+
+      if(parent_id == null  && !document.getElementById('menu_'+menu_id).classList.contains('mm-selected-menu')){
+        var parentMenus = document.querySelectorAll('.mm-selected-menu');
+        parentMenus.forEach(parentMenu => {
+          parentMenu.classList.remove('mm-selected-menu');
+        });
+
+        var childMenus = document.querySelectorAll('.mm-collapse');
+        childMenus.forEach(childMenu => {
+          childMenu.classList.remove('mm-show');
+        });
+
+      }
+      if(menu_subs!== undefined){
+        //this.setState({current_parent_id:parent_id})
+        if( document.getElementById('menu_'+menu_id).classList.contains('mm-selected-menu')){
+          document.getElementById('menu_'+menu_id).classList.remove('mm-selected-menu');
+          menu_subs.map(function (menu){
+            document.getElementById('menu_'+menu.id).classList.remove('mm-show');
+          })
+        }else{
+          document.getElementById('menu_'+menu_id).classList.add('mm-selected-menu');
+          menu_subs.map(function (menu){
+            document.getElementById('menu_'+menu.id).classList.add('mm-show');
+            //alert(document.getElementById('menu_'+menu.id).parentNode.id);
+          })
+        }
+      }
+  }
   return (
-    <div
+
+  <div
       className={`deznav ${iconHover} ${
-        sidebarposition.value === "fixed" &&
-        sidebarLayout.value === "horizontal" &&
-        headerposition.value === "static"
-          ? scrollPosition > 120
-            ? "fixed"
-            : ""
-          : ""
+          sidebarposition.value === "fixed" &&
+          sidebarLayout.value === "horizontal" &&
+          headerposition.value === "static"
+              ? scrollPosition > 120
+                  ? "fixed"
+                  : ""
+              : ""
       }`}
-      style={{top:'52px'}}
-    >
-      <PerfectScrollbar className="deznav-scroll" style={{paddingTop:'20px'}}>
-        <MM className="metismenu" id="menu" style={{fontSize:'10px'}}>
+      style={{top:'39px',borderRight:'solid 2px #ddd'}}
+  >
+    <PerfectScrollbar className="deznav-scroll" style={{paddingTop:'20px'}}>
+      <MM className="metismenu" id="menu" style={{fontSize:'10px'}}>
+        {props.menuList && props.menuList.map((menu, index) => (
 
+            <>
+              <li id={"menu_"+menu.id} className={`${deshBoard.includes(path) ? "mm-active" : ""}`} style={{color: '#992E62', padding: '5px'}}
+                  show={"false"}
 
-          {props.menuList && props.menuList.map((menu, index) => (
+              >
+                <Link
+                    onClick={()=>toggleSubmenu(menu.subs,menu.id,menu.parentId)}
+                    className={menu.subs && menu.subs.length>0 ?"has-arrow ai-icon":""}
+                      to={{ pathname: menu.moduleId===null ? (menu.url!==null?menu.url:"" ): "modules", state: menu.url}}
+                      style={{color: '#992E62', padding: '1px',paddingBottom:'1px', backgroundColor: 'white'}}>
+                  <i className={menu.icon!==null && menu.icon!=="wc"? menu.icon : "flaticon-087-stop"} style={{color: '#0F697D'}} size="xs"/>
+                  <span className="nav-text" style={{color: '#992E62',fontWeight:'600', fontFamily:'Trebuchet'}}>{menu.name}</span>
+                </Link>
+                {menu.subs.length>0 ?
+                    _.sortBy(menu.subs, ["parentId", "position"]).map((subMenu, index) => (
+                        <>
+                          <ul  id={'menu_'+subMenu.id}  className="mm-collapse" style={{padding: "0.1rem 0 !important"}}>
+                            <ul  style={{ marginLeft:"-15px", marginTop:"-22px",  marginBottom:"-12px"}}>
+                              <Link
+                                  to={{ pathname:  !subMenu.moduleId ? subMenu.url: "modules", state: subMenu.url}}
+                                  onClick={()=>toggleSubmenu(subMenu.subs,subMenu.id,subMenu.parentId)}
+                              >
+                                <div>
+                                  <i className="fa-solid fa-ellipsis" style={{color: 'rgb(153, 46, 98)'}} />{" "} {" "}
+                                  <span style={{fontSize:'14px',color:"rgb(25, 56, 59)",fontWeight:"bold",fontFamily:'Trebuchet'}} >{subMenu.name} </span>{" "}
+                                  <span className="align-middle me-1" style={{fontSize:'14px !important'}} >
+                                        {subMenu.subs && subMenu.subs.length > 0 &&(
+                                            <i className="fa-solid fa-angle-right fa-sm" size="20" style={{float:"right",marginTop:'5%'}}></i>
+                                        )}
 
-              <>
-                  <li className={`${deshBoard.includes(path) ? "mm-active" : ""}`} style={{color: '#798087', padding: '2px'}}
-                      show={"false"}>
-                    <Link className={menu.subs && menu.subs.length>0 ?"has-arrow ai-icon":""}  
-                    to={{ pathname: menu.moduleId===null ? (menu.url!==null?menu.url:"" ): "modules", state: menu.url}}
+                                    </span>
+                                </div>
 
-                          style={{color: '#798087', padding: '1px', backgroundColor: 'white'}}>
-                      <i className={menu.icon!==null && menu.icon!=="wc"? menu.icon : "flaticon-087-stop"} style={{color: '#24a4eb'}} size="xs"/>
-                      <span className="nav-text" style={{color: '#24a4eb'}}>{menu.name}</span>
-                    </Link>
-                    {menu.subs.length>0 ?
-                        _.sortBy(menu.subs, ["parentId", "position"]).map((subMenu, index) => (
-                            <>
-                              <ul style={{padding: "0.1rem 0 !important"}}>
-                                <li   style={{ marginLeft:"-15px", marginTop:"-12px",  marginBottom:"-12px"}}>
-                                  <Link                      
-                                      to={{ pathname:  !subMenu.moduleId ? subMenu.url: "modules", state: subMenu.url}}
-                                  >
-                                    <span style={{fontSize:'13px'}} >{subMenu.name} </span>
-                                  </Link>
-                                  {subMenu.subs && subMenu.subs.length > 0 ?
-                                      subMenu.subs.map((subSubMenu, index) => (
-                                        <>
-                                          <li className="">
-                                            <Link style={{color: '#798087'}}
-                                                  className={`${path === "system-information" ? "mm-active" : ""}`} to={!subSubMenu.moduleId || subSubMenu.moduleId===null? subSubMenu.url : "modules" }>
+                              </Link>
+                              {subMenu.subs && subMenu.subs.length > 0 ?
+                                  subMenu.subs.map((subSubMenu, index) => (
+                                      <>
+                                        <ul id={'menu_'+subSubMenu.id} className="mm-collapse" style={{ marginTop:"-18px",  marginBottom:"-22px", marginLeft:'10px'}}>
+                                          <Link style={{color: '#0E6073'}}
+                                                className={`${path === "system-information" ? "mm-collapse" : ""}`} to={!subSubMenu.moduleId || subSubMenu.moduleId===null? subSubMenu.url : "modules" }>
                                                       <span className="align-middle me-1" style={{fontSize:'14px !important'}} >
-                                                        <i className="ti-angle-right " size="xs"></i>
-                                                      </span>{" "}<span style={{fontSize:'12px'}} >{subSubMenu.name}</span>
-                                            </Link>
-                                          </li>
-                                        </>
-                                      ))
-                                    :
-                                      ""
-                                  }
-                                </li>
-                              </ul>
+                                                        <i className="fa-solid fa-arrow-right fa-2xs" size="20"></i>
+                                                      </span>{" "}<span style={{fontSize:'14px',fontFamily:'Trebuchet'}} >{subSubMenu.name}</span>
+                                          </Link>
+                                        </ul>
+                                      </>
+                                  ))
+                                  :
+                                  ""
+                              }
+                            </ul>
+                          </ul>
 
-                            </>
-                        ))
+                        </>
+                    ))
                     :
-                        ""
+                    ""
 
-                    }
+                }
 
-                  </li>
-              </>
-              ))}
+              </li>
+            </>
+        ))}
 
-        </MM>
+      </MM>
 
 
-      </PerfectScrollbar>
-    </div>
+    </PerfectScrollbar>
+  </div>
+
   );
 };
 

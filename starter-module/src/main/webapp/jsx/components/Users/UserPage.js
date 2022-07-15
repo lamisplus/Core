@@ -10,6 +10,7 @@ import PageTitle from "./../../layouts/PageTitle";
 //import UiModal from "./modaltest"
 import { ToastContainer} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import CancelIcon from "@material-ui/icons/Cancel";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -34,9 +35,10 @@ const UserPage = (props) => {
                 variant="contained"
                 color="primary"
                 className="me-2 float-end"
-                startIcon={<FaUserPlus />}
+                startIcon={<FaUserPlus style={{color:'#fff'}} />}
+                style={{backgroundColor:'rgb(4, 196, 217)'}}
               >
-                <span style={{ textTransform: "capitalize" }}>New User</span>
+                <span style={{ textTransform: "capitalize", color:'#fff', fontWeight:'bolder' }}>New User</span>
               </Button>
             </Link>
             <br />

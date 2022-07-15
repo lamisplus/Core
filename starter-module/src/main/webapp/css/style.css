@@ -12775,7 +12775,7 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
   [data-sidebar-style="full"][data-layout="vertical"] .menu-toggle .nav-header .nav-control {
     right: -4rem; }
     [data-sidebar-style="full"][data-layout="vertical"] .menu-toggle .nav-header .nav-control .hamburger .line {
-      background-color: #0E8A74; }
+      background-color: #fff; }
 [data-sidebar-style="full"][data-layout="vertical"] .menu-toggle .copyright,
 [data-sidebar-style="full"][data-layout="vertical"] .menu-toggle .plus-box {
   display: none; }
@@ -12810,19 +12810,17 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
       [data-sidebar-style="full"][data-layout="vertical"] .menu-toggle .deznav .metismenu li a i {
         margin: 0; }
     [data-sidebar-style="full"][data-layout="vertical"] .menu-toggle .deznav .metismenu li > ul {
-      position: absolute;
-      left: 5.8rem;
-      top: 0;
-      width: 12rem;
-      z-index: 1001;
-      display: none;
-      padding-left: 1px;
+        position: inherit;
+        left: 7.75rem;
+        top: 2.9375rem;
+        width: 15rem;
+        z-index: 10001;
+        display: none;
+        padding-left: 1px;
       height: auto !important;
-      box-shadow: 0px 0px 40px 0px rgba(82, 63, 105, 0.1);
-      border-radius: 6px;
       margin-left: 0;
       border: 0;
-      background: #fff; }
+      background: #fcf8f8; }
       [direction="rtl"][data-sidebar-style="full"][data-layout="vertical"] .menu-toggle .deznav .metismenu li > ul {
         left: auto;
         right: 5rem; }

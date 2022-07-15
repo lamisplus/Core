@@ -7,11 +7,11 @@ import {Link, useHistory} from "react-router-dom";
 import {  getSubMenus, deleteModuleMenu} from '../../../actions/menu';
 import { makeStyles } from "@material-ui/core/styles";
 import { Menu, MenuList, MenuButton, MenuItem } from "@reach/menu-button";
-import { MdDeleteForever, MdModeEdit } from "react-icons/md";
+import {MdDeleteForever, MdModeEdit, MdPerson} from "react-icons/md";
 import SaveIcon from "@material-ui/icons/Save";
 import CancelIcon from "@material-ui/icons/Cancel";
 import MatButton from "@material-ui/core/Button";
-import { FaPlus } from "react-icons/fa";
+import {FaEye, FaPlus} from "react-icons/fa";
 import { TiArrowBack } from 'react-icons/ti'
 import PageTitle from "../../layouts/PageTitle";
 import {Card, CardContent} from "@material-ui/core";
@@ -43,6 +43,7 @@ import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
+import SplitActionButton from "../Button/SplitActionButton";
 
 
 const tableIcons = {
@@ -128,6 +129,32 @@ const SubMenuList = (props) => {
         setEditModuleMenuModal(!editModuleMenuModal)
     }
 
+    function actionItems(row){
+        return  [
+            {
+                type:'link',
+                name:'View',
+                icon:<FaEye  size="22"/>,
+                to:{
+                    pathname: "/submenu",
+                    state: {parent: row}
+                }
+            },
+            {
+                type:'button',
+                name:'Edit',
+                icon:<MdPerson size="20" color='rgb(4, 196, 217)' />,
+                onClick:(() =>  editModuleMenu(row))
+            },
+            {
+                type:'button',
+                name:'Delete',
+                icon:<MdModeEdit size="20" color='rgb(4, 196, 217)' />,
+                onClick:(() =>  deleteMenuModal(row.id, row.name))
+            }
+        ]
+    }
+
     return (
         <div>
             <ToastContainer autoClose={3000} hideProgressBar />
@@ -141,22 +168,35 @@ const SubMenuList = (props) => {
                         className=" float-end ms-2"
                         startIcon={<FaPlus size="10"/>}
                         onClick={()=>updateModuleMenuPosition(parent)}
+                        style={{backgroundColor:"rgb(4, 196, 217)"}}
                     >
                         <span style={{ textTransform: "capitalize" }}>New </span>
                         &nbsp;&nbsp;
                         <span style={{ textTransform: "lowercase" }}>Menu </span>
                     </MatButton>
+                    {/*<Link to={"/menu"} >*/}
+                    {/*    <MatButton*/}
+                    {/*        variant="contained"*/}
+                    {/*        color="primary"*/}
+                    {/*        className=" float-end ms-2"*/}
+                    {/*        //startIcon={<FaUserPlus size="10"/>}*/}
+
+                    {/*    >*/}
+                    {/*        <span style={{ textTransform: "capitalize" }}>Back</span>*/}
+                    {/*    </MatButton>*/}
+                    {/*</Link>*/}
                     <Link to={"/menu"} >
                         <MatButton
                             variant="contained"
                             color="primary"
-                            className=" float-end ms-2"
-                            //startIcon={<FaUserPlus size="10"/>}
-
+                            className="float-end ms-2"
+                            style={{backgroundColor:'#04C4D9',fontWeight:"bolder"}}
+                            startIcon={<TiArrowBack />}
                         >
                             <span style={{ textTransform: "capitalize" }}>Back</span>
                         </MatButton>
                     </Link>
+
                     <br/><br/>
                     <MaterialTable
                         icons={tableIcons}
@@ -182,7 +222,8 @@ const SubMenuList = (props) => {
                             tooltip: row.tooltip,
                             actions: (
                                 <div>
-
+                                    <SplitActionButton actions={actionItems(row)} />
+{/*
                                     {row.subs && row.subs.length ? (
                                             <Link to={{pathname: "/submenu", state: {parent: row}}}>
                                                 <Label as='a' color='black' className="ms-1" size='mini'>
@@ -199,6 +240,7 @@ const SubMenuList = (props) => {
                                     <Label as='a' color='red' onClick={() =>  deleteMenuModal(row.id, row.name)}  size='mini'>
                                         <Icon name='trash' /> Delete
                                     </Label>
+*/}
 
 
                                 </div>
