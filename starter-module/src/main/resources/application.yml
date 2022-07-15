@@ -60,8 +60,6 @@ server:
         uri-encoding: UTF-8
         connection-timeout: 20s
 spring:
-    config:
-        import: "file:./db-config.yml"
     datasource:
         driver-class-name: org.postgresql.Driver
         hibernate:
