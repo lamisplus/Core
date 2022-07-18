@@ -59,7 +59,7 @@ public interface ModuleRepository extends JpaRepository<Module, Long> {
     void deleteMenuAuthorities(Long menuId);
 
     @Modifying
-    @Query(value = "delete from authority where module_id = ?1", nativeQuery = true)
+    @Query(value = "delete from base_authority where module_id = ?1", nativeQuery = true)
     void deleteAuthorities(Long moduleId);
 
     @Modifying
