@@ -34,6 +34,7 @@ mvnw.cmd
 application-debug.*
 node_modules
 .eslintcache
-/starter-module/src/main/resources/static/*
-/starter-module/build/*
-/base-module/node/*
+starter-module/src/main/resources/static/*
+starter-module/build/*
+starter-module/node/*
+base-module/node/*
