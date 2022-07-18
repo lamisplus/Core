@@ -35,3 +35,5 @@ application-debug.*
 node_modules
 .eslintcache
 /starter-module/src/main/resources/static/*
+/starter-module/build/*
+/base-module/node/*
