@@ -12337,7 +12337,7 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
 .deznav {
   width: 21.563rem;
   padding-bottom: 0;
-  height: calc(100% - 120px);
+  height: calc(100%);
   position: absolute;
   top: 7.5rem;
   padding-top: 0;

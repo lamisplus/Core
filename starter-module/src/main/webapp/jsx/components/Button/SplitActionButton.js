@@ -79,7 +79,7 @@ export default function SplitActionButton(props) {
                         }}
                     >
                         {/*width: 130,*/}
-                        <Paper sx={{  width: 130,maxWidth: '100%', marginTop:'2px', zIndex:'1000' }}>
+                        <Paper sx={{  minWidth: 130,maxWidth: '100%', marginTop:'2px', zIndex:'1000' }}>
                             <ClickAwayListener onClickAway={handleClose}>
                                 <MenuList id="split-button-menu" autoFocusItem>
                                     {props.actions.slice(1).map((option, index) => (
@@ -92,7 +92,7 @@ export default function SplitActionButton(props) {
                                                 to={option.type==='link'?option.to:'#'}
                                                 style={{width:'100%'}}
                                             >
-                                                {option.icon}<span style={{color: '#645f5f', fontWeight:'bolder', fontSize:'12px'}}>{option.name}</span>
+                                                {option.icon}<span style={{color: '#645f5f', fontWeight:'bolder', fontSize:'12px'}}>{option.name}dd</span>
                                             </Link>
 
                                         </MenuItem>

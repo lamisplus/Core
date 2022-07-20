@@ -32,7 +32,7 @@ function App (props) {
     let routes = (  
         <Switch>
             <Route path='/login' exact component={Login} />
-
+            <Route path='/' exact component={Login} />
         </Switch>
     );
     if (currentUserSubject._value!==null) {
