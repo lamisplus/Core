@@ -96,7 +96,7 @@ public class LamisPlusApplication  {
         Thread thread = new Thread(() -> {
             context.close();
             SpringApplication springApplication = new SpringApplication(new Class[]{LamisPlusApplication.class});
-            springApplication.setDefaultProperties(Collections.singletonMap("spring.config.additional-location", "${user.home}/db-config.yml"));
+            springApplication.setDefaultProperties(Collections.singletonMap("spring.config.additional-location", userDir + "/db-config.yml"));
             context = springApplication.run(args.getSourceArgs());
         });
         thread.setDaemon(false);
