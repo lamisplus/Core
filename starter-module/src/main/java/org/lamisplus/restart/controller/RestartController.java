@@ -11,7 +11,7 @@ public class RestartController {
     //Versioning through URI Path
     private final String BASE_URL_VERSION_ONE = "/api/v1";
 
-    @GetMapping(BASE_URL_VERSION_ONE + "/restart")
+    @GetMapping({"/restart"})
     @PreAuthorize("hasAnyAuthority('Super Admin','Facility Admin', 'Admin', 'Data Clerk', 'DEC', 'M&E Officer')")
     public void restart() {
         LamisPlusApplication.restart();
