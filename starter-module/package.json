@@ -1,5 +1,5 @@
 {
-  "name": "LamisPlus",
+  "name": "LAMISPlus",
   "version": "0.1.0",
   "homepage": "",
   "private": true,
@@ -110,7 +110,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "react-scripts build && xcopy /s /y build src\\main\\resources\\static",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

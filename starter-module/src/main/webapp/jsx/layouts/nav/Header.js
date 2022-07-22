@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { Dropdown } from "react-bootstrap";
 import {url as baseUrl} from "./../../../api";
 /// Image
-import avatar from "../../../images/avatar/user-avatar.png";
+import avatar from "../../../images/avatar/user-avatar-white.png";
 import LogoutPage from './Logout';
 import {  toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -90,7 +90,7 @@ const Header = (props) => {
 
   return (
     /*<div className="header" style={{ backgroundColor: '#303f9f', height:'55px' }}>*/
-    <div className="header" style={{ backgroundColor: 'rgb(4, 196, 217)', height:'65px' }}>
+    <div className="header" style={{ backgroundColor: '#014d88', height:'65px' }}>
       <div className="header-content" style={{borderLeft: "solid 1px #fff"}}>
         <nav className="navbar navbar-expand">
           <div className="collapse navbar-collapse justify-content-between">

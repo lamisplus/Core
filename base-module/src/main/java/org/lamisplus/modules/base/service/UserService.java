@@ -144,11 +144,11 @@ public class UserService {
         return userMapper.usersToUserDTOs(userRepository.findAllByRoleIn(roles));
     }
 
-    public UserDTO changeOrganisationUnit(Long organisationUnitId, UserDTO userDTO) {
-        Optional<User> optionalUser = userRepository.findById(userDTO.getId());
+    public UserDTO changeOrganisationUnit(Long organisationUnitId) {
+        User user = this.getUserWithRoles().get();
 
         boolean found = false;
-        for (ApplicationUserOrganisationUnit applicationUserOrganisationUnit : userDTO.getApplicationUserOrganisationUnits()) {
+        for (ApplicationUserOrganisationUnit applicationUserOrganisationUnit : user.getApplicationUserOrganisationUnits()) {
             Long orgUnitId = applicationUserOrganisationUnit.getOrganisationUnitId();
             if (organisationUnitId.longValue() == orgUnitId.longValue()) {
                 found = true;
@@ -156,11 +156,16 @@ public class UserService {
             }
         }
         if (!found) {
-            throw new EntityNotFoundException(OrganisationUnit.class, "Id", organisationUnitId + "");
+            throw new EntityNotFoundException(User.class, "OrganisationUnit Id", organisationUnitId + "");
         }
-        User user = optionalUser.get();
         user.setCurrentOrganisationUnitId(organisationUnitId);
-        return userMapper.userToUserDTO(userRepository.save(user));
+        user = userRepository.save(user);
+        return userMapper.userToUserDTO(user);
     }
+
+    public UserDTO getUserById(Long id){
+        return userMapper.userToUserDTO(userRepository.findById(id).orElseThrow(()-> new EntityNotFoundException(User.class, "Id", id + "")));
+    }
+
 
 }

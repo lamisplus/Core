@@ -176,10 +176,10 @@ const SideBar = (props) => {
                 <Link
                     onClick={()=>toggleSubmenu(menu.subs,menu.id,menu.parentId)}
                     className={menu.subs && menu.subs.length>0 ?"has-arrow ai-icon":""}
-                      to={{ pathname: menu.moduleId===null ? (menu.url!==null?menu.url:"" ): "modules", state: menu.url}}
+                      to={{ pathname: menu.moduleId===null ? (menu.url!==null?menu.url:"dashboard" ): "modules", state: menu.url}}
                       style={{color: '#992E62', padding: '1px',paddingBottom:'1px', backgroundColor: 'white'}}>
-                  <i className={menu.icon!==null && menu.icon!=="wc"? menu.icon : "flaticon-087-stop"} style={{color: '#0F697D'}} size="xs"/>
-                  <span className="nav-text" style={{color: '#992E62',fontWeight:'600', fontFamily:'Trebuchet'}}>{menu.name}</span>
+                  <i className={menu.icon!==null && menu.icon!=="wc"? menu.icon : "flaticon-087-stop"} style={{color: '#014d88'}} size="xs"/>
+                  <span className="nav-text" style={{color: '#014d88',fontWeight:'600', fontFamily:'Trebuchet',fontSize:'18px'}}>{menu.name}</span>
                 </Link>
                 {menu.subs.length>0 ?
                     _.sortBy(menu.subs, ["parentId", "position"]).map((subMenu, index) => (
@@ -191,11 +191,11 @@ const SideBar = (props) => {
                                   onClick={()=>toggleSubmenu(subMenu.subs,subMenu.id,subMenu.parentId)}
                               >
                                 <div>
-                                  <i className="fa-solid fa-ellipsis" style={{color: 'rgb(153, 46, 98)'}} />{" "} {" "}
-                                  <span style={{fontSize:'14px',color:"rgb(25, 56, 59)",fontWeight:"bold",fontFamily:'Trebuchet'}} >{subMenu.name} </span>{" "}
+                                  <i className="fa-solid fa-ellipsis" style={{color: '#014d88'}} />{" "} {" "}
+                                  <span style={{fontSize:'16px',color:"#4B5563",fontFamily:'Trebuchet'}} >{subMenu.name} </span>{" "}
                                   <span className="align-middle me-1" style={{fontSize:'14px !important'}} >
                                         {subMenu.subs && subMenu.subs.length > 0 &&(
-                                            <i className="fa-solid fa-angle-right fa-sm" size="20" style={{float:"right",marginTop:'5%'}}></i>
+                                            <i className="fa-solid fa-angle-right fa-sm" size="20" style={{float:"right",marginTop:'8%'}}></i>
                                         )}
 
                                     </span>
@@ -206,7 +206,7 @@ const SideBar = (props) => {
                                   subMenu.subs.map((subSubMenu, index) => (
                                       <>
                                         <ul id={'menu_'+subSubMenu.id} className="mm-collapse" style={{ marginTop:"-18px",  marginBottom:"-22px", marginLeft:'10px'}}>
-                                          <Link style={{color: '#0E6073'}}
+                                          <Link style={{color: '#4B5563'}}
                                                 className={`${path === "system-information" ? "mm-collapse" : ""}`} to={!subSubMenu.moduleId || subSubMenu.moduleId===null? subSubMenu.url : "modules" }>
                                                       <span className="align-middle me-1" style={{fontSize:'14px !important'}} >
                                                         <i className="fa-solid fa-arrow-right fa-2xs" size="20"></i>
