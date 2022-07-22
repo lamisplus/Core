@@ -42,14 +42,15 @@ export default function SplitActionButton(props) {
 
     return (
         <React.Fragment>
-            <ButtonGroup variant="contained" ref={anchorRef} style={{backgroundColor:'rgb(4, 196, 217)', height:'30px',width:'130px'}} >
-                <Link to={props.actions[0].to}>
-                    <Button size="small" onClick={handleClick} variant="contained" startIcon={props.actions[0].icon} style={{backgroundColor:'rgb(4, 196, 217)'}}>
+            <ButtonGroup variant="contained" ref={anchorRef} style={{backgroundColor:'rgb(153, 46, 98)', height:'30px',width:'150px'}} >
+                <Link to={props.actions[0].to} style={{borderRight:'20px solid #fff !important'}}>
+                    <Button size="small" onClick={handleClick} variant="contained" startIcon={props.actions[0].icon} style={{backgroundColor:'rgb(153, 46, 98)'}}>
                         <Typography variant="h7" style={{fontWeight:'bolder'}}>{props.actions[0].name}</Typography>
                     </Button>
                 </Link>
 
-                <Divider orientation="vertical" flexItem>
+                <Divider orientation="vertical" flexItem style={{borderRight:'20px solid #fff !important', backgroundColor:'#fff',width:'1px', height:'26px',marginTop:'2px'}}>
+                    1
                 </Divider>
                 <Button
                     size="medium"
@@ -58,7 +59,7 @@ export default function SplitActionButton(props) {
                     aria-label="select merge strategy"
                     aria-haspopup="menu"
                     onClick={handleToggle}
-                    style={{backgroundColor:'rgb(4, 196, 217)'}}
+                    style={{backgroundColor:'rgb(153, 46, 98)'}}
                 >
                     <FaCaretDown size='24' />
                 </Button>
@@ -75,24 +76,24 @@ export default function SplitActionButton(props) {
                     <Grow
                         {...TransitionProps}
                         style={{
-                            transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom'
+                            transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom',
+                            zIndex:'1000'
                         }}
                     >
                         {/*width: 130,*/}
-                        <Paper sx={{  minWidth: 130,maxWidth: '100%', marginTop:'2px', zIndex:'1000' }}>
+                        <Paper sx={{ minWidth:'130px', maxWidth: '150px', marginTop:'2px', zIndex:'1000' }}>
                             <ClickAwayListener onClickAway={handleClose}>
                                 <MenuList id="split-button-menu" autoFocusItem>
                                     {props.actions.slice(1).map((option, index) => (
                                         <MenuItem
                                             key={Math.random()}
-                                           /* onClick={option.type==='button'?option.onClick:'#'}*/
                                             {...(option.type==='button'&& {onClick:option.onClick})}
                                         >
                                             <Link
                                                 to={option.type==='link'?option.to:'#'}
                                                 style={{width:'100%'}}
                                             >
-                                                {option.icon}<span style={{color: '#645f5f', fontWeight:'bolder', fontSize:'12px'}}>{option.name}dd</span>
+                                                {option.icon}<span style={{color: 'rgb(153, 46, 98)', fontWeight:'bolder', fontSize:'12px'}}>{option.name}</span>
                                             </Link>
 
                                         </MenuItem>

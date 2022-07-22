@@ -149,7 +149,7 @@ const UserList = (props) => {
             {
                 type:'link',
                 name:'Edit',
-                icon:<MdPerson size="20" color='rgb(4, 196, 217)' />,
+                icon:<MdPerson size="20" color='#014d88' />,
                 to:{
                     pathname: "/edit-user",
                     state: { user: row, defRole: roles  }
@@ -158,7 +158,7 @@ const UserList = (props) => {
             {
                 type:'button',
                 name:'Delete',
-                icon:<MdModeEdit size="20" color='rgb(4, 196, 217)' />,
+                icon:<MdModeEdit size="20" color='#014d88' />,
                 onClick:(() => deleteUserModal( row.id))
             }
         ]
@@ -201,10 +201,13 @@ const UserList = (props) => {
           ),
         }))}
         options={{
-          headerStyle: {
-              zIndex:'3',
-            color: "#000",
-          },
+            headerStyle: {
+                zIndex:'3',
+                backgroundColor: "#014d88",
+                color: "#fff",
+                fontSize:'16px',
+                padding:'10px'
+            },
           searchFieldStyle: {
             width: "300%",
             margingLeft: "250px",

@@ -121,13 +121,13 @@ const UpdateOrgUnit = (props) => {
         <div >
             <Modal show={props.modalstatus} className={props.className} size="lg">
                 {/*                  <ModalHeader toggle={props.togglestatus} >
-                      <span style={{color:'rgb(4, 196, 217)',fontWeight:'bolder', fontSize:'18px'}}> Update Organization Unit Levels</span>
+                      <span style={{color:'#014d88',fontWeight:'bolder', fontSize:'18px'}}> Update Organization Unit Levels</span>
                   </ModalHeader>*/}
 
                 <Form onSubmit={saveOrgName}>
                     <Modal.Header toggle={props.togglestatus}>
 
-                        <Modal.Title style={{color:'rgb(4, 196, 217)',fontWeight:'bolder'}}>Update Organization Unit</Modal.Title>
+                        <Modal.Title style={{color:'#014d88',fontWeight:'bolder'}}>Update Organization Unit</Modal.Title>
                         <Button
                             variant=""
                             className="btn-close"
@@ -147,12 +147,12 @@ const UpdateOrgUnit = (props) => {
                                 <Row>
                                     <Col md={6}>
                                         <FormGroup>
-                                            <Label for="" style={{color:'rgb(4, 196, 217)',fontWeight:'bolder'}}>Name</Label>
+                                            <Label for="" style={{color:'#014d88',fontWeight:'bolder'}}>Name</Label>
                                             <Input
                                                 type="text"
                                                 name="name"
                                                 id="name"
-                                                style={{height:"40px",border:'solid 1px rgb(4, 196, 217)',borderRadius:'5px'}}
+                                                style={{height:"40px",border:'solid 1px #014d88',borderRadius:'5px'}}
                                                 value={otherfields.name}
                                                 onChange={handleOtherFieldInputChange}
                                                 {...(errors.name && { invalid: true})}
@@ -164,12 +164,12 @@ const UpdateOrgUnit = (props) => {
 
                                     <Col md={6}>
                                         <FormGroup>
-                                            <Label for="" style={{color:'rgb(4, 196, 217)',fontWeight:'bolder'}}>Description</Label>
+                                            <Label for="" style={{color:'#014d88',fontWeight:'bolder'}}>Description</Label>
                                             <Input
                                                 type="text"
                                                 name="description"
                                                 id="description"
-                                                style={{height:"40px",border:'solid 1px rgb(4, 196, 217)',borderRadius:'5px'}}
+                                                style={{height:"40px",border:'solid 1px #014d88',borderRadius:'5px'}}
                                                 value={otherfields.description}
                                                 onChange={handleOtherFieldInputChange}
                                                 {...(errors.description && { invalid: true})}
@@ -180,12 +180,12 @@ const UpdateOrgUnit = (props) => {
                                     </Col>
                                     <Col md={12}>
                                         <FormGroup check>
-                                            <Label check style={{color:'rgb(4, 196, 217)',fontWeight:'bolder'}}>
+                                            <Label check style={{color:'#014d88',fontWeight:'bolder'}}>
                                                 <Input
                                                     type="checkbox"
                                                     name="status"
                                                     id="status"
-                                                    style={{border:'solid 1px rgb(4, 196, 217)',borderRadius:'5px'}}
+                                                    style={{border:'solid 1px #014d88',borderRadius:'5px'}}
                                                     checked={otherfields.status === 0 ? true : false}
 
                                                     onChange={handleCheckedBox}/>{' '}
@@ -210,7 +210,7 @@ const UpdateOrgUnit = (props) => {
                                             disabled={loading}
                                             className=" float-right mr-1"
                                             startIcon={<SaveIcon />}
-                                            style={{backgroundColor:'rgb(4, 196, 217)'}}
+                                            style={{backgroundColor:'#014d88'}}
                                         >
                                             Save
                                         </MatButton>
@@ -220,7 +220,7 @@ const UpdateOrgUnit = (props) => {
                                             onClick={props.togglestatus}
                                             className={classes.button}
                                             startIcon={<CancelIcon style={{color:'#fff'}} />}
-                                            style={{backgroundColor:'#3f51b5', marginLeft:'5px',color:'#fff'}}
+                                            style={{backgroundColor:'#992E62', marginLeft:'5px',color:'#fff'}}
                                             className=" float-right mr-2"
                                         >
                                             Cancel

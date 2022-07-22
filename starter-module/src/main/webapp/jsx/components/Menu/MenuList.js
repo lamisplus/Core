@@ -144,13 +144,13 @@ const MainMenuList = (props) => {
             {
                 type:'button',
                 name:'Edit',
-                icon:<MdPerson size="20" color='rgb(4, 196, 217)' />,
+                icon:<MdPerson size="20" color='#014d88' />,
                 onClick:(() =>  editModuleMenu(row))
             },
             {
                 type:'button',
                 name:'Delete',
-                icon:<MdModeEdit size="20" color='rgb(4, 196, 217)' />,
+                icon:<MdModeEdit size="20" color='#014d88' />,
                 onClick:(() =>  deleteMenuModal(row.id, row.name))
             }
         ]
@@ -168,11 +168,9 @@ const MainMenuList = (props) => {
                             className=" float-end ms-2"
                             startIcon={<FaPlus size="10"/>}
                             onClick={()=>updateModuleMenuPosition(datasample)}
-                            style={{backgroundColor:'rgb(4, 196, 217)'}}
+                            style={{backgroundColor:'#014d88 '}}
                         >
-                            <span style={{ textTransform: "capitalize" }}>New </span>
-                            &nbsp;&nbsp;
-                            <span style={{ textTransform: "lowercase" }}>Menu </span>
+                            <span style={{ textTransform: "capitalize" }}>New  Menu </span>
                         </MatButton>
 
                     <br />
@@ -227,8 +225,10 @@ const MainMenuList = (props) => {
                 }))}
                 options={{
                     headerStyle: {
-
-                        color: "#000",
+                        backgroundColor: "#014d88",
+                        color: "#fff",
+                        fontSize:'16px',
+                        padding:'10px'
                     },
 
                     searchFieldStyle: {

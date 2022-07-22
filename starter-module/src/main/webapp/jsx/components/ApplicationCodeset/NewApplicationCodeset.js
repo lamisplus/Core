@@ -74,7 +74,7 @@ const ModalSample = (props) => {
 
                 <Form onSubmit={createGlobalVariable}>
                     <Modal.Header toggle={props.toggleModal}> 
-                    <Modal.Title style={{color:'rgb(4, 196, 217)',fontWeight:'bolder'}}>{props.formData && props.formData.id ? 'Edit' : 'New'} Application Codeset </Modal.Title>
+                    <Modal.Title style={{color:'#014d88',fontWeight:'bolder'}}>{props.formData && props.formData.id ? 'Edit' : 'New'} Application Codeset </Modal.Title>
                     <Button
                       variant=""
                       className="btn-close"
@@ -88,7 +88,7 @@ const ModalSample = (props) => {
                                     <Col md={12}>
                                         {!showNewCodesetGroup ?
                                             <FormGroup>
-                                                <Label style={{color:'rgb(4, 196, 217)',fontWeight:'bolder'}}>Codeset Group <span style={{cursor: "pointer", color: "blue"}}
+                                                <Label style={{color:'#014d88',fontWeight:'bolder'}}>Codeset Group <span style={{cursor: "pointer", color: "blue"}}
                                                                            onClick={() => setShowNewCodesetGroup(true)}> ( or Click to create new codeset group)</span></Label>
                                                 <Select
                                                     required
@@ -97,7 +97,7 @@ const ModalSample = (props) => {
                                                     isOptionDisabled={option => formData.id ? option.value !== formData.codesetGroup : false}
                                                     isMulti={false}
                                                     onChange={handleCodesetGroupChange}
-                                                    style={{height:"40px",border:'solid 1px rgb(4, 196, 217)',borderRadius:'5px', fontWeight:'bolder',appearance:'auto'}}
+                                                    style={{height:"40px",border:'solid 1px #014d88',borderRadius:'5px', fontWeight:'bolder',appearance:'auto'}}
                                                     options={props.applicationCodesetList ? Array.from(new Set(props.applicationCodesetList.map(x => x.codesetGroup))).sort().map(codesetGroup => ({
                                                         value: codesetGroup,
                                                         label: codesetGroup
@@ -111,7 +111,7 @@ const ModalSample = (props) => {
                                                 />
                                             </FormGroup> :
                                             <FormGroup>
-                                                <Label style={{color:'rgb(4, 196, 217)',fontWeight:'bolder'}}>Codeset Group <span style={{cursor: "pointer", color: "blue"}}
+                                                <Label style={{color:'#014d88',fontWeight:'bolder'}}>Codeset Group <span style={{cursor: "pointer", color: "blue"}}
                                                                            onClick={() => setShowNewCodesetGroup(false)}> ( or Click to pick from existing codeset group)</span></Label>
                                                 <Input
                                                     type='text'
@@ -120,7 +120,7 @@ const ModalSample = (props) => {
                                                     placeholder='Enter new codeset group'
                                                     value={formData.codesetGroup}
                                                     onChange={handleInputChange}
-                                                    style={{height:"40px",border:'solid 1px rgb(4, 196, 217)',borderRadius:'5px', fontWeight:'bolder'}}
+                                                    style={{height:"40px",border:'solid 1px #014d88',borderRadius:'5px', fontWeight:'bolder'}}
                                                     required
                                                 />
                                             </FormGroup>
@@ -129,7 +129,7 @@ const ModalSample = (props) => {
                                     </Col>
                                     <Col md={12}>
                                         <FormGroup>
-                                            <Label style={{color:'rgb(4, 196, 217)',fontWeight:'bolder'}}>Name</Label>
+                                            <Label style={{color:'#014d88',fontWeight:'bolder'}}>Name</Label>
                                             <Input
                                                 type='text'
                                                 name='display'
@@ -137,7 +137,7 @@ const ModalSample = (props) => {
                                                 placeholder=' '
                                                 value={formData.display}
                                                 onChange={handleInputChange}
-                                                style={{height:"40px",border:'solid 1px rgb(4, 196, 217)',borderRadius:'5px', fontWeight:'bolder'}}
+                                                style={{height:"40px",border:'solid 1px #014d88',borderRadius:'5px', fontWeight:'bolder'}}
                                                 required
                                             />
                                         </FormGroup>
@@ -145,7 +145,7 @@ const ModalSample = (props) => {
 
                                     <Col md={12}>
                                         <FormGroup>
-                                            <Label style={{color:'rgb(4, 196, 217)',fontWeight:'bolder'}}>Language</Label>
+                                            <Label style={{color:'#014d88',fontWeight:'bolder'}}>Language</Label>
                                             <Input
                                                 type='text'
                                                 name='language'
@@ -153,7 +153,7 @@ const ModalSample = (props) => {
                                                 placeholder=' '
                                                 value={formData.language}
                                                 onChange={handleInputChange}
-                                                style={{height:"40px",border:'solid 1px rgb(4, 196, 217)',borderRadius:'5px', fontWeight:'bolder'}}
+                                                style={{height:"40px",border:'solid 1px #014d88',borderRadius:'5px', fontWeight:'bolder'}}
                                                 required
                                             />
                                         </FormGroup>
@@ -161,7 +161,7 @@ const ModalSample = (props) => {
 
                                     <Col md={12}>
                                         <FormGroup>
-                                            <Label style={{color:'rgb(4, 196, 217)',fontWeight:'bolder'}}>Version</Label>
+                                            <Label style={{color:'#014d88',fontWeight:'bolder'}}>Version</Label>
                                             <Input
                                                 type='text'
                                                 name='version'
@@ -169,7 +169,7 @@ const ModalSample = (props) => {
                                                 placeholder=' '
                                                 value={formData.version}
                                                 onChange={handleInputChange}
-                                                style={{height:"40px",border:'solid 1px rgb(4, 196, 217)',borderRadius:'5px', fontWeight:'bolder'}}
+                                                style={{height:"40px",border:'solid 1px #014d88',borderRadius:'5px', fontWeight:'bolder'}}
                                                 required
                                             />
                                         </FormGroup>
@@ -183,7 +183,7 @@ const ModalSample = (props) => {
                                     className={classes.button}
                                     startIcon={<SaveIcon />}
                                     disabled={loading}
-                                    style={{backgroundColor:'rgb(4, 196, 217)'}}
+                                    style={{backgroundColor:'#014d88'}}
                                 >
                                     Save  {loading ? <Spinner /> : ""}
                                 </MatButton>
@@ -193,7 +193,7 @@ const ModalSample = (props) => {
                                     color='default'
                                     onClick={props.toggleModal}
                                     startIcon={<CancelIcon style={{color:'#fff'}} />}
-                                    style={{backgroundColor:'#3f51b5',color:'#fff'}}
+                                    style={{backgroundColor:'#992E62',color:'#fff'}}
                                 >
                                     Cancel
                                 </MatButton>
