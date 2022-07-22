@@ -102,7 +102,7 @@ public class User {
     @ManyToMany(cascade = CascadeType.PERSIST)
     private Set<Role> role;
 
-    @OneToMany(mappedBy = "applicationUserByApplicationUserId", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "applicationUserByApplicationUserId", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private List<ApplicationUserOrganisationUnit> applicationUserOrganisationUnits;
 
     @ManyToOne

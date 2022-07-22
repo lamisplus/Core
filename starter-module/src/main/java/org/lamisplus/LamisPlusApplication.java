@@ -20,6 +20,7 @@ import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -40,7 +41,7 @@ public class LamisPlusApplication  {
 
     public static void main(String[] args) {
         SpringApplication springApplication = new SpringApplication(new Class[]{LamisPlusApplication.class});
-        springApplication.setDefaultProperties(Collections.singletonMap("spring.config.additional-location", userDir + "/db-config.yml"));
+        springApplication.setDefaultProperties(Collections.singletonMap("spring.config.additional-location", userDir + File.separator + "db-config.yml"));
         context = springApplication.run(args);
     }
     /*
@@ -96,7 +97,7 @@ public class LamisPlusApplication  {
         Thread thread = new Thread(() -> {
             context.close();
             SpringApplication springApplication = new SpringApplication(new Class[]{LamisPlusApplication.class});
-            springApplication.setDefaultProperties(Collections.singletonMap("spring.config.additional-location", "${user.home}/db-config.yml"));
+            springApplication.setDefaultProperties(Collections.singletonMap("spring.config.additional-location", userDir + File.separator + "db-config.yml"));
             context = springApplication.run(args.getSourceArgs());
         });
         thread.setDaemon(false);
