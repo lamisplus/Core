@@ -8,7 +8,6 @@ import org.lamisplus.modules.base.controller.apierror.RecordExistException;
 import org.lamisplus.modules.base.domain.dto.OrganisationUnitLevelDTO;
 import org.lamisplus.modules.base.domain.entities.OrganisationUnit;
 import org.lamisplus.modules.base.domain.entities.OrganisationUnitLevel;
-import org.lamisplus.modules.base.domain.mapper.OrganisationUnitLevelMapper;
 import org.lamisplus.modules.base.domain.repositories.OrganisationUnitLevelRepository;
 import org.lamisplus.modules.base.domain.repositories.OrganisationUnitRepository;
 import org.springframework.stereotype.Service;
