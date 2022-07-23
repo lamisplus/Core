@@ -58,7 +58,7 @@ public class ApplicationUserOrganisationUnitService {
             applicationUserOrganisationUnitRepository.delete(applicationUserOrganisationUnit);
 
     }
-    public ApplicationUserOrganisationUnit toApplicationUserOrganisationUnit(ApplicationUserOrganisationUnitDTO applicationUserOrganisationUnitDTO) {
+    private ApplicationUserOrganisationUnit toApplicationUserOrganisationUnit(ApplicationUserOrganisationUnitDTO applicationUserOrganisationUnitDTO) {
         if ( applicationUserOrganisationUnitDTO == null ) {
             return null;
         }
@@ -71,7 +71,7 @@ public class ApplicationUserOrganisationUnitService {
 
         return applicationUserOrganisationUnit;
     }
-    public ApplicationUserOrganisationUnitDTO toApplicationUserOrganisationUnitDTO(ApplicationUserOrganisationUnit applicationUserOrganisationUnit) {
+    private ApplicationUserOrganisationUnitDTO toApplicationUserOrganisationUnitDTO(ApplicationUserOrganisationUnit applicationUserOrganisationUnit) {
         if ( applicationUserOrganisationUnit == null ) {
             return null;
         }
@@ -84,7 +84,7 @@ public class ApplicationUserOrganisationUnitService {
 
         return applicationUserOrganisationUnitDTO;
     }
-    public List<ApplicationUserOrganisationUnit> toApplicationUserOrganisationUnitList(List<ApplicationUserOrganisationUnitDTO> applicationUserOrganisationUnitDTOS) {
+    private List<ApplicationUserOrganisationUnit> toApplicationUserOrganisationUnitList(List<ApplicationUserOrganisationUnitDTO> applicationUserOrganisationUnitDTOS) {
         if ( applicationUserOrganisationUnitDTOS == null ) {
             return null;
         }
