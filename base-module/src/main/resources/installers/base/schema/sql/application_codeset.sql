@@ -446,5 +446,7 @@ INSERT INTO base_application_codeset (id, codeset_group, display, language, vers
 INSERT INTO base_application_codeset (id, codeset_group, display, language, version, code, date_created, created_by, date_modified, modified_by, archived) OVERRIDING SYSTEM VALUE VALUES (453, 'BIOMETRIC_CAPTURE_FINGERS', 'Left Little Finger', 'en', '1', 'b78983bd-0b5e-45fb-t38d-de4k62f4a680', '2020-04-23 00:00:00', 'Alexander Alozie', '2020-04-23 00:00:00', 'Alexander Alozie', 0);
 INSERT INTO base_application_codeset (id, codeset_group, display, language, version, code, date_created, created_by, date_modified, modified_by, archived) OVERRIDING SYSTEM VALUE VALUES (454, 'BIOMETRIC_CAPTURE_FINGERS', 'Right Ring Finger', 'en', '1', '2f49797f-4783-4a26-a30a-97d5z40f5073', '2020-04-23 00:00:00', 'Alexander Alozie', '2020-04-23 00:00:00', 'Alexander Alozie', 0);
 INSERT INTO base_application_codeset (id, codeset_group, display, language, version, code, date_created, created_by, date_modified, modified_by, archived) OVERRIDING SYSTEM VALUE VALUES (455, 'BIOMETRIC_CAPTURE_FINGERS', 'Right Little Finger', 'en', '1', '32fc5406-e46f-486d-b4z4-d55wf9b83be5', '2020-04-23 00:00:00', 'Alexander Alozie', '2020-04-23 00:00:00', 'Alexander Alozie', 0);
+INSERT INTO base_application_codeset (id, codeset_group, display, language, version, code, date_created, created_by, date_modified, modified_by, archived) OVERRIDING SYSTEM VALUE VALUES (456, 'ORGANISATION_UNIT_IDENTIFIERS', 'DATIM ID', 'en', '1', '39fc5406-e46c-496d-b4z4-d58wf9e83be5', '2020-04-23 00:00:00', 'Emeka', '2020-04-23 00:00:00', 'Emeka', 0);
 
-SELECT setval('base_application_codeset_id_seq', (455));
+
+SELECT setval('base_application_codeset_id_seq', (456));

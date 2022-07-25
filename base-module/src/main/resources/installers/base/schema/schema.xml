@@ -807,4 +807,15 @@
                 NOT VALID;
         </sql>
     </changeSet>
+
+    <changeSet failOnError="true" author="Emeka" id="1648201114214-core-schema-89">
+        <sql>
+            ALTER TABLE base_organisation_unit_identifier
+                ADD CONSTRAINT base_organisation_unit_id_fk FOREIGN KEY (organisation_unit_id)
+                REFERENCES base_organisation_unit (id) MATCH SIMPLE
+                ON UPDATE NO ACTION
+                ON DELETE CASCADE
+                NOT VALID;
+        </sql>
+    </changeSet>
 </databaseChangeLog>
