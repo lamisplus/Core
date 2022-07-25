@@ -298,6 +298,7 @@
             created_by character varying,
             date_modified timestamp without time zone,
             modified_by character varying,
+            uuid character varying,
             CONSTRAINT organisation_unit_pkey PRIMARY KEY (id)
             )
         </sql>
