@@ -1,18 +1,22 @@
 package org.lamisplus.modules.base.util;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.lamisplus.modules.base.configurer.ContextProvider;
 import org.lamisplus.modules.base.domain.entities.ModuleDependency;
 import org.lamisplus.modules.base.domain.entities.Module;
 import org.lamisplus.modules.base.domain.repositories.ModuleDependencyRepository;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Slf4j
+@RequiredArgsConstructor
+@Component
 public class ModuleDependencyResolver {
-    private static ModuleDependencyRepository repository = ContextProvider.getBean(ModuleDependencyRepository.class);
+    private final ModuleDependencyRepository repository;
 
-    public static void resolveDependencies(Module module, List<Module> resolved, List<Module> unresolved)
+    public void resolveDependencies(Module module, List<Module> resolved, List<Module> unresolved)
             throws CyclicDependencyException, UnsatisfiedDependencyException {
         unresolved.add(module);
         for (ModuleDependency moduleDependency : repository.findDependencies(module)) {
