@@ -33,6 +33,7 @@ import moment from "moment";
 import PageTitle from "./../../layouts/PageTitle";
 //import Select from "react-select";
 import DualListBox from "react-dual-listbox";
+import _ from "lodash";
 
 Moment.locale("en");
 momentLocalizer();
@@ -92,10 +93,33 @@ const UserRegistration = (props) => {
   const [validPasswordClass, setValidPasswordClass] = useState("");
   const [saving, setSaving] = useState(false);
   const [selectedOption, setSelectedOption] = useState(props.location.state.user.roles);
-  const [setArr, setSetArr] = useState([]);  
+  const [setArr, setSetArr] = useState([]);
   const [designation, setDesignation] = useState([]);
+  const [allOrganisations, setAllorganisations]=useState([]);
+  const [organisations,setOrganisations] = useState([]);
+  const [selectedOrganisations,setSelectedOrganisations] = useState([ "CHC ZUNGERU" ]);
 
+  const fetchOrganisation=()=>{
+    axios
+        .get(`${baseUrl}organisation-unit-levels/v2/4/organisation-units`)
+        .then((response) => {
+          setAllorganisations(response.data);
+          setOrganisations(
+              Object.entries(response.data).map(([key, value]) => ({
+                label: value.name,
+                value: value.name,
+              }))
+          );
+          setSelectedOrganisations(
+              _.uniq(_.map(userDetail.applicationUserOrganisationUnits, 'organisationUnitName'))
+          )
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+  }
   useEffect(() => {
+
     async function getCharacters() {
       axios
       .get(`${baseUrl}application-codesets/v2/DESIGNATION`)
@@ -113,6 +137,7 @@ const UserRegistration = (props) => {
         });
     }
     getCharacters();
+    fetchOrganisation();
   }, []);
 
   
@@ -152,6 +177,9 @@ const UserRegistration = (props) => {
   const onPermissionSelect = (selectedValues) => {
     setSelectedOption(selectedValues);
   };
+  const onOrganisationSelect = (selectedValues) => {
+    setSelectedOrganisations(selectedValues);
+  };
 
   // check if password and confirm password match
   const handleConfirmPassword = (e, setConfirmPassword = true) => {
@@ -179,8 +207,63 @@ const UserRegistration = (props) => {
     handleConfirmPassword(e, false);
   };
 
+
+
+/*  async function switchFacility (facility) {
+    console.log(facility)
+    await axios.post(`${baseUrl}users/organisationUnit/${facility}`, {})
+        .then(response => {
+          toast.success('Facility switched successfully!');
+          //toggleAssignFacilityModal();
+        }) .catch((error) => {
+          toast.error('An error occurred, could not switch facility.');
+        });
+
+  }*/
+
+  const updateUserOrganisations=()=>{
+    if(selectedOrganisations.length >0){
+      //First delete all current organisations
+/*      var defaultFacility= _.find(allOrganisations, {name:selectedOrganisations[0]});
+      switchFacility(defaultFacility.id);*/
+      if(userDetail.applicationUserOrganisationUnits.length >0){
+        userDetail.applicationUserOrganisationUnits.map((organisation) =>{
+
+          var orgDetails = _.find(allOrganisations, {name:organisation.organisationUnitId});
+
+          axios.delete(`${baseUrl}application_user_organisation_unit/${orgDetails.id}`, )
+              .then(response => {
+                toast.success(`successfully added`);
+              }) .catch((error) => {
+            toast.error(`An error occurred, adding facility`);
+          });
+        });
+
+
+      }
+      //Add Organisations
+      let facilityDetails = [];
+      selectedOrganisations.map((organisation) =>{
+        var orgDetails = _.find(allOrganisations, {name:organisation});
+        facilityDetails.push({
+          "applicationUserId": userDetail.id,
+          "organisationUnitId": orgDetails.id
+        })
+
+      });
+      axios.post(`${baseUrl}application_user_organisation_unit`, facilityDetails)
+          .then(response => {
+            toast.success(`successfully added`);
+          }) .catch((error) => {
+        toast.error(`An error occurred, adding facility`);
+      });
+    }
+  }
+
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    updateUserOrganisations();
     const dateOfBirth = moment(values.dateOfBirth).format("YYYY-MM-DD");
     values["dateOfBirth"] = dateOfBirth;
     //values["roles"] = [values["role"]]
@@ -384,6 +467,24 @@ const UserRegistration = (props) => {
                     </div>
 
                   </div>
+
+
+
+                  <div className="form-group mb-12 col-md-12">
+                    <FormGroup>
+                      <Label for="permissions" style={{color:'#014d88',fontWeight:'bolder'}}>Facility*</Label>
+                      <DualListBox
+                          //canFilter
+                          options={organisations}
+                          onChange={onOrganisationSelect}
+                          selected={selectedOrganisations}
+                      />
+                    </FormGroup>
+                  </div>
+
+
+
+
 
                   <div className="form-group mb-12 col-md-12">
                       <FormGroup>

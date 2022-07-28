@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, {useContext, useEffect, useState} from "react";
 
 /// React router dom
 import {  Switch, Route } from "react-router-dom";
@@ -41,8 +41,14 @@ import BiometricList from "./components/Biometric/BiometricList";
 
 import SubMenuList from "./components/Menu/SubMenuList";
 import { ThemeContext } from "../context/ThemeContext";
+import {authentication} from "../_services/authentication";
+import axios from "axios";
+import {url as baseUrl} from "../api";
+import * as ACTION_TYPES from "../actions/types";
+import ErrorMissingOrganisation from "./pages/ErrorMissingOrganisation";
 
 const Markup = () => {
+  const [user, setUser] = useState(null);
   const { menuToggle } = useContext(ThemeContext);
   const routes = [
     /// Dashboard
@@ -78,43 +84,67 @@ const Markup = () => {
     { url: "menu", component: MenuList },
     { url: "biometrics", component: BiometricList },
   ];
-  
   let path = window.location.pathname;
   path = path.split("/");
   path = path[path.length - 1];
 
   let pagePath = path.split("-").includes("page");
-  return (
-    <>
-      <div
-        id={`${!pagePath ? "main-wrapper" : ""}`}
-        className={`${!pagePath ? "show" : "mh100vh"}  ${
-          menuToggle ? "menu-toggle" : ""
-        }`}
-      >
-        {!pagePath && <Nav />}
 
-        <div className={`${!pagePath ? "content-body" : ""}`} style={{paddingTop: '4rem',backgroundColor:'#f2f7f8'}}>
-          <div
-            className={`${!pagePath ? "container-fluid" : ""}`}
-            style={{ minHeight: window.screen.height - 260, padding:'1px' }}
-          >
-            <Switch>
-              {routes.map((data, i) => (
-                <Route
-                  key={i}
-                  exact
-                  path={`/${data.url}`}
-                  component={data.component}
-                />
-              ))}
-            </Switch>
-          </div>
-        </div>
-        {!pagePath && <Footer />}
-      </div>
-      
-    </>
+
+  async function fetchMe() {
+    if( authentication.currentUserValue != null ) {
+      axios
+          .get(`${baseUrl}account`)
+          .then((response) => {
+            setUser(response.data);
+          })
+          .catch((error) => {
+            authentication.logout();
+            // console.log(error);
+          });
+    }
+  }
+
+  useEffect(() => {
+    fetchMe();
+
+  }, []);
+  return (
+      <>
+        {user && user.currentOrganisationUnitId != null ?
+              <div
+                  id={`${!pagePath ? "main-wrapper" : ""}`}
+                  className={`${!pagePath ? "show" : "mh100vh"}  ${
+                      menuToggle ? "menu-toggle" : ""
+                  }`}
+              >
+                {!pagePath && <Nav />}
+
+                <div className={`${!pagePath ? "content-body" : ""}`} style={{paddingTop: '4rem',backgroundColor:'#f2f7f8'}}>
+                  <div
+                      className={`${!pagePath ? "container-fluid" : ""}`}
+                      style={{ minHeight: window.screen.height - 260, padding:'1px' }}
+                  >
+                    <Switch>
+                      {routes.map((data, i) => (
+                          <Route
+                              key={i}
+                              exact
+                              path={`/${data.url}`}
+                              component={data.component}
+                          />
+                      ))}
+                    </Switch>
+                  </div>
+                </div>
+                {!pagePath && <Footer />}
+              </div>
+            :
+            <ErrorMissingOrganisation />
+        }
+
+      </>
+
   );
 };
 
