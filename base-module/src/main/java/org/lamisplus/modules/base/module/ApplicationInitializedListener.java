@@ -26,6 +26,7 @@ public class ApplicationInitializedListener {
     private final ModuleRepository moduleRepository;
     private final ModuleService moduleService;
     private final SimpMessageSendingOperations messagingTemplate;
+    private final ModuleDependencyResolver moduleDependencyResolver;
 
     @EventListener
     @Async
@@ -39,9 +40,10 @@ public class ApplicationInitializedListener {
 
         modules.forEach(module -> {
             try {
-                ModuleDependencyResolver.resolveDependencies(module, resolved, unresolved);
+                moduleDependencyResolver.resolveDependencies(module, resolved, unresolved);
             } catch (CyclicDependencyException | UnsatisfiedDependencyException e) {
                 LOG.error(e.getMessage());
+                e.printStackTrace();
             }
         });
         if (!resolved.isEmpty()) {
