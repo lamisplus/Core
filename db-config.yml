@@ -3,7 +3,7 @@ spring:
         driver-class-name: org.postgresql.Driver
         username: postgres
         password: emeka
-        url: jdbc:postgresql://localhost:5432/stlukelamisplusdb
+        url: jdbc:postgresql://localhost:5432/core
         hibernate:
             ddl-auto: none
             event.merge.enty_copy_observer: allow
@@ -32,7 +32,7 @@ lamisplus:
             driver-class-name: org.postgresql.Driver
             username: postgres
             password: emeka
-            url: jdbc:postgresql://localhost:5432/stlukelamisplusdb
+            url: jdbc:postgresql://localhost:5432/core
             hikari:
                     auto-commit: true
                     data-source-properties:
