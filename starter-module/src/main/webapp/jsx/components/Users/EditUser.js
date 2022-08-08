@@ -224,7 +224,7 @@ const UserRegistration = (props) => {
                 color="primary"
                 className=" float-end ms-1"
                 startIcon={<TiArrowBack style={{color:'#fff'}} />}
-                style={{backgroundColor:'rgb(4, 196, 217)'}}
+                style={{backgroundColor:'#014d88'}}
               >
                 <span style={{ textTransform: "capitalize" }}>Back </span>
               </Button>
@@ -237,7 +237,7 @@ const UserRegistration = (props) => {
       <div className="col-xl-12 col-lg-12">
           <div className="card">
             <div className="card-header">
-              <h4 className="card-title" style={{color:'rgb(4, 196, 217)',fontWeight:'bolder'}}>{userDetail===null ? "User Information" : "Edit User Information"}</h4>
+              <h4 className="card-title" style={{color:'#014d88',fontWeight:'bolder'}}>{userDetail===null ? "User Information" : "Edit User Information"}</h4>
             </div>
             <div className="card-body">
               <div className="basic-form">
@@ -245,56 +245,56 @@ const UserRegistration = (props) => {
                   <div className="row">
                     <div className="form-group mb-3 col-md-6">
                     <FormGroup>
-                    <Label for="firstName" style={{color:'rgb(4, 196, 217)',fontWeight:'bolder'}}>First Name *</Label>
+                    <Label for="firstName" style={{color:'#014d88',fontWeight:'bolder'}}>First Name *</Label>
                     <Input
                       type="text"
                       name="firstName"
                       id="firstName"
                       value={values.firstName}
                       onChange={handleInputChange}
-                      style={{height:"40px",border:'solid 1px rgb(4, 196, 217)',borderRadius:'5px'}}
+                      style={{height:"40px",border:'solid 1px #014d88',borderRadius:'5px'}}
                       required
                     />
                   </FormGroup>
                     </div>
                     <div className="form-group mb-3 col-md-6">
                     <FormGroup>
-                    <Label for="lastName" style={{color:'rgb(4, 196, 217)',fontWeight:'bolder'}}>Last Name * </Label>
+                    <Label for="lastName" style={{color:'#014d88',fontWeight:'bolder'}}>Last Name * </Label>
                     <Input
                       type="text"
                       name="lastName"
                       id="lastName"
                       onChange={handleInputChange}
                       value={values.lastName}
-                      style={{height:"40px",border:'solid 1px rgb(4, 196, 217)',borderRadius:'5px'}}
+                      style={{height:"40px",border:'solid 1px #014d88',borderRadius:'5px'}}
                       required
                     />
                   </FormGroup>
                     </div>
                     <div className="form-group mb-3 col-md-6">
                     <FormGroup>
-                    <Label for="userName" style={{color:'rgb(4, 196, 217)',fontWeight:'bolder'}}>Username *</Label>
+                    <Label for="userName" style={{color:'#014d88',fontWeight:'bolder'}}>Username *</Label>
                     <Input
                       type="text"
                       name="userName"
                       id="userName"
                       onChange={handleInputChange}
                       value={values.userName}
-                      style={{height:"40px",border:'solid 1px rgb(4, 196, 217)',borderRadius:'5px'}}
+                      style={{height:"40px",border:'solid 1px #014d88',borderRadius:'5px'}}
                       required
                     />
                   </FormGroup>
                     </div>
                     <div className="form-group mb-3 col-md-6">
                     <FormGroup>
-                    <Label for="email" style={{color:'rgb(4, 196, 217)',fontWeight:'bolder'}}>Email *</Label>
+                    <Label for="email" style={{color:'#014d88',fontWeight:'bolder'}}>Email *</Label>
                     <Input
                       type="email"
                       name="email"
                       id="email"
                       onChange={handleInputChange}
                       value={values.email}
-                      style={{height:"40px",border:'solid 1px rgb(4, 196, 217)',borderRadius:'5px'}}
+                      style={{height:"40px",border:'solid 1px #014d88',borderRadius:'5px'}}
                       required
                     />
                   </FormGroup>
@@ -315,14 +315,14 @@ const UserRegistration = (props) => {
                     </div> */}
                     <div className="form-group mb-3 col-md-6">
                       <FormGroup>
-                      <Label for="gender" style={{color:'rgb(4, 196, 217)',fontWeight:'bolder'}}>Designation </Label>
+                      <Label for="gender" style={{color:'#014d88',fontWeight:'bolder'}}>Designation </Label>
                       <Input
                         type="select"
                         name="designation"
                         id="designation"
                         value={values.designation}
                         onChange={handleInputChange}
-                        style={{height:"40px",border:'solid 1px rgb(4, 196, 217)',borderRadius:'5px'}}
+                        style={{height:"40px",border:'solid 1px #014d88',borderRadius:'5px'}}
                         required
                       >
                        
@@ -336,28 +336,28 @@ const UserRegistration = (props) => {
                     </div>
                     <div className="form-group mb-3 col-md-6">
                       <FormGroup>
-                      <Label for="phoneNumber" style={{color:'rgb(4, 196, 217)',fontWeight:'bolder'}}>Phone Number *</Label>
+                      <Label for="phoneNumber" style={{color:'#014d88',fontWeight:'bolder'}}>Phone Number *</Label>
                       <Input
                         type="number"
                         name="phoneNumber"
                         id="phoneNumber"
                         onChange={handleInputChange}
                         value={values.phoneNumber}
-                        style={{height:"40px",border:'solid 1px rgb(4, 196, 217)',borderRadius:'5px'}}
+                        style={{height:"40px",border:'solid 1px #014d88',borderRadius:'5px'}}
                         required
                       />
                       </FormGroup>                                     
                     </div>
                     <div className="form-group mb-3 col-md-6">
                         <FormGroup>
-                        <Label for="password" style={{color:'rgb(4, 196, 217)',fontWeight:'bolder'}}>Password *</Label>
+                        <Label for="password" style={{color:'#014d88',fontWeight:'bolder'}}>Password *</Label>
                           <Input
                             type="password"
                             name="password"
                             id="password"
                             onChange={handlePassword}
                             value={values.password}
-                            style={{height:"40px",border:'solid 1px rgb(4, 196, 217)',borderRadius:'5px'}}
+                            style={{height:"40px",border:'solid 1px #014d88',borderRadius:'5px'}}
                             required
                             className={validPasswordClass}
                           />
@@ -368,14 +368,14 @@ const UserRegistration = (props) => {
                     </div>
                     <div className="form-group mb-3 col-md-6">
                       <FormGroup>
-                      <Label for="confirm" style={{color:'rgb(4, 196, 217)',fontWeight:'bolder'}}>Confirm Password *</Label>
+                      <Label for="confirm" style={{color:'#014d88',fontWeight:'bolder'}}>Confirm Password *</Label>
                       <Input
                         type="password"
                         name="confirm"
                         id="confirm"
                         onChange={handleConfirmPassword}
                         value={confirm}
-                        style={{height:"40px",border:'solid 1px rgb(4, 196, 217)',borderRadius:'5px'}}
+                        style={{height:"40px",border:'solid 1px #014d88',borderRadius:'5px'}}
                         required
                         className={matchingPasswordClass}
                       />
@@ -387,7 +387,7 @@ const UserRegistration = (props) => {
 
                   <div className="form-group mb-12 col-md-12">
                       <FormGroup>
-                        <Label for="permissions" style={{color:'rgb(4, 196, 217)',fontWeight:'bolder'}}>Role*</Label>
+                        <Label for="permissions" style={{color:'#014d88',fontWeight:'bolder'}}>Role*</Label>
                         <DualListBox
                           //canFilter
                           options={role}
@@ -408,7 +408,7 @@ const UserRegistration = (props) => {
                   className={classes.button}
                   startIcon={<SaveIcon />}
                   disabled={saving || !(validPassword && matchingPassword)}
-                  style={{backgroundColor:'rgb(4, 196, 217)'}}
+                  style={{backgroundColor:'#014d88',color:'#fff'}}
                 >
                   {!saving ? (
                     <span style={{ textTransform: "capitalize" }}>Save</span>
@@ -426,7 +426,7 @@ const UserRegistration = (props) => {
                 className={classes.button}
                 startIcon={<SaveIcon />}
                 disabled={!(validPassword && matchingPassword)}
-                style={{backgroundColor:'rgb(4, 196, 217)'}}
+                style={{backgroundColor:'#014d88',color:'#fff'}}
               >
                 {!saving ? (
                   <span style={{ textTransform: "capitalize" }}>Save</span>
@@ -436,16 +436,22 @@ const UserRegistration = (props) => {
               </MatButton>
               )
             }
-              <MatButton
-                variant="contained"
-                className={classes.button}
-                startIcon={<CancelIcon />}
-                onClick={resetForm}
-                startIcon={<CancelIcon style={{color:'#fff'}} />}
-                style={{backgroundColor:'#3f51b5'}}
-              >
-                <span style={{ textTransform: "capitalize",color:'#fff' }}>Cancel</span>
-              </MatButton>
+                  {" "}<Link
+                        to ={{
+                          pathname: "/users",
+                          state: 'users'
+                        }}
+                    >
+                          <MatButton
+                            variant="contained"
+                            className={classes.button}
+                            startIcon={<CancelIcon style={{color:'#fff'}} />}
+                            style={{backgroundColor:'#992E62'}}
+                          >
+                            <span style={{ textTransform: "capitalize",color:'#fff' }}>Cancel</span>
+                          </MatButton>
+                </Link>
+
                 </form>
               </div>
             </div>

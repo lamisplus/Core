@@ -143,13 +143,13 @@ const SubMenuList = (props) => {
             {
                 type:'button',
                 name:'Edit',
-                icon:<MdPerson size="20" color='rgb(4, 196, 217)' />,
+                icon:<MdPerson size="20" color='#014d88' />,
                 onClick:(() =>  editModuleMenu(row))
             },
             {
                 type:'button',
                 name:'Delete',
-                icon:<MdModeEdit size="20" color='rgb(4, 196, 217)' />,
+                icon:<MdModeEdit size="20" color='#014d88' />,
                 onClick:(() =>  deleteMenuModal(row.id, row.name))
             }
         ]
@@ -168,7 +168,7 @@ const SubMenuList = (props) => {
                         className=" float-end ms-2"
                         startIcon={<FaPlus size="10"/>}
                         onClick={()=>updateModuleMenuPosition(parent)}
-                        style={{backgroundColor:"rgb(4, 196, 217)"}}
+                        style={{backgroundColor:"#014d88"}}
                     >
                         <span style={{ textTransform: "capitalize" }}>New </span>
                         &nbsp;&nbsp;

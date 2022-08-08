@@ -123,13 +123,13 @@ const processDelete = (id) => {
             {
                 type:'button',
                 name:'Edit',
-                icon:<MdModeEdit size="20" color='rgb(4, 196, 217)' />,
+                icon:<MdModeEdit size="20" color='#014d88' />,
                 onClick:(() => openApplicationCodeset(row))
             },
             {
                 type:'button',
                 name:'Delete',
-                icon:<MdDelete size="20" color='rgb(4, 196, 217)' />,
+                icon:<MdDelete size="20" color='#014d88' />,
                 onClick:(() => deleteApplicationCodeset( row))
             }
         ]
@@ -146,7 +146,7 @@ const processDelete = (id) => {
                           color="primary"
                           startIcon={<FaPlus size="10"/>}
                           onClick={() => openApplicationCodeset(null)}
-                                   style={{backgroundColor:'rgb(4, 196, 217)'}}
+                                   style={{backgroundColor:'#014d88'}}
                         >
                             <span style={{textTransform: 'capitalize'}}>Codeset</span>
                         </ButtonMui>
@@ -154,7 +154,7 @@ const processDelete = (id) => {
                     </div>
                     <MaterialTable
                     icons={tableIcons}
-                        title="Find Application Codeset"
+                        title="Find Codeset"
                         columns={[
                             {
                                 title: "Codeset Group",
@@ -192,8 +192,11 @@ const processDelete = (id) => {
                         components={props.actions}
                         options={{
                             headerStyle: {
+                                backgroundColor: "#014d88",
+                                color: "#fff",
+                                fontSize:'16px',
+                                padding:'10px',
                                 zIndex:'3',
-                                color: "#000",
                             },
                             searchFieldStyle: {
                                 width : '250%',

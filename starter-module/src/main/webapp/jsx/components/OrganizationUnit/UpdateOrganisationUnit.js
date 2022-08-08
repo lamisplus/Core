@@ -132,7 +132,7 @@ const createOrgUnit = (e) => {
               <Modal show={props.modalstatus} className={props.className} size="lg">
                   <Modal.Header toggle={props.togglestatus}>
 
-                      <Modal.Title style={{color:'rgb(4, 196, 217)',fontWeight:'bolder'}}>Update Organization Unit</Modal.Title>
+                      <Modal.Title style={{color:'#014d88',fontWeight:'bolder'}}>Update Organization Unit</Modal.Title>
                       <Button
                           variant=""
                           className="btn-close"
@@ -145,7 +145,7 @@ const createOrgUnit = (e) => {
                                {orgUnitIDParam.id!= 1 ? (
                                     <Col md={6}>
                                           <FormGroup>
-                                              <Label for="" style={{color:'rgb(4, 196, 217)',fontWeight:'bolder'}}>Parent Organisation  Unit</Label>
+                                              <Label for="" style={{color:'#014d88',fontWeight:'bolder'}}>Parent Organisation  Unit</Label>
 
                                                   <Autocomplete
                                                     id="filter-orgUnit"
@@ -153,7 +153,7 @@ const createOrgUnit = (e) => {
                                                     getOptionLabel={(option) => option.title}
                                                     filterOptions={filterOptions}
                                                     size="small"
-                                                    style={{height:"40px",border:'solid 1px rgb(4, 196, 217)',borderRadius:'5px'}}
+                                                    style={{height:"40px",border:'solid 1px #014d88',borderRadius:'5px'}}
                                                     onChange={(e, i) => {
                                                         console.log(1)
                                                         setOtherFields({ ...otherfields, parentOrganisationUnitId: i.value });
@@ -168,12 +168,12 @@ const createOrgUnit = (e) => {
                                  }
                                   <Col md={6}>
                                     <FormGroup>
-                                        <Label for="" style={{color:'rgb(4, 196, 217)',fontWeight:'bolder'}}> Name</Label>
+                                        <Label for="" style={{color:'#014d88',fontWeight:'bolder'}}> Name</Label>
                                               <Input
                                                   type="text"
                                                   name="name"
                                                   id="name"
-                                                  style={{height:"40px",border:'solid 1px rgb(4, 196, 217)',borderRadius:'5px'}}
+                                                  style={{height:"40px",border:'solid 1px #014d88',borderRadius:'5px'}}
                                                   value={otherfields.name}
                                                   onChange={handleOtherFieldInputChange}
                                                   {...(errors.name && { invalid: true})}
@@ -184,12 +184,12 @@ const createOrgUnit = (e) => {
                                   </Col>
                                   <Col md={6}>
                                     <FormGroup>
-                                        <Label for="" style={{color:'rgb(4, 196, 217)',fontWeight:'bolder'}}>Description</Label>
+                                        <Label for="" style={{color:'#014d88',fontWeight:'bolder'}}>Description</Label>
                                               <Input
                                                   type="text"
                                                   name="description"
                                                   id="description"
-                                                  style={{height:"40px",border:'solid 1px rgb(4, 196, 217)',borderRadius:'5px'}}
+                                                  style={{height:"40px",border:'solid 1px #014d88',borderRadius:'5px'}}
                                                   value={otherfields.description}
                                                   onChange={handleOtherFieldInputChange}
                                                   {...(errors.description && { invalid: true})}
