@@ -21,7 +21,7 @@ import Message from './Message';
 import Progress from './Progress';
 import axios from 'axios';
 import OverlayLoader from 'react-overlay-loading/lib/OverlayLoader'
-import { ToastContainer } from "react-toastify";
+import {toast, ToastContainer} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
 import {CardBody,Col,Row, Form} from 'reactstrap'
@@ -29,11 +29,25 @@ import { Card, CardContent } from "@material-ui/core";
 import { url } from "./../../../api";
 import { createBootstrapModule, startBootstrapModule } from './../../../actions/bootstrapModule';
 import { updateBootstrapModule, fetchAllBootstrapModuleBYBatchNum } from './../../../actions/bootstrapModule';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import _ from "lodash";
+
 //import RestartingApp from "./RestartModule";
 
 const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
+        "& .MuiStepIcon-active": { color: "#014d88" },
+        "& .MuiStepIcon-completed": { color: "green" },
+        "& .Mui-disabled .MuiStepIcon-root": { color: "#992E62" },
+        "& .MuiStepLabel-label.MuiStepLabel-active":{ color: "#014d88", fontSize:'14px' },
+        "& .MuiStepLabel-label":{ color: "#992E62", fontSize:'14px' },
+        "& .MuiDropzoneArea-icon":{ color: "#992E62", fontSize:'24px',width:'150px',height:'150px' },
+        "& .MuiDropzoneArea-text":{ color: "#992E62", fontSize:'24px' }
     },
     card: {
         margin: theme.spacing(20),
@@ -138,7 +152,8 @@ const BootstrapModule = (props) => {
     const [moduleStatus, setModuleStatus] = useState()
     const [moduleBatchNum, setModuleBatchNum] = useState()
     const [restartmodal, setRestartModal] = useState(false) //Modal
-    const toggleRestartModal = () => setRestartModal(!restartmodal)
+    const toggleRestartModal = () => setRestartModal(!restartmodal);
+    const [open, setOpen] = useState(false);
 
     useEffect(() => {
         const onSuccess = (data) => {
@@ -150,8 +165,16 @@ const BootstrapModule = (props) => {
 
     }, [moduleStatus,moduleBatchNum]); //componentDidMount
 
-    const restartingModule  = (row) => {
-        setRestartModal(!restartmodal)
+    const restartingModule  = () => {
+        axios.get(`${url }restart`)
+        .then((response) => {
+            toast.error(`Successfully restarting`);
+        }).catch((error) => {
+            console.log(error);
+            toast.error(`An error occurred, restarting`);
+        });
+/*        alert('restarting');
+        //setRestartModal(!restartmodal)*/
     }
 
     const handleModuleBatchList = (moduleStatus,moduleBatchNum) => {
@@ -191,6 +214,13 @@ const BootstrapModule = (props) => {
         const onError = () => {}
         props.startBootstrapModule( onSuccess, onError);
     }
+    const handleClickOpen = () => {
+
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
 
     const handleInstallModule = (obj) => {
 
@@ -206,7 +236,8 @@ const BootstrapModule = (props) => {
             setDisableNextButtonProcess(false)
             //window.location.href = "bootstrap-modules";
             //history.push(`/bootstrap-modules`)
-            restartingModule()
+            setOpen(true);
+
         }
         const onError = () => {
             setDisabledNextButton(false)
@@ -353,13 +384,14 @@ const BootstrapModule = (props) => {
                                    }
                                    <br/>
                                     <Table striped>
-                                    <thead style={{  backgroundColor:'#000000', color:'#ffffff', height:"5px !important" }}>
+                                        <thead style={{  backgroundColor:'#014d88', color:'#ffffff', height:"5px !important" }}>
                                         <tr style={{ height:"5px !important" }}>
-                                            <th>Module Name</th>
-                                            <th>Description</th>
-                                            <th>Version</th>
-                                            <th>Status</th>
-                                            <th>Action</th>
+
+                                            <th style={{padding:'15px 10px'}}>Module Name</th>
+                                            <th style={{padding:'15px 10px'}}>Description</th>
+                                            <th style={{padding:'15px 10px'}}>Version</th>
+                                            <th style={{padding:'15px 10px'}}>Status</th>
+                                            <th style={{padding:'15px 10px'}}>Action</th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -453,23 +485,20 @@ const BootstrapModule = (props) => {
             >
                 <MatButton
                     type='submit'
-                    variant='contained'
-                    //variant="outlined"
-                    color="default"
-                    className=" float-end"
+                    variant="contained"
+                    className="me-2 float-end"
+                    style={{backgroundColor:'#992E62',color:'#fff',marginTop:'-20px',marginRight:'10px', fontSize:'18px',width:'110px'}}
                 >
                     <TiArrowBack/>{" "} Back
                 </MatButton>
             </Link>
             <br/><br/>
-            <Card className={classes.cardBottom}>
+            <Card className={classes.cardBottom} style={{marginTop:'-10px'}}>
                 <CardContent>
                     <br/>
                     <Row>
                         <Col>
-                            <h3>Update Module
-
-                            </h3>
+                            <h3 style={{color:'#014d88', fontWeight:'bold'}}>Update Module</h3>
                             <Card className="mb-12">
                                 <CardBody>
 
@@ -492,7 +521,7 @@ const BootstrapModule = (props) => {
                                                     <Button variant="contained"
                                                             onClick={handleReset}
                                                             color="secondary">
-                                                        Reset/Canacel
+                                                        Reset/Cancel
                                                     </Button>
 
                                                 </div>
@@ -507,7 +536,9 @@ const BootstrapModule = (props) => {
                                                             disabled={activeStep === 0}
                                                             onClick={handleBack}
                                                             className={classes.backButton}
+                                                            hidden={!uploadButtonhidden}
                                                             variant="contained"
+                                                            style={{backgroundColor:'#992E62',color:'#fff'}}
                                                         >
                                                             Previous
                                                         </Button>
@@ -518,6 +549,7 @@ const BootstrapModule = (props) => {
                                                             onClick={handleUploadFile}
                                                             hidden={uploadButtonhidden}
                                                             disabled={disabledUploadButton}
+                                                            style={{backgroundColor:'#014d88',color:'#fff'}}
                                                         >
                                                             Upload Module
                                                         </Button>
@@ -533,7 +565,40 @@ const BootstrapModule = (props) => {
                     </Row>
                 </CardContent>
             </Card>
+            <Dialog open={open} onClose={handleClose}>
+                <DialogTitle>Restart LAMISPlus</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        Would you like to restart LAMISPlus.
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={restartingModule}
+                        style={{backgroundColor:'#014d88',color:'#fff'}}
+                    >
+                        Restart
+                    </Button>
 
+                    <Link
+                        to ={{
+                            pathname: "/bootstrap-modules",
+                            activetab: 1
+                        }}
+                    >
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            style={{backgroundColor:'#992E62',color:'#fff',marginLeft:"20px"}}
+                        >
+                            Close
+                        </Button>
+                    </Link>
+
+                </DialogActions>
+            </Dialog>
 
         </>
     );

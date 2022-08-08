@@ -686,3 +686,13 @@ button.react-calendar__tile.react-calendar__tile--active.react-calendar__tile--r
 	height: auto;
 	display: contents;
 }
+[data-reach-menu], [data-reach-menu-popover] {
+  display: block;
+  position: absolute;
+  z-index: 1000;
+}
+
+
+.MuiStepIcon-root.MuiStepIcon-active {
+  color: #992E62;
+}

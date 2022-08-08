@@ -37,6 +37,14 @@ import { installBootstrapModule, fetchAllBootstrapModuleBYBatchNum } from './../
 const useStyles = makeStyles((theme) => ({
     root: {
       width: '100%',
+        "& .MuiStepIcon-active": { color: "#014d88" },
+        "& .MuiStepIcon-completed": { color: "green" },
+        "& .Mui-disabled .MuiStepIcon-root": { color: "#992E62" },
+        "& .MuiStepLabel-label.MuiStepLabel-active":{ color: "#014d88", fontSize:'14px' },
+        "& .MuiStepLabel-label":{ color: "#992E62", fontSize:'14px' },
+        "& .MuiDropzoneArea-icon":{ color: "#992E62", fontSize:'24px',width:'150px',height:'150px' },
+        "& .MuiDropzoneArea-text":{ color: "#992E62", fontSize:'24px' }
+
     },
     card: {
       margin: theme.spacing(20),
@@ -335,20 +343,20 @@ const BootstrapModule = (props) => {
                                    }
                                    <br/>
                                     <Table striped size="sm">
-                                        <thead style={{  backgroundColor:'#000000', color:'#ffffff', height:"5px !important" }}>
+                                        <thead style={{  backgroundColor:'#014d88', color:'#ffffff', height:"5px !important" }}>
                                         <tr style={{ height:"5px !important" }}>
                                         
-                                        <th>Module Name</th>
-                                        <th>Description</th>
-                                        <th>Version</th>
-                                        <th>Status</th>
-                                        <th>Action</th>
+                                        <th style={{padding:'15px 10px'}}>Module Name</th>
+                                        <th style={{padding:'15px 10px'}}>Description</th>
+                                        <th style={{padding:'15px 10px'}}>Version</th>
+                                        <th style={{padding:'15px 10px'}}>Status</th>
+                                        <th style={{padding:'15px 10px'}}>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                        
                                         {[uploadResponse].map((row) => (
-                                        <tr key={row.id}>
+                                        <tr key={row.id} >
                                             <td>{row.name===""?" ":row.name}</td>
                                             <td>{row.description===""?" ":row.description}</td>
 
@@ -436,24 +444,23 @@ const BootstrapModule = (props) => {
                 <MatButton
                       type='submit'
                       variant="contained"
-                      color="primary"
-                      
-                      className="me-2 float-end"                        
+                      className="me-2 float-end"
+                      style={{backgroundColor:'#992E62',color:'#fff',marginTop:'-20px',marginRight:'10px', fontSize:'18px',width:'110px'}}
                   >
                     <TiArrowBack/>{" "} Back
                 </MatButton>
                 </Link>
                 <br/><br/>
-         <Card className={classes.cardBottom}>
+         <Card className={classes.cardBottom} style={{marginTop:'-10px'}}>
           <CardContent>
               <br/>
             <Row>
             <Col>
-              <h3>New Module</h3>                
-                  <div className={classes.root}>
-                    <Stepper activeStep={activeStep} alternativeLabel>
+              <h3 style={{color:'#014d88', fontWeight:'bold'}}>New Module</h3>
+                  <div className={classes.root} >
+                    <Stepper className={classes.root} activeStep={activeStep} alternativeLabel >
                       {steps.map((label) => (
-                        <Step key={label}>
+                        <Step key={label} style={{color:'red'}}>
                           <StepLabel>{label}</StepLabel>
                         </Step>
                       ))}
@@ -462,38 +469,40 @@ const BootstrapModule = (props) => {
                       {activeStep === steps.length ? (
                         <div>
                           <Alert color="info">
-                          <Typography className={classes.instructions}>All steps completed</Typography>
+                          <Typography className={classes.instructions} >All steps completed</Typography>
                           </Alert>
                           
                           <Button variant="contained" 
                             onClick={handleReset} 
                             color="secondary">
-                                Reset/Canacel
+                                Reset/Cancel
                             </Button>
                           
                         </div>
                       ) : (
                         <div>
-                          <Typography className={classes.instructions}>
+                          <Typography className={classes.instructions} >
                               {getStepContent(activeStep)}
-                              
+
                           </Typography>
                           <div>
                             <Button
                               disabled={activeStep === 0}
                               onClick={handleBack}//handleBack
                               className={classes.backButton}
+                              hidden={!uploadButtonhidden}
                               variant="contained"
+                              style={{backgroundColor:'#992E62',color:'#fff'}}
                             >
                               Previous
                             </Button>
                             
                             <Button 
-                              variant="contained" 
-                              color="primary" 
+                              variant="contained"
                               onClick={handleUploadFile}
                               hidden={uploadButtonhidden}
                               disabled={disabledUploadButton}
+                              style={{backgroundColor:'#014d88',color:'#fff'}}
                               >
                               Upload Module
                             </Button>
