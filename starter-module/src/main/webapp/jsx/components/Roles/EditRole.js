@@ -184,7 +184,7 @@ const AddRole = (props) => {
             color="primary"
             className=" float-end ms-2"
             startIcon={<TiArrowBack />}
-            style={{backgroundColor:'rgb(4, 196, 217)'}}
+            style={{backgroundColor:'#014d88'}}
           >
             <span style={{ textTransform: "capitalize" }} >Back </span>
           </Button>
@@ -206,21 +206,21 @@ const AddRole = (props) => {
               <Row form>
                 <Col md={12}>
                   <FormGroup>
-                    <Label for="name" style={{color:'rgb(4, 196, 217)',fontWeight:'bolder'}}>Name *</Label>
+                    <Label for="name" style={{color:'#014d88',fontWeight:'bolder'}}>Name *</Label>
                     <Input
                       type="text"
                       name="name"
                       id="name"
                       value={values.name}
                       onChange={handleInputChange}
-                      style={{height:"40px",border:'solid 1px rgb(4, 196, 217)',borderRadius:'5px'}}
+                      style={{height:"40px",border:'solid 1px #014d88',borderRadius:'5px'}}
                       required
                     />
                   </FormGroup>
                 </Col>
                 <Col md={12}>
                   <FormGroup>
-                    <Label for="permissions" style={{color:'rgb(4, 196, 217)',fontWeight:'bolder'}}>Permissions</Label>
+                    <Label for="permissions" style={{color:'#014d88',fontWeight:'bolder'}}>Permissions</Label>
                     <DualListBox
                         canFilter
                       options={permissions}
@@ -232,7 +232,7 @@ const AddRole = (props) => {
                 <br/>
                 <Col md={12}>
                   <FormGroup>
-                    <Label for="permissions" style={{color:'rgb(4, 196, 217)',fontWeight:'bolder'}}><b>Menu Items</b></Label>
+                    <Label for="permissions" style={{color:'#014d88',fontWeight:'bolder'}}><b>Menu Items</b></Label>
                     <DualListBox
                       canFilter
                       options={menList}
@@ -250,7 +250,7 @@ const AddRole = (props) => {
                 color="primary"
                 className={classes.button}
                 startIcon={<SaveIcon />}
-                style={{backgroundColor:'rgb(4, 196, 217)'}}
+                style={{backgroundColor:'#014d88'}}
                 disabled={saving}
               >
                 {!saving ? (
@@ -264,7 +264,7 @@ const AddRole = (props) => {
                 variant="contained"
                 className={classes.button}
                 startIcon={<CancelIcon style={{color:'#fff'}} />}
-                style={{backgroundColor:'#3f51b5'}}
+                style={{backgroundColor:'rgb(153, 46, 98)'}}
                 onClick={resetForm}
               >
                 <span style={{ textTransform: "capitalize", color:'#fff' }}>Cancel</span>

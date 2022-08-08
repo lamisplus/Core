@@ -144,13 +144,13 @@ const useStyles = makeStyles({
               {
                   type:'button',
                   name:'Edit',
-                  icon:<MdPerson size="20" color='rgb(4, 196, 217)' />,
+                  icon:<MdPerson size="20" color='#014d88' />,
                   onClick:(() => updateOrgUnit(row))
               },
               {
                   type:'button',
                   name:'Delete',
-                  icon:<MdModeEdit size="20" color='rgb(4, 196, 217)' />,
+                  icon:<MdModeEdit size="20" color='#014d88' />,
                   onClick:(() => deleteModule( row))
               }
           ]
@@ -163,13 +163,13 @@ return (
 
                             <Card body>
                             <Breadcrumbs aria-label="breadcrumb">
-                              <Link color="inherit" to={{pathname: "/organisation-unit"}} style={{color:'rgb(4, 196, 217)', fontWeight:'bolder'}} >
+                              <Link color="inherit" to={{pathname: "/organisation-unit"}} style={{color:'#014d88', fontWeight:'bolder'}} >
                                   Organisational Unit Level
                               </Link>
-                              <Link color="inherit" style={{color:'rgb(4, 196, 217)', fontWeight:'bolder'}}  >
+                              <Link color="inherit" style={{color:'#014d88', fontWeight:'bolder'}}  >
                                  Organisational Unit 
                               </Link>
-                              <Typography color="textPrimary" style={{color:'#3f51b5', fontWeight:'bolder'}} >{parentOrganisationUnitId.name} </Typography>
+                              <Typography color="textPrimary" style={{color:'#992E62', fontWeight:'bolder'}} >{parentOrganisationUnitId.name} </Typography>
                              </Breadcrumbs>
                               <br/>
                                   <div className={"d-flex justify-content-end pb-2"}>
@@ -188,7 +188,7 @@ return (
                                               color="primary"
                                               startIcon={<FaPlus />}
                                               onClick={() => createParentOrgUnit()}
-                                              style={{backgroundColor:'rgb(4, 196, 217)',marginLeft:'5px'}}
+                                              style={{backgroundColor:'#014d88',marginLeft:'5px'}}
                                       >
                                           <span style={{textTransform: 'capitalize'}}>New Org. Unit</span>
                                       </Button>

@@ -13,7 +13,6 @@ import java.util.stream.Collectors;
 
 @Service
 public class UserMapper {
-
     public List<UserDTO> usersToUserDTOs(List<User> users) {
         return users.stream().filter(Objects::nonNull).map(this::userToUserDTO).collect(Collectors.toList());
     }

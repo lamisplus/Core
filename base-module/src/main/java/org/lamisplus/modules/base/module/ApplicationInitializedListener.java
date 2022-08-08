@@ -8,8 +8,6 @@ import org.lamisplus.modules.base.util.CyclicDependencyException;
 import org.lamisplus.modules.base.util.ModuleDependencyResolver;
 import org.lamisplus.modules.base.util.UnsatisfiedDependencyException;
 import org.springframework.boot.web.servlet.context.ServletWebServerInitializedEvent;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.event.EventListener;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.scheduling.annotation.Async;
@@ -39,11 +37,13 @@ public class ApplicationInitializedListener {
         List<Module> resolved = new ArrayList<>();
         List<Module> unresolved = new ArrayList<>();
         List<Module> started = new ArrayList<>();
+
         modules.forEach(module -> {
             try {
                 moduleDependencyResolver.resolveDependencies(module, resolved, unresolved);
             } catch (CyclicDependencyException | UnsatisfiedDependencyException e) {
                 LOG.error(e.getMessage());
+                e.printStackTrace();
             }
         });
         if (!resolved.isEmpty()) {

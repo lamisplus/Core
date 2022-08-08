@@ -124,7 +124,7 @@ const fetchRole =()=>{
       {
         type:'link',
         name:'Edit',
-        icon:<MdPerson size="20" color='rgb(4, 196, 217)' />,
+        icon:<MdPerson size="20" color='#014d88' />,
         to:{
           pathname: "/edit-role",
           state: { row: row }
@@ -133,7 +133,7 @@ const fetchRole =()=>{
       {
         type:'button',
         name:'Delete',
-        icon:<MdModeEdit size="20" color='rgb(4, 196, 217)' />,
+        icon:<MdModeEdit size="20" color='#014d88' />,
         onClick:(() =>  deleteRoleModal(row.id))
       }
     ]
@@ -175,8 +175,9 @@ const fetchRole =()=>{
         }))}
         options={{
           headerStyle: {
-            
-            color: "#000",
+            backgroundColor: "#014d88",
+            color: "#fff",
+            fontSize:'14px',
           },
           
           searchFieldStyle: {

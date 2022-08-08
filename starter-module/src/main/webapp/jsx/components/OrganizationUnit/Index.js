@@ -141,13 +141,13 @@ const useStyles = makeStyles({
               {
                   type:'button',
                   name:'Edit',
-                  icon:<MdPerson size="20" color='rgb(4, 196, 217)' />,
+                  icon:<MdPerson size="20" color='#014d88' />,
                   onClick:(() => updateOrgUnitLevel(row))
               },
               {
                   type:'button',
                   name:'Delete',
-                  icon:<MdModeEdit size="20" color='rgb(4, 196, 217)' />,
+                  icon:<MdModeEdit size="20" color='#014d88' />,
                   onClick:(() => deleteModule( row))
               }
           ]
@@ -165,7 +165,7 @@ return (
                           color="primary"
                           startIcon={<FaPlus size="10"/>}
                           onClick={() => createOrgUnit()}
-                           style={{backgroundColor:'rgb(4, 196, 217)'}}
+                           style={{backgroundColor:'#014d88'}}
                   >
 
                       <span style={{textTransform: 'capitalize'}}>New Org. Unit Level</span>
@@ -205,11 +205,12 @@ return (
                         </div>,
                     }))}
                   options={{
-                    headerStyle: {
-                      //backgroundColor: "#9F9FA5",
-                      color: "#000",
-                      margin: "auto",
-                        zIndex:'3'
+                      headerStyle: {
+                          backgroundColor: "#014d88",
+                          color: "#fff",
+                          fontSize:'16px',
+                          padding:'10px',
+                          zIndex:'3'
                       },
                       searchFieldStyle: {
                         width : '150%',

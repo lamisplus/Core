@@ -9,6 +9,7 @@ import org.lamisplus.modules.base.security.SecurityUtils;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 
 @Data
@@ -101,4 +102,7 @@ public class OrganisationUnit extends JsonBEntity implements Serializable {
         this.id = id;
         this.name = name;
     }
+
+    @OneToMany(mappedBy = "organisationUnitByOrganisationUnitId")
+    private List<OrganisationUnitIdentifier> organisationUnitIdentifiers;
 }

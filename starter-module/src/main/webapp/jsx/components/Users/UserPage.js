@@ -36,7 +36,7 @@ const UserPage = (props) => {
                 color="primary"
                 className="me-2 float-end"
                 startIcon={<FaUserPlus style={{color:'#fff'}} />}
-                style={{backgroundColor:'rgb(4, 196, 217)'}}
+                style={{backgroundColor:'#014d88'}}
               >
                 <span style={{ textTransform: "capitalize", color:'#fff', fontWeight:'bolder' }}>New User</span>
               </Button>

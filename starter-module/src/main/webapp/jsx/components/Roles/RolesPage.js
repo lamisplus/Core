@@ -29,27 +29,13 @@ const RolePage = (props) => {
 
       <Card className={classes.cardBottom}>
         <CardContent>
-         
-{/*          <Link to ={{
-            pathname: "/users",
-            state: 'users'
-          }}>
-          <Button
-            variant="contained"
-            color="primary"
-            className=" float-end ms-2"
-            startIcon={<TiArrowBack size="10"/>}
-          >
-            <span style={{ textTransform: "capitalize" }}>Back </span>
-          </Button>
-        </Link>*/}
             <Link to="/add-role">
               <Button
                 variant="contained"
                 color="primary"
                 className=" float-end ms-2"
                 startIcon={<FaPlus size="10" style={{color:'#fff'}}/>}
-                style={{backgroundColor:'rgb(4, 196, 217)'}}
+                style={{backgroundColor:'#014d88'}}
               >
                 <span style={{ textTransform: "capitalize" }}>New Role </span>
               </Button>
