@@ -2,24 +2,39 @@ package org.lamisplus.modules.base.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.audit4j.core.util.Log;
 import org.lamisplus.modules.base.controller.apierror.EntityNotFoundException;
 import org.lamisplus.modules.base.controller.apierror.IllegalTypeException;
 import org.lamisplus.modules.base.controller.apierror.RecordExistException;
 import org.lamisplus.modules.base.domain.dto.OrganisationUnitDTO;
+import org.lamisplus.modules.base.domain.dto.OrganisationUnitExtraction;
 import org.lamisplus.modules.base.domain.entities.OrganisationUnit;
 import org.lamisplus.modules.base.domain.entities.OrganisationUnitHierarchy;
+import org.lamisplus.modules.base.domain.entities.OrganisationUnitIdentifier;
 import org.lamisplus.modules.base.domain.entities.OrganisationUnitLevel;
 import org.lamisplus.modules.base.domain.repositories.OrganisationUnitHierarchyRepository;
+import org.lamisplus.modules.base.domain.repositories.OrganisationUnitIdentifierRepository;
 import org.lamisplus.modules.base.domain.repositories.OrganisationUnitRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
+import static java.sql.Types.BOOLEAN;
+import static java.sql.Types.NUMERIC;
+import static org.apache.tomcat.util.bcel.classfile.ElementValue.STRING;
 import static org.lamisplus.modules.base.util.Constants.ArchiveStatus.ARCHIVED;
 import static org.lamisplus.modules.base.util.Constants.ArchiveStatus.UN_ARCHIVED;
 
@@ -30,6 +45,7 @@ import static org.lamisplus.modules.base.util.Constants.ArchiveStatus.UN_ARCHIVE
 public class OrganisationUnitService {
     private static final Long FIRST_ORG_LEVEL = 1L;
     private final OrganisationUnitRepository organisationUnitRepository;
+    private final OrganisationUnitIdentifierRepository organisationUnitIdentifierRepository;
     private final OrganisationUnitHierarchyRepository organisationUnitHierarchyRepository;
 
     public List<OrganisationUnit> save(
@@ -200,4 +216,151 @@ public class OrganisationUnitService {
         organisationUnitDTO.setDetails (organisationUnit.getDetails ());
         return organisationUnitDTO;
     }
+
+    /*public List getAll(){
+        List orgList = new ArrayList();
+        try {
+            orgList = this.readDataFromExcelFile("C:\\Users\\Dell\\Documents\\PALLADIUM WORKS\\PALLADIUM WORKS\\FACILITIES\\FACILITY\\datim_facility.xlsx");
+            organisationUnitIdentifierRepository.saveAll(orgList);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return orgList;
+    }
+
+    public List<OrganisationUnitIdentifier> readDataFromExcelFile(String excelFilePath) throws IOException {
+
+        List<OrganisationUnitIdentifier> organisationUnitIdentifiers = new ArrayList<>();
+        List<OrganisationUnitExtraction> organisationUnitExtractions = new ArrayList<>();
+        List<OrganisationUnitDTO> organisationUnitDTOS = new ArrayList<>();
+
+
+        FileInputStream inputStream = new FileInputStream(excelFilePath);
+        try {
+
+            XSSFWorkbook workbook = new XSSFWorkbook(inputStream);
+
+            Sheet firstSheet = workbook.getSheetAt(0);
+
+            Iterator<Row> iterator = firstSheet.iterator();
+            while (iterator.hasNext()) {
+                Row nextRow = iterator.next();
+                Iterator<Cell> cellIterator = nextRow.cellIterator();
+                OrganisationUnitExtraction organisationUnitExtraction = new OrganisationUnitExtraction();
+                OrganisationUnitDTO organisationUnitDTO = new OrganisationUnitDTO();
+                OrganisationUnitIdentifier organisationUnitIdentifier = new OrganisationUnitIdentifier();
+
+                while (cellIterator.hasNext()) {
+                    Cell nextCell = cellIterator.next();
+                    int columnIndex = nextCell.getColumnIndex();
+                    String parentOrganisationUnitName = "";
+                    Long id;
+                    String name = "";
+                    switch (columnIndex) {
+                        case 0:
+                            //State
+                            String parentParentOrganisationUnitName = String.valueOf(nextCell).trim();
+                            organisationUnitExtraction.setParentParentOrganisationUnitName(parentParentOrganisationUnitName);
+                            OrganisationUnit state = organisationUnitRepository.findLikeOrganisationUnit("%"+organisationUnitExtraction.getParentParentOrganisationUnitName()+"%",
+                                            1,2, 0)
+                                    .orElseThrow(()-> new EntityNotFoundException(OrganisationUnit.class, "name", organisationUnitExtraction.getParentParentOrganisationUnitName()));
+                            //LOG.info("state is {}", state);
+                            organisationUnitExtraction.setParentParentOrganisationUnitId(state.getId());
+                            break;
+                        case 1:
+                            //LGA
+                            parentOrganisationUnitName = String.valueOf(nextCell).trim();
+                            //LOG.info("lga name is {}", parentOrganisationUnitName);
+                            organisationUnitExtraction.setParentOrganisationUnitName(parentOrganisationUnitName);
+                            Optional<OrganisationUnit> lga = organisationUnitRepository.findLikeOrganisationUnit("%"+organisationUnitExtraction.getParentOrganisationUnitName()+"%",
+                                            organisationUnitExtraction.getParentParentOrganisationUnitId(),3, 0);
+                            if(lga.isPresent()) {
+                                //LOG.info("lga is {}", lga.get());
+                                organisationUnitExtraction.setParentOrganisationUnitId(lga.get().getId());
+                            }
+                            break;
+                        case 2:
+                            //facility
+                            organisationUnitExtraction.setOrganisationUnitName(String.valueOf(nextCell).trim());
+                            OrganisationUnit facility;
+                            if(organisationUnitExtraction.getParentOrganisationUnitId() == null){
+                                facility= organisationUnitRepository.findLikeOrganisationUnitInState("%"+organisationUnitExtraction.getOrganisationUnitName()+"%",4, 0)
+                                        .orElseThrow(()-> new EntityNotFoundException(OrganisationUnit.class, "name", organisationUnitExtraction.getOrganisationUnitName()));
+                            } else {
+                                facility = organisationUnitRepository.findLikeOrganisationUnit("%"+organisationUnitExtraction.getOrganisationUnitName()+"%",
+                                                organisationUnitExtraction.getParentOrganisationUnitId(),4, 0)
+                                        .orElseThrow(()-> new EntityNotFoundException(OrganisationUnit.class, "name", organisationUnitExtraction.getOrganisationUnitName()));
+                            }
+                            //LOG.info("facility is {}", facility);
+                            organisationUnitIdentifier.setOrganisationUnitId(facility.getId());
+                            //System.out.println(getCellValue(nextCell));
+                            break;
+
+                        case 3:
+                            //Datim
+                            String datimId = String.valueOf(nextCell).trim();
+                            organisationUnitExtraction.setDatimId(datimId);
+
+                            organisationUnitDTO.setName(organisationUnitExtraction.getOrganisationUnitName());
+                            organisationUnitDTO.setDescription(organisationUnitExtraction.getDescription());
+                            organisationUnitDTO.setOrganisationUnitLevelId(4L);
+                            organisationUnitDTO.setParentOrganisationUnitId(organisationUnitExtraction.getParentOrganisationUnitId());
+                            organisationUnitIdentifier.setName("DATIM_ID");
+                            organisationUnitIdentifier.setCode(datimId);
+                            LOG.info("organisationUnitIdentifier is {}", organisationUnitIdentifier);
+                            //save(organisationUnitDTO);
+                    }
+                }
+
+                //organisationUnitDTOS.add(organisationUnitDTO);
+                //organisationUnitExtractions.add(organisationUnitExtraction);
+                organisationUnitIdentifiers.add(organisationUnitIdentifier);
+            }
+            inputStream.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            inputStream.close();
+        }
+        return organisationUnitIdentifiers;
+    }
+
+    private Object getCellValue(Cell cell) {
+        switch (cell.getCellType()) {
+            case STRING:
+                return cell.getStringCellValue();
+            case BOOLEAN:
+                return cell.getBooleanCellValue();
+            case NUMERIC:
+                return cell.getNumericCellValue();
+        }
+        return null;
+    }
+
+    public OrganisationUnit save(OrganisationUnitDTO organisationUnitDTO) {
+        Optional<OrganisationUnit> organizationOptional = organisationUnitRepository.findByNameAndParentOrganisationUnitIdAndArchived(organisationUnitDTO.getName(), organisationUnitDTO.getId(), 0);
+        if(organizationOptional.isPresent())throw new RecordExistException(OrganisationUnit.class, "Name", organisationUnitDTO.getName() +"");
+        final OrganisationUnit organisationUnit = this.toOrganisationUnit(organisationUnitDTO);
+
+        Log.info("OrganisationUnitDTO {}", organisationUnitDTO);
+        OrganisationUnit organisationUnit1 = organisationUnitRepository.save(organisationUnit);
+        Long level = organisationUnit1.getOrganisationUnitLevelId();
+        List<OrganisationUnitHierarchy> organisationUnitHierarchies = new ArrayList<>();
+        OrganisationUnit returnOrgUnit = organisationUnit1;
+
+        Long parent_org_unit_id = 1L;
+        while(parent_org_unit_id > 0){
+            parent_org_unit_id = organisationUnit1.getParentOrganisationUnitId();
+            organisationUnitHierarchies.add(new OrganisationUnitHierarchy(null, returnOrgUnit.getId(), organisationUnit1.getParentOrganisationUnitId(),
+                    level, null, null, null));
+
+            Optional<OrganisationUnit> organisationUnitOptional = organisationUnitRepository.findById(organisationUnit1.getParentOrganisationUnitId());
+            if(organisationUnitOptional.isPresent()){
+                organisationUnit1 = organisationUnitOptional.get();
+            }
+            --parent_org_unit_id;
+        }
+        organisationUnitHierarchyRepository.saveAll(organisationUnitHierarchies);
+        return returnOrgUnit;
+    }*/
 }

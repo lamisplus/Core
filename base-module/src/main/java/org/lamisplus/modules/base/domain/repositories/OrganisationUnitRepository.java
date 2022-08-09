@@ -43,4 +43,13 @@ public interface OrganisationUnitRepository extends JpaRepository<OrganisationUn
     @Query(value = "SELECT * FROM base_organisation_unit ou WHERE ou.organisation_unit_level_id = ?1 " +
             "AND ou.archived = ?2", nativeQuery = true)
     List<OrganisationUnit> findByOrganisationsByLevelAndArchived(Long organisationUnitLevelId, int archived);
+
+    @Query(value = "SELECT * FROM base_organisation_unit ou WHERE ou.name ilike ?1 " +
+            "AND parent_organisation_unit_id=?2 AND organisation_unit_level_id=?3 AND ou.archived = ?4", nativeQuery = true)
+    Optional<OrganisationUnit> findLikeOrganisationUnit(String name, long parentOrganisationUnitId, Integer level, int archived);
+
+    @Query(value = "SELECT * FROM base_organisation_unit ou WHERE ou.name ilike ?1 " +
+            "AND organisation_unit_level_id=?2 AND ou.archived = ?3", nativeQuery = true)
+    Optional<OrganisationUnit> findLikeOrganisationUnitInState(String name, Integer level, int archived);
+
 }
