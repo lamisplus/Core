@@ -33,6 +33,7 @@ import moment from "moment";
 import PageTitle from "./../../layouts/PageTitle";
 //import Select from "react-select";
 import DualListBox from "react-dual-listbox";
+import _ from "lodash";
 
 Moment.locale("en");
 momentLocalizer();
@@ -93,6 +94,26 @@ const UserRegistration = (props) => {
   const [saving, setSaving] = useState(false);
   const [selectedOption, setSelectedOption] = useState();
   const [designation, setDesignation] = useState([]);
+  const [allOrganisations, setAllorganisations]=useState([]);
+  const [organisations,setOrganisations] = useState([]);
+  const [selectedOrganisations,setSelectedOrganisations] = useState([]);
+
+  const fetchOrganisation=()=>{
+    axios
+        .get(`${baseUrl}organisation-unit-levels/v2/4/organisation-units`)
+        .then((response) => {
+          setAllorganisations(response.data);
+          setOrganisations(
+              Object.entries(response.data).map(([key, value]) => ({
+                label: value.name,
+                value: value.name,
+              }))
+          );
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+  }
 
   useEffect(() => {
     async function getCharacters() {
@@ -112,6 +133,7 @@ const UserRegistration = (props) => {
         });
     }
     getCharacters();
+    fetchOrganisation();
   }, []);
 
   /* Get list of Role parameter from the endpoint */
@@ -163,40 +185,57 @@ const UserRegistration = (props) => {
     // check if password and confirm password match
     handleConfirmPassword(e, false);
   };
+  const updateUserOrganisations=(userId)=>{
+    if(selectedOrganisations.length >0){
+      //Add Organisations
+      let facilityDetails = [];
+      selectedOrganisations.map((organisation) =>{
+        var orgDetails = _.find(allOrganisations, {name:organisation});
+        facilityDetails.push({
+          "applicationUserId": userId,
+          "organisationUnitId": orgDetails.id
+        })
 
-  const handleSubmit = (e) => {
+      });
+      axios.post(`${baseUrl}application_user_organisation_unit`, facilityDetails)
+          .then(response => {
+            toast.success(`successfully added`);
+          }) .catch((error) => {
+        toast.error(`An error occurred, adding facility`);
+      });
+      return true;
+    }
+    return false;
+  }
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const dateOfBirth = moment(values.dateOfBirth).format("YYYY-MM-DD");
     values["dateOfBirth"] = dateOfBirth;
-    //values["roles"] = [values["role"]]
-    // let roleArr = []
-  
-    // selectedOption.forEach(function (value, index, array) {
-    //   roleArr.push(value['label'])
-    // })
     values["roles"] = selectedOption
-    //console.log(selectedOption)
-    //console.log(values)
-    //return;
-    setSaving(true);
-    const onSuccess = () => {
-      setSaving(false);
-      //resetForm();
-      props.history.push("/users")
+    setSaving();
 
-    };
-    const onError = () => {
-      setSaving(false);
-    
-    };
-      props.register(values, onSuccess, onError)
-   
+    axios.post(`${baseUrl}users`, values)
+        .then(response => {
+          setSaving(false);
+          toast.success(`successfully added`);
+          console.log(response.data)
+          //props.history.push("/users")
+        }) .catch((error) => {
+          setSaving(false);
+          toast.error(`An error occurred, adding facility`);
+    });
+    //updateUserOrganisations();
+
+    alert('user created');
   };
 
   const onPermissionSelect = (selectedValues) => {
     setSelectedOption(selectedValues);
   };
- 
+  const onOrganisationSelect = (selectedValues) => {
+    setSelectedOrganisations(selectedValues);
+  };
 
   return (
     <>
@@ -312,40 +351,10 @@ const UserRegistration = (props) => {
                       ))}
                     </Input>
                     </FormGroup> 
-                    {/* <Select
-                          onChange={setSelectedOption}
-                          value={selectedOption}
-                          options={role}
-                          isMulti="true"
-                          noOptionsMessage="true"
-                      /> 
-                    
-                    */}
+
 
                   </div>
-                   
-                    {/* <div className="form-group mb-3 col-md-6">
-                    <FormGroup>
-                    <Label for="gender">Gender </Label>
-                    <Input
-                      type="select"
-                      name="gender"
-                      id="gender"
-                      value={values.gender}
-                      onChange={handleInputChange}
-                      //required
-                    >
-                      <option value=""> </option>
-                      
-                      {gender.map(({ label, value }) => (
-                        <option key={value} value={value}>
-                          {label}
-                        </option>
-                      ))}
-                    </Input>
-                  </FormGroup>
-                   
-                    </div> */}
+
                      <div className="form-group mb-3 col-md-6">
                     <FormGroup>
                     <Label for="phoneNumber" style={{color:'#014d88',fontWeight:'bolder'}}>Phone Number *</Label>
@@ -402,6 +411,18 @@ const UserRegistration = (props) => {
                     </div>
                     <div className="form-group mb-12 col-md-12">
                       <FormGroup>
+                        <Label for="permissions" style={{color:'#014d88',fontWeight:'bolder'}}>Facility*</Label>
+                        <DualListBox
+                            //canFilter
+                            options={organisations}
+                            onChange={onOrganisationSelect}
+                            selected={selectedOrganisations}
+                        />
+                      </FormGroup>
+                    </div>
+
+                    <div className="form-group mb-12 col-md-12">
+                      <FormGroup>
                         <Label for="permissions" style={{color:'#014d88',fontWeight:'bolder'}}>Role*</Label>
                         <DualListBox
                           //canFilter
@@ -413,6 +434,7 @@ const UserRegistration = (props) => {
                       </FormGroup>
                     </div>
                   </div>
+
                 
                   {saving ? <Spinner /> : ""}
               <br />

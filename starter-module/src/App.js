@@ -1,14 +1,15 @@
-import { lazy, Suspense, useEffect } from 'react';
+import {lazy, Suspense, useEffect, useState} from 'react';
 
 /// Components
 import Index from "./main/webapp/jsx";
 import { connect, useDispatch } from 'react-redux';
-import {  Route, Switch, withRouter } from 'react-router-dom';
+import {  Route, Switch, withRouter,Redirect } from 'react-router-dom';
 // action
 /// Style
 import "./main/webapp/vendor/bootstrap-select/dist/css/bootstrap-select.min.css";
 import "./main/webapp/css/style.css";
 import { BehaviorSubject } from 'rxjs';
+
 
 const currentUserSubject = new BehaviorSubject(JSON.parse(localStorage.getItem('currentUser')));
 //console.log(currentUserSubject)
@@ -20,24 +21,24 @@ const Login = lazy(() => {
 });
 
 function App (props) {
-   
     const dispatch = useDispatch();
     // useEffect(() => {
     //    // checkAutoLogin(dispatch, props.history);
     //    if (currentUserSubject._value!==null) {
     //         window.location.href = "/login";
     //    }
-    // }, [currentUserSubject._value]); 
-    
+    // }, [currentUserSubject._value]);
+
+
     let routes = (  
         <Switch>
             <Route path='/login' exact component={Login} />
-            <Route path='/' exact component={Login} />
+            <Redirect from='/*' to="/login" />
         </Switch>
     );
     if (currentUserSubject._value!==null) {
-		return (
-			<>
+        return (
+            <>
                 <Suspense fallback={
                     <div id="preloader">
                         <div className="sk-three-bounce">
@@ -45,8 +46,8 @@ function App (props) {
                             <div className="sk-child sk-bounce2"></div>
                             <div className="sk-child sk-bounce3"></div>
                         </div>
-                    </div>  
-                   }
+                    </div>
+                }
                 >
                     <Index />
                 </Suspense>

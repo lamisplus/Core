@@ -196,4 +196,17 @@
                  splitStatements="false"
                  stripComments="true"/>
     </changeSet>
+
+    <changeSet failOnError="true" author="Chukwuemeka Ilozue" id="16482011142141-core-insert-schema-88">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM base_organisation_unit_identifier WHERE id=1;
+            </sqlCheck>
+        </preConditions>
+        <sqlFile dbms="postgresql"
+                 path="sql/organisation_unit_identifier.sql"
+                 relativeToChangelogFile="true"
+                 splitStatements="false"
+                 stripComments="true"/>
+    </changeSet>
 </databaseChangeLog>

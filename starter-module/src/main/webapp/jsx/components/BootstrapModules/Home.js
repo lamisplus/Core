@@ -110,29 +110,29 @@ const PostPage = (props) => {
                 activeMenu="Modules"
                 pageContent="Modules"
             />
-            <Link to={"upload-module"} >
+            <Link to={"upload-module"} style={{marginTop:'-20px',marginRight:'30px'}} >
             <Button
                 variant="contained"
-                color="primary"
-                className="me-2 float-end"
+                className=" float-end"
                 startIcon={<FaPlus size="10"/>}
+                style={{backgroundColor:'#014d88',color:'#fff',marginTop:'-20px',marginRight:'10px', width:'110px'}}
               >
-                <span style={{ textTransform: "capitalize" }}>New</span>
+                <span style={{ textTransform: "capitalize",fontSize:"18px" }}>New</span>
               </Button>
             </Link>
 
 			<div className="mb-sm-5 mb-3 d-flex flex-wrap align-items-center text-head"></div>
-            <div className="row">
+            <div className="row" style={{marginTop:'-25px',paddingRight:'10px',paddingLeft:'5px'}}>
                 {!loading && listOfAllModule.length > 0 ? (
                 <>
                 {listOfAllModule.map((contact, index)=>(
-                    <div  className="col-xl-3 col-xxl-4 col-lg-6 col-md-6 col-sm-6" key={index}>
+                    <div  className="col-xl-4 col-xxl-4 col-lg-6 col-md-6 col-sm-6" key={index} style={{minHeight:'300px'}}>
                         <div  className="card " style={{borderRadius:"6px"}}>
 								
                             <div className="card-header align-items-start">
                                 <div>
-                                    <h6 className="fs-18 font-w500 mb-3"><Link to={"#"}className="text-black user-name">{contact.name}</Link></h6>
-                                    <div className="text-dark fs-14 text-nowrap"><i className="fa fa-calendar-o me-3" aria-hidden="true"></i>{contact.buildTime}</div>
+                                    <h6 className="fs-18 font-w500 mb-3"><Link to={"#"}className="user-name" style={{color:'#014d88',fontSize:'20px'}}>{contact.name}</Link></h6>
+                                    <div className="fs-14 text-nowrap" style={{color:'#992E62', fontWeight:'bold'}}><i className="fa fa-calendar-o me-3" aria-hidden="true"></i>{contact.buildTime}</div>
                                 </div>
 
                                 {/*Action button -- Dropdown menu*/}
@@ -143,7 +143,7 @@ const PostPage = (props) => {
                                     drop="up"
                                     className="btn sharp btn-primary "
                                     id="tp-btn"
-                                    style={{ backgroundColor: '#3E51B5', fontSize:"4"}}
+                                    style={{ backgroundColor: '#014d88', borderColor:'#014d88', fontSize:"4", borderRadius:'5px',marginRight:'-25px',marginTop:'-25px'}}
                                     >
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
@@ -221,7 +221,7 @@ const PostPage = (props) => {
                             </div>
                             <div className="card-body p-0 pb-3">
                                 <ul className="list-group list-group-flush">
-                                    <li className="list-group-item">
+                                    <li className="list-group-item" style={{minHeight:'200px'}}>
                                         <span className="mb-0 title">Description</span> :
                                         <span className="text-black ms-2">{contact.description}</span>
                                     </li>

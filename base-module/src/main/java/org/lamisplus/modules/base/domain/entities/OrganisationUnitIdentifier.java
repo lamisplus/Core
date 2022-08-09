@@ -15,7 +15,7 @@ public class OrganisationUnitIdentifier {
     @Id
     @Column(name = "id", updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Basic
     @Column(name = "organisation_unit_id")
