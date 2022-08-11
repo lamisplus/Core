@@ -199,8 +199,8 @@ return (
                               columns={[
                                 { title: 'Name', field: 'name' },
                                
-                                { title: 'Parent Parent Org. Unit Name', field: 'ParentOrgUnitName' },
-                                { title: 'Parent Org. Unit name', field: 'ParentName' },
+                                { title: 'Parent', field: 'ParentOrgUnitName' },
+                                /*{ title: 'Parent Org. Unit name', field: 'ParentName' },*/
                                 { title: 'Description', field: 'description' },
                                 
                                 { title: 'Action', field: 'actions'},
@@ -209,7 +209,7 @@ return (
                                 data={props.fetchAllOrgUnitLevelDetail.map((row) => ({
                                       name: row.name, 
                                       ParentOrgUnitName: row && row.parentParentOrganisationUnitName ? row.parentParentOrganisationUnitName : "",              
-                                      ParentName: row && row.parentOrganisationUnitName ? row.parentOrganisationUnitName : "", 
+                                      /*ParentName: row && row.parentOrganisationUnitName ? row.parentOrganisationUnitName : "", */
                                       description: row. description,
                                     
                                     actions: (
