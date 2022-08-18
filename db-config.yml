@@ -3,10 +3,10 @@ spring:
         driver-class-name: org.postgresql.Driver
         username: postgres
         password: emeka
-        url: jdbc:postgresql://localhost:5432/core-test
+        url: jdbc:postgresql://localhost:5432/test-migration
         hibernate:
             ddl-auto: none
-            event.merge.enty_copy_observer: allow
+            event.merge.entry_copy_observer: allow
         hikari:
             auto-commit: true
             data-source-properties:
@@ -32,7 +32,7 @@ lamisplus:
             driver-class-name: org.postgresql.Driver
             username: postgres
             password: emeka
-            url: jdbc:postgresql://localhost:5432/core-test
+            url: jdbc:postgresql://localhost:5432/test-migration
             hikari:
                     auto-commit: true
                     data-source-properties:
@@ -50,3 +50,5 @@ lamisplus:
             server-port: 8282
             timeout: 3000
             quality: 80
+server:
+    port: 8383
