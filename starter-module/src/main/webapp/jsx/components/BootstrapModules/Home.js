@@ -268,6 +268,7 @@ const PostPage = (props) => {
                             </>
                         }
                     </div>
+
                     <UnIstallModal modalstatus={unInstallmodal} togglestatus={toggleUninstallModal} datasample={collectModal} loadModules={loadModules}/>
                     <DeactivateModule modalstatus={deactivateModal} togglestatus={toggleDeactivateModal} datasample={collectModal} loadModules={loadModules}/>
                     <ActivateModule modalstatus={activateModal} togglestatus={toggleActivateModal} datasample={collectModal} loadModules={loadModules}/>
