@@ -1,6 +1,7 @@
 package org.lamisplus.modules.base.service;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.lamisplus.modules.base.controller.apierror.EntityNotFoundException;
 import org.lamisplus.modules.base.controller.apierror.RecordExistException;
@@ -50,16 +51,17 @@ public class UserService {
         optionalUser.ifPresent(existingUser -> {
                     throw new RecordExistException(User.class, "Name", userDTO.getUserName());
         });
-        return this.registerOrUpdateUser(userDTO, password);
+        return this.registerOrUpdateUser(userDTO, password, true);
     }
 
-    public User registerOrUpdateUser(UserDTO userDTO, String password){
+    public User registerOrUpdateUser(UserDTO userDTO, String password, Boolean updatePassword){
         User newUser = new User();
         if(userDTO.getId() != null){
             newUser.setId(userDTO.getId());
         }
-        
-        String encryptedPassword = passwordEncoder.encode(password);
+        //if update password then encode new password else just use old password
+        String encryptedPassword = updatePassword ? passwordEncoder.encode(password) : password;
+
         newUser.setUserName(userDTO.getUserName());
         newUser.setEmail(userDTO.getEmail());
         newUser.setPhoneNumber(userDTO.getPhoneNumber());
@@ -69,6 +71,10 @@ public class UserService {
         newUser.setFirstName(userDTO.getFirstName());
         newUser.setLastName(userDTO.getLastName());
         newUser.setDesignation(userDTO.getDesignation());
+
+        if(!userDTO.getApplicationUserOrganisationUnits().isEmpty()) {
+            newUser.setApplicationUserOrganisationUnits(userDTO.getApplicationUserOrganisationUnits());
+        }
         if (userDTO.getDetails() != null) {
             newUser.setDetails(userDTO.getDetails());
         }
@@ -85,17 +91,18 @@ public class UserService {
         } else {
             newUser.setRole(getRolesFromStringSet(userDTO.getRoles()));
         }
-
         userRepository.save(newUser);
         return newUser;
     }
 
     public User update(Long id, UserDTO userDTO, String password){
-        userRepository.findById(id)
+        User user = userRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(User.class, "id", ""+id));
         userDTO.setId(id);
-
-        return this.registerOrUpdateUser(userDTO, password);
+        if(!StringUtils.isEmpty(password)){
+            return this.registerOrUpdateUser(userDTO, password, true);
+        }
+        return this.registerOrUpdateUser(userDTO, user.getPassword(), false);
     }
 
     public void delete(Long id){
@@ -166,6 +173,4 @@ public class UserService {
     public UserDTO getUserById(Long id){
         return userMapper.userToUserDTO(userRepository.findById(id).orElseThrow(()-> new EntityNotFoundException(User.class, "Id", id + "")));
     }
-
-
 }
