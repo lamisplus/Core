@@ -88,13 +88,12 @@ public class TokenProvider {
         for (Role role : roles) {
             if(!StringUtils.isEmpty(permits)) {
                 permits = permits +",";
-            } else {
-                permits = permits + role.getPermission().stream().map(Permission::getName).collect(Collectors.joining(","));
             }
+                permits = permits + role.getPermission().stream().map(Permission::getName).collect(Collectors.joining(","));
         }
         //check if no permission then it must be an ordinary user so assign the role as user authority
         if(StringUtils.isEmpty(permits))permits = claims.get(AUTHORITIES_KEY).toString();
-        //LOG.info("permits {}", permits);
+        LOG.info("permits {}", permits);
         Collection<? extends GrantedAuthority> authorities = Arrays
                 .stream(permits.split(","))
                 .map(SimpleGrantedAuthority::new)
