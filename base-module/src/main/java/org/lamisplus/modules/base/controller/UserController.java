@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -36,11 +37,13 @@ public class UserController {
 
 
     @GetMapping(BASE_URL_VERSION_ONE + "/{id}")
+    @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete','user', 'all_permission')")
     public ResponseEntity<UserDTO> get(@PathVariable Long id) {
         return ResponseEntity.ok(userRepository.findById(id).map(UserDTO::new).get());
     }
 
     @PostMapping(BASE_URL_VERSION_ONE + "/{id}/roles")
+    @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete', 'all_permission')")
     public ResponseEntity<Object[]> updateRoles(@Valid @RequestBody List<Role> roles, @PathVariable Long id) throws Exception {
         try {
             User user = userRepository.findById(id).get();
@@ -84,6 +87,7 @@ public class UserController {
 
     @PostMapping(BASE_URL_VERSION_ONE)
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete', 'all_permission')")
     public void save(@Valid @RequestBody ManagedUserVM managedUserVM) {
         //Check Password Length
         userService.save(managedUserVM, managedUserVM.getPassword());
@@ -91,12 +95,14 @@ public class UserController {
 
     @PutMapping(BASE_URL_VERSION_ONE + "/{id}")
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete', 'user','all_permission')")
     public void update(@PathVariable Long id, @Valid @RequestBody ManagedUserVM managedUserVM) {
         userService.update(id, managedUserVM, managedUserVM.getPassword());
     }
 
     @DeleteMapping(BASE_URL_VERSION_ONE + "/{id}")
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete','all_permission')")
     public void update(@PathVariable Long id) {
         userService.delete(id);
     }

@@ -18,6 +18,7 @@ import org.lamisplus.modules.base.module.ModuleService;
 import org.lamisplus.modules.base.service.MenuService;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -39,6 +40,7 @@ public class ModuleController {
 
 
     @GetMapping(BASE_URL_VERSION_ONE+"/modules/{id:\\d+}/web-modules")
+    @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete','user', 'all_permission')")
     @Timed
     //@PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     public List<WebModule> getModulesByType(@PathVariable("id") Long id) {
@@ -52,6 +54,7 @@ public class ModuleController {
     }
 
     @GetMapping(BASE_URL_VERSION_ONE+"/modules/{id:\\d+}/menus")
+    @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete','user', 'all_permission')")
     @Timed
     //@PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     public List<MenuDTO> getModulesMenu(@PathVariable("id") Long id) {
@@ -73,6 +76,7 @@ public class ModuleController {
 
 
     @GetMapping(BASE_URL_VERSION_ONE+ "/modules/{id:\\d+}")
+    @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete','user', 'all_permission')")
     @Timed
     public ResponseEntity<Module> getModule(@PathVariable("id") Long id) {
         LOG.debug("Getting module: {}", id);
@@ -86,6 +90,7 @@ public class ModuleController {
     }
 
     @GetMapping(BASE_URL_VERSION_ONE+ "/modules")
+    @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete','user', 'all_permission')")
     @Timed
     public List<Module> getWebModules() {
         LOG.debug("Getting all active modules");
@@ -103,36 +108,43 @@ public class ModuleController {
     }
 
     @PostMapping(BASE_URL_VERSION_ONE+ "/modules/activate")
+    @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete', 'all_permission')")
     public ModuleResponse activateModule(@RequestBody Module module) {
         return moduleService.activate(module);
     }
 
     @PostMapping(BASE_URL_VERSION_ONE+ "/modules/deactivate")
+    @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete', 'all_permission')")
     public ModuleResponse deactivateModule(@RequestBody Module module) {
         return moduleService.deactivate(module);
     }
 
     @PostMapping(BASE_URL_VERSION_ONE+"/modules/uninstall")
+    @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete', 'all_permission')")
     public ModuleResponse shutdownModule(@RequestBody Module module, Boolean uninstall) {
         return moduleService.uninstall(module, uninstall);
     }
 
     @PostMapping(BASE_URL_VERSION_ONE+"/modules/update")
+    @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete', 'all_permission')")
     public ModuleResponse updateModule(@RequestBody Module module) {
         return moduleService.update(module, false);
     }
 
     @PostMapping(BASE_URL_VERSION_ONE+"/modules/upload")
+    @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete', 'all_permission')")
     public Module uploadModuleData(@RequestParam("file") MultipartFile file) {
         return moduleService.uploadModuleData(file);
     }
 
     @PostMapping(BASE_URL_VERSION_ONE+ "/modules/install")
+    @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete', 'all_permission')")
     public ModuleResponse installModule(final @RequestBody Module module, @RequestParam Boolean install) {
         return moduleService.installModule(module, install, false);
     }
 
     @GetMapping(BASE_URL_VERSION_ONE + "/modules/menus")
+    @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete','user', 'all_permission')")
     public List<Menu> getMenus() {
         LOG.debug("Getting all menus for current user");
 
@@ -240,6 +252,7 @@ public class ModuleController {
     }
 
     @GetMapping(BASE_URL_VERSION_ONE + "/modules/installed")
+    @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete','user', 'all_permission')")
     @Cacheable(cacheNames = "modules")
     public List<Module> getModules() {
         LOG.debug("Get all installed modules");
@@ -252,16 +265,19 @@ public class ModuleController {
     }
 
     @PutMapping(BASE_URL_VERSION_ONE + "/modules/{id}")
+    @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete', 'all_permission')")
     public ModuleResponse updateDetails(@PathVariable Long id, @RequestBody Module module) {
         return moduleService.updateDetails(id, module);
     }
 
     @PutMapping(BASE_URL_VERSION_ONE + "/modules/{id}/menus")
+    @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete', 'all_permission')")
     public ResponseEntity<List<Menu>> updateModuleMenu(@PathVariable Long id, @RequestBody ModuleMenuDTO moduleMenuDTO) {
         return ResponseEntity.ok(this.menuService.updateModuleMenu(id, moduleMenuDTO));
     }
 
     @GetMapping(BASE_URL_VERSION_ONE + "/modules/check")
+    @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete','user', 'all_permission')")
     public Boolean exist(@RequestParam String moduleName) {
         return this.moduleService.exist(moduleName);
     }
