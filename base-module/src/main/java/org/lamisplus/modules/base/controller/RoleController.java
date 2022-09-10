@@ -10,6 +10,7 @@ import org.lamisplus.modules.base.service.RoleService;
 import org.lamisplus.modules.base.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -30,6 +31,7 @@ public class RoleController {
 
 
     @GetMapping(BASE_URL_VERSION_ONE + "/v2/{id}")
+    @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete','user', 'all_permission')")
     public ResponseEntity<Role> getById(@PathVariable Long id) {
         Role role = roleRepository.findById(id)
                 .orElseThrow(()-> new EntityNotFoundException(Role.class, "id", ""+id));
@@ -38,6 +40,7 @@ public class RoleController {
     }
 
     @GetMapping(BASE_URL_VERSION_ONE)
+    @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete','user', 'all_permission')")
     public ResponseEntity<List<Role>> getAll() {
         List<Role> roles = roleRepository.findAllByArchived(UN_ARCHIVED);
         return ResponseEntity.ok(roles);
@@ -45,11 +48,13 @@ public class RoleController {
 
     @PostMapping(BASE_URL_VERSION_ONE)
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete', 'all_permission')")
     public void save(@Valid @RequestBody RoleDTO roleDTO) throws Exception {
         roleService.save(roleDTO);
     }
 
     @PutMapping(BASE_URL_VERSION_ONE + "/{id}")
+    @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete','user', 'all_permission')")
     public ResponseEntity<Role> update(@Valid @RequestBody RoleDTO role, @PathVariable Long id) {
         try {
             Role updatedRole = new Role();
@@ -70,6 +75,7 @@ public class RoleController {
     }
 
     @DeleteMapping(BASE_URL_VERSION_ONE + "/{id}")
+    @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete','user', 'all_permission')")
     @ResponseStatus(HttpStatus.OK)
     public void deleteRole(@PathVariable Long id) {
         Role role = roleRepository.findById(id)

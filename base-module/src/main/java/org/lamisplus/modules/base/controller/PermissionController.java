@@ -18,14 +18,14 @@ public class PermissionController {
     private final String BASE_URL_VERSION_ONE = "/api/v1/permissions";
 
     @GetMapping(BASE_URL_VERSION_ONE)
-    @PreAuthorize("hasAnyAuthority('Super Admin','Facility Admin', 'Admin', 'Data Clerk', 'DEC', 'M&E Officer')")
+    @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete', 'all_permission')")
     public ResponseEntity<List<Permission>> getAll() {
         return ResponseEntity.ok(this.permissionRepository.findAllByArchived(0));
     }
 
 
     @PostMapping(BASE_URL_VERSION_ONE)
-    @PreAuthorize("hasAnyAuthority('Super Admin','Facility Admin', 'Admin', 'Data Clerk', 'DEC', 'M&E Officer')")
+    @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete', 'all_permission')")
     public ResponseEntity<List<Permission>> save(@RequestBody List<Permission> permissions) {
         return ResponseEntity.ok(this.permissionRepository.saveAll(permissions));
     }
