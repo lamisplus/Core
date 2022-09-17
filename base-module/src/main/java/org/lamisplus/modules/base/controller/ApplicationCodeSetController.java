@@ -49,7 +49,7 @@ public class ApplicationCodeSetController {
 
     }
 
-    @DeleteMapping("/v2/{id}")
+    @DeleteMapping(BASE_URL_VERSION_ONE + "/v2/{id}")
     @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete', 'all_permission')")
     public void delete(@PathVariable Long id) {
         this.applicationCodesetService.delete(id);

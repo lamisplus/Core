@@ -79,23 +79,8 @@ public class TokenProvider {
     public Authentication getAuthentication(String token) {
         Claims claims = Jwts.parserBuilder().setSigningKey(this.getSigningKey()).build().parseClaimsJws(token).getBody();
 
-        //Get all user roles
-        List<Role> roles = roleRepository.findAllInRolesNames(Arrays.stream(claims.get(AUTHORITIES_KEY)
-                        .toString().split(","))
-                        .collect(Collectors.toSet()));
-        String permits="";
-        //Get all user permissions
-        for (Role role : roles) {
-            if(!StringUtils.isEmpty(permits)) {
-                permits = permits +",";
-            }
-                permits = permits + role.getPermission().stream().map(Permission::getName).collect(Collectors.joining(","));
-        }
-        //check if no permission then it must be an ordinary user so assign the role as user authority
-        if(StringUtils.isEmpty(permits))permits = claims.get(AUTHORITIES_KEY).toString();
-        LOG.info("permits {}", permits);
         Collection<? extends GrantedAuthority> authorities = Arrays
-                .stream(permits.split(","))
+                .stream(this.getPermissionsFromClaims(claims).split(","))
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
         User principal = new User(claims.getSubject(), "", authorities);
@@ -122,5 +107,24 @@ public class TokenProvider {
     private Key getSigningKey() {
         byte[] keyBytes = Decoders.BASE64.decode(this.secret);
         return Keys.hmacShaKeyFor(keyBytes);
+    }
+
+    private String getPermissionsFromClaims(Claims claims){
+        //Get all user roles
+        List<Role> roles = roleRepository.findAllInRolesNames(Arrays.stream(claims.get(AUTHORITIES_KEY)
+                        .toString().split(","))
+                .collect(Collectors.toSet()));
+        String permits="";
+        //Get all user permissions
+        for (Role role : roles) {
+            if(!StringUtils.isEmpty(permits)) {
+                permits = permits +",";
+            }
+            permits = permits + role.getPermission().stream().map(Permission::getName).collect(Collectors.joining(","));
+        }
+        //check if no permission then it must be an ordinary user so assign the role as user authority
+        if(StringUtils.isEmpty(permits))permits = claims.get(AUTHORITIES_KEY).toString();
+
+        return permits;
     }
 }

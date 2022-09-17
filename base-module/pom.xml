@@ -529,16 +529,19 @@
 			<artifactId>spring-security-core</artifactId>
 		</dependency>
 
+		<!--install maven then run-->
+		<!--mvn install:install-file -Dfile=FDxSDKPro_jdk1.6.0_45.jar -DgroupId=secugen -DartifactId=FDxSDKPro -Dversion=1.6 -Dpackaging=jar-->
+
 		<dependency>
 			<groupId>secugen</groupId>
 			<artifactId>FDxSDKPro</artifactId>
-			<version>1.0</version>
+			<version>1.6</version>
 		</dependency>
 
-		<dependency>
+		<!--<dependency>
 			<groupId>com.fasterxml.jackson.dataformat</groupId>
 			<artifactId>jackson-dataformat-yaml</artifactId>
-		</dependency>
+		</dependency>-->
 
 		<dependency>
 			<groupId>com.networknt</groupId>
