@@ -51,13 +51,6 @@ public class TokenProvider {
     public String createToken(Authentication authentication, UserService userService, boolean rememberMe) {
         //String authorities = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining(","));
 
-        long now = (new Date()).getTime();
-        Date validity;
-        if (rememberMe) {
-            validity = new Date(now + this.tokenValidityInMillisecondsForRememberMe);
-        } else {
-            validity = new Date(now + this.tokenValidityInMilliseconds);
-        }
         org.lamisplus.modules.base.domain.entities.User user = userService.getUserWithRoles().get();
         //getting & adding user details to token
         String name = user.getFirstName() + " " +
@@ -72,7 +65,7 @@ public class TokenProvider {
                 .claim("name", name)
                 //.claim("role", role)
                 .signWith(this.getSigningKey(), SignatureAlgorithm.HS512)
-                .setExpiration(validity)
+                .setExpiration(this.setExpirationDate(rememberMe))
                 .compact();
     }
 
@@ -126,5 +119,13 @@ public class TokenProvider {
         if(StringUtils.isEmpty(permits))permits = claims.get(AUTHORITIES_KEY).toString();
 
         return permits;
+    }
+
+    private Date setExpirationDate(Boolean rememberMe){
+        long now = (new Date()).getTime();
+        if (rememberMe) {
+            return new Date(now + this.tokenValidityInMillisecondsForRememberMe);
+        }
+        return new Date(now + this.tokenValidityInMilliseconds);
     }
 }

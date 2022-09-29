@@ -1,5 +1,6 @@
 package org.lamisplus.modules.base.domain.dto;
 
+import kotlin.collections.ArrayDeque;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -43,7 +44,7 @@ public class UserDTO {
     private Long currentOrganisationUnitId;
 
     @ToString.Exclude
-    private List<ApplicationUserOrganisationUnit> applicationUserOrganisationUnits;
+    private List<ApplicationUserOrganisationUnit> applicationUserOrganisationUnits = new ArrayDeque<>();
 
     private String currentOrganisationUnitName;
     private int managedPatientCount;

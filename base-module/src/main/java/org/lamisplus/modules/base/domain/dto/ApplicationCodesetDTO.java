@@ -30,10 +30,11 @@ public class ApplicationCodesetDTO {
     public ApplicationCodesetDTO(){
     }
 
-    public ApplicationCodesetDTO(Long id, String display, String code, String codesetGroup){
+    public ApplicationCodesetDTO(Long id, String display, String code, String codesetGroup, String version){
         this.id = id;
         this.display = display;
         this.code = code;
         this.codesetGroup = codesetGroup;
+        this.version = version;
     }
 }
