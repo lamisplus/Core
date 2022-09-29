@@ -26,12 +26,18 @@ public class ApplicationCodeSetController {
     @GetMapping(BASE_URL_VERSION_ONE +"/v2/{codesetGroup}")
     @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete','user', 'all_permission')")
     public ResponseEntity<List<ApplicationCodesetDTO>> getApplicationCodeByCodeSetGroup(@PathVariable String codesetGroup) {
-        return ResponseEntity.ok(this.applicationCodesetService.getApplicationCodeByCodesetGroup(codesetGroup));
+        return ResponseEntity.ok(this.applicationCodesetService.getApplicationCodeByCodeSetGroup(codesetGroup));
     }
 
     @GetMapping(BASE_URL_VERSION_ONE+ "/v2")
     @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete','user', 'all_permission')")
     public ResponseEntity<List<ApplicationCodesetDTO>> getAllApplicationCodesets() {
+        return ResponseEntity.ok(this.applicationCodesetService.getAllApplicationCodeset());
+    }
+
+    @GetMapping(BASE_URL_VERSION_ONE+ "/{code}")
+    @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete','user', 'all_permission')")
+    public ResponseEntity<List<ApplicationCodesetDTO>> getAllByCode() {
         return ResponseEntity.ok(this.applicationCodesetService.getAllApplicationCodeset());
     }
 
