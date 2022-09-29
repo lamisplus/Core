@@ -91,6 +91,7 @@ public class ApplicationCodesetService {
                 .id (applicationCodeSet.getId ())
                 .display (applicationCodeSet.getDisplay ())
                 .language (applicationCodeSet.getLanguage ())
+                .version (applicationCodeSet.getVersion ())
                 .build ();
     }
 

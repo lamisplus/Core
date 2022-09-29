@@ -37,8 +37,8 @@ public class ApplicationCodeSetController {
 
     @GetMapping(BASE_URL_VERSION_ONE+ "/{code}")
     @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete','user', 'all_permission')")
-    public ResponseEntity<List<ApplicationCodesetDTO>> getAllByCode() {
-        return ResponseEntity.ok(this.applicationCodesetService.getAllApplicationCodeset());
+    public ResponseEntity<List<ApplicationCodesetDTO>> getAllApplicationCodeSets(@PathVariable String code) {
+        return ResponseEntity.ok(this.applicationCodesetService.getAllApplicationCodeSets(code));
     }
 
     @PostMapping(BASE_URL_VERSION_ONE+ "/v2")
