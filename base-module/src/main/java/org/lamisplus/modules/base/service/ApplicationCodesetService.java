@@ -55,7 +55,7 @@ public class ApplicationCodesetService {
         return applicationCodesetRepository.findAllByCodesetGroupAndArchivedOrderByIdAsc(codeSetGroup, UN_ARCHIVED);
     }
 
-    public ApplicationCodesetDTO getApplicationCodeSet(Long id){
+    public ApplicationCodesetDTO getApplicationCodeset(Long id){
         final ApplicationCodeSet applicationCodeset = applicationCodesetRepository.findByIdAndArchived(id, UN_ARCHIVED)
                 .orElseThrow(() -> new EntityNotFoundException(ApplicationCodeSet.class,"Display:",id+""));
 
