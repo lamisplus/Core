@@ -45,7 +45,8 @@ public class ApplicationCodesetService {
         applicationCodeset.setCode(UUID.randomUUID().toString());
         applicationCodeset.setArchived(UN_ARCHIVED);
         String code = applicationCodeset.getCodesetGroup()+"_"+applicationCodeset.getDisplay();
-        applicationCodeset.setCode(code.toUpperCase());
+        code = code.replaceAll("[\\p{Punct}&&[^_]]+|^_+|\\p{Punct}+(?=_|$)", "_");
+        applicationCodeset.setCode(code.toUpperCase().trim());
 
         return applicationCodesetRepository.save(applicationCodeset);
     }
