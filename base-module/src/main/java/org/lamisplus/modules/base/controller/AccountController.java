@@ -12,6 +12,7 @@ import org.lamisplus.modules.base.domain.repositories.RoleRepository;
 import org.lamisplus.modules.base.domain.repositories.UserRepository;
 import org.lamisplus.modules.base.security.SecurityUtils;
 import org.lamisplus.modules.base.service.UserService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -37,9 +38,11 @@ public class AccountController {
     //Versioning through URI Path
     private final String BASE_URL_VERSION_ONE = "/api/v1";
 
-    @GetMapping(BASE_URL_VERSION_ONE + "/account")
-    public UserDTO getAccount(Principal principal){
 
+
+    @GetMapping(BASE_URL_VERSION_ONE + "/account")
+    @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete','user', 'all_permission')")
+    public UserDTO getAccount(Principal principal){
         Optional<User> optionalUser = userService.getUserWithRoles();
         if(optionalUser.isPresent()){
             User user = optionalUser.get();
@@ -67,6 +70,7 @@ public class AccountController {
     }
 
     @GetMapping(BASE_URL_VERSION_ONE + "/account/roles")
+    @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete','user', 'all_permission')")
     public List<Role> getAccountRoles(Principal principal){
         Optional<User> optionalUser = userService.getUserWithRoles();
         UserDTO userDTO = userService.getUserWithRoles()

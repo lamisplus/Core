@@ -6,6 +6,7 @@ import org.lamisplus.modules.base.domain.dto.StandardCodesetDTO;
 import org.lamisplus.modules.base.domain.entities.StandardCodeset;
 import org.lamisplus.modules.base.service.StandardCodesetService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,36 +25,43 @@ public class StandardCodesetController {
     }
 
     @GetMapping(BASE_URL_VERSION_ONE + "/standard-codeset-source/{id}")
+    @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete','user', 'all_permission')")
     public ResponseEntity<List<StandardCodesetDTO>> getAllStandardCodesetByStandardCodesetSourceId(@PathVariable Long id) {
         return ResponseEntity.ok(standardCodesetService.getAllStandardCodesetByStandardCodesetSourceId(id));
     }
 
     @GetMapping(BASE_URL_VERSION_ONE + "/{id}")
+    @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete','user', 'all_permission')")
     public ResponseEntity<StandardCodesetDTO> getStandardCodesetById(@PathVariable Long id) {
         return ResponseEntity.ok(standardCodesetService.getStandardCodesetById(id));
     }
 
     @GetMapping(BASE_URL_VERSION_ONE + "/code/{code}")
+    @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete','user', 'all_permission')")
     public ResponseEntity<StandardCodesetDTO> getStandardCodesetByCode(@PathVariable String code) {
         return ResponseEntity.ok(standardCodesetService.getStandardCodesetByCode(code));
     }
 
     @GetMapping(BASE_URL_VERSION_ONE + "/application-codeset/{id}")
+    @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete','user', 'all_permission')")
     public ResponseEntity<StandardCodesetDTO> getStandardCodesetByApplicationCodesetId(@PathVariable Long id) {
         return ResponseEntity.ok(standardCodesetService.getStandardCodesetByApplicationCodesetId(id));
     }
 
     @PostMapping(BASE_URL_VERSION_ONE)
+    @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete', 'all_permission')")
     public ResponseEntity<StandardCodeset> save(@RequestBody StandardCodesetDTO standardCodesetDTO) {
         return ResponseEntity.ok(standardCodesetService.save(standardCodesetDTO));
     }
 
     @PutMapping(BASE_URL_VERSION_ONE + "/{id}")
+    @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete', 'all_permission')")
     public ResponseEntity<StandardCodeset> update(@PathVariable Long id, @RequestBody StandardCodesetDTO standardCodesetDTO) {
         return ResponseEntity.ok(this.standardCodesetService.update(id, standardCodesetDTO));
     }
 
     @DeleteMapping(BASE_URL_VERSION_ONE + "/{id}")
+    @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete', 'all_permission')")
     public ResponseEntity<Integer> delete(@PathVariable Long id) {
         return ResponseEntity.ok(this.standardCodesetService.delete(id));
     }

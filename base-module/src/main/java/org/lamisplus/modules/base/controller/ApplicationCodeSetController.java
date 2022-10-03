@@ -24,29 +24,39 @@ public class ApplicationCodeSetController {
     private final String BASE_URL_VERSION_ONE = "/api/v1/application-codesets";
 
     @GetMapping(BASE_URL_VERSION_ONE +"/v2/{codesetGroup}")
+    @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete','user', 'all_permission')")
     public ResponseEntity<List<ApplicationCodesetDTO>> getApplicationCodeByCodeSetGroup(@PathVariable String codesetGroup) {
-        return ResponseEntity.ok(this.applicationCodesetService.getApplicationCodeByCodesetGroup(codesetGroup));
+        return ResponseEntity.ok(this.applicationCodesetService.getApplicationCodeByCodeSetGroup(codesetGroup));
     }
 
     @GetMapping(BASE_URL_VERSION_ONE+ "/v2")
+    @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete','user', 'all_permission')")
     public ResponseEntity<List<ApplicationCodesetDTO>> getAllApplicationCodesets() {
         return ResponseEntity.ok(this.applicationCodesetService.getAllApplicationCodeset());
     }
 
+    @GetMapping(BASE_URL_VERSION_ONE+ "/{code}")
+    @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete','user', 'all_permission')")
+    public ResponseEntity<List<ApplicationCodesetDTO>> getAllApplicationCodeSets(@PathVariable String code) {
+        return ResponseEntity.ok(this.applicationCodesetService.getAllApplicationCodeSets(code));
+    }
+
     @PostMapping(BASE_URL_VERSION_ONE+ "/v2")
+    @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete', 'all_permission')")
     public ResponseEntity<ApplicationCodeSet> save(@Valid @RequestBody ApplicationCodesetDTO applicationCodesetDTO) {
         return ResponseEntity.ok(applicationCodesetService.save(applicationCodesetDTO));
 
     }
 
     @PutMapping(BASE_URL_VERSION_ONE + "/v2/{id}")
+    @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete', 'all_permission')")
     public ResponseEntity<ApplicationCodeSet> update(@PathVariable Long id, @Valid @RequestBody ApplicationCodesetDTO applicationCodesetDTO) {
         return ResponseEntity.ok(applicationCodesetService.update(id, applicationCodesetDTO));
 
     }
 
-    @DeleteMapping("/v2/{id}")
-    @PreAuthorize("hasAnyAuthority('Super Admin','Admin', 'DEC', 'Data Clerk', 'Facility Admin')")
+    @DeleteMapping(BASE_URL_VERSION_ONE + "/v2/{id}")
+    @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete', 'all_permission')")
     public void delete(@PathVariable Long id) {
         this.applicationCodesetService.delete(id);
     }

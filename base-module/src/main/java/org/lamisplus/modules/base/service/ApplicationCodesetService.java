@@ -35,21 +35,23 @@ public class ApplicationCodesetService {
     }
 
     public ApplicationCodeSet save(ApplicationCodesetDTO applicationCodesetDTO){
-        Optional<ApplicationCodeSet> applicationCodesetOptional = applicationCodesetRepository.findByDisplayAndCodesetGroupAndArchived(applicationCodesetDTO.getDisplay(),
+        Optional<ApplicationCodeSet> applicationCodeSetOptional = applicationCodesetRepository.findByDisplayAndCodesetGroupAndArchived(applicationCodesetDTO.getDisplay(),
                 applicationCodesetDTO.getCodesetGroup(), UN_ARCHIVED);
-        if (applicationCodesetOptional.isPresent()) {
+        if (applicationCodeSetOptional.isPresent()) {
             throw new RecordExistException(ApplicationCodeSet.class,"Display:",applicationCodesetDTO.getDisplay());
         }
-
 
         final ApplicationCodeSet applicationCodeset = convertApplicationCodeDtoSet (applicationCodesetDTO);
         applicationCodeset.setCode(UUID.randomUUID().toString());
         applicationCodeset.setArchived(UN_ARCHIVED);
+        String code = applicationCodeset.getCodesetGroup()+"_"+applicationCodeset.getDisplay();
+        code = code.replaceAll("[\\p{Punct}&&[^_]]+|^_+|\\p{Punct}+(?=_|$)", "_");
+        applicationCodeset.setCode(code.toUpperCase().trim());
 
         return applicationCodesetRepository.save(applicationCodeset);
     }
 
-    public List<ApplicationCodesetDTO> getApplicationCodeByCodesetGroup(String codeSetGroup){
+    public List<ApplicationCodesetDTO> getApplicationCodeByCodeSetGroup(String codeSetGroup){
         return applicationCodesetRepository.findAllByCodesetGroupAndArchivedOrderByIdAsc(codeSetGroup, UN_ARCHIVED);
     }
 
@@ -79,8 +81,8 @@ public class ApplicationCodesetService {
         applicationCodeset.setArchived(ARCHIVED);
     }
 
-    public Boolean exist(String display, String codesetGroup){
-        return applicationCodesetRepository.existsByDisplayAndCodesetGroup(display, codesetGroup);
+    public Boolean exist(String display, String codeSetGroup){
+        return applicationCodesetRepository.existsByDisplayAndCodesetGroup(display, codeSetGroup);
     }
 
     public  ApplicationCodesetDTO convertApplicationCodeSetToDto(ApplicationCodeSet applicationCodeSet){
@@ -90,6 +92,7 @@ public class ApplicationCodesetService {
                 .id (applicationCodeSet.getId ())
                 .display (applicationCodeSet.getDisplay ())
                 .language (applicationCodeSet.getLanguage ())
+                .version (applicationCodeSet.getVersion ())
                 .build ();
     }
 
@@ -101,5 +104,13 @@ public class ApplicationCodesetService {
         applicationCodeSet  .setDisplay (applicationCodesetDTO.getDisplay ());
         applicationCodeSet  .setLanguage (applicationCodesetDTO.getLanguage ());
        return applicationCodeSet;
+    }
+
+    public List<ApplicationCodesetDTO> getAllApplicationCodeSets(String code) {
+        List<ApplicationCodeSet> applicationCodeSet = applicationCodesetRepository.findAllByCodeAndArchived(code, UN_ARCHIVED);
+        if(applicationCodeSet.isEmpty()) throw new EntityNotFoundException(ApplicationCodeSet.class,"Code:",code+"");
+        return applicationCodeSet.stream()
+                .map(applicationCodeSet1 -> convertApplicationCodeSetToDto(applicationCodeSet1))
+                .collect(Collectors.toList());
     }
 }

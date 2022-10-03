@@ -254,7 +254,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleDataIntegrityViolation(DataIntegrityViolationException ex,
                                                                   WebRequest request) {
         if (ex.getCause() instanceof ConstraintViolationException) {
-            return buildResponseEntity(new ApiError(HttpStatus.CONFLICT, "Database error", ex.getCause()));
+            return buildResponseEntity(new ApiError(HttpStatus.CONFLICT, "Database error - " + ex.getMessage(), ex.getCause()));
         }
         return buildResponseEntity(new ApiError(INTERNAL_SERVER_ERROR, ex));
     }

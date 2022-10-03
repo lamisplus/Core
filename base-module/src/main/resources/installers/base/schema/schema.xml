@@ -819,4 +819,11 @@
                 NOT VALID;
         </sql>
     </changeSet>
+
+    <changeSet failOnError="true" author="Emeka" id="1648201114214-core-schema-90">
+        <sql>
+            ALTER TABLE IF EXISTS base_application_codeset
+                ADD CONSTRAINT unique_base_application_codeset_code UNIQUE (code);
+        </sql>
+    </changeSet>
 </databaseChangeLog>
