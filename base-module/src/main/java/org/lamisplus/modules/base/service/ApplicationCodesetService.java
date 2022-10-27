@@ -41,11 +41,14 @@ public class ApplicationCodesetService {
             throw new RecordExistException(ApplicationCodeSet.class,"Display:",applicationCodesetDTO.getDisplay());
         }
 
+        //the sql - update base_application_codeset
+        //set code = REPLACE(REPLACE(TRIM(UPPER(codeset_group || '_' || display)), '/', ''), ' ', '_')
         final ApplicationCodeSet applicationCodeset = convertApplicationCodeDtoSet (applicationCodesetDTO);
         applicationCodeset.setCode(UUID.randomUUID().toString());
         applicationCodeset.setArchived(UN_ARCHIVED);
         String code = applicationCodeset.getCodesetGroup()+"_"+applicationCodeset.getDisplay();
-        code = code.replaceAll("[\\p{Punct}&&[^_]]+|^_+|\\p{Punct}+(?=_|$)", "_");
+        code = code.replace("/", "_").replace(" ", "_");
+        //code = code.replaceAll("[\\p{Punct}&&[^_]]+|^_+|\\p{Punct}+(?=_|$)", "_");
         applicationCodeset.setCode(code.toUpperCase().trim());
 
         return applicationCodesetRepository.save(applicationCodeset);
