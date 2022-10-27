@@ -46,6 +46,8 @@ import axios from "axios";
 import {url as baseUrl} from "../api";
 import * as ACTION_TYPES from "../actions/types";
 import ErrorMissingOrganisation from "./pages/ErrorMissingOrganisation";
+import FacilitiesList from "./components/FaciltyConfig/FacilitiesPage";
+import AddFacility from "./components/FaciltyConfig/AddFacility";
 
 const Markup = () => {
   const [user, setUser] = useState(null);
@@ -83,6 +85,8 @@ const Markup = () => {
     { url: "admin-parent-organization-unit", component: ParentOrganizationUnit },
     { url: "menu", component: MenuList },
     { url: "biometrics", component: BiometricList },
+    { url: "facility", component: FacilitiesList },
+    { url: "facility-config", component: AddFacility },
   ];
   let path = window.location.pathname;
   path = path.split("/");
