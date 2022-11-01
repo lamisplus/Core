@@ -11,6 +11,7 @@ INSERT INTO base_menu (id, name, state, type, level, "position", icon, tooltip, 
 INSERT INTO base_menu (id, name, state, type, level, "position", icon, tooltip, breadcrumb, disabled, module_id, parent_id, archived, url) OVERRIDING SYSTEM VALUE VALUES (24, 'Application Metrics', 'Application Metrics', 'sidebar', 'LEVEL_1', 3, NULL, 'Application Metrics', 'Application Metrics', false, NULL, 21, 0, 'application-matrics');
 INSERT INTO base_menu (id, name, state, type, level, "position", icon, tooltip, breadcrumb, disabled, module_id, parent_id, archived, url) OVERRIDING SYSTEM VALUE VALUES (25, 'Log Configurations', 'Log Configurations', 'sidebar', 'LEVEL_1', 4, NULL, 'Log Configurations', 'Log Configurations', NULL, NULL, 21, 0, 'log-configuration');
 INSERT INTO base_menu (id, name, state, type, level, "position", icon, tooltip, breadcrumb, disabled, module_id, parent_id, archived, url) OVERRIDING SYSTEM VALUE VALUES (26, 'Menu Management', 'Menu Management', 'sidebar', 'LEVEL_1', 1, NULL, 'Menu Management', 'Menu Management', false, NULL, 15, 0, 'menu');
+INSERT INTO base_menu (id, name, state, type, level, "position", icon, tooltip, breadcrumb, disabled, module_id, parent_id, archived, url) OVERRIDING SYSTEM VALUE VALUES (30, 'Facility Management', 'Facility Management', 'sidebar', 'LEVEL_1', 10, NULL, 'Facility Management', 'Facility Management', false, NULL, 15, 0, 'facility');
 
 
 SELECT pg_catalog.setval('base_menu_id_seq', 26, true);
