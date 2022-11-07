@@ -532,18 +532,10 @@
 		<!--install maven then run-->
 		<!--mvn install:install-file -Dfile=FDxSDKPro_jdk1.6.0_45.jar -DgroupId=secugen -DartifactId=FDxSDKPro -Dversion=1.6 -Dpackaging=jar-->
 
-<!--		<dependency>
-			<groupId>secugen</groupId>
-			<artifactId>FDxSDKPro</artifactId>
-			<version>1.6</version>
-		</dependency>-->
-
 		<dependency>
 			<groupId>secugen</groupId>
 			<artifactId>FDxSDKPro</artifactId>
 			<version>1.6</version>
-			<scope>system</scope>
-			<systemPath>${basedir}/libs/FDxSDKPro.jar</systemPath>
 		</dependency>
 
 		<!--<dependency>

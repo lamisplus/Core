@@ -1,5 +1,6 @@
 package org.lamisplus.modules.base.util;
 
+import org.lamisplus.modules.base.domain.dto.PageDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -35,6 +36,18 @@ public final class PaginationUtil {
         link.append(prepareLink(uriBuilder, page.getTotalPages() - 1, pageSize, "last")).append(",").append(prepareLink(uriBuilder, 0, pageSize, "first"));
         headers.add("Link", link.toString());
         return headers;
+    }
+
+    public static PageDTO generatePagination(Page page, List records) {
+        long totalRecords = page.getTotalElements();
+        int pageNumber = page.getNumber();
+        int pageSize = page.getSize();
+        int totalPages = page.getTotalPages();
+        return PageDTO.builder().totalRecords(totalRecords)
+                .pageNumber(pageNumber)
+                .pageSize(pageSize)
+                .totalPages(totalPages)
+                .records(records).build();
     }
 
     private static String prepareLink(UriComponentsBuilder uriBuilder, int pageNumber, int pageSize, String relType) {
