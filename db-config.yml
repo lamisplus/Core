@@ -1,8 +1,8 @@
 spring:
     datasource:
         driver-class-name: org.postgresql.Driver
-        username: dhis
-        password: dhis
+        username: postgres
+        password: emeka
         url: jdbc:postgresql://localhost:5432/lamisplus
         hibernate:
             ddl-auto: none
@@ -30,8 +30,8 @@ lamisplus:
     datasource:
         module:
             driver-class-name: org.postgresql.Driver
-            username: dhis
-            password: dhis
+            username: postgres
+            password: emeka
             url: jdbc:postgresql://localhost:5432/lamisplus
             hikari:
                     auto-commit: true
@@ -51,4 +51,4 @@ lamisplus:
             timeout: 3000
             quality: 80
 server:
-    port: 8282
+    port: 8383
