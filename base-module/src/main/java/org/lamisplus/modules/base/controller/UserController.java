@@ -3,6 +3,7 @@ package org.lamisplus.modules.base.controller;
 import lombok.RequiredArgsConstructor;
 import org.lamisplus.modules.base.controller.apierror.EntityNotFoundException;
 import org.lamisplus.modules.base.controller.vm.ManagedUserVM;
+import org.lamisplus.modules.base.domain.dto.ManagementDto;
 import org.lamisplus.modules.base.domain.dto.UserDTO;
 import org.lamisplus.modules.base.domain.entities.Role;
 import org.lamisplus.modules.base.domain.entities.User;
@@ -83,6 +84,12 @@ public class UserController {
     public Integer getNumberOfLoggedInUsers() {
         final List<Object> allPrincipals = sessionRegistry.getAllPrincipals();
         return  allPrincipals.size();
+    }
+
+    @GetMapping("/configure/app")
+    public ManagementDto isLamisPlusConfigured() {
+        return userService.isLamisPlusConfigured();
+
     }
 
     @PostMapping(BASE_URL_VERSION_ONE)
