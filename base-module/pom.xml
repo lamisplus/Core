@@ -344,11 +344,11 @@
 			<optional>true</optional>
 		</dependency>
 
-		<dependency>
+		<!--<dependency>
 			<groupId>com.coveo</groupId>
 			<artifactId>nashorn-commonjs-modules</artifactId>
 			<version>1.0.9</version>
-		</dependency>
+		</dependency>-->
 
 		<dependency>
 			<groupId>org.apache.commons</groupId>
