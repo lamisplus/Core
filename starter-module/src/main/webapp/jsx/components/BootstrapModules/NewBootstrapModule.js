@@ -25,7 +25,7 @@ import Message from './Message';
 import Progress from './Progress';
 import axios from 'axios';
 import OverlayLoader from 'react-overlay-loading/lib/OverlayLoader'
-import { ToastContainer } from "react-toastify";
+import {toast, ToastContainer} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
 import {CardBody,Col,Row, Form} from 'reactstrap'
@@ -33,6 +33,11 @@ import { Card, CardContent } from "@material-ui/core";
 import { url } from "./../../../api";
 import { createBootstrapModule, startBootstrapModule } from './../../../actions/bootstrapModule';
 import { installBootstrapModule, fetchAllBootstrapModuleBYBatchNum } from './../../../actions/bootstrapModule';
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogActions from "@mui/material/DialogActions";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -98,8 +103,8 @@ const BootstrapModule = (props) => {
     const [disabledUploadButton, setDisabledUploadButton] = useState(false)
     const [disabledNextButton, setDisabledNextButton] = useState(false)
     const [moduleStatus, setModuleStatus] = useState() 
-    const [moduleBatchNum, setModuleBatchNum] = useState() 
- 
+    const [moduleBatchNum, setModuleBatchNum] = useState()
+    const [open, setOpen] = useState(false);
 
     useEffect(() => {
       const onSuccess = (data) => {
@@ -150,6 +155,23 @@ const BootstrapModule = (props) => {
     props.startBootstrapModule( onSuccess, onError); 
   }
 
+    const restartingModule  = () => {
+        axios.get(`http://localhost:8282/restart`)
+            .then((response) => {
+                toast.error(`Successfully restarting`);
+            }).catch((error) => {
+            console.log(error);
+            toast.error(`An error occurred, restarting`);
+        });
+        history.push(`/bootstrap-modules`);
+        /*        alert('restarting');
+                //setRestartModal(!restartmodal)*/
+    }
+    const handleClose = () => {
+        setOpen(false);
+        history.push(`/bootstrap-modules`);
+    };
+
   const handleInstallModule = (obj) => {
 
       setDisabledNextButton(true)
@@ -161,9 +183,10 @@ const BootstrapModule = (props) => {
       //uploadResponse[foundIndex] = installModuleDetail
       setDisabledNextButton(false)
       setInstallationOverlay(false) 
-      setDisableNextButtonProcess(false)  
+      setDisableNextButtonProcess(false)
+          setOpen(true);
       //window.location.href = "bootstrap-modules";
-      history.push(`/bootstrap-modules`)
+      //history.push(`/bootstrap-modules`)
     }
     const onError = () => {
       setDisabledNextButton(false)
@@ -533,6 +556,42 @@ const BootstrapModule = (props) => {
         </Row>
         </CardContent>
         </Card>
+
+
+            <Dialog open={open} onClose={handleClose} >
+                <DialogTitle style={{backgroundColor:'#014d88',color:'#fff',textAlign:'center'}}>Restart LAMISPlus</DialogTitle>
+                <DialogContent style={{width:'500px',height:'250px',padding:'0px'}}>
+                    <DialogContentText style={{fontSize:'24px',color:'#992E62',fontWeight:'bold', width:'500px',height:'250px',border:'10px solid #fff',textAlign:'center',justifyContent:'center',display:'flex',alignItems:'center'}}>
+                        Kindly restart LAMISPlus to enable the update
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions style={{backgroundColor:'#014d88',color:'#fff'}}>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={restartingModule}
+                        style={{color:'#014d88',backgroundColor:'#fff'}}
+                    >
+                        Restart
+                    </Button>
+
+                    <Link
+                        to ={{
+                            pathname: "/bootstrap-modules",
+                            activetab: 1
+                        }}
+                    >
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            style={{backgroundColor:'#992E62',color:'#fff',marginLeft:"20px"}}
+                        >
+                            Close
+                        </Button>
+                    </Link>
+
+                </DialogActions>
+            </Dialog>
         </>
     );     
 }

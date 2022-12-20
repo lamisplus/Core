@@ -157,8 +157,8 @@ const processDelete = (id) => {
                         title="Find Codeset"
                         columns={[
                             {
-                                title: "Codeset Group",
-                                field: "codesetGroup",
+                                title: "Group",
+                                field: "Group",
                             },
                             { title: "Value", field: "display" },
                             { title: "Version", field: "version" },
@@ -167,7 +167,7 @@ const processDelete = (id) => {
                         ]}
                         isLoading={loading}
                         data={props.applicationCodesetList.map((row) => ({
-                            codesetGroup: row.codesetGroup,
+                            Group: row.codesetGroup,
                             
                             display: row.display,
                             language: row.language,

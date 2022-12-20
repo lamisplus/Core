@@ -65,7 +65,17 @@ const useStyles = makeStyles((theme) => ({
   },
   root: {
     flexGrow: 1,
-    maxWidth: 752,
+    '& .form-control.is-valid': {
+      borderColor: '#f72b50 !important',
+      borderRight: '0px !important'
+    },
+    '& .form-control.is-invalid': {
+      borderColor: '#f72b50e !important',
+      borderRight: '0px !important'
+    },
+/*    "& .react-dual-listbox button, .react-dual-listbox select":{
+      border:'1px solid #E6E6E6'
+    }*/
   },
   demo: {
     backgroundColor: theme.palette.background.default,
@@ -73,6 +83,7 @@ const useStyles = makeStyles((theme) => ({
   inline: {
     display: "inline",
   },
+
 }));
 //let  arrVal = [];
 
@@ -97,6 +108,12 @@ const UserRegistration = (props) => {
   const [allOrganisations, setAllorganisations]=useState([]);
   const [organisations,setOrganisations] = useState([]);
   const [selectedOrganisations,setSelectedOrganisations] = useState([]);
+  const [passwordStrength, setPasswordStrength] = useState("#E6E6E6");
+  const [passwordTextColor, setPasswordTextColor] = useState("#2D2D2D");
+  const [passwordFeedback, setPasswordFeedback] = useState('Minimum 6 characters, one uppercase and lowercase letter and one number');
+  const strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
+  const mediumRegex = new RegExp("^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})");
+
 
   const fetchOrganisation=()=>{
     axios
@@ -162,6 +179,21 @@ const UserRegistration = (props) => {
 
   // check if password and confirm password match
   const handleConfirmPassword = (e, setConfirmPassword = true) => {
+    if(strongRegex.test(e.target.value)) {
+      setPasswordStrength("#DDFFEE");
+      setPasswordTextColor("#01C864");
+      setPasswordFeedback('Password Strength: Strong')
+    } else if(mediumRegex.test(e.target.value)) {
+      setPasswordStrength("#FFF3D0");
+      setPasswordTextColor("#FFD55A");
+      setPasswordFeedback('Password Strength: Medium')
+    } else {
+      setPasswordStrength("#E6E6E6");
+      setPasswordTextColor("#2D2D2D");
+      setPasswordFeedback('Minimum 6 characters, one uppercase and lowercase letter and one number')
+    }
+
+
     if (setConfirmPassword) setConfirm(e.target.value);
     if (e.target.value === values.password || e.target.value === confirm) {
       setMatchingPassword(true);
@@ -219,7 +251,7 @@ const UserRegistration = (props) => {
         .then(response => {
           setSaving(false);
           toast.success(`successfully added`);
-          console.log(response.data)
+          //console.log(response.data)
           //props.history.push("/users")
         }) .catch((error) => {
           setSaving(false);
@@ -264,7 +296,7 @@ const UserRegistration = (props) => {
           <br />
       <ToastContainer autoClose={3000} hideProgressBar />
       
-      <div className="col-xl-12 col-lg-12">
+      <div  className={classes.root} >
           <div className="card">
             <div className="card-header">
               <h4 className="card-title" style={{color:'#014d88',fontWeight:'bolder'}}>{userDetail===null ? "User Information" : "Edit User Information"}</h4>
@@ -383,13 +415,17 @@ const UserRegistration = (props) => {
                       id="password"
                       onChange={handlePassword}
                       value={values.password}
-                      style={{height:"40px",border:'solid 1px #014d88',borderRadius:'5px'}}
+                      style={{height:"40px",border:'solid 1px #014d88',borderRadius:'5px',backgroundColor:`${passwordStrength}`}}
                       required
                       className={validPasswordClass}
+                      autocomplete="off"
                     />
-                    <FormFeedback>
-                      Password must be atleast 6 characters
-                    </FormFeedback>
+                      <div style={{color:`${passwordTextColor}`,opacity:'1'}}>
+                        {passwordFeedback}
+                      </div>
+ {/*                   <FormFeedback>
+                      {passwordFeedback}
+                    </FormFeedback>*/}
                   </FormGroup>
                    
                     </div>
@@ -405,6 +441,7 @@ const UserRegistration = (props) => {
                       style={{height:"40px",border:'solid 1px #014d88',borderRadius:'5px'}}
                       required
                       className={matchingPasswordClass}
+                      autocomplete="off"
                     />
                     <FormFeedback>Passwords do not match</FormFeedback>
                   </FormGroup>

@@ -166,8 +166,9 @@ const BootstrapModule = (props) => {
     }, [moduleStatus,moduleBatchNum]); //componentDidMount
 
     const restartingModule  = () => {
-        axios.get(`${url }restart`)
+        axios.get(`http://localhost:8282/restart`)
         .then((response) => {
+            handleClose()
             toast.error(`Successfully restarting`);
         }).catch((error) => {
             console.log(error);
@@ -565,19 +566,19 @@ const BootstrapModule = (props) => {
                     </Row>
                 </CardContent>
             </Card>
-            <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>Restart LAMISPlus</DialogTitle>
-                <DialogContent>
-                    <DialogContentText>
-                        Would you like to restart LAMISPlus.
+            <Dialog open={open} >
+                <DialogTitle style={{backgroundColor:'#014d88',color:'#fff',textAlign:'center', fontSize:'28px'}}>Restart LAMISPlus</DialogTitle>
+                <DialogContent style={{width:'850px',height:'250px',padding:'0px'}}>
+                    <DialogContentText style={{fontSize:'24px',color:'#992E62',fontWeight:'bold', width:'600px',height:'250px',border:'10px solid #fff',textAlign:'center',justifyContent:'center',display:'flex',alignItems:'center'}}>
+                        Kindly restart LAMISPlus to effect the update
                     </DialogContentText>
                 </DialogContent>
-                <DialogActions>
+                <DialogActions style={{backgroundColor:'#014d88',color:'#fff'}}>
                     <Button
                         variant="contained"
                         color="primary"
                         onClick={restartingModule}
-                        style={{backgroundColor:'#014d88',color:'#fff'}}
+                        style={{color:'#014d88',backgroundColor:'#fff'}}
                     >
                         Restart
                     </Button>

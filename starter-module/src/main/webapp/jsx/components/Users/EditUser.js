@@ -79,6 +79,7 @@ let  arrVal = [];
 const UserRegistration = (props) => {
    //
   const userDetail = props.location && props.location.state ? props.location.state.user : null;
+  const [currentUser, setCurrentUser]=useState(null)
   const rolesDef = props.location && props.location.state ? props.location.state.defRole : null;
   const classes = useStyles();
   const { values, setValues, handleInputChange, resetForm } = useForm(
@@ -86,7 +87,7 @@ const UserRegistration = (props) => {
   );
   const [gender, setGender] = useState([]);
   const [role, setRole] = useState([]);
-  const [confirm, setConfirm] = useState("");
+  const [confirm, setConfirm] = useState(null);
   const [matchingPassword, setMatchingPassword] = useState(false);
   const [validPassword, setValidPassword] = useState(false);
   const [matchingPasswordClass, setMatchingPasswordClass] = useState("");
@@ -98,6 +99,13 @@ const UserRegistration = (props) => {
   const [allOrganisations, setAllorganisations]=useState([]);
   const [organisations,setOrganisations] = useState([]);
   const [selectedOrganisations,setSelectedOrganisations] = useState([ "CHC ZUNGERU" ]);
+  const [passwordStrength, setPasswordStrength] = useState("#E6E6E6");
+  const [passwordTextColor, setPasswordTextColor] = useState("#2D2D2D");
+  const [passwordFeedback, setPasswordFeedback] = useState('Minimum 6 characters, one uppercase and lowercase letter and one number');
+  const strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
+  const mediumRegex = new RegExp("^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})");
+
+
 
   const fetchOrganisation=()=>{
     axios
@@ -113,6 +121,7 @@ const UserRegistration = (props) => {
           setSelectedOrganisations(
               _.uniq(_.map(userDetail.applicationUserOrganisationUnits, 'organisationUnitName'))
           )
+
         })
         .catch((error) => {
           console.log(error);
@@ -145,35 +154,34 @@ const UserRegistration = (props) => {
   useEffect(() => {
     async function getCharacters() {
       axios
-        .get(`${baseUrl}account/roles`)
-        .then((response) => {
-          
-          setRole(
-            Object.entries(response.data).map(([key, value]) => ({
-              label: value.name,
-              value: value.name,
-            }))
-          );
-          //console.log(props.location.state.user.roles)
-          //setSelectedOption(role.filter(x => x.value in(props.location.state.user.roles)))
-        //   props.location.state.user.roles.forEach(function (value, index, array) {
-        //     for(var i=0; i<rolesDef.length; i++){
-        //       if (rolesDef[i].label===value ){
-        //         console.log(rolesDef)
-        //         arrVal.push(rolesDef[i])
-        //       }
-                          
-        //     }
-            
-        // });
-        //setSelectedOption(arrVal)
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+          .get(`${baseUrl}account/roles`)
+          .then((response) => {
+            setRole(
+                Object.entries(response.data).map(([key, value]) => ({
+                  label: value.name,
+                  value: value.name,
+                }))
+            );
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+
+      axios
+          .get(`${baseUrl}account`)
+          .then((response) => {
+            setCurrentUser(response.data)
+            setMatchingPassword(true);
+            setValidPassword(true);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
     }
     getCharacters();
   }, []);
+
+
   const onPermissionSelect = (selectedValues) => {
     setSelectedOption(selectedValues);
   };
@@ -183,6 +191,20 @@ const UserRegistration = (props) => {
 
   // check if password and confirm password match
   const handleConfirmPassword = (e, setConfirmPassword = true) => {
+    if(strongRegex.test(e.target.value)) {
+      setPasswordStrength("#DDFFEE");
+      setPasswordTextColor("#01C864");
+      setPasswordFeedback('Password Strength: Strong')
+    } else if(mediumRegex.test(e.target.value)) {
+      setPasswordStrength("#FFF3D0");
+      setPasswordTextColor("#FFD55A");
+      setPasswordFeedback('Password Strength: Medium')
+    } else {
+      setPasswordStrength("#E6E6E6");
+      setPasswordTextColor("#2D2D2D");
+      setPasswordFeedback('Minimum 6 characters, one uppercase and lowercase letter and one number')
+    }
+
     if (setConfirmPassword) setConfirm(e.target.value);
     if (e.target.value === values.password || e.target.value === confirm) {
       setMatchingPassword(true);
@@ -205,6 +227,7 @@ const UserRegistration = (props) => {
     }
     // check if password and confirm password match
     handleConfirmPassword(e, false);
+
   };
 
 
@@ -228,9 +251,7 @@ const UserRegistration = (props) => {
       switchFacility(defaultFacility.id);*/
       if(userDetail.applicationUserOrganisationUnits.length >0){
         userDetail.applicationUserOrganisationUnits.map((organisation) =>{
-
-          var orgDetails = _.find(allOrganisations, {name:organisation.organisationUnitId});
-
+          var orgDetails = _.find(allOrganisations, {id:organisation.organisationUnitId});
           axios.delete(`${baseUrl}application_user_organisation_unit/${orgDetails.id}`, )
               .then(response => {
                 toast.success(`successfully added`);
@@ -241,6 +262,7 @@ const UserRegistration = (props) => {
 
 
       }
+      console.log()
       //Add Organisations
       let facilityDetails = [];
       selectedOrganisations.map((organisation) =>{
@@ -262,15 +284,12 @@ const UserRegistration = (props) => {
 
 
   const handleSubmit = (e) => {
+
     e.preventDefault();
     updateUserOrganisations();
+
     const dateOfBirth = moment(values.dateOfBirth).format("YYYY-MM-DD");
     values["dateOfBirth"] = dateOfBirth;
-    //values["roles"] = [values["role"]]
-    // let roleArr = []
-    // const newRoleList =selectedOption.forEach(function (value, index, array) {
-    //   roleArr.push(value['label'])
-    // })
     values["roles"] = selectedOption
     setSaving(true);
     const onSuccess = () => {
@@ -433,25 +452,28 @@ const UserRegistration = (props) => {
                     </div>
                     <div className="form-group mb-3 col-md-6">
                         <FormGroup>
-                        <Label for="password" style={{color:'#014d88',fontWeight:'bolder'}}>Password *</Label>
+                        <Label for="password" style={{color:'#014d88',fontWeight:'bolder'}}>Password</Label>
                           <Input
                             type="password"
                             name="password"
                             id="password"
                             onChange={handlePassword}
                             value={values.password}
-                            style={{height:"40px",border:'solid 1px #014d88',borderRadius:'5px'}}
-                            required
+                            style={{height:"40px",border:'solid 1px #014d88',borderRadius:'5px',backgroundColor:`${passwordStrength}`}}
                             className={validPasswordClass}
+                            autoComplete="new-password"
                           />
-                        <FormFeedback>
+                          <div style={{color:`${passwordTextColor}`,opacity:'1'}}>
+                            {passwordFeedback}
+                          </div>
+{/*                        <FormFeedback>
                           Password must be atleast 6 characters
-                        </FormFeedback>
+                        </FormFeedback>*/}
                         </FormGroup>
                     </div>
                     <div className="form-group mb-3 col-md-6">
                       <FormGroup>
-                      <Label for="confirm" style={{color:'#014d88',fontWeight:'bolder'}}>Confirm Password *</Label>
+                      <Label for="confirm" style={{color:'#014d88',fontWeight:'bolder'}}>Confirm Password</Label>
                       <Input
                         type="password"
                         name="confirm"
@@ -459,8 +481,8 @@ const UserRegistration = (props) => {
                         onChange={handleConfirmPassword}
                         value={confirm}
                         style={{height:"40px",border:'solid 1px #014d88',borderRadius:'5px'}}
-                        required
                         className={matchingPasswordClass}
+                        autoComplete="new-password"
                       />
                       <FormFeedback>Passwords do not match</FormFeedback>
                       </FormGroup> 
@@ -470,14 +492,15 @@ const UserRegistration = (props) => {
 
 
 
-                  <div className="form-group mb-12 col-md-12">
+                  <div className="form-group mb-12 col-md-12" >
                     <FormGroup>
                       <Label for="permissions" style={{color:'#014d88',fontWeight:'bolder'}}>Facility*</Label>
                       <DualListBox
-                          //canFilter
+                          canFilter
                           options={organisations}
                           onChange={onOrganisationSelect}
                           selected={selectedOrganisations}
+                          required
                       />
                     </FormGroup>
                   </div>
@@ -486,11 +509,11 @@ const UserRegistration = (props) => {
 
 
 
-                  <div className="form-group mb-12 col-md-12">
+                  <div className="form-group mb-12 col-md-12" style={{paddingTop:'20px'}}>
                       <FormGroup>
                         <Label for="permissions" style={{color:'#014d88',fontWeight:'bolder'}}>Role*</Label>
                         <DualListBox
-                          //canFilter
+                          canFilter
                           options={role}
                           onChange={onPermissionSelect}
                           selected={selectedOption}

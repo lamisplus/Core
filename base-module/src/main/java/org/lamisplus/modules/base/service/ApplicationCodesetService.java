@@ -41,11 +41,14 @@ public class ApplicationCodesetService {
             throw new RecordExistException(ApplicationCodeSet.class,"Display:",applicationCodesetDTO.getDisplay());
         }
 
+        //the sql - update base_application_codeset
+        //set code = REPLACE(REPLACE(TRIM(UPPER(codeset_group || '_' || display)), '/', ''), ' ', '_')
         final ApplicationCodeSet applicationCodeset = convertApplicationCodeDtoSet (applicationCodesetDTO);
         applicationCodeset.setCode(UUID.randomUUID().toString());
         applicationCodeset.setArchived(UN_ARCHIVED);
         String code = applicationCodeset.getCodesetGroup()+"_"+applicationCodeset.getDisplay();
-        code = code.replaceAll("[\\p{Punct}&&[^_]]+|^_+|\\p{Punct}+(?=_|$)", "_");
+        code = code.replace("/", "_").replace(" ", "_");
+        //code = code.replaceAll("[\\p{Punct}&&[^_]]+|^_+|\\p{Punct}+(?=_|$)", "_");
         applicationCodeset.setCode(code.toUpperCase().trim());
 
         return applicationCodesetRepository.save(applicationCodeset);
@@ -69,7 +72,7 @@ public class ApplicationCodesetService {
         final ApplicationCodeSet applicationCodeset = convertApplicationCodeDtoSet (applicationCodesetDTO);
         applicationCodeset.setId(id);
         if(applicationCodeset.getArchived() == null) {
-            //deactivate the codeset, 1 is archived, 0 is unarchived, 2 is deactivate
+            //deactivate the codeset, 1 is archived, 0 is unarchived, 2 is deactivated
             applicationCodeset.setArchived(UN_ARCHIVED);
         }
         return applicationCodesetRepository.save(applicationCodeset);
@@ -110,7 +113,7 @@ public class ApplicationCodesetService {
         List<ApplicationCodeSet> applicationCodeSet = applicationCodesetRepository.findAllByCodeAndArchived(code, UN_ARCHIVED);
         if(applicationCodeSet.isEmpty()) throw new EntityNotFoundException(ApplicationCodeSet.class,"Code:",code+"");
         return applicationCodeSet.stream()
-                .map(applicationCodeSet1 -> convertApplicationCodeSetToDto(applicationCodeSet1))
+                .map(this::convertApplicationCodeSetToDto)
                 .collect(Collectors.toList());
     }
 }
