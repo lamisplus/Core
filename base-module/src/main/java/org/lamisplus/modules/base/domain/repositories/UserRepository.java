@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashSet;
@@ -26,4 +27,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Page<User> findAllByArchived(Pageable pageable, int archived);
 
     Optional<User> findByIdAndArchived(Long id, int archived);
+
+    @Query(value = "SELECT * FROM public.base_application_user where user_name != 'guest@lamisplus.org' and archived != '1'  ORDER BY id ASC", nativeQuery = true)
+    List <User> getAllByArchived();
 }

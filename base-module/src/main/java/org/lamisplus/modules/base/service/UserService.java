@@ -5,6 +5,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.lamisplus.modules.base.controller.apierror.EntityNotFoundException;
 import org.lamisplus.modules.base.controller.apierror.RecordExistException;
+import org.lamisplus.modules.base.domain.dto.ManagementDto;
 import org.lamisplus.modules.base.domain.dto.UserDTO;
 import org.lamisplus.modules.base.domain.entities.ApplicationUserOrganisationUnit;
 import org.lamisplus.modules.base.domain.entities.OrganisationUnit;
@@ -172,5 +173,13 @@ public class UserService {
 
     public UserDTO getUserById(Long id){
         return userMapper.userToUserDTO(userRepository.findById(id).orElseThrow(()-> new EntityNotFoundException(User.class, "Id", id + "")));
+    }
+
+    public ManagementDto isLamisPlusConfigured() {
+        ManagementDto managementDto = new ManagementDto();
+        List <User> users = userRepository.getAllByArchived();
+        managementDto.setConfigured(!users.isEmpty());
+        managementDto.setUsers(users);
+        return managementDto;
     }
 }
