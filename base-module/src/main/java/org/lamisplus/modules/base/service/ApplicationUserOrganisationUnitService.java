@@ -96,4 +96,10 @@ public class ApplicationUserOrganisationUnitService {
 
         return list;
     }
+
+    public void creatUserxxxxxxxx(ApplicationUserOrganisationUnitDTO applicationUserOrganisationUnitDTO) {
+    applicationUserOrganisationUnitRepository
+                .save(this.toApplicationUserOrganisationUnit(applicationUserOrganisationUnitDTO));
+    }
+
 }
