@@ -42,7 +42,7 @@ const ErrorMissingOrganisation = (props) => {
 
     const getLgaByState = (data) => {
         fetchOrgUnitByParentId(data.value.id, 3, setLgas);
-        //fetchFacilityByParentId(data.value.id, 4);
+        fetchFacilityByParentId(data.value.id, data.value.id);
     }
     const getFacilities = (data) => {
         fetchFacilityByParentId(data.value.id, 4);
