@@ -22,7 +22,7 @@ const ErrorMissingOrganisation = (props) => {
 
     const [loading, setLoading] = useState(false)
     //const currentUser = props.user;
-    const defaultValues = {applicationUserId: "", organisationUnitId:""};
+    const defaultValues = {applicationUserId: "", organisationUnitId:"", targetGroup:""};
     const [formData, setFormData] = useState( defaultValues)
     const [facilities, setFacilities] = useState([]);
     const [countries, setCountries] = useState([]);
@@ -30,7 +30,7 @@ const ErrorMissingOrganisation = (props) => {
     const [lgas, setLgas] = useState([]);
     const [selectedFacilities, setSelectedFacilities] = useState( [] );
     const classes = useStyles()
-
+    const [targetGroup, setTargetGroup] = useState([]);
     const onFacilitySelect = (selectedValues) => {
         setSelectedFacilities(selectedValues);
     };
@@ -49,6 +49,7 @@ const ErrorMissingOrganisation = (props) => {
     }
     useEffect(() => {
         fetchCountries();
+        fetchTargetGroup();
     }, []);
     const fetchCountries = () => {
         axios
@@ -65,7 +66,21 @@ const ErrorMissingOrganisation = (props) => {
                 console.log(error);
             });
     }
-
+    const fetchTargetGroup = () => {
+        axios
+            .get(`${baseUrl}application-codesets/v2/TARGET_GROUP_SETUP`)
+            .then((response) => {
+                const c = response.data.map(x => ({
+                    ...x,
+                    label: x.name,
+                    value: x.id,
+                }));
+                setTargetGroup(c);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
     const fetchFacilityByParentId = (parentId, levelId) => {
         axios
             .get(`${baseUrl}organisation-units/parent-organisation-units/${parentId}/organisation-units-level/${levelId}/hierarchy`)
@@ -174,11 +189,12 @@ const ErrorMissingOrganisation = (props) => {
 
                                         <Col md={4}>
                                             <FormGroup>
-                                                <Label>Country</Label>
+                                                <Label style={{fontWeight: "bold", fontSize: "16px", }} >Country</Label>
                                                 <Select
                                                     required
                                                     isMulti={false}
                                                     //isClearable={true}
+                                                    style={{border: "1px solid #014D88", borderRadius:"0.2rem"}}
                                                     onChange={getStateByCountry}
                                                     options={countries.map((x) => ({
                                                         label: x.name,
@@ -189,7 +205,7 @@ const ErrorMissingOrganisation = (props) => {
                                         </Col>
                                         <Col md={4}>
                                             <FormGroup>
-                                                <Label>State</Label>
+                                                <Label style={{fontWeight: "bold", fontSize: "16px"}}>State</Label>
                                                 <Select
                                                     required
                                                     //isMulti={false}
@@ -204,7 +220,7 @@ const ErrorMissingOrganisation = (props) => {
                                         </Col>
                                         <Col md={4}>
                                             <FormGroup>
-                                                <Label>LGA</Label>
+                                                <Label style={{fontWeight: "bold", fontSize: "16px"}}>LGA</Label>
                                                 <Select
                                                     required
                                                     isMulti={false}
@@ -217,10 +233,11 @@ const ErrorMissingOrganisation = (props) => {
                                                 />
                                             </FormGroup>
                                         </Col>
-                                        <br/>
+                                        <br/><br/>
+                                        <br/><br/>
                                         <Col md={12}>
                                             <FormGroup>
-                                                <Label for="Facility" style={{fontSize:'24px'}}>Assign Facilities</Label>
+                                                <Label for="Facility" style={{fontSize:'22px', fontWeight: "bold"}}>Assign Facilities</Label>
                                                 <DualListBox
                                                     canFilter
                                                     options={facilities}
@@ -229,6 +246,24 @@ const ErrorMissingOrganisation = (props) => {
                                                 />
                                             </FormGroup>
                                         </Col>
+                                    </Row>
+                                    <br/>
+                                    <Row >
+                                    <Col md={4}>
+                                        <FormGroup>
+                                            <Label style={{fontWeight: "bold", fontSize: "16px"}}>Target Group</Label>
+                                            <Select
+                                                required
+                                                //isMulti={false}
+                                                //isClearable={true}
+                                                //onChange={getLgaByState}
+                                                options={targetGroup.map((x) => ({
+                                                    label: x.display,
+                                                    value: x.code,
+                                                }))}
+                                            />
+                                        </FormGroup>
+                                    </Col>
                                     </Row>
                                     <br/>
                                     <MatButton
