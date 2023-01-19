@@ -34,6 +34,7 @@ import PageTitle from "./../../layouts/PageTitle";
 //import Select from "react-select";
 import DualListBox from "react-dual-listbox";
 import _ from "lodash";
+import {authentication} from "../../../_services/authentication";
 
 Moment.locale("en");
 momentLocalizer();
@@ -113,19 +114,19 @@ const UserRegistration = (props) => {
   const [passwordFeedback, setPasswordFeedback] = useState('Minimum 6 characters, one uppercase and lowercase letter and one number');
   const strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
   const mediumRegex = new RegExp("^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})");
-
+  const [user, setUser] = useState(null);
 
   const fetchOrganisation=()=>{
     axios
         .get(`${baseUrl}organisation-unit-levels/v2/4/organisation-units`)
         .then((response) => {
           setAllorganisations(response.data);
-          setOrganisations(
-              Object.entries(response.data).map(([key, value]) => ({
-                label: value.name,
-                value: value.name,
-              }))
-          );
+          // setOrganisations(
+          //     Object.entries(response.data).map(([key, value]) => ({
+          //       label: value.name,
+          //       value: value.name,
+          //     }))
+          // );
         })
         .catch((error) => {
           console.log(error);
@@ -151,6 +152,7 @@ const UserRegistration = (props) => {
     }
     getCharacters();
     fetchOrganisation();
+    fetchMe();
   }, []);
 
   /* Get list of Role parameter from the endpoint */
@@ -174,9 +176,27 @@ const UserRegistration = (props) => {
     }
     getCharacters();
   }, []);
- /// console.log(role)
-
-
+  async function fetchMe() {
+    if( authentication.currentUserValue != null ) {
+      axios
+          .get(`${baseUrl}account`)
+          .then((response) => {
+            setUser(response.data);
+            //console.log(response.data)
+            setOrganisations(
+                Object.entries(response.data.applicationUserOrganisationUnits).map(([key, value]) => ({
+                  label: value.organisationUnitName,
+                  value: value.organisationUnitId,
+                }))
+            );
+          })
+          .catch((error) => {
+            //authentication.logout();
+            // console.log(error);
+          });
+    }
+  }
+  console.log(user)
   // check if password and confirm password match
   const handleConfirmPassword = (e, setConfirmPassword = true) => {
     if(strongRegex.test(e.target.value)) {
