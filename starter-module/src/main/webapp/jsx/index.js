@@ -136,7 +136,7 @@ const Markup = () => {
             {user && user.currentOrganisationUnitId != null ?
                 (
                     <>
-                      {appConfig !== false ?
+                      {appConfig !== true ?
                           (
                               <>
                                 <div
