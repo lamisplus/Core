@@ -129,8 +129,6 @@ const Markup = () => {
     configApp();
   }, []);
 
-  console.log("testing")
-
   return (
       <>
         {/*{appConfig !== true ? (*/}
@@ -138,7 +136,7 @@ const Markup = () => {
             {user && user.currentOrganisationUnitId != null ?
                 (
                     <>
-                      {appConfig !== true ?
+                      {appConfig !== false ?
                           (
                               <>
                                 <div

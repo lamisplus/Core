@@ -44,6 +44,9 @@ const ErrorMissingOrganisation = (props) => {
         fetchOrgUnitByParentId(data.value.id, 3, setLgas);
         fetchFacilityByParentId(data.value.id, data.value.id);
     }
+    const getTargetGroup = (data) => {
+        defaultValues.targetGroup=data.label
+    }
     const getFacilities = (data) => {
         fetchFacilityByParentId(data.value.id, 4);
     }
@@ -256,7 +259,7 @@ const ErrorMissingOrganisation = (props) => {
                                                 required
                                                 //isMulti={false}
                                                 //isClearable={true}
-                                                //onChange={getLgaByState}
+                                                onChange={getTargetGroup}
                                                 options={targetGroup.map((x) => ({
                                                     label: x.display,
                                                     value: x.code,
