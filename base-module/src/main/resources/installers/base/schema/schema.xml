@@ -76,6 +76,7 @@
             current_organisation_unit_id bigint,
             first_name character varying(255) ,
             last_name character varying(255) ,
+            target_group character varying(255),
             created_by character varying ,
             date_created timestamp without time zone,
             modified_by character varying ,
