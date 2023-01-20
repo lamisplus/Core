@@ -89,7 +89,7 @@ const useStyles = makeStyles((theme) => ({
 //let  arrVal = [];
 
 const UserRegistration = (props) => {
-   //
+
   const userDetail = props.location && props.location.state ? props.location.state.user : null;
   //const rolesDef = props.location && props.location.state ? props.location.state.defRole : null;
   const classes = useStyles();
@@ -196,7 +196,7 @@ const UserRegistration = (props) => {
           });
     }
   }
-  console.log(user)
+  //console.log(user)
   // check if password and confirm password match
   const handleConfirmPassword = (e, setConfirmPassword = true) => {
     if(strongRegex.test(e.target.value)) {
@@ -278,8 +278,6 @@ const UserRegistration = (props) => {
           toast.error(`An error occurred, adding facility`);
     });
     //updateUserOrganisations();
-
-    alert('user created');
   };
 
   const onPermissionSelect = (selectedValues) => {
