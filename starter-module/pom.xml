@@ -573,7 +573,7 @@
 				<artifactId>frontend-maven-plugin</artifactId>
 				<version>1.12.1</version>
 				<executions>
-					<execution>
+					<!--<execution>
 						<id>install node and npm</id>
 						<goals>
 							<goal>install-node-and-npm</goal>
@@ -591,7 +591,7 @@
 						<configuration>
 							<arguments>install</arguments>
 						</configuration>
-					</execution>
+					</execution>-->
 					<execution>
 						<id>npm run build</id>
 						<goals>
