@@ -3,6 +3,7 @@ package org.lamisplus.modules.base.controller;
 import lombok.RequiredArgsConstructor;
 import org.lamisplus.modules.base.controller.apierror.EntityNotFoundException;
 import org.lamisplus.modules.base.controller.vm.ManagedUserVM;
+import org.lamisplus.modules.base.domain.dto.FacilitySetupDTO;
 import org.lamisplus.modules.base.domain.dto.ManagementDto;
 import org.lamisplus.modules.base.domain.dto.UserDTO;
 import org.lamisplus.modules.base.domain.entities.Role;
@@ -86,11 +87,7 @@ public class UserController {
         return  allPrincipals.size();
     }
 
-    @GetMapping("/configure/app")
-    public ManagementDto isLamisPlusConfigured() {
-        return userService.isLamisPlusConfigured();
 
-    }
 
     @PostMapping(BASE_URL_VERSION_ONE)
     @ResponseStatus(HttpStatus.CREATED)
@@ -124,5 +121,15 @@ public class UserController {
     @PostMapping(BASE_URL_VERSION_ONE + "/organisationUnit/{id}")
     public ResponseEntity<UserDTO> switchOrganisationUnit(@PathVariable Long id) {
         return ResponseEntity.ok(userService.changeOrganisationUnit(id));
+    }
+
+    @GetMapping(BASE_URL_VERSION_ONE +"/configure/app")
+    public boolean isLamisPlusConfigured() {
+        return userService.isLamisPlusConfigured();
+
+    }
+    @PostMapping(BASE_URL_VERSION_ONE +"/facility/setup")
+    public FacilitySetupDTO facilitySetup(@RequestBody FacilitySetupDTO facilitySetupDTO) {
+        return userService.facilitySetup(facilitySetupDTO);
     }
 }

@@ -28,6 +28,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByIdAndArchived(Long id, int archived);
 
-    @Query(value = "SELECT * FROM public.base_application_user where user_name != 'guest@lamisplus.org' and archived != '1'  ORDER BY id ASC", nativeQuery = true)
-    List <User> getAllByArchived();
+    @Query(value = "SELECT count(*) FROM public.base_application_user where current_organisation_unit_id !=100000 and archived != '1'", nativeQuery = true)
+    Integer getAllByArchived();
+
+    @Query(value = "SELECT count(*) FROM public.base_application_user_organisation_unit where application_user_id=?1 and organisation_unit_id=?2", nativeQuery = true)
+    Integer getUsersByOrganisationId(Long userId, Long orgId);
 }
