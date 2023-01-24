@@ -77,6 +77,8 @@ public class UserService {
         newUser.setPhoneNumber(userDTO.getPhoneNumber());
         newUser.setGender(userDTO.getGender());
         newUser.setCurrentOrganisationUnitId(getUserWithRoles().get().getCurrentOrganisationUnitId());
+        newUser.setTargetGroup(getUserWithRoles().get().getTargetGroup());
+
         newUser.setPassword(encryptedPassword);
         newUser.setFirstName(userDTO.getFirstName());
         newUser.setLastName(userDTO.getLastName());
@@ -201,6 +203,7 @@ public class UserService {
         if (currentUser.isPresent()) {
             User user = (User) currentUser.get();
             user.setCurrentOrganisationUnitId(ogrId[0]);
+            user.setTargetGroup(facilitySetupDTO.getTargetGroup());
 
             ApplicationUserOrganisationUnitDTO applicationUserOrganisationUnitDTO = new ApplicationUserOrganisationUnitDTO();
 

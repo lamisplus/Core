@@ -5,5 +5,6 @@ import lombok.Data;
 public class FacilitySetupDTO
 {
     private String applicationUserId;
+    private String targetGroup;
     private Long [] organisationUnitId;
 }
