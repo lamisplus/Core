@@ -155,10 +155,6 @@
 					<groupId>ch.qos.logback</groupId>
 					<artifactId>logback-classic</artifactId>
 				</exclusion>
-				<!--<exclusion>
-					<groupId>org.springframework</groupId>
-					<artifactId>spring-core</artifactId>
-				</exclusion>-->
 			</exclusions>
 		</dependency>
 
@@ -344,29 +340,11 @@
 			<optional>true</optional>
 		</dependency>
 
-		<!--<dependency>
-			<groupId>com.coveo</groupId>
-			<artifactId>nashorn-commonjs-modules</artifactId>
-			<version>1.0.9</version>
-		</dependency>-->
-
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-collections4</artifactId>
 			<version>4.4</version>
 		</dependency>
-
-		<!--<dependency>
-            <groupId>org.tukaani</groupId>
-            <artifactId>xz</artifactId>
-            <version>1.6</version>
-        </dependency>-->
-
-		<!--<dependency>
-            <groupId>com.github.jhonnymertz</groupId>
-            <artifactId>java-wkhtmltopdf-wrapper</artifactId>
-            <version>1.1.10-RELEASE</version>
-        </dependency>-->
 
 		<dependency>
 			<groupId>org.apache.commons</groupId>
@@ -538,11 +516,6 @@
 			<version>1.6</version>
 		</dependency>
 
-		<!--<dependency>
-			<groupId>com.fasterxml.jackson.dataformat</groupId>
-			<artifactId>jackson-dataformat-yaml</artifactId>
-		</dependency>-->
-
 		<dependency>
 			<groupId>com.networknt</groupId>
 			<artifactId>json-schema-validator</artifactId>
@@ -559,11 +532,6 @@
 			<version>4.1.2</version>
 			<scope>compile</scope>
 		</dependency>
-		<!--<dependency>
-			<groupId>com.innoventsolutions.birt.runtime</groupId>
-			<artifactId>org.eclipse.birt.runtime_4.8.0-20180626</artifactId>
-			<version>4.8.0</version>
-		</dependency>-->
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
@@ -619,16 +587,6 @@
 		<dependency>
 			<groupId>com.fasterxml.jackson.dataformat</groupId>
 			<artifactId>jackson-dataformat-avro</artifactId>
-			<!--<exclusions>
-				<exclusion>
-					<groupId>com.fasterxml.jackson.core</groupId>
-					<artifactId>jackson-annotations</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>com.fasterxml.jackson.core</groupId>
-					<artifactId>jackson-core</artifactId>
-				</exclusion>
-			</exclusions>-->
 		</dependency>
 
 		<dependency>
@@ -644,10 +602,6 @@
 					<groupId>io.confluent</groupId>
 					<artifactId>common-utils</artifactId>
 				</exclusion>
-				<!--<exclusion>
-					<groupId>com.fasterxml.jackson.core</groupId>
-					<artifactId>ackson-annotations</artifactId>
-				</exclusion>-->
 			</exclusions>
 		</dependency>
 
@@ -683,13 +637,6 @@
 
 	<build>
 		<plugins>
-			<!--<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
-					<skip>true</skip>
-				</configuration>
-			</plugin>-->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
@@ -726,73 +673,6 @@
 					</annotationProcessorPaths>
 				</configuration>
 			</plugin>
-
-			<!--<plugin>
-				<artifactId>maven-clean-plugin</artifactId>
-				<version>3.1.0</version>
-				<executions>
-					<execution>
-						<id>auto-clean</id>
-						<phase>initialize</phase>
-						<goals>
-							<goal>clean</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-
-			<plugin>
-				<artifactId>maven-install-plugin</artifactId>
-				<version>2.5.2</version>
-				<executions>
-					<execution>
-						<id>auto-install</id>
-						<phase>initialize</phase>
-						<goals>
-							<goal>install</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>-->
-			<!--			<plugin>-->
-			<!--				<groupId>org.springframework.boot</groupId>-->
-			<!--				<artifactId>spring-boot-maven-plugin</artifactId>-->
-			<!--			</plugin>-->
-						<!--<plugin>
-							<groupId>com.github.eirslett</groupId>
-							<artifactId>frontend-maven-plugin</artifactId>
-							<version>1.12.1</version>
-							<executions>
-								<execution>
-									<id>install node and npm</id>
-									<goals>
-										<goal>install-node-and-npm</goal>
-									</goals>
-									<configuration>
-										<nodeVersion>v16.13.2</nodeVersion>
-										<npmVersion>8.1.2</npmVersion>
-									</configuration>
-								</execution>
-								<execution>
-									<id>npm install</id>
-									<goals>
-										<goal>npm</goal>
-									</goals>
-									<configuration>
-										<arguments>install</arguments>
-									</configuration>
-								</execution>
-								<execution>
-									<id>npm run build</id>
-									<goals>
-										<goal>npm</goal>
-									</goals>
-									<configuration>
-										<arguments>run build</arguments>
-									</configuration>
-								</execution>
-							</executions>
-						</plugin>-->
 		</plugins>
 	</build>
 </project>
