@@ -16,6 +16,7 @@ import { ToastContainer, toast} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
 import { connect } from "react-redux";
+import {useHistory} from "react-router-dom";
 // React Notification
 
 import { register, update } from "./../../../actions/user";
@@ -89,7 +90,7 @@ const useStyles = makeStyles((theme) => ({
 //let  arrVal = [];
 
 const UserRegistration = (props) => {
-
+  const history = useHistory();
   const userDetail = props.location && props.location.state ? props.location.state.user : null;
   //const rolesDef = props.location && props.location.state ? props.location.state.defRole : null;
   const classes = useStyles();
@@ -272,7 +273,9 @@ const UserRegistration = (props) => {
           setSaving(false);
           toast.success(`successfully added`);
           //console.log(response.data)
-          //props.history.push("/users")
+          history.push({
+            pathname: '/users',
+          });
         }) .catch((error) => {
           setSaving(false);
           toast.error(`An error occurred, adding facility`);
