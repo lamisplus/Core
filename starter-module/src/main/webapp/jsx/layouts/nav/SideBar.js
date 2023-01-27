@@ -179,7 +179,7 @@ const SideBar = (props) => {
                       to={{ pathname: menu.moduleId===null ? (menu.url!==null?menu.url:"dashboard" ): "modules", state: menu.url}}
                       style={{color: '#992E62', padding: '1px',paddingBottom:'1px', backgroundColor: 'white'}}>
                   <i className={menu.icon!==null && menu.icon!=="wc"? menu.icon : "flaticon-087-stop"} style={{color: '#014d88'}} size="xs"/>
-                  <span className="nav-text" style={{color: '#014d88',fontWeight:'600', fontFamily:'Trebuchet',fontSize:'18px'}}>{menu.name}</span>
+                  <span className="nav-text" style={{color: '#014d88',fontWeight:'600', fontFamily:'Trebuchet',fontSize:'18px'}} title={menu.name}>{menu.name}</span>
                 </Link>
                 {menu.subs.length>0 ?
                     _.sortBy(menu.subs, ["parentId", "position"]).map((subMenu, index) => (
@@ -192,7 +192,7 @@ const SideBar = (props) => {
                               >
                                 <div>
                                   <i className="fa-solid fa-ellipsis" style={{color: '#014d88'}} />{" "} {" "}
-                                  <span style={{fontSize:'16px',color:"#4B5563",fontFamily:'Trebuchet'}} >{subMenu.name} </span>{" "}
+                                  <span style={{fontSize:'16px',color:"#4B5563",fontFamily:'Trebuchet'}} title={subMenu.name}>{subMenu.name} </span>{" "}
                                   <span className="align-middle me-1" style={{fontSize:'14px !important'}} >
                                         {subMenu.subs && subMenu.subs.length > 0 &&(
                                             <i className="fa-solid fa-angle-right fa-sm" size="20" style={{float:"right",marginTop:'8%'}}></i>
@@ -210,7 +210,7 @@ const SideBar = (props) => {
                                                 className={`${path === "system-information" ? "mm-collapse" : ""}`} to={!subSubMenu.moduleId || subSubMenu.moduleId===null? subSubMenu.url : "modules" }>
                                                       <span className="align-middle me-1" style={{fontSize:'14px !important'}} >
                                                         <i className="fa-solid fa-arrow-right fa-2xs" size="20"></i>
-                                                      </span>{" "}<span style={{fontSize:'14px',fontFamily:'Trebuchet'}} >{subSubMenu.name}</span>
+                                                      </span>{" "}<span style={{fontSize:'14px',fontFamily:'Trebuchet'}} title={subSubMenu.name}>{subSubMenu.name}</span>
                                           </Link>
                                         </ul>
                                       </>
