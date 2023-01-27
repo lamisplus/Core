@@ -1,5 +1,3 @@
-
-
 //Online Server
 //export const url =  'http://www.lamisplus.org/base-module/api/';
 
