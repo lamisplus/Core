@@ -95,9 +95,9 @@ public class User {
     @Column(name = "last_name")
     private String lastName;
 
-    @Basic
+    /*@Basic
     @Column(name = "target_group")
-    private String targetGroup;
+    private String targetGroup;*/
 
     @Basic
     @Column(name = "designation")

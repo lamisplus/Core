@@ -67,7 +67,7 @@ public class UserDTO {
         this.email = user.getEmail();
         this.phoneNumber = user.getPhoneNumber();
         this.gender = user.getGender();
-        this.targetGroup = user.getTargetGroup();
+        //this.targetGroup = user.getTargetGroup();
         this.designation = user.getDesignation();
         this.currentOrganisationUnitId = user.getCurrentOrganisationUnitId();
         this.applicationUserOrganisationUnits = user.getApplicationUserOrganisationUnits();

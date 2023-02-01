@@ -31,7 +31,7 @@ public class ApplicationCodeSet extends Audit<String> {
 
     @Basic
     @Column(name = "version")
-    private String version;
+    private String version="1.0";
 
     @Basic
     @Column(name = "code", updatable = false)
@@ -39,5 +39,5 @@ public class ApplicationCodeSet extends Audit<String> {
 
     @Basic
     @Column(name = "archived") //1 is archived, 0 is unarchived, 2 is deactivate
-    private Integer archived;
+    private Integer archived=0;
 }

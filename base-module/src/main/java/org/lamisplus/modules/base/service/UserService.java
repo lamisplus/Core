@@ -40,6 +40,8 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
 
+    private final OrganisationUnitRepository organisationUnitRepository;
+
     private final ApplicationUserOrganisationUnitRepository applicationUserOrganisationUnitRepository;
 
     //private final ApplicationUserOrganisationUnitService applicationUserOrganisationUnitService;
@@ -77,7 +79,7 @@ public class UserService {
         newUser.setPhoneNumber(userDTO.getPhoneNumber());
         newUser.setGender(userDTO.getGender());
         newUser.setCurrentOrganisationUnitId(getUserWithRoles().get().getCurrentOrganisationUnitId());
-        newUser.setTargetGroup(getUserWithRoles().get().getTargetGroup());
+        //newUser.setTargetGroup(getUserWithRoles().get().getTargetGroup());
 
         newUser.setPassword(encryptedPassword);
         newUser.setFirstName(userDTO.getFirstName());
@@ -187,38 +189,30 @@ public class UserService {
     }
 
     public boolean isLamisPlusConfigured() {
-        //ManagementDto managementDto = new ManagementDto();
-        boolean reply = Boolean.FALSE;
-        Integer count = userRepository.getAllByArchived();
-        if(count > 0) reply = Boolean.TRUE;
-//        managementDto.setConfigured(!users.isEmpty());
-//        managementDto.setUsers(users);
-        return reply;
+        String loginInUser = SecurityUtils.getCurrentUserLogin().orElse(null);
+        User user=new User();
+        if(loginInUser != null) {
+            user = userRepository.findOneByUserName(loginInUser).orElse(new User());
+        }
+        return user.getCurrentOrganisationUnitId() != null? false:true;
     }
 
     public FacilitySetupDTO facilitySetup(FacilitySetupDTO facilitySetupDTO)
     {
         Long [] ogrId = facilitySetupDTO.getOrganisationUnitId();
-        Optional<User> currentUser = userRepository.findOneByUserName(facilitySetupDTO.getApplicationUserId());
-        if (currentUser.isPresent()) {
-            User user = (User) currentUser.get();
-            user.setCurrentOrganisationUnitId(ogrId[0]);
-            user.setTargetGroup(facilitySetupDTO.getTargetGroup());
-
-            ApplicationUserOrganisationUnitDTO applicationUserOrganisationUnitDTO = new ApplicationUserOrganisationUnitDTO();
-
-            for (int k=0; k<ogrId.length; k++)
-            {
-                if(userRepository.getUsersByOrganisationId(user.getId(), ogrId[k])>0) continue;
-                applicationUserOrganisationUnitDTO.setApplicationUserId(user.getId());
-                applicationUserOrganisationUnitDTO.setOrganisationUnitId(ogrId[k]);
-               this.creatUser(applicationUserOrganisationUnitDTO);
-                System.out.println(ogrId[k]);
-            }
-
-
-
+        User user = userRepository.findOneByUserName(facilitySetupDTO.getApplicationUserId())
+                .orElseThrow(()-> new EntityNotFoundException(User.class, "Username", String.valueOf(facilitySetupDTO.getApplicationUserId())));
+        List<ApplicationUserOrganisationUnit> applicationUserOrganisationUnits = new ArrayList<>();
+        for(int i=0; i <ogrId.length; i++ ){
+            Long orgId = ogrId[i];
+            organisationUnitRepository.findById(orgId)
+                    .orElseThrow(()-> new EntityNotFoundException(OrganisationUnit.class, "Id", String.valueOf(orgId)));
+            ApplicationUserOrganisationUnit appUserOrg = new ApplicationUserOrganisationUnit();
+            appUserOrg.setApplicationUserId(user.getId());
+            appUserOrg.setOrganisationUnitId(orgId);
+            applicationUserOrganisationUnits.add(appUserOrg);
         }
+         applicationUserOrganisationUnitRepository.saveAll(applicationUserOrganisationUnits);
 
         return facilitySetupDTO;
     }

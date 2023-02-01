@@ -133,10 +133,10 @@ const Markup = () => {
       <>
         {/*{appConfig !== true ? (*/}
         {/*    <>*/}
-            {user && user.currentOrganisationUnitId != null ?
+            {user !== null ?
                 (
                     <>
-                      {appConfig !== true ?
+                      {user && user.currentOrganisationUnitId !== null ?
                           (
                               <>
                                 <div

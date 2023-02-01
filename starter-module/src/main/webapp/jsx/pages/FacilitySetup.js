@@ -251,24 +251,24 @@ const ErrorMissingOrganisation = (props) => {
                                         </Col>
                                     </Row>
                                     <br/>
-                                    <Row >
-                                    <Col md={4}>
-                                        <FormGroup>
-                                            <Label style={{fontWeight: "bold", fontSize: "16px"}}>Target Group</Label>
-                                            <Select
-                                                required
-                                                //isMulti={false}
-                                                //isClearable={true}
-                                                onChange={getTargetGroup}
-                                                options={targetGroup.map((x) => ({
-                                                    label: x.display,
-                                                    value: x.code,
-                                                }))}
-                                            />
-                                        </FormGroup>
-                                    </Col>
-                                    </Row>
-                                    <br/>
+                                    {/*<Row >*/}
+                                    {/*<Col md={4}>*/}
+                                    {/*    <FormGroup>*/}
+                                    {/*        <Label style={{fontWeight: "bold", fontSize: "16px"}}>Target Group</Label>*/}
+                                    {/*        <Select*/}
+                                    {/*            required*/}
+                                    {/*            //isMulti={false}*/}
+                                    {/*            //isClearable={true}*/}
+                                    {/*            onChange={getTargetGroup}*/}
+                                    {/*            options={targetGroup.map((x) => ({*/}
+                                    {/*                label: x.display,*/}
+                                    {/*                value: x.code,*/}
+                                    {/*            }))}*/}
+                                    {/*        />*/}
+                                    {/*    </FormGroup>*/}
+                                    {/*</Col>*/}
+                                    {/*</Row>*/}
+
                                     <MatButton
                                         type='submit'
                                         variant='contained'

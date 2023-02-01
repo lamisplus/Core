@@ -8,9 +8,11 @@ import org.lamisplus.modules.base.controller.apierror.RecordExistException;
 import org.lamisplus.modules.base.domain.dto.ApplicationCodesetDTO;
 import org.lamisplus.modules.base.domain.entities.ApplicationCodeSet;
 import org.lamisplus.modules.base.domain.repositories.ApplicationCodesetRepository;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.beans.Beans;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -66,11 +68,12 @@ public class ApplicationCodesetService {
     }
 
     public ApplicationCodeSet update(Long id, ApplicationCodesetDTO applicationCodesetDTO){
-        applicationCodesetRepository.findByIdAndArchivedNot(id, ARCHIVED)
+        ApplicationCodeSet applicationCodeSetOld = applicationCodesetRepository.findByIdAndArchivedNot(id, ARCHIVED)
                 .orElseThrow(() -> new EntityNotFoundException(ApplicationCodeSet.class,"Display:",id+""));
 
         final ApplicationCodeSet applicationCodeset = convertApplicationCodeDtoSet (applicationCodesetDTO);
         applicationCodeset.setId(id);
+        applicationCodeset.setCode(applicationCodeSetOld.getCode());
         if(applicationCodeset.getArchived() == null) {
             //deactivate the codeset, 1 is archived, 0 is unarchived, 2 is deactivated
             applicationCodeset.setArchived(UN_ARCHIVED);
