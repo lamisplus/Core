@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!-- This XML was generated from LAMISPlus application -->
+<Container>
+    <MessageHeader>
+        <MessageStatusCode>INITIAL</MessageStatusCode>
+        <MessageCreationDateTime>2023-02-08T12:37:54</MessageCreationDateTime>
+        <MessageSchemaVersion>1.6</MessageSchemaVersion>
+        <MessageUniqueID>3</MessageUniqueID>
+        <MessageSendingOrganization>
+            <FacilityName>Base Abat Primary Health Centre</FacilityName>
+            <FacilityID>dmrFYPiuKAA</FacilityID>
+            <FacilityTypeCode>FAC</FacilityTypeCode>
+        </MessageSendingOrganization>
+    </MessageHeader>
+    <IndividualReport>
+        <PatientDemographics>
+            <PatientIdentifier>dmrFYPiuKAA_6d153e84-b625-469f-bc7f-347bac364dca</PatientIdentifier>
+            <TreatmentFacility>
+                <FacilityName>Base Abat Primary Health Centre</FacilityName>
+                <FacilityID>dmrFYPiuKAA</FacilityID>
+                <FacilityTypeCode>FAC</FacilityTypeCode>
+            </TreatmentFacility>
+            <PatientDateOfBirth>1990-06-15</PatientDateOfBirth>
+            <PatientSexCode>F</PatientSexCode>
+            <PatientEducationLevelCode>6</PatientEducationLevelCode>
+            <PatientOccupationCode>RET</PatientOccupationCode>
+            <PatientMaritalStatusCode>M</PatientMaritalStatusCode>
+            <StateOfNigeriaOriginCode>15</StateOfNigeriaOriginCode>
+        </PatientDemographics>
+        <Condition>
+            <ConditionCode>86406008</ConditionCode>
+            <ProgramArea>
+                <ProgramAreaCode>HIV</ProgramAreaCode>
+            </ProgramArea>
+            <PatientAddress>
+                <AddressTypeCode>H</AddressTypeCode>
+                <Town>Abuja</Town>
+                <LGACode>605</LGACode>
+                <StateCode>15</StateCode>
+                <CountryCode>NGA</CountryCode>
+            </PatientAddress>
+            <CommonQuestions>
+                <HospitalNumber>3222</HospitalNumber>
+                <DiagnosisFacility>
+                    <FacilityName>Base Abat Primary Health Centre</FacilityName>
+                    <FacilityID>dmrFYPiuKAA</FacilityID>
+                    <FacilityTypeCode>FAC</FacilityTypeCode>
+                </DiagnosisFacility>
+                <DiagnosisDate>2023-02-01</DiagnosisDate>
+                <PatientPregnancyStatusCode>NK</PatientPregnancyStatusCode>
+                <PatientAge>32</PatientAge>
+            </CommonQuestions>
+            <ConditionSpecificQuestions>
+                <HIVQuestions>
+                    <MedicallyEligibleDate>2023-02-01</MedicallyEligibleDate>
+                    <ReasonMedicallyEligible>2</ReasonMedicallyEligible>
+                    <ARTStartDate>2023-02-01</ARTStartDate>
+                    <WeightAtARTStart>75</WeightAtARTStart>
+                    <ChildHeightAtARTStart>1800</ChildHeightAtARTStart>
+                    <FunctionalStatusStartART>W</FunctionalStatusStartART>
+                    <PatientTransferredOut>false</PatientTransferredOut>
+                    <EnrolledInHIVCareDate

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!-- This XML was generated from LAMISPlus application -->
+<Container>
+    <MessageHeader>
+        <MessageStatusCode>UPDATED</MessageStatusCode>
+        <MessageCreationDateTime>2023-02-10T09:40:18</MessageCreationDateTime>
+        <MessageSchemaVersion>1.6</MessageSchemaVersion>
+        <MessageUniqueID>2</MessageUniqueID>
+        <MessageSendingOrganization>
+            <FacilityName>Borrong General Hospital</FacilityName>
+            <FacilityID>Pjak5oARJBf</FacilityID>
+            <FacilityTypeCode>FAC</FacilityTypeCode>
+        </MessageSendingOrganization>
+    </MessageHeader>
+    <IndividualReport>
+        <PatientDemographics>
+            <PatientIdentifier>Pjak5oARJBf_cfe016ff-80b8-485f-83a8-44d2ce9a2cd3</PatientIdentifier>
+            <TreatmentFacility>
+                <FacilityName>Borrong General Hospital</FacilityName>
+                <FacilityID>Pjak5oARJBf</FacilityID>
+                <FacilityTypeCode>FAC</FacilityTypeCode>
+            </TreatmentFacility>
+            <PatientDateOfBirth>2001-06-15</PatientDateOfBirth>
+            <PatientSexCode>F</PatientSexCode>
+            <PatientEducationLevelCode>1</PatientEducationLevelCode>
+            <PatientOccupationCode>UNE</PatientOccupationCode>
+            <PatientMaritalStatusCode>S</PatientMaritalStatusCode>
+            <StateOfNigeriaOriginCode>13</StateOfNigeriaOriginCode>
+        </PatientDemographics>
+        <Condition>
+            <ConditionCode>86406008</ConditionCode>
+            <ProgramArea>
+                <ProgramAreaCode>HIV</ProgramAreaCode>
+            </ProgramArea>
+            <PatientAddress>
+                <AddressTypeCode>H</AddressTypeCode>
+                <Town>Abuja</Town>
+                <LGACode>158</LGACode>
+                <StateCode>13</StateCode>
+                <CountryCode>NGA</CountryCode>
+            </PatientAddress>
+            <CommonQuestions>
+                <HospitalNumber>001</HospitalNumber>
+                <DiagnosisFacility>
+                    <FacilityName>Borrong General Hospital</FacilityName>
+                    <FacilityID>Pjak5oARJBf</FacilityID>
+                    <FacilityTypeCode>FAC</FacilityTypeCode>
+                </DiagnosisFacility>
+                <DiagnosisDate>2023-02-01</DiagnosisDate>
+                <PatientPregnancyStatusCode>NK</PatientPregnancyStatusCode>
+                <PatientAge>21</PatientAge>
+            </CommonQuestions>
+            <ConditionSpecificQuestions>
+                <HIVQuestions>
+                    <MedicallyEligibleDate>2023-02-01</MedicallyEligibleDate>
+                    <ReasonMedicallyEligible>2</ReasonMedicallyEligible>
+                    <ARTStartDate>2023-02-01</ARTStartDate>
+                    <WeightAtARTStart>75</WeightAtARTStart>
+                    <ChildHeightAtARTStart>1800</ChildHeightAtARTStart>
+                    <FunctionalStatusStartART>A</FunctionalStatusStartART>
+                    <PatientTransferredOut>false</PatientTransferredOut>
+                    <EnrolledInHIVCareDate>2023-02-01</EnrolledInHIVCareDate>
+                </HIVQuestions>
+            </ConditionSpecificQuestions>
+            <Regimen>
+                <VisitID>2f1c7283-559e-4249-843d-88a2318042d2</VisitID>
+                <VisitDate>2023-02-02</VisitDate>
+                <PrescribedRegimen>
+                    <Code>1m</Code>
+                    <CodeDescTxt>TDF-3TC-DTG</CodeDescTxt>
+                </PrescribedRegimen>
+                <PrescribedRegimenTypeCode>ART</PrescribedRegimenTypeCode>
+                <PrescribedRegimenLineCode>10</PrescribedRegimenLineCode>
+                <PrescribedRegimenDuration>30</PrescribedRegimenDuration>
+                <PrescribedRegimenDispensedDate>2023-02-02</PrescribedRegimenDispensedDate>
+                <DateRegimenStarted>2023-02-02</DateRegimenStarted>
+            </Regimen>
+        </Condition>
+    </IndividualReport>
+</Container>
