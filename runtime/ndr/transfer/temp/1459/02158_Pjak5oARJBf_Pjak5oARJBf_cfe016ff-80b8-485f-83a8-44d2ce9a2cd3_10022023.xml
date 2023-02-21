@@ -3,9 +3,9 @@
 <Container>
     <MessageHeader>
         <MessageStatusCode>UPDATED</MessageStatusCode>
-        <MessageCreationDateTime>2023-02-10T09:40:18</MessageCreationDateTime>
+        <MessageCreationDateTime>2023-02-10T14:34:32</MessageCreationDateTime>
         <MessageSchemaVersion>1.6</MessageSchemaVersion>
-        <MessageUniqueID>2</MessageUniqueID>
+        <MessageUniqueID>1</MessageUniqueID>
         <MessageSendingOrganization>
             <FacilityName>Borrong General Hospital</FacilityName>
             <FacilityID>Pjak5oARJBf</FacilityID>
@@ -62,12 +62,81 @@
                     <EnrolledInHIVCareDate>2023-02-01</EnrolledInHIVCareDate>
                 </HIVQuestions>
             </ConditionSpecificQuestions>
+            <Encounters>
+                <HIVEncounter>
+                    <VisitID>564f0962-e191-4d38-b1bd-2042382b498b</VisitID>
+                    <VisitDate>2023-02-06</VisitDate>
+                    <Weight>75</Weight>
+                    <ChildHeight>180</ChildHeight>
+                    <BloodPressure>60/56</BloodPressure>
+                    <EDDandPMTCTLink>NK</EDDandPMTCTLink>
+                    <TBStatus>4</TBStatus>
+                    <ARVDrugRegimen>
+                        <Code>1m</Code>
+                        <CodeDescTxt>TDF-3TC-DTG</CodeDescTxt>
+                    </ARVDrugRegimen>
+                    <NextAppointmentDate>2023-03-25</NextAppointmentDate>
+                </HIVEncounter>
+            </Encounters>
+            <LaboratoryReport>
+                <VisitID>49b489b2-5747-4c1c-9b77-c09f0611d778</VisitID>
+                <VisitDate>2023-02-01</VisitDate>
+                <LaboratoryTestIdentifier>0000001</LaboratoryTestIdentifier>
+                <CollectionDate>2023-02-01</CollectionDate>
+                <LaboratoryOrderAndResult>
+                    <LaboratoryTestTypeCode>00001</LaboratoryTestTypeCode>
+                    <OrderedTestDate>2023-02-01</OrderedTestDate>
+                    <LaboratoryResultedTest>
+                        <Code>80</Code>
+                        <CodeDescTxt>Viral Load</CodeDescTxt>
+                    </LaboratoryResultedTest>
+                    <LaboratoryResult>
+                        <AnswerNumeric>
+                            <Value1>3000.0</Value1>
+                        </AnswerNumeric>
+                    </LaboratoryResult>
+                    <ResultedTestDate>2023-02-02</ResultedTestDate>
+                </LaboratoryOrderAndResult>
+            </LaboratoryReport>
+            <LaboratoryReport>
+                <VisitID>661027eb-c0f4-4810-ba3f-cfa28c6f5a5a</VisitID>
+                <VisitDate>2023-02-09</VisitDate>
+                <LaboratoryTestIdentifier>0000001</LaboratoryTestIdentifier>
+                <CollectionDate>2023-02-09</CollectionDate>
+                <LaboratoryOrderAndResult>
+                    <LaboratoryTestTypeCode>00001</LaboratoryTestTypeCode>
+                    <OrderedTestDate>2023-10-02</OrderedTestDate>
+                    <LaboratoryResultedTest>
+                        <Code>80</Code>
+                        <CodeDescTxt>Viral Load</CodeDescTxt>
+                    </LaboratoryResultedTest>
+                    <LaboratoryResult>
+                        <AnswerNumeric>
+                            <Value1>333.0</Value1>
+                        </AnswerNumeric>
+                    </LaboratoryResult>
+                    <ResultedTestDate>2023-02-10</ResultedTestDate>
+                </LaboratoryOrderAndResult>
+            </LaboratoryReport>
             <Regimen>
                 <VisitID>2f1c7283-559e-4249-843d-88a2318042d2</VisitID>
                 <VisitDate>2023-02-02</VisitDate>
                 <PrescribedRegimen>
                     <Code>1m</Code>
                     <CodeDescTxt>TDF-3TC-DTG</CodeDescTxt>
+                </PrescribedRegimen>
+                <PrescribedRegimenTypeCode>ART</PrescribedRegimenTypeCode>
+                <PrescribedRegimenLineCode>10</PrescribedRegimenLineCode>
+                <PrescribedRegimenDuration>30</PrescribedRegimenDuration>
+                <PrescribedRegimenDispensedDate>2023-02-02</PrescribedRegimenDispensedDate>
+                <DateRegimenStarted>2023-02-02</DateRegimenStarted>
+            </Regimen>
+            <Regimen>
+                <VisitID>a3df5af3-fbfe-4198-b035-d679368cb598</VisitID>
+                <VisitDate>2023-02-02</VisitDate>
+                <PrescribedRegimen>
+                    <Code>1a</Code>
+                    <CodeDescTxt>AZT-3TC-EFV</CodeDescTxt>
                 </PrescribedRegimen>
                 <PrescribedRegimenTypeCode>ART</PrescribedRegimenTypeCode>
                 <PrescribedRegimenLineCode>10</PrescribedRegimenLineCode>

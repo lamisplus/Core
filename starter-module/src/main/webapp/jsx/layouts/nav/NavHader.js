@@ -16,7 +16,7 @@ const NavHader = () => {
 			<Fragment style={{padding:'5px'}}>
                 <img src={logo} alt="" className="logo-abbr"  width="60" height="60"/>
                 {"  "}
-                <text style={{color:'#014d88'}}>{!toggle?'LAMISPlus 2.0':''}</text>
+                <text style={{color:'#014d88'}}>{!toggle?'LAMISPlus':''}</text>
 			</Fragment>
       </Link>
 
