@@ -93,16 +93,16 @@ return (
                     <TiArrowBack/>{" "} Back 
                   </MatButton>
                 </Link>
-                <MatButton
-                  type='submit'
-                  variant='contained'
-                  color='primary'
-                  //className={classes.button}                        
-                  className=" float-right mr-1"
-                  onClick={() => createParentOrgUnit()}
-                >
-                  <TiPlus/>{" "} New 
-                </MatButton>
+                {/*<MatButton*/}
+                {/*  type='submit'*/}
+                {/*  variant='contained'*/}
+                {/*  color='primary'*/}
+                {/*  //className={classes.button}                        */}
+                {/*  className=" float-right mr-1"*/}
+                {/*  onClick={() => createParentOrgUnit()}*/}
+                {/*>*/}
+                {/*  <TiPlus/>{" "} New */}
+                {/*</MatButton>*/}
                 </h1>
                 <Card className="mb-12">
                 
@@ -120,32 +120,32 @@ return (
                                 { title: 'Parent Name', field: 'name' },
                                 { title: 'Description', field: 'description' },
                                 
-                                { title: 'Action', field: 'actions'},
+                                // { title: 'Action', field: 'actions'},
                               ]}
                               isLoading={loading}
                                 data={listOfAllParentOrgUnitLevel.map((row) => ({
                                       name: row.name,  
                                       description: row. description,
                                     
-                                    actions: 
-                                      <div>
-                                        <Menu>
-                                            <MenuButton style={{ backgroundColor:"#992E62", color:"#fff", border:"2px solid #992E62", borderRadius:"4px", }}>
-                                              Actions <span aria-hidden>▾</span>
-                                            </MenuButton>
-                                                <MenuList style={{ color:"#000 !important"}} > 
-                                                      <MenuItem style={{ color:"#000 !important"}}>
-                                                     
-                                                      </MenuItem> 
-                                                      <MenuItem  style={{ color:"#000 !important"}} onSelect={() => deleteModule('module to delete')}>                      
-                                                      
-                                                            <MdDelete size="15" color="blue" />{" "}<span style={{color: '#000'}}>Delete </span>
-                                                                                
-                                                      </MenuItem>                                    
-                                                      
-                                              </MenuList>
-                                        </Menu>
-                                  </div>        
+                                  //   actions:
+                                  //     <div>
+                                  //       <Menu>
+                                  //           <MenuButton style={{ backgroundColor:"#992E62", color:"#fff", border:"2px solid #992E62", borderRadius:"4px", }}>
+                                  //             Actions <span aria-hidden>▾</span>
+                                  //           </MenuButton>
+                                  //               <MenuList style={{ color:"#000 !important"}} >
+                                  //                     <MenuItem style={{ color:"#000 !important"}}>
+                                  //
+                                  //                     </MenuItem>
+                                  //                     {/*<MenuItem  style={{ color:"#000 !important"}} onSelect={() => deleteModule('module to delete')}>                      */}
+                                  //
+                                  //                     {/*      <MdDelete size="15" color="blue" />{" "}<span style={{color: '#000'}}>Delete </span>*/}
+                                  //                     {/*                          */}
+                                  //                     {/*</MenuItem>                                    */}
+                                  //
+                                  //             </MenuList>
+                                  //       </Menu>
+                                  // </div>
                                 }))}
                               options={{
                                 headerStyle: {

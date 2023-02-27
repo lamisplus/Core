@@ -138,18 +138,18 @@ const useStyles = makeStyles({
                       state: { orgUnitLevel: row  }
                   }
               },
-              {
-                  type:'button',
-                  name:'Edit',
-                  icon:<MdPerson size="20" color='#014d88' />,
-                  onClick:(() => updateOrgUnitLevel(row))
-              },
-              {
-                  type:'button',
-                  name:'Delete',
-                  icon:<MdModeEdit size="20" color='#014d88' />,
-                  onClick:(() => deleteModule( row))
-              }
+              // {
+              //     type:'button',
+              //     name:'Edit',
+              //     icon:<MdPerson size="20" color='#014d88' />,
+              //     onClick:(() => updateOrgUnitLevel(row))
+              // },
+              // {
+              //     type:'button',
+              //     name:'Delete',
+              //     icon:<MdModeEdit size="20" color='#014d88' />,
+              //     onClick:(() => deleteModule( row))
+              // }
           ]
       }
 return (
@@ -161,15 +161,15 @@ return (
                   
             <br/>
                 <div className={"d-flex justify-content-end pb-2"}>
-                  <MButton variant="contained"
-                          color="primary"
-                          startIcon={<FaPlus size="10"/>}
-                          onClick={() => createOrgUnit()}
-                           style={{backgroundColor:'#014d88'}}
-                  >
+                  {/*<MButton variant="contained"*/}
+                  {/*        color="primary"*/}
+                  {/*        startIcon={<FaPlus size="10"/>}*/}
+                  {/*        onClick={() => createOrgUnit()}*/}
+                  {/*         style={{backgroundColor:'#014d88'}}*/}
+                  {/*>*/}
 
-                      <span style={{textTransform: 'capitalize'}}>New Org. Unit Level</span>
-                  </MButton>
+                  {/*    <span style={{textTransform: 'capitalize'}}>New Org. Unit Level</span>*/}
+                  {/*</MButton>*/}
 
                 </div>
                 <MaterialTable
@@ -187,20 +187,20 @@ return (
                           name: row.name,  
                           description: row. description,
                         
-                        actions: 
+                        actions:
                           <div>
                               <SplitActionButton actions={actionItems(row)} />
-{/*                              <Link to={{pathname: "/admin-parent-organization-unit", state: { orgUnitLevel: row  }}}                              >
-                                  <Label as='a' color='black' className="ms-1" size='mini'>
-                                      <Icon name='eye' /> View
-                                  </Label>
-                              </Link>
-                              <Label as='a' color='blue' onClick={() => updateOrgUnitLevel(row)}  size='mini'>
-                                  <Icon name='pencil' /> Edit
-                              </Label>
-                              <Label as='a' color='red' onClick={() => deleteModule( row)} size='mini'>
-                                  <Icon name='trash' /> Delete
-                              </Label>*/}
+                              {/*<Link to={{pathname: "/admin-parent-organization-unit", state: { orgUnitLevel: row  }}}                              >*/}
+                              {/*    <Label as='a' color='black' className="ms-1" size='mini'>*/}
+                              {/*        <Icon name='eye' /> View*/}
+                              {/*    </Label>*/}
+                              {/*</Link>*/}
+                              {/*<Label as='a' color='blue' onClick={() => updateOrgUnitLevel(row)}  size='mini'>*/}
+                              {/*    <Icon name='pencil' /> Edit*/}
+                              {/*</Label>*/}
+                              {/*<Label as='a' color='red' onClick={() => deleteModule( row)} size='mini'>*/}
+                              {/*    <Icon name='trash' /> Delete*/}
+                              {/*</Label>*/}
 
                         </div>,
                     }))}

@@ -17,6 +17,8 @@ import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
 import { connect } from "react-redux";
 import {useHistory} from "react-router-dom";
+import PhoneInput from 'react-phone-input-2'
+import 'react-phone-input-2/lib/style.css'
 // React Notification
 
 import { register, update } from "./../../../actions/user";
@@ -94,7 +96,7 @@ const UserRegistration = (props) => {
   const userDetail = props.location && props.location.state ? props.location.state.user : null;
   //const rolesDef = props.location && props.location.state ? props.location.state.defRole : null;
   const classes = useStyles();
-  const { values, setValues, handleInputChange, resetForm } = useForm(
+  const { values, setValues, handleInputChange, resetForm, errors } = useForm(
     props.location && props.location.state ? props.location.state.user :  initialfieldState_userRegistration 
   );
   const [gender, setGender] = useState([]);
@@ -282,7 +284,10 @@ const UserRegistration = (props) => {
     });
     //updateUserOrganisations();
   };
-
+  const checkPhoneNumber=(e, inputName)=>{
+    //console.log(e, inputName)
+    setValues(inputName,e);
+  }
   const onPermissionSelect = (selectedValues) => {
     setSelectedOption(selectedValues);
   };
@@ -411,15 +416,37 @@ const UserRegistration = (props) => {
                      <div className="form-group mb-3 col-md-6">
                     <FormGroup>
                     <Label for="phoneNumber" style={{color:'#014d88',fontWeight:'bolder'}}>Phone Number *</Label>
-                    <Input
-                      type="number"
-                      name="phoneNumber"
-                      id="phoneNumber"
-                      onChange={handleInputChange}
-                      value={values.phoneNumber}
-                      style={{height:"40px",border:'solid 1px #014d88',borderRadius:'5px'}}
-                      required
-                    />
+                    {/*<Input*/}
+                    {/*  type="number"*/}
+                    {/*  name="phoneNumber"*/}
+                    {/*  id="phoneNumber"*/}
+                    {/*  onChange={handleInputChange}*/}
+                    {/*  value={values.phoneNumber}*/}
+                    {/*  style={{height:"40px",border:'solid 1px #014d88',borderRadius:'5px'}}*/}
+                    {/*  required*/}
+                    {/*/>*/}
+                      <PhoneInput
+                          containerStyle={{width:'100%',border: "1px solid #014d88"}}
+                          inputStyle={{width:'100%',borderRadius:'0px'}}
+                          country={'ng'}
+                          masks={{ng: '...-...-....', at: '(....) ...-....'}}
+                          placeholder="(234)7099999999"
+                          value={values.phoneNumber}
+                          onChange={(e)=>{checkPhoneNumber(e,'phoneNumber')}}
+                          isValid={(value, country) => {
+                            if(value === country.countryCode){
+                              return true;
+                            }else{
+                              if(value.length < 13){
+                                errors.phoneNumber = true;
+                                return false;
+                              }else{
+                                errors.phoneNumber = false;
+                                return true;
+                              }
+                            }
+                          }}
+                      />
                   </FormGroup>
                    
                     </div>

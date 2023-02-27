@@ -184,14 +184,14 @@ return (
                                               <span style={{ textTransform: "capitalize" }}>Back</span>
                                           </MatButton>
                                       </Link>
-                                      <Button variant="contained"
-                                              color="primary"
-                                              startIcon={<FaPlus />}
-                                              onClick={() => createParentOrgUnit()}
-                                              style={{backgroundColor:'#014d88',marginLeft:'5px'}}
-                                      >
-                                          <span style={{textTransform: 'capitalize'}}>New Org. Unit</span>
-                                      </Button>
+                                      {/*<Button variant="contained"*/}
+                                      {/*        color="primary"*/}
+                                      {/*        startIcon={<FaPlus />}*/}
+                                      {/*        onClick={() => createParentOrgUnit()}*/}
+                                      {/*        style={{backgroundColor:'#014d88',marginLeft:'5px'}}*/}
+                                      {/*>*/}
+                                      {/*    <span style={{textTransform: 'capitalize'}}>New Org. Unit</span>*/}
+                                      {/*</Button>*/}
                                </div>
                             <MaterialTable
                             icons={tableIcons}
@@ -203,7 +203,7 @@ return (
                                 /*{ title: 'Parent Org. Unit name', field: 'ParentName' },*/
                                 { title: 'Description', field: 'description' },
                                 
-                                { title: 'Action', field: 'actions'},
+                                // { title: 'Action', field: 'actions'},
                               ]}
                               isLoading={loading}
                                 data={props.fetchAllOrgUnitLevelDetail.map((row) => ({
@@ -212,17 +212,17 @@ return (
                                       /*ParentName: row && row.parentOrganisationUnitName ? row.parentOrganisationUnitName : "", */
                                       description: row. description,
                                     
-                                    actions: (
-                                        <div>
-                                            <SplitActionButton actions={actionItems(row)} />
-{/*                                          <Label as='a' color='blue' onClick={() => updateOrgUnit(row)}  size='mini'>
-                                              <Icon name='pencil' /> Edit
-                                          </Label>
-                                          <Label as='a' color='red' onClick={() => deleteModule( row)} size='mini'>
-                                              <Icon name='trash' /> Delete
-                                          </Label>*/}
-                                        </div>
-                                    )
+//                                     actions: (
+//                                         <div>
+//                                             <SplitActionButton actions={actionItems(row)} />
+// {/*                                          <Label as='a' color='blue' onClick={() => updateOrgUnit(row)}  size='mini'>
+//                                               <Icon name='pencil' /> Edit
+//                                           </Label>
+//                                           <Label as='a' color='red' onClick={() => deleteModule( row)} size='mini'>
+//                                               <Icon name='trash' /> Delete
+//                                           </Label>*/}
+//                                         </div>
+//                                     )
                                 }))}
                               options={{
                                 headerStyle: {
