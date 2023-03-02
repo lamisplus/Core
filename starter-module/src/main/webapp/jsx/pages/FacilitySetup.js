@@ -214,7 +214,7 @@ const ErrorMissingOrganisation = (props) => {
                                                     //isMulti={false}
                                                     //isClearable={true}
                                                     onChange={getLgaByState}
-                                                    options={states.map((x) => ({
+                                                    options={states.sort().map((x) => ({
                                                         label: x.name,
                                                         value: x,
                                                     }))}
@@ -229,7 +229,7 @@ const ErrorMissingOrganisation = (props) => {
                                                     isMulti={false}
                                                     isClearable={true}
                                                     onChange={getFacilities}
-                                                    options={lgas.map((x) => ({
+                                                    options={lgas.sort().map((x) => ({
                                                         label: x.name,
                                                         value: x,
                                                     }))}

@@ -41,7 +41,6 @@ public class AccountController {
 
 
     @GetMapping(BASE_URL_VERSION_ONE + "/account")
-    @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete','user', 'all_permission')")
     public UserDTO getAccount(Principal principal){
         Optional<User> optionalUser = userService.getUserWithRoles();
         if(optionalUser.isPresent()){

@@ -240,9 +240,9 @@ const PostPage = (props) => {
                                                             <Badge variant="info badge-xs light" className="card-link float-end">Version {contact.version}</Badge>
                                                             <span className="mb-0 title">Status</span> :
                                                             <span className="text-black desc-text ms-2">
-                                        <Badge variant={contact.active===true? "primary badge-xs": "danger badge-xs"}><i className="fa fa-check-square me-2 scale4" aria-hidden="true"></i> {contact.active===true? "Active": "Inactive"}</Badge>
-                                                                {/*<BootstrapSwitchButton checked={true} size="xs" />*/}
-                                        </span>
+                                                        <Badge variant={contact.active===true? "primary badge-xs": "danger badge-xs"}><i className="fa fa-check-square me-2 scale4" aria-hidden="true"></i> {contact.active===true? "Active": "Inactive"}</Badge>
+                                                                                {/*<BootstrapSwitchButton checked={true} size="xs" />*/}
+                                                        </span>
                                                         </li>
 
                                                     </ul>

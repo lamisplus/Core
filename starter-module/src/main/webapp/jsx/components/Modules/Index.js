@@ -32,6 +32,7 @@ export default function ExternalModules(props) {
       <embed src={src+ "?jwt="+encodeURIComponent(userToken)}
       width="100%"
       height="1000"
+             onLoad={"Loading please wait..."}
       onerror="alert('URL invalid !!');"
       />
       </>

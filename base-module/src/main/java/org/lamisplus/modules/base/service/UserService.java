@@ -78,7 +78,11 @@ public class UserService {
         newUser.setEmail(userDTO.getEmail());
         newUser.setPhoneNumber(userDTO.getPhoneNumber());
         newUser.setGender(userDTO.getGender());
-        newUser.setCurrentOrganisationUnitId(getUserWithRoles().get().getCurrentOrganisationUnitId());
+        if(userDTO.getCurrentOrganisationUnitId() != null) {
+            newUser.setCurrentOrganisationUnitId(newUser.getCurrentOrganisationUnitId());
+        } else {
+            newUser.setCurrentOrganisationUnitId(getUserWithRoles().get().getCurrentOrganisationUnitId());
+        }
         //newUser.setTargetGroup(getUserWithRoles().get().getTargetGroup());
 
         newUser.setPassword(encryptedPassword);
