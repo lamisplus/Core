@@ -51,4 +51,4 @@ lamisplus:
             timeout: 3000
             quality: 80
 server:
-    port: 8383
+    port: 9090

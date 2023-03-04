@@ -35,7 +35,7 @@ logging:
         enabled: true
 
     file:
-        name: application-debug.log
+        name: application-debug/application-debug.log
 server:
     error:
         whitelabel:
