@@ -111,7 +111,7 @@ const handleKeyPress = (e) => {
                         <input type="text" className="form-control"
                         value={username}
                         //onChange={(e) => setEmail(e.target.value)}
-                        //defaultValue="abcd@gmail.com"
+                        style={{border: "1px solid #014D88",borderRadius:"0.2rem"}}
                         name="email"
                         onChange={(e) => setUsername(e.target.value)}
                         onKeyPress={(e) => handleKeyPress(e)}
@@ -130,6 +130,7 @@ const handleKeyPress = (e) => {
                             //     setPassword(e.target.value)
                             // }
                            // helperText={helperText}
+                           style={{border: "1px solid #014D88",borderRadius:"0.2rem"}}
                           onChange={(e) => setPassword(e.target.value)}
                           onKeyPress={(e) => handleKeyPress(e)}
                         />
@@ -140,7 +141,7 @@ const handleKeyPress = (e) => {
                         <button
                           type="submit"
                           className="btn btn-primary btn-block"
-                          style={{ backgroundColor: '#3E51B5' }}
+                          style={{ backgroundColor: '#0D3068', borderRadius:"0.2rem" }}
                           onClick={() => handleLogin()}
                           disabled={isButtonDisabled}
                         >
