@@ -3,15 +3,9 @@ import { useHistory } from "react-router-dom";
 import { Link } from "react-router-dom";
 // import { connect, useDispatch } from 'react-redux';
 import {  Alert, Button } from "react-bootstrap";
-// import {
-//     loadingToggleAction,
-//     loginAction,
-// } from '../../store/actions/AuthActions';
-// image
+
 import logo from "../../images/lamisPlus/logo_200.png";
 import { authentication } from "../../_services/authentication";
-
-let height =54;
 
 function Register(props) {
 
@@ -54,7 +48,7 @@ const handleLogin = (e) => {
     }
   );
 };
-
+var d = new Date();
 const handleKeyPress = (e) => {
   if (e.keyCode === 13 || e.which === 13) {
     isButtonDisabled || handleLogin();
@@ -154,6 +148,18 @@ const handleKeyPress = (e) => {
                 </div>
               </div>
             </div>
+          </div>
+          <div className="row">
+          <div className=" col-sm-4"></div>
+            <div className=" ml-10 col-sm-4">
+            <p>
+              Copyright © LAMISPlus 2.0.1 
+              {" "}{" "}
+              {/* {d.getFullYear()} */}
+            </p>
+           
+            </div>
+            <div className=" col-sm-4"></div>
           </div>
         </div>
       </div>

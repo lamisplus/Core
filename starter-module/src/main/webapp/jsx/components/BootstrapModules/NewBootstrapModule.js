@@ -156,11 +156,11 @@ const BootstrapModule = (props) => {
   }
 
     const restartingModule  = () => {
-        axios.get(`http://localhost:8282/restart`)
+        axios.get(`restart`)
             .then((response) => {
                 toast.error(`Successfully restarting`);
             }).catch((error) => {
-            console.log(error);
+            //console.log(error);
             toast.error(`An error occurred, restarting`);
         });
         history.push(`/bootstrap-modules`);
