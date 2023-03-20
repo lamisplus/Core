@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet failOnError="true" id="core-updates-000001" author="Dr. Java">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM base_organisation_unit WHERE name='General Hospital Yauri';
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            UPDATE base_organisation_unit SET name='General Hospital Yauri' WHERE id=1540
+        </sql>
+    </changeSet>
+
+    <changeSet failOnError="true" id="core-updates-000002" author="Dr. Java">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM base_organisation_unit_identifier WHERE code='GxSUmojRHpC';
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO base_organisation_unit_identifier (id, organisation_unit_id, code, name)
+            VALUES (615, 1829, 'GxSUmojRHpC', 'DATIM_ID');
+            SELECT pg_catalog.setval('base_organisation_unit_identifier_id_seq', 615, true);
+        </sql>
+    </changeSet>
+</databaseChangeLog>
