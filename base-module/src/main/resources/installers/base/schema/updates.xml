@@ -23,4 +23,35 @@
             SELECT pg_catalog.setval('base_organisation_unit_identifier_id_seq', 615, true);
         </sql>
     </changeSet>
+
+    <changeSet failOnError="true" id="core-updates-000003" author="Dr. Java">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM base_organisation_unit_identifier WHERE code='cYdxH1tF7Di';
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO base_organisation_unit (id, name, description, organisation_unit_level_id,
+                                                parent_organisation_unit_id, archived, details, date_created,
+                                                created_by, date_modified, modified_by, uuid)
+                OVERRIDING SYSTEM VALUE VALUES (2025, 'Maiduguri KP OSS', 'Facility in Maiduguri', 4, 200, 0,
+                                                NULL, CURRENT_TIMESTAMP, 'Emeka Ilozue', CURRENT_TIMESTAMP,
+                                                'Emeka Ilozue', '36edc807-36fa-4438-85ae-d8ee9c52bdd6');
+
+            SELECT pg_catalog.setval('base_organisation_unit_id_seq',
+            (SELECT MAX(id) FROM base_organisation_unit), true);
+
+            INSERT INTO base_organisation_unit_hierarchy(
+                organisation_unit_id, parent_organisation_unit_id, organisation_unit_level_id)
+            VALUES (2025, 200, 4),
+                   (2025, 9, 4),
+                   (2025,1, 4);
+
+            SELECT pg_catalog.setval('base_organisation_unit_hierarchy_id_seq',
+             (SELECT MAX(id) FROM base_organisation_unit_hierarchy), true);
+
+            INSERT INTO base_organisation_unit_identifier(organisation_unit_id, code, name)
+            VALUES (2025, 'cYdxH1tF7Di', 'DATIM_ID');
+        </sql>
+    </changeSet>
 </databaseChangeLog>
