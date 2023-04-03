@@ -48,7 +48,7 @@
                    (2025,1, 4);
 
             SELECT pg_catalog.setval('base_organisation_unit_hierarchy_id_seq',
-             (SELECT MAX(id) FROM base_organisation_unit_hierarchy), true);
+                    (SELECT MAX(id) FROM base_organisation_unit WHERE organisation_unit_level_id !=8), true);
 
             INSERT INTO base_organisation_unit_identifier(organisation_unit_id, code, name)
             VALUES (2025, 'cYdxH1tF7Di', 'DATIM_ID');
@@ -82,7 +82,7 @@
             'Emeka Ilozue', 'ecc09c98-677d-4eca-9ae7-4ddf1b463594');
 
             SELECT pg_catalog.setval('base_organisation_unit_id_seq',
-            (SELECT MAX(id) FROM base_organisation_unit), true);
+            (SELECT MAX(id) FROM base_organisation_unit WHERE organisation_unit_level_id !=8), true);
 
             INSERT INTO base_organisation_unit_hierarchy(
             organisation_unit_id, parent_organisation_unit_id, organisation_unit_level_id)
