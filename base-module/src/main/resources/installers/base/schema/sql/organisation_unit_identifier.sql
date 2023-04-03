@@ -612,5 +612,7 @@ INSERT INTO base_organisation_unit_identifier (id, organisation_unit_id, code, n
 INSERT INTO base_organisation_unit_identifier (id, organisation_unit_id, code, name) VALUES (612, 1961, 'wqwVSiQtdPr', 'DATIM_ID');
 INSERT INTO base_organisation_unit_identifier (id, organisation_unit_id, code, name) VALUES (613, 1971, 'fVcjpsyeO4q', 'DATIM_ID');
 INSERT INTO base_organisation_unit_identifier (id, organisation_unit_id, code, name) VALUES (614, 1732, 'NcHykmnJlCo', 'DATIM_ID');
+INSERT INTO base_organisation_unit_identifier (id, organisation_unit_id, code, name) VALUES (615, 1829, 'GxSUmojRHpC', 'DATIM_ID');
 
-SELECT pg_catalog.setval('base_organisation_unit_identifier_id_seq', 614, true);
+
+SELECT pg_catalog.setval('base_organisation_unit_identifier_id_seq', 615, true);
