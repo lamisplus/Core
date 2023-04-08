@@ -294,17 +294,12 @@ const UserRegistration = (props) => {
     const acceptedNumber= e.slice(0, limit)
     return  acceptedNumber   
 }
-const handleInputChangePhoneNumber=(e, inputName)=>{
-  console.log(e.target.value)
-  const limit = 11;
-  const acceptedNumber= e.target.value.slice(0, limit)
-  console.log(acceptedNumber)
-  setValues({...values, ['phoneNumber']: acceptedNumber})
-    return  acceptedNumber 
-  //console.log(inputName)
-  
-      //setRelatives({...relatives,  [inputName]: e.slice(0, limit)});     
-}
+  const handleInputChangePhoneNumber=(e, inputName)=>{
+    const limit = 11;
+    const acceptedNumber= e.target.value.slice(0, limit)
+    setValues({...values, ['phoneNumber']: acceptedNumber})
+      return  acceptedNumber
+  }
 
   return (
       <>

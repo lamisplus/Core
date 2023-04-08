@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!-- This XML was generated from LAMISPlus application -->
+<Container>
+    <MessageHeader>
+        <MessageStatusCode>INITIAL</MessageStatusCode>
+        <MessageCreationDateTime>2023-03-23T08:46:10</MessageCreationDateTime>
+        <MessageSchemaVersion>1.6</MessageSchemaVersion>
+        <MessageUniqueID>142</MessageUniqueID>
+        <MessageSendingOrganization>
+            <FacilityName>Civil Services Hospitals</FacilityName>
+            <FacilityID>IxqO8NCc1Ob</FacilityID>
+            <FacilityTypeCode>FAC</FacilityTypeCode>
+        </MessageSendingOrganization>
+    </MessageHeader>
+    <IndividualReport>
+        <PatientDemographics>
+            <PatientIdentifier>IxqO8NCc1Ob_7977d51a-f30e-482a-af00-eb803d8aa8cf</PatientIdentifier>
+            <TreatmentFacility>
+                <FacilityName>Civil Services Hospitals</FacilityName>
+                <FacilityID>IxqO8NCc1Ob</FacilityID>
+                <FacilityTypeCode>FAC</FacilityTypeCode>
+            </TreatmentFacility>
+            <PatientDateOfBirth>2010-05-02</PatientDateOfBirth>
+            <PatientSexCode>F</PatientSexCode>
+            <PatientOccupationCode>STU</PatientOccupationCode>
+            <PatientMaritalStatusCode>S</PatientMaritalStatusCode>
+            <StateOfNigeriaOriginCode>24</StateOfNigeriaOriginCode>
+        </PatientDemographics>
+        <Condition>
+            <ConditionCode>86406008</ConditionCode>
+            <ProgramArea>
+                <ProgramAreaCode>HIV</ProgramAreaCode>
+            </ProgramArea>
+            <PatientAddress>
+                <AddressTypeCode>H</AddressTypeCode>
+                <Town>Kwara</Town>
+                <LGACode>347</LGACode>
+                <StateCode>24</StateCode>
+                <CountryCode>NGA</CountryCode>
+            </PatientAddress>
+            <CommonQuestions>
+                <HospitalNumber>00-12-940</HospitalNumber>
+                <DiagnosisFacility>
+                    <FacilityName>Civil Services Hospitals</FacilityName>
+                    <FacilityID>IxqO8NCc1Ob</FacilityID>
+                    <FacilityTypeCode>FAC</FacilityTypeCode>
+                </DiagnosisFacility>
+                <DiagnosisDate>2022-09-27</DiagnosisDate>
+                <PatientPregnancyStatusCode>NK</PatientPregnancyStatusCode>
+                <PatientAge>12</PatientAge>
+            </CommonQuestions>
+            <ConditionSpecificQuestions>
+                <HIVQuestions>
+                    <MedicallyEligibleDate>2022-09-27</MedicallyEligibleDate>
+                    <ReasonMedicallyEligible>3</ReasonMedicallyEligible>
+                    <ARTStartDate>2022-09-27</ARTStartDate>
+                    <FunctionalStatusStartART>W</FunctionalStatusStartART>
+                    <PatientTransferredOut>false</PatientTransferredOut>
+                    <EnrolledInHIVCareDate>2022-09-27</EnrolledInHIVCareDate>
+                </HIVQuestions>
+            </ConditionSpecificQuestions>
+            <Encounters>
+                <HIVEncounter>
+                    <VisitID>404c991a-7d07-4a45-81b7-071a0cd1ea3a
