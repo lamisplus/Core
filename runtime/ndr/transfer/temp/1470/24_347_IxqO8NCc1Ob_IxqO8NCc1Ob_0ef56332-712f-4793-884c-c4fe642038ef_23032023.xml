@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!-- This XML was generated from LAMISPlus application -->
+<Container>
+    <MessageHeader>
+        <MessageStatusCode>INITIAL</MessageStatusCode>
+        <MessageCreationDateTime>2023-03-23T08:44:55</MessageCreationDateTime>
+        <MessageSchemaVersion>1.6</MessageSchemaVersion>
+        <MessageUniqueID>122</MessageUniqueID>
+        <MessageSendingOrganization>
+            <FacilityName>Civil Services Hospitals</FacilityName>
+            <FacilityID>IxqO8NCc1Ob</FacilityID>
+            <FacilityTypeCode>FAC</FacilityTypeCode>
+        </MessageSendingOrganization>
+    </MessageHeader>
+    <IndividualReport>
+        <PatientDemographics>
+            <PatientIdentifier>IxqO8NCc1Ob_0ef56332-712f-4793-884c-c4fe642038ef</PatientIdentifier>
+            <TreatmentFacility>
+                <FacilityName>Civil Services Hospitals</FacilityName>
+                <FacilityID>IxqO8NCc1Ob</FacilityID>
+                <FacilityTypeCode>FAC</FacilityTypeCode>
+            </TreatmentFacility>
+            <PatientDateOfBirth>1980-05-05</PatientDateOfBirth>
+            <PatientSexCode>M</PatientSexCode>
+            <PatientMaritalStatusCode>M</PatientMaritalStatusCode>
+            <StateOfNigeriaOriginCode>24</StateOfNigeriaOriginCode>
+        </PatientDemographics>
+        <Condition>
+            <ConditionCode>86406008</ConditionCode>
+            <ProgramArea>
+                <ProgramAreaCode>HIV</ProgramAreaCode>
+            </ProgramArea>
+            <PatientAddress>
+                <AddressTypeCode>H</AddressTypeCode>
+                <Town>Kwara</Town>
+                <LGACode>347</LGACode>
+                <StateCode>24</StateCode>
+                <CountryCode>NGA</CountryCode>
+            </PatientAddress>
+            <CommonQuestions>
+                <HospitalNumber>00-10-469</HospitalNumber>
+                <DiagnosisFacility>
+                    <FacilityName>Civil Services Hospitals</FacilityName>
+                    <FacilityID>IxqO8NCc1Ob</FacilityID>
+                    <FacilityTypeCode>FAC</FacilityTypeCode>
+                </DiagnosisFacility>
+                <DiagnosisDate>2010-05-05</DiagnosisDate>
+                <PatientAge>42</PatientAge>
+            </CommonQuestions>
+            <ConditionSpecificQuestions>
+                <HIVQuestions>
+                    <MedicallyEligibleDate>2010-08-05</MedicallyEligibleDate>
+                    <ReasonMedicallyEligible>2</ReasonMedicallyEligible>
+                    <FirstARTRegimen>
+                        <Code>1b</Code>
+                        <CodeDescTxt>AZT-3TC-NVP</CodeDescTxt>
+                    </FirstARTRegimen>
+                    <ARTStartDate>2010-08-05</ARTStartDate>
+                    <FunctionalStatusStartART>W</FunctionalStatusStartART>
+                    <PatientTransferredOut>false</PatientTransferredOut>
+                    <EnrolledInHIVCareDate>2010-05-05</EnrolledInHIVCareDate>
+                </HIVQuestions>
+            </ConditionSpecificQuestions>
+            <Encounters>
+                <HIVEncounter
