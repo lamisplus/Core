@@ -111,4 +111,27 @@
             WHERE name='Usman DanFodio University Teaching Hosp';
         </sql>
     </changeSet>
+
+    <changeSet failOnError="true" id="core-updates-000007" author="Dr. Java">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM base_organisation_unit WHERE name='Kaffin Koro General Hospital';
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            UPDATE base_organisation_unit SET name='Kaffin Koro General Hospital' WHERE id=1734;
+
+            UPDATE base_organisation_unit SET name='Minna Maternal and Child Health Tunga' WHERE id=1829;
+
+            UPDATE base_organisation_unit SET name='MCH GULU' WHERE id=1732;
+
+            INSERT INTO base_organisation_unit_identifier (id, organisation_unit_id, code, name)
+            VALUES (618, 1734, 'svjTbtRNldx', 'DATIM_ID');
+            SELECT pg_catalog.setval('base_organisation_unit_identifier_id_seq', 618, true);
+
+            INSERT INTO base_organisation_unit_identifier (id, organisation_unit_id, code, name)
+            VALUES (619, 1732, 'boIwPPchmTK', 'DATIM_ID');
+            SELECT pg_catalog.setval('base_organisation_unit_identifier_id_seq', 619, true);
+        </sql>
+    </changeSet>
 </databaseChangeLog>

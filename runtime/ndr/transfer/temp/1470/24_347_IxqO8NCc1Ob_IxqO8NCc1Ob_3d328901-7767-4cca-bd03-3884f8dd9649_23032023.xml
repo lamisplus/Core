@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!-- This XML was generated from LAMISPlus application -->
+<Container>
+    <MessageHeader>
+        <MessageStatusCode>INITIAL</MessageStatusCode>
+        <MessageCreationDateTime>2023-03-23T08:40:11</MessageCreationDateTime>
+        <MessageSchemaVersion>1.6</MessageSchemaVersion>
+        <MessageUniqueID>36</MessageUniqueID>
+        <MessageSendingOrganization>
+            <FacilityName>Civil Services Hospitals</FacilityName>
+            <FacilityID>IxqO8NCc1Ob</FacilityID>
+            <FacilityTypeCode>FAC</FacilityTypeCode>
+        </MessageSendingOrganization>
+    </MessageHeader>
+    <IndividualReport>
+        <PatientDemographics>
+            <PatientIdentifier>IxqO8NCc1Ob_3d328901-7767-4cca-bd03-3884f8dd9649</PatientIdentifier>
+            <TreatmentFacility>
+                <FacilityName>Civil Services Hospitals</FacilityName>
+                <FacilityID>IxqO8NCc1Ob</FacilityID>
+                <FacilityTypeCode>FAC</FacilityTypeCode>
+            </TreatmentFacility>
+            <PatientDateOfBirth>1968-01-01</PatientDateOfBirth>
+            <PatientSexCode>M</PatientSexCode>
+            <PatientOccupationCode>UNE</PatientOccupationCode>
+            <PatientMaritalStatusCode>M</PatientMaritalStatusCode>
+            <StateOfNigeriaOriginCode>24</StateOfNigeriaOriginCode>
+        </PatientDemographics>
+        <Condition>
+            <ConditionCode>86406008</ConditionCode>
+            <ProgramArea>
+                <ProgramAreaCode>HIV</ProgramAreaCode>
+            </ProgramArea>
+            <PatientAddress>
+                <AddressTypeCode>H</AddressTypeCode>
+                <Town>Kwara</Town>
+                <LGACode>347</LGACode>
+                <StateCode>24</StateCode>
+                <CountryCode>NGA</CountryCode>
+            </PatientAddress>
+            <CommonQuestions>
+                <HospitalNumber>00-12-978</HospitalNumber>
+                <DiagnosisFacility>
+                    <FacilityName>Civil Services Hospitals</FacilityName>
+                    <FacilityID>IxqO8NCc1Ob</FacilityID>
+                    <FacilityTypeCode>FAC</FacilityTypeCode>
+                </DiagnosisFacility>
+                <DiagnosisDate>2023-02-09</DiagnosisDate>
+                <PatientAge>55</PatientAge>
+            </CommonQuestions>
+            <ConditionSpecificQuestions>
+                <HIVQuestions>
+                    <MedicallyEligibleDate>2023-02-09</MedicallyEligibleDate>
+                    <ReasonMedicallyEligible>2</ReasonMedicallyEligible>
+                    <FirstARTRegimen>
+                        <Code>1m</Code>
+                        <CodeDescTxt>TDF-3TC-DTG</CodeDescTxt>
+                    </FirstARTRegimen>
+                    <ARTStartDate>2023-02-09</ARTStartDate>
+                    <FunctionalStatusStartART>W</FunctionalStatusStartART>
+                    <PatientTransferredOut>false</PatientTransferredOut>
+                    <EnrolledInHIVCareDate>2023-02-09</EnrolledInHIVCareDate>
+                </HIVQuestions>
+            </ConditionSpecificQuestions>
+            <Regimen>
+                <VisitID>e7abbf8a-8693-4746-8917-3b098a34ffe8</VisitID>
+                <VisitDate>2023-02-09</VisitDate>
+                <PrescribedRegimen>
+                    <Code>1m</Code>
+                    <CodeDescTxt>TDF-3TC-DTG</CodeDescTxt>
+                </PrescribedRegimen>
+                <PrescribedRegimenTypeCode>ART</PrescribedRegimenTypeCode>
+                <PrescribedRegimenLineCode>10</PrescribedRegimenLineCode>
+                <PrescribedRegimenDuration>90</PrescribedRegimenDuration>
+                <PrescribedRegimenDispensedDate>2023-02-09</PrescribedRegimenDispensedDate>
+                <DateRegimenStarted>2023-02-09</DateRegimenStarted>
+            </Regimen>
+            <Regimen>
+                <VisitID>e7abbf8a-8693-4746-8917-3b098a34ffe8</VisitID>
+                <VisitDate>2023-02-09</VisitDate>
+                <PrescribedRegimen>
+                    <Code>CTX960</Code>
+                    <CodeDescTxt>Cotrimoxazole 960mg</CodeDescTxt>
+                </PrescribedRegimen>
+                <PrescribedRegimenTypeCode>OI</PrescribedRegimenTypeCode>
+                <PrescribedRegimenDuration>90</PrescribedRegimenDuration>
+                <PrescribedRegimenDispensedDate>2023-02-09</PrescribedRegimenDispensedDate>
+                <DateRegimenStarted>2023-02-09</DateRegimenStarted>
+            </Regimen>
+        </Condition>
+    </IndividualReport>
+</Container>
