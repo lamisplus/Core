@@ -35,7 +35,7 @@ logging:
         enabled: true
 
     file:
-        name: application-debug.log
+        name: application-debug/application-debug.log
 server:
     error:
         whitelabel:
@@ -63,8 +63,8 @@ spring:
     datasource:
         driver-class-name: org.postgresql.Driver
         username: lamisplus
-        password: lamispluadmin@123#
-        url: jdbc:postgresql://localhost:5432/lamisplus_enhanced
+        password: admin
+        url: jdbc:postgresql://localhost:5432/lamisplus2
         hibernate:
             ddl-auto: none
             event.merge.enty_copy_observer: allow
@@ -136,8 +136,8 @@ lamisplus:
         module:
             driver-class-name: org.postgresql.Driver
             username: lamisplus
-            password: lamispluadmin@123#
-            url: jdbc:postgresql://localhost:5432/lamisplus_enhanced
+            password: admin
+            url: jdbc:postgresql://localhost:5432/lamisplus2
             hikari:
                 auto-commit: true
                 data-source-properties:

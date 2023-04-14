@@ -39,6 +39,8 @@ public class UserDTO {
 
     private String gender;
 
+    private String targetGroup;
+
     private String designation;
 
     private Long currentOrganisationUnitId;
@@ -65,6 +67,7 @@ public class UserDTO {
         this.email = user.getEmail();
         this.phoneNumber = user.getPhoneNumber();
         this.gender = user.getGender();
+        //this.targetGroup = user.getTargetGroup();
         this.designation = user.getDesignation();
         this.currentOrganisationUnitId = user.getCurrentOrganisationUnitId();
         this.applicationUserOrganisationUnits = user.getApplicationUserOrganisationUnits();
@@ -89,6 +92,7 @@ public class UserDTO {
                 ", managedPatientCount='" + managedPatientCount + '\'' +
                 ", currentOrganisationUnitId='" + currentOrganisationUnitId + '\'' +
                 ", roles=" + roles + '\'' +
+                ", targetGroup=" + targetGroup + '\'' +
                 ", permissions=" + permissions + '\'' +
                 '}';
     }

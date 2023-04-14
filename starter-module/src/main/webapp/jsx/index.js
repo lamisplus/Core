@@ -48,10 +48,12 @@ import * as ACTION_TYPES from "../actions/types";
 import ErrorMissingOrganisation from "./pages/ErrorMissingOrganisation";
 import FacilitiesList from "./components/FaciltyConfig/FacilitiesPage";
 import AddFacility from "./components/FaciltyConfig/AddFacility";
+import FacilitySetup from "./pages/FacilitySetup";
 
 const Markup = () => {
   const [user, setUser] = useState(null);
   const { menuToggle } = useContext(ThemeContext);
+  const [appConfig, setAppConfig] = useState(null);
   const routes = [
     /// Dashboard
     { url: "", component: Home },
@@ -108,44 +110,77 @@ const Markup = () => {
           });
     }
   }
+  async function configApp() {
+    if( authentication.currentUserValue != null ) {
+      axios
+          .get(`${baseUrl}users/configure/app`)
+          .then((response) => {
+            setAppConfig(response.data);
+          })
+          .catch((error) => {
+            //authentication.logout();
+            // console.log(error);
+          });
+    }
+  }
 
   useEffect(() => {
     fetchMe();
-
+    configApp();
   }, []);
+
   return (
       <>
-        {user && user.currentOrganisationUnitId != null ?
-              <div
-                  id={`${!pagePath ? "main-wrapper" : ""}`}
-                  className={`${!pagePath ? "show" : "mh100vh"}  ${
-                      menuToggle ? "menu-toggle" : ""
-                  }`}
-              >
-                {!pagePath && <Nav />}
+        {/*{appConfig !== true ? (*/}
+        {/*    <>*/}
+            {user !== null ?
+                (
+                    <>
+                      {user && user.currentOrganisationUnitId !== null ?
+                          (
+                              <>
+                                <div
+                                    id={`${!pagePath ? "main-wrapper" : ""}`}
+                                    className={`${!pagePath ? "show" : "mh100vh"}  ${
+                                        menuToggle ? "menu-toggle" : ""
+                                    }`}
+                                >
+                                  {!pagePath && <Nav/>}
 
-                <div className={`${!pagePath ? "content-body" : ""}`} style={{paddingTop: '4rem',backgroundColor:'#f2f7f8'}}>
-                  <div
-                      className={`${!pagePath ? "container-fluid" : ""}`}
-                      style={{ minHeight: window.screen.height - 260, padding:'1px' }}
-                  >
-                    <Switch>
-                      {routes.map((data, i) => (
-                          <Route
-                              key={i}
-                              exact
-                              path={`/${data.url}`}
-                              component={data.component}
-                          />
-                      ))}
-                    </Switch>
-                  </div>
-                </div>
-                {!pagePath && <Footer />}
-              </div>
-            :
-            <ErrorMissingOrganisation />
-        }
+                                  <div className={`${!pagePath ? "content-body" : ""}`}
+                                       style={{paddingTop: '4rem', backgroundColor: '#f2f7f8'}}>
+                                    <div
+                                        className={`${!pagePath ? "container-fluid" : ""}`}
+                                        style={{minHeight: window.screen.height - 260, padding: '1px'}}
+                                    >
+                                      <Switch>
+                                        {routes.map((data, i) => (
+                                            <Route
+                                                key={i}
+                                                exact
+                                                path={`/${data.url}`}
+                                                component={data.component}
+                                            />
+                                        ))}
+                                      </Switch>
+                                    </div>
+                                  </div>
+                                  {!pagePath && <Footer/>}
+                                </div>
+                              </>
+                          ) :
+                          (
+                              <>
+                                <FacilitySetup user={user}/>
+                              </>
+                          )
+                      }
+                    </>
+                )
+                :
+
+                <ErrorMissingOrganisation/>
+          }
 
       </>
 

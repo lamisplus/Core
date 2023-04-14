@@ -95,6 +95,10 @@ public class User {
     @Column(name = "last_name")
     private String lastName;
 
+    /*@Basic
+    @Column(name = "target_group")
+    private String targetGroup;*/
+
     @Basic
     @Column(name = "designation")
     private String designation;

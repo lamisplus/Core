@@ -63,7 +63,7 @@ const UpdateOrgUnit = (props) => {
     const toggleModal3 = () => setModal3(!modal3)
 
     // console.log(orgUnitDetails)
-    console.log(otherfields)
+    // console.log(otherfields)
 
     const handleOtherFieldInputChange = e => {
 

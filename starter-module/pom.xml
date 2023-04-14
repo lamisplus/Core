@@ -564,16 +564,12 @@
 					</annotationProcessorPaths>
 				</configuration>
 			</plugin>
-			<!--<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>-->
 			<plugin>
 				<groupId>com.github.eirslett</groupId>
 				<artifactId>frontend-maven-plugin</artifactId>
 				<version>1.12.1</version>
 				<executions>
-					<execution>
+					<!--<execution>
 						<id>install node and npm</id>
 						<goals>
 							<goal>install-node-and-npm</goal>
@@ -591,16 +587,16 @@
 						<configuration>
 							<arguments>install</arguments>
 						</configuration>
-					</execution>
-					<execution>
-						<id>npm run build</id>
-						<goals>
-							<goal>npm</goal>
-						</goals>
-						<configuration>
-							<arguments>run build</arguments>
-						</configuration>
-					</execution>
+					</execution>-->
+<!--					<execution>-->
+<!--						<id>npm run build</id>-->
+<!--						<goals>-->
+<!--							<goal>npm</goal>-->
+<!--						</goals>-->
+<!--						<configuration>-->
+<!--							<arguments>run build</arguments>-->
+<!--						</configuration>-->
+<!--					</execution>-->
 				</executions>
 			</plugin>
 

@@ -142,14 +142,14 @@ const processDelete = (id) => {
               <CardBody>
                    <div className={"d-flex justify-content-end pb-2"}>
                        
-                        <ButtonMui variant="contained"
-                          color="primary"
-                          startIcon={<FaPlus size="10"/>}
-                          onClick={() => openApplicationCodeset(null)}
-                                   style={{backgroundColor:'#014d88'}}
-                        >
-                            <span style={{textTransform: 'capitalize'}}>Codeset</span>
-                        </ButtonMui>
+                        {/*<ButtonMui variant="contained"*/}
+                        {/*  color="primary"*/}
+                        {/*  startIcon={<FaPlus size="10"/>}*/}
+                        {/*  onClick={() => openApplicationCodeset(null)}*/}
+                        {/*           style={{backgroundColor:'#014d88'}}*/}
+                        {/*>*/}
+                        {/*    <span style={{textTransform: 'capitalize'}}>Codeset</span>*/}
+                        {/*</ButtonMui>*/}
 
                     </div>
                     <MaterialTable
@@ -163,7 +163,7 @@ const processDelete = (id) => {
                             { title: "Value", field: "display" },
                             { title: "Version", field: "version" },
                             { title: "Language", field: "language" },
-                            { title: "Action", field: "action" },
+                            //{ title: "Action", field: "action" },
                         ]}
                         isLoading={loading}
                         data={props.applicationCodesetList.map((row) => ({
@@ -172,18 +172,18 @@ const processDelete = (id) => {
                             display: row.display,
                             language: row.language,
                             version: row.version,
-                            action:
-                            <div>
-                                <SplitActionButton actions={actionItems(row)} />
-{/*                                <Label as='a' color='blue' className="ms-1" size='mini' onClick={() => openApplicationCodeset(row)}>
-                                    <Icon name='pencil' /> Edit
-                                </Label>
-
-                                <Label as='a' color='red' onClick={() => deleteApplicationCodeset( row)} size='mini'>
-                                    <Icon name='trash' /> Delete
-                                </Label>*/}
-
-                            </div>
+                            // action:
+                            // <div>
+                            //     <SplitActionButton actions={actionItems(row)} />
+                            //    <Label as='a' color='blue' className="ms-1" size='mini' onClick={() => openApplicationCodeset(row)}>
+                            //         <Icon name='pencil' /> Edit
+                            //     </Label>
+                            //
+                            //     <Label as='a' color='red' onClick={() => deleteApplicationCodeset( row)} size='mini'>
+                            //         <Icon name='trash' /> Delete
+                            //     </Label>
+                            //
+                            // </div>
 
                         }))}
 

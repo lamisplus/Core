@@ -49,6 +49,7 @@ const Home = () => {
 				<div className="col-xl-12">
 					<div className="row">
 						<img src={landingPageImage} width={10} alt="" style={{width:'100%'}} />
+
 {/*						<div className="col-xl-3 col-xxl-6 col-sm-6 " >
 							<div className="card" style={{borderRadius:"6px"}}>
 								<div className="card-header border-0 pb-0">

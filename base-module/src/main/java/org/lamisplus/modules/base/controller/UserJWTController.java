@@ -37,6 +37,13 @@ public class UserJWTController {
 
     @PostMapping(BASE_URL_VERSION_ONE + "/authenticate")
     public ResponseEntity<JWTToken> authorize(@Valid @RequestBody LoginVM loginVM) {
+        String jwt = authorization(loginVM);
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add(JWTFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
+        return new ResponseEntity<>(new JWTToken(jwt), httpHeaders, HttpStatus.OK);
+    }
+
+    public String authorization(LoginVM loginVM) {
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                 loginVM.getUsername(),
                 loginVM.getPassword()
@@ -45,16 +52,13 @@ public class UserJWTController {
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         boolean rememberMe = (loginVM.isRememberMe() == null) ? false : loginVM.isRememberMe();
-        String jwt = tokenProvider.createToken(authentication, userService, rememberMe);
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add(JWTFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
-        return new ResponseEntity<>(new JWTToken(jwt), httpHeaders, HttpStatus.OK);
+        return tokenProvider.createToken(authentication, userService, rememberMe);
     }
 
     /**
      * Object to return as body in JWT Authentication.
      */
-    static class JWTToken {
+    public static class JWTToken {
         private String idToken;
 
         JWTToken(String idToken) {
@@ -62,7 +66,7 @@ public class UserJWTController {
         }
 
         @JsonProperty("id_token")
-        String getIdToken() {
+        public String getIdToken() {
             return idToken;
         }
 

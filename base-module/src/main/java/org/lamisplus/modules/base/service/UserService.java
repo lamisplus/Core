@@ -5,12 +5,17 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.lamisplus.modules.base.controller.apierror.EntityNotFoundException;
 import org.lamisplus.modules.base.controller.apierror.RecordExistException;
+import org.lamisplus.modules.base.domain.dto.ApplicationUserOrganisationUnitDTO;
+import org.lamisplus.modules.base.domain.dto.FacilitySetupDTO;
+import org.lamisplus.modules.base.domain.dto.ManagementDto;
 import org.lamisplus.modules.base.domain.dto.UserDTO;
 import org.lamisplus.modules.base.domain.entities.ApplicationUserOrganisationUnit;
 import org.lamisplus.modules.base.domain.entities.OrganisationUnit;
 import org.lamisplus.modules.base.domain.entities.Role;
 import org.lamisplus.modules.base.domain.entities.User;
 import org.lamisplus.modules.base.domain.mapper.UserMapper;
+import org.lamisplus.modules.base.domain.repositories.ApplicationUserOrganisationUnitRepository;
+import org.lamisplus.modules.base.domain.repositories.OrganisationUnitRepository;
 import org.lamisplus.modules.base.domain.repositories.RoleRepository;
 import org.lamisplus.modules.base.domain.repositories.UserRepository;
 import org.lamisplus.modules.base.security.RolesConstants;
@@ -34,6 +39,13 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
+
+    private final OrganisationUnitRepository organisationUnitRepository;
+
+    private final ApplicationUserOrganisationUnitRepository applicationUserOrganisationUnitRepository;
+
+    //private final ApplicationUserOrganisationUnitService applicationUserOrganisationUnitService;
+    private static final int ARCHIVED = 1;
     private final UserMapper userMapper;
 
     @Transactional
@@ -66,7 +78,13 @@ public class UserService {
         newUser.setEmail(userDTO.getEmail());
         newUser.setPhoneNumber(userDTO.getPhoneNumber());
         newUser.setGender(userDTO.getGender());
-        newUser.setCurrentOrganisationUnitId(getUserWithRoles().get().getCurrentOrganisationUnitId());
+        if(userDTO.getCurrentOrganisationUnitId() != null) {
+            newUser.setCurrentOrganisationUnitId(newUser.getCurrentOrganisationUnitId());
+        } else {
+            newUser.setCurrentOrganisationUnitId(getUserWithRoles().get().getCurrentOrganisationUnitId());
+        }
+        //newUser.setTargetGroup(getUserWithRoles().get().getTargetGroup());
+
         newUser.setPassword(encryptedPassword);
         newUser.setFirstName(userDTO.getFirstName());
         newUser.setLastName(userDTO.getLastName());
@@ -172,5 +190,53 @@ public class UserService {
 
     public UserDTO getUserById(Long id){
         return userMapper.userToUserDTO(userRepository.findById(id).orElseThrow(()-> new EntityNotFoundException(User.class, "Id", id + "")));
+    }
+
+    public boolean isLamisPlusConfigured() {
+        String loginInUser = SecurityUtils.getCurrentUserLogin().orElse(null);
+        User user=new User();
+        if(loginInUser != null) {
+            user = userRepository.findOneByUserName(loginInUser).orElse(new User());
+        }
+        return user.getCurrentOrganisationUnitId() != null? false:true;
+    }
+
+    public FacilitySetupDTO facilitySetup(FacilitySetupDTO facilitySetupDTO)
+    {
+        Long [] ogrId = facilitySetupDTO.getOrganisationUnitId();
+        User user = userRepository.findOneByUserName(facilitySetupDTO.getApplicationUserId())
+                .orElseThrow(()-> new EntityNotFoundException(User.class, "Username", String.valueOf(facilitySetupDTO.getApplicationUserId())));
+        List<ApplicationUserOrganisationUnit> applicationUserOrganisationUnits = new ArrayList<>();
+        for(int i=0; i <ogrId.length; i++ ){
+            Long orgId = ogrId[i];
+            organisationUnitRepository.findById(orgId)
+                    .orElseThrow(()-> new EntityNotFoundException(OrganisationUnit.class, "Id", String.valueOf(orgId)));
+            ApplicationUserOrganisationUnit appUserOrg = new ApplicationUserOrganisationUnit();
+            appUserOrg.setApplicationUserId(user.getId());
+            appUserOrg.setOrganisationUnitId(orgId);
+            applicationUserOrganisationUnits.add(appUserOrg);
+        }
+         applicationUserOrganisationUnitRepository.saveAll(applicationUserOrganisationUnits);
+
+        return facilitySetupDTO;
+    }
+
+    public void creatUser(ApplicationUserOrganisationUnitDTO applicationUserOrganisationUnitDTO) {
+        applicationUserOrganisationUnitRepository
+                .save(this.toApplicationUserOrganisationUnit(applicationUserOrganisationUnitDTO));
+    }
+
+    private ApplicationUserOrganisationUnit toApplicationUserOrganisationUnit(ApplicationUserOrganisationUnitDTO applicationUserOrganisationUnitDTO) {
+        if ( applicationUserOrganisationUnitDTO == null ) {
+            return null;
+        }
+
+        ApplicationUserOrganisationUnit applicationUserOrganisationUnit = new ApplicationUserOrganisationUnit();
+
+        applicationUserOrganisationUnit.setId( applicationUserOrganisationUnitDTO.getId() );
+        applicationUserOrganisationUnit.setApplicationUserId( applicationUserOrganisationUnitDTO.getApplicationUserId() );
+        applicationUserOrganisationUnit.setOrganisationUnitId( applicationUserOrganisationUnitDTO.getOrganisationUnitId() );
+
+        return applicationUserOrganisationUnit;
     }
 }
