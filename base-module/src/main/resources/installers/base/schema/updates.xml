@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
-    <changeSet failOnError="true" id="core-updates-000001" author="Dr. Java">
+    <changeSet failOnError="true" id="core-updates-1" author="Dr. Java">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">
                 SELECT COUNT(*) FROM base_organisation_unit WHERE name='General Hospital Yauri';
@@ -11,7 +11,7 @@
         </sql>
     </changeSet>
 
-    <changeSet failOnError="true" id="core-updates-000002" author="Dr. Java">
+    <changeSet failOnError="true" id="core-updates-2" author="Dr. Java">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">
                 SELECT COUNT(*) FROM base_organisation_unit_identifier WHERE code='GxSUmojRHpC';
@@ -24,7 +24,7 @@
         </sql>
     </changeSet>
 
-    <changeSet failOnError="true" id="core-updates-000003" author="Dr. Java">
+    <changeSet failOnError="true" id="core-updates-3" author="Dr. Java">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">
                 SELECT COUNT(*) FROM base_organisation_unit_identifier WHERE code='cYdxH1tF7Di';
@@ -41,11 +41,11 @@
             SELECT pg_catalog.setval('base_organisation_unit_id_seq',
             (SELECT MAX(id) FROM base_organisation_unit), true);
 
-            INSERT INTO base_organisation_unit_hierarchy(
+            INSERT INTO base_organisation_unit_hierarchy(id,
                 organisation_unit_id, parent_organisation_unit_id, organisation_unit_level_id)
-            VALUES (2025, 200, 4),
-                   (2025, 9, 4),
-                   (2025,1, 4);
+            VALUES (SELECT MAX(id) + 1 FROM base_organisation_unit, 2025, 200, 4),
+                   (SELECT MAX(id) + 2 FROM base_organisation_unit, 2025, 9, 4),
+                   (SELECT MAX(id) + 3 FROM base_organisation_unit, 2025,1, 4);
 
             SELECT pg_catalog.setval('base_organisation_unit_hierarchy_id_seq',
                     (SELECT MAX(id) FROM base_organisation_unit WHERE organisation_unit_level_id !=8), true);
@@ -55,7 +55,7 @@
         </sql>
     </changeSet>
 
-    <changeSet failOnError="true" id="core-updates-000004" author="Dr. Java">
+    <changeSet failOnError="true" id="core-updates-4" author="Dr. Java">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="2">
                 SELECT COUNT(*) FROM base_organisation_unit_identifier WHERE code='zvv5uWH8hNf';
@@ -67,7 +67,7 @@
         </sql>
     </changeSet>
 
-    <changeSet failOnError="true" id="core-updates-000005" author="Dr. Java">
+    <changeSet failOnError="true" id="core-updates-5" author="Dr. Java">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">
                 SELECT COUNT(*) FROM base_organisation_unit_identifier WHERE code='rAilliFFqMN';
@@ -98,7 +98,7 @@
         </sql>
     </changeSet>
 
-    <changeSet failOnError="true" id="core-updates-000006" author="Dr. Java">
+    <changeSet failOnError="true" id="core-updates-6" author="Dr. Java">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">
                 SELECT COUNT(*) FROM base_organisation_unit
@@ -112,7 +112,7 @@
         </sql>
     </changeSet>
 
-    <changeSet failOnError="true" id="core-updates-000007" author="Dr. Java">
+    <changeSet failOnError="true" id="core-updates-7" author="Dr. Java">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">
                 SELECT COUNT(*) FROM base_organisation_unit WHERE name='Kaffin Koro General Hospital';
@@ -132,6 +132,72 @@
             INSERT INTO base_organisation_unit_identifier (id, organisation_unit_id, code, name)
             VALUES (619, 1732, 'boIwPPchmTK', 'DATIM_ID');
             SELECT pg_catalog.setval('base_organisation_unit_identifier_id_seq', 619, true);
+        </sql>
+    </changeSet>
+
+    <changeSet failOnError="true" id="core-updates-08" author="Dr. Java">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM base_application_codeset WHERE id=1015;
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO base_application_codeset (id, codeset_group, display, language, version, code, date_created, created_by, date_modified, modified_by, archived) OVERRIDING SYSTEM VALUE VALUES (962, 'PREP_OTHER_TEST', 'Other (specify)', 'en', '1', 'PREP_OTHER_TEST_OTHER_(SPECIFY)', '2020-04-23 00:00:00', 'guest@lamisplus.org', '2020-04-23 00:00:00', 'guest@lamisplus.org', 0);
+            INSERT INTO base_application_codeset (id, codeset_group, display, language, version, code, date_created, created_by, date_modified, modified_by, archived) OVERRIDING SYSTEM VALUE VALUES (963, 'PREP_OTHER_TEST', 'Chest Xray ', 'en', '1', 'PREP_OTHER_TEST_CHEST_XRAY_', '2020-04-23 00:00:00', 'guest@lamisplus.org', '2020-04-23 00:00:00', 'guest@lamisplus.org', 0);
+            INSERT INTO base_application_codeset (id, codeset_group, display, language, version, code, date_created, created_by, date_modified, modified_by, archived) OVERRIDING SYSTEM VALUE VALUES (964, 'PREP_OTHER_TEST', 'Sputum AFB ', 'en', '1', 'PREP_OTHER_TEST_SPUTUM_AFB_', '2020-04-23 00:00:00', 'guest@lamisplus.org', '2020-04-23 00:00:00', 'guest@lamisplus.org', 0);
+            INSERT INTO base_application_codeset (id, codeset_group, display, language, version, code, date_created, created_by, date_modified, modified_by, archived) OVERRIDING SYSTEM VALUE VALUES (965, 'PREP_OTHER_TEST', 'Urinalysis', 'en', '1', 'PREP_OTHER_TEST_URINALYSIS', '2020-04-23 00:00:00', 'guest@lamisplus.org', '2020-04-23 00:00:00', 'guest@lamisplus.org', 0);
+            INSERT INTO base_application_codeset (id, codeset_group, display, language, version, code, date_created, created_by, date_modified, modified_by, archived) OVERRIDING SYSTEM VALUE VALUES (966, 'PREP_OTHER_TEST', 'HBsAg', 'en', '1', 'PREP_OTHER_TEST_HBSAG', '2020-04-23 00:00:00', 'guest@lamisplus.org', '2020-04-23 00:00:00', 'guest@lamisplus.org', 0);
+            INSERT INTO base_application_codeset (id, codeset_group, display, language, version, code, date_created, created_by, date_modified, modified_by, archived) OVERRIDING SYSTEM VALUE VALUES (967, 'PREP_OTHER_TEST', 'Lipid Profile', 'en', '1', 'PREP_OTHER_TEST_LIPID_PROFILE', '2020-04-23 00:00:00', 'guest@lamisplus.org', '2020-04-23 00:00:00', 'guest@lamisplus.org', 0);
+            INSERT INTO base_application_codeset (id, codeset_group, display, language, version, code, date_created, created_by, date_modified, modified_by, archived) OVERRIDING SYSTEM VALUE VALUES (968, 'PREP_OTHER_TEST', 'Creatinine', 'en', '1', 'PREP_OTHER_TEST_CREATININE', '2020-04-23 00:00:00', 'guest@lamisplus.org', '2020-04-23 00:00:00', 'guest@lamisplus.org', 0);
+            INSERT INTO base_application_codeset (id, codeset_group, display, language, version, code, date_created, created_by, date_modified, modified_by, archived) OVERRIDING SYSTEM VALUE VALUES (969, 'PREP_OTHER_TEST', 'AST', 'en', '1', 'PREP_OTHER_TEST_AST', '2020-04-23 00:00:00', 'guest@lamisplus.org', '2020-04-23 00:00:00', 'guest@lamisplus.org', 0);
+            INSERT INTO base_application_codeset (id, codeset_group, display, language, version, code, date_created, created_by, date_modified, modified_by, archived) OVERRIDING SYSTEM VALUE VALUES (970, 'PREP_OTHER_TEST', 'ALT', 'en', '1', 'PREP_OTHER_TEST_ALT', '2020-04-23 00:00:00', 'guest@lamisplus.org', '2020-04-23 00:00:00', 'guest@lamisplus.org', 0);
+            INSERT INTO base_application_codeset (id, codeset_group, display, language, version, code, date_created, created_by, date_modified, modified_by, archived) OVERRIDING SYSTEM VALUE VALUES (971, 'PREP_OTHER_TEST', 'WBC + Diff', 'en', '1', 'PREP_OTHER_TEST_WBC_+_DIFF', '2020-04-23 00:00:00', 'guest@lamisplus.org', '2020-04-23 00:00:00', 'guest@lamisplus.org', 0);
+            INSERT INTO base_application_codeset (id, codeset_group, display, language, version, code, date_created, created_by, date_modified, modified_by, archived) OVERRIDING SYSTEM VALUE VALUES (972, 'PREP_OTHER_TEST', 'HB/PCV', 'en', '1', 'PREP_OTHER_TEST_HB_PCV', '2020-04-23 00:00:00', 'guest@lamisplus.org', '2020-04-23 00:00:00', 'guest@lamisplus.org', 0);
+            INSERT INTO base_application_codeset (id, codeset_group, display, language, version, code, date_created, created_by, date_modified, modified_by, archived) OVERRIDING SYSTEM VALUE VALUES (973, 'SYPHILIS_RESULT', 'Others', 'en', '1', 'SYPHILIS_RESULT_OTHERS', '2020-04-23 00:00:00', 'guest@lamisplus.org', '2020-04-23 00:00:00', 'guest@lamisplus.org', 0);
+            INSERT INTO base_application_codeset (id, codeset_group, display, language, version, code, date_created, created_by, date_modified, modified_by, archived) OVERRIDING SYSTEM VALUE VALUES (974, 'SYPHILIS_RESULT', 'Not Done', 'en', '1', 'SYPHILIS_RESULT_NOT_DONE', '2020-04-23 00:00:00', 'guest@lamisplus.org', '2020-04-23 00:00:00', 'guest@lamisplus.org', 0);
+            INSERT INTO base_application_codeset (id, codeset_group, display, language, version, code, date_created, created_by, date_modified, modified_by, archived) OVERRIDING SYSTEM VALUE VALUES (975, 'SYPHILIS_RESULT', 'Positive', 'en', '1', 'SYPHILIS_RESULT_POSITIVE', '2020-04-23 00:00:00', 'guest@lamisplus.org', '2020-04-23 00:00:00', 'guest@lamisplus.org', 0);
+            INSERT INTO base_application_codeset (id, codeset_group, display, language, version, code, date_created, created_by, date_modified, modified_by, archived) OVERRIDING SYSTEM VALUE VALUES (976, 'SYPHILIS_RESULT', 'Negative', 'en', '1', 'SYPHILIS_RESULT_NEGATIVE', '2020-04-23 00:00:00', 'guest@lamisplus.org', '2020-04-23 00:00:00', 'guest@lamisplus.org', 0);
+            INSERT INTO base_application_codeset (id, codeset_group, display, language, version, code, date_created, created_by, date_modified, modified_by, archived) OVERRIDING SYSTEM VALUE VALUES (977, 'PREP_URINALYSIS_RESULT', 'Proteinuria Present - Three +++', 'en', '1', 'PREP_URINALYSIS_RESULT_PROTEINURIA_PRESENT_-_THREE_+++', '2020-04-23 00:00:00', 'guest@lamisplus.org', '2020-04-23 00:00:00', 'guest@lamisplus.org', 0);
+            INSERT INTO base_application_codeset (id, codeset_group, display, language, version, code, date_created, created_by, date_modified, modified_by, archived) OVERRIDING SYSTEM VALUE VALUES (978, 'PREP_URINALYSIS_RESULT', 'Proteinuria Present - Two ++', 'en', '1', 'PREP_URINALYSIS_RESULT_PROTEINURIA_PRESENT_-_TWO_++', '2020-04-23 00:00:00', 'guest@lamisplus.org', '2020-04-23 00:00:00', 'guest@lamisplus.org', 0);
+            INSERT INTO base_application_codeset (id, codeset_group, display, language, version, code, date_created, created_by, date_modified, modified_by, archived) OVERRIDING SYSTEM VALUE VALUES (979, 'PREP_URINALYSIS_RESULT', 'Proteinuria Present - One +', 'en', '1', 'PREP_URINALYSIS_RESULT_PROTEINURIA_PRESENT_-_ONE_+', '2020-04-23 00:00:00', 'guest@lamisplus.org', '2020-04-23 00:00:00', 'guest@lamisplus.org', 0);
+            INSERT INTO base_application_codeset (id, codeset_group, display, language, version, code, date_created, created_by, date_modified, modified_by, archived) OVERRIDING SYSTEM VALUE VALUES (980, 'PREP_URINALYSIS_RESULT', 'No proteinuria', 'en', '1', 'PREP_URINALYSIS_RESULT_NO_PROTEINURIA', '2020-04-23 00:00:00', 'guest@lamisplus.org', '2020-04-23 00:00:00', 'guest@lamisplus.org', 0);
+            INSERT INTO base_application_codeset (id, codeset_group, display, language, version, code, date_created, created_by, date_modified, modified_by, archived) OVERRIDING SYSTEM VALUE VALUES (981, 'COMMUNITY_PMTCT', 'TBA rt-HCW', 'en', '1', 'COMMUNITY_PMTCT_TBA_RT-HCW', '2020-04-23 00:00:00', 'guest@lamisplus.org', '2020-04-23 00:00:00', 'guest@lamisplus.org', 0);
+            INSERT INTO base_application_codeset (id, codeset_group, display, language, version, code, date_created, created_by, date_modified, modified_by, archived) OVERRIDING SYSTEM VALUE VALUES (982, 'COMMUNITY_PMTCT', 'TBA Orthodx', 'en', '1', 'COMMUNITY_PMTCT_TBA_ORTHODX', '2020-04-23 00:00:00', 'guest@lamisplus.org', '2020-04-23 00:00:00', 'guest@lamisplus.org', 0);
+            INSERT INTO base_application_codeset (id, codeset_group, display, language, version, code, date_created, created_by, date_modified, modified_by, archived) OVERRIDING SYSTEM VALUE VALUES (983, 'COMMUNITY_PMTCT', 'Delivery homes', 'en', '1', 'COMMUNITY_PMTCT_DELIVERY_HOMES', '2020-04-23 00:00:00', 'guest@lamisplus.org', '2020-04-23 00:00:00', 'guest@lamisplus.org', 0);
+            INSERT INTO base_application_codeset (id, codeset_group, display, language, version, code, date_created, created_by, date_modified, modified_by, archived) OVERRIDING SYSTEM VALUE VALUES (984, 'COMMUNITY_PMTCT', 'Congregational setting', 'en', '1', 'COMMUNITY_PMTCT_CONGREGATIONAL_SETTING', '2020-04-23 00:00:00', 'guest@lamisplus.org', '2020-04-23 00:00:00', 'guest@lamisplus.org', 0);
+            INSERT INTO base_application_codeset (id, codeset_group, display, language, version, code, date_created, created_by, date_modified, modified_by, archived) OVERRIDING SYSTEM VALUE VALUES (985, 'COMMUNITY_PMTCT', 'Spoke health facility', 'en', '1', 'COMMUNITY_PMTCT_SPOKE_HEALTH_FACILITY', '2020-04-23 00:00:00', 'guest@lamisplus.org', '2020-04-23 00:00:00', 'guest@lamisplus.org', 0);
+            INSERT INTO base_application_codeset (id, codeset_group, display, language, version, code, date_created, created_by, date_modified, modified_by, archived) OVERRIDING SYSTEM VALUE VALUES (986, 'TB_TREATMENT_OUTCOME', 'Treatment success', 'en', '1', 'TB_TREATMENT_OUTCOME_TREATMENT_SUCCESS', '2020-04-23 00:00:00', 'guest@lamisplus.org', '2020-04-23 00:00:00', 'guest@lamisplus.org', 0);
+            INSERT INTO base_application_codeset (id, codeset_group, display, language, version, code, date_created, created_by, date_modified, modified_by, archived) OVERRIDING SYSTEM VALUE VALUES (987, 'TB_TREATMENT_OUTCOME', 'Not evaluated', 'en', '1', 'TB_TREATMENT_OUTCOME_NOT_EVALUATED', '2020-04-23 00:00:00', 'guest@lamisplus.org', '2020-04-23 00:00:00', 'guest@lamisplus.org', 0);
+            INSERT INTO base_application_codeset (id, codeset_group, display, language, version, code, date_created, created_by, date_modified, modified_by, archived) OVERRIDING SYSTEM VALUE VALUES (988, 'TB_TREATMENT_OUTCOME', 'Lost to follow-up', 'en', '1', 'TB_TREATMENT_OUTCOME_LOST_TO_FOLLOW-UP', '2020-04-23 00:00:00', 'guest@lamisplus.org', '2020-04-23 00:00:00', 'guest@lamisplus.org', 0);
+            INSERT INTO base_application_codeset (id, codeset_group, display, language, version, code, date_created, created_by, date_modified, modified_by, archived) OVERRIDING SYSTEM VALUE VALUES (989, 'TB_TREATMENT_OUTCOME', 'Died', 'en', '1', 'TB_TREATMENT_OUTCOME_DIED', '2020-04-23 00:00:00', 'guest@lamisplus.org', '2020-04-23 00:00:00', 'guest@lamisplus.org', 0);
+            INSERT INTO base_application_codeset (id, codeset_group, display, language, version, code, date_created, created_by, date_modified, modified_by, archived) OVERRIDING SYSTEM VALUE VALUES (990, 'TB_TREATMENT_OUTCOME', 'Treatment completed', 'en', '1', 'TB_TREATMENT_OUTCOME_TREATMENT_COMPLETED', '2020-04-23 00:00:00', 'guest@lamisplus.org', '2020-04-23 00:00:00', 'guest@lamisplus.org', 0);
+            INSERT INTO base_application_codeset (id, codeset_group, display, language, version, code, date_created, created_by, date_modified, modified_by, archived) OVERRIDING SYSTEM VALUE VALUES (991, 'TB_TREATMENT_OUTCOME', 'Cured', 'en', '1', 'TB_TREATMENT_OUTCOME_CURED', '2020-04-23 00:00:00', 'guest@lamisplus.org', '2020-04-23 00:00:00', 'guest@lamisplus.org', 0);
+            INSERT INTO base_application_codeset (id, codeset_group, display, language, version, code, date_created, created_by, date_modified, modified_by, archived) OVERRIDING SYSTEM VALUE VALUES (992, 'TB_TREATMENT_OUTCOME', 'Treatment failed', 'en', '1', 'TB_TREATMENT_OUTCOME_TREATMENT_FAILED', '2020-04-23 00:00:00', 'guest@lamisplus.org', '2020-04-23 00:00:00', 'guest@lamisplus.org', 0);
+            INSERT INTO base_application_codeset (id, codeset_group, display, language, version, code, date_created, created_by, date_modified, modified_by, archived) OVERRIDING SYSTEM VALUE VALUES (993, 'TB_TREATMENT_TYPE', 'Relapsed', 'en', '1', 'TB_TREATMENT_TYPE_RELAPSED', '2020-04-23 00:00:00', 'guest@lamisplus.org', '2020-04-23 00:00:00', 'guest@lamisplus.org', 0);
+            INSERT INTO base_application_codeset (id, codeset_group, display, language, version, code, date_created, created_by, date_modified, modified_by, archived) OVERRIDING SYSTEM VALUE VALUES (994, 'TB_TREATMENT_TYPE', 'New', 'en', '1', 'TB_TREATMENT_TYPE_NEW', '2020-04-23 00:00:00', 'guest@lamisplus.org', '2020-04-23 00:00:00', 'guest@lamisplus.org', 0);
+            INSERT INTO base_application_codeset (id, codeset_group, display, language, version, code, date_created, created_by, date_modified, modified_by, archived) OVERRIDING SYSTEM VALUE VALUES (995, 'NUTRITION_SUPPORT', 'Referred to community support', 'en', '1', 'NUTRITION_SUPPORT_REFERRED_TO_COMMUNITY_SUPPORT', '2020-04-23 00:00:00', 'guest@lamisplus.org', '2020-04-23 00:00:00', 'guest@lamisplus.org', 0);
+            INSERT INTO base_application_codeset (id, codeset_group, display, language, version, code, date_created, created_by, date_modified, modified_by, archived) OVERRIDING SYSTEM VALUE VALUES (996, 'NUTRITION_SUPPORT', 'Referred to other clinical services', 'en', '1', 'NUTRITION_SUPPORT_REFERRED_TO_OTHER_CLINICAL_SERVICES', '2020-04-23 00:00:00', 'guest@lamisplus.org', '2020-04-23 00:00:00', 'guest@lamisplus.org', 0);
+            INSERT INTO base_application_codeset (id, codeset_group, display, language, version, code, date_created, created_by, date_modified, modified_by, archived) OVERRIDING SYSTEM VALUE VALUES (997, 'NUTRITION_SUPPORT', 'Nutrition Supplement', 'en', '1', 'NUTRITION_SUPPORT_NUTRITION_SUPPLEMENT', '2020-04-23 00:00:00', 'guest@lamisplus.org', '2020-04-23 00:00:00', 'guest@lamisplus.org', 0);
+            INSERT INTO base_application_codeset (id, codeset_group, display, language, version, code, date_created, created_by, date_modified, modified_by, archived) OVERRIDING SYSTEM VALUE VALUES (998, 'NUTRITION_EDUCATION_COUNSELLED', 'Nutrition Supplement', 'en', '1', 'NUTRITION_EDUCATION_COUNSELLED_NUTRITION_SUPPLEMENT', '2020-04-23 00:00:00', 'guest@lamisplus.org', '2020-04-23 00:00:00', 'guest@lamisplus.org', 0);
+            INSERT INTO base_application_codeset (id, codeset_group, display, language, version, code, date_created, created_by, date_modified, modified_by, archived) OVERRIDING SYSTEM VALUE VALUES (999, 'NUTRITION_EDUCATION_COUNSELLED', 'Client agreed to action plan', 'en', '1', 'NUTRITION_EDUCATION_COUNSELLED_CLIENT_AGREED_TO_ACTION_PLAN', '2020-04-23 00:00:00', 'guest@lamisplus.org', '2020-04-23 00:00:00', 'guest@lamisplus.org', 0);
+            INSERT INTO base_application_codeset (id, codeset_group, display, language, version, code, date_created, created_by, date_modified, modified_by, archived) OVERRIDING SYSTEM VALUE VALUES (1000, 'NUTRITION_EDUCATION_COUNSELLED', 'Nutrition Counselling', 'en', '1', 'NUTRITION_EDUCATION_COUNSELLED_NUTRITION_COUNSELLING', '2020-04-23 00:00:00', 'guest@lamisplus.org', '2020-04-23 00:00:00', 'guest@lamisplus.org', 0);
+            INSERT INTO base_application_codeset (id, codeset_group, display, language, version, code, date_created, created_by, date_modified, modified_by, archived) OVERRIDING SYSTEM VALUE VALUES (1001, 'NUTRITION_EDUCATION_COUNSELLED', 'Nutrition Education', 'en', '1', 'NUTRITION_EDUCATION_COUNSELLED_NUTRITION_EDUCATION', '2020-04-23 00:00:00', 'guest@lamisplus.org', '2020-04-23 00:00:00', 'guest@lamisplus.org', 0);
+            INSERT INTO base_application_codeset (id, codeset_group, display, language, version, code, date_created, created_by, date_modified, modified_by, archived) OVERRIDING SYSTEM VALUE VALUES (1002, 'CHRONIC_CARE_CLIENT_TYPE', 'Registered PLHIV on follow up/subsequent visit this semi-annual period', 'en', '1', 'CHRONIC_CARE_CLIENT_TYPE_REGISTERED_PLHIV_ON_FOLLOW_UP_SUBSEQUENT_VISIT_THIS_SEMI-ANNUAL_PERIOD', '2020-04-23 00:00:00', 'guest@lamisplus.org', '2020-04-23 00:00:00', 'guest@lamisplus.org', 0);
+            INSERT INTO base_application_codeset (id, codeset_group, display, language, version, code, date_created, created_by, date_modified, modified_by, archived) OVERRIDING SYSTEM VALUE VALUES (1003, 'CHRONIC_CARE_CLIENT_TYPE', 'Registered PLHIV on first time visit this semi- annual period', 'en', '1', 'CHRONIC_CARE_CLIENT_TYPE_REGISTERED_PLHIV_ON_FIRST_TIME_VISIT_THIS_SEMI-_ANNUAL_PERIOD', '2020-04-23 00:00:00', 'guest@lamisplus.org', '2020-04-23 00:00:00', 'guest@lamisplus.org', 0);
+            INSERT INTO base_application_codeset (id, codeset_group, display, language, version, code, date_created, created_by, date_modified, modified_by, archived) OVERRIDING SYSTEM VALUE VALUES (1004, 'CHRONIC_CARE_CLIENT_TYPE', 'PLHIV newly enrolled into HIV Care and treatment ', 'en', '1', 'CHRONIC_CARE_CLIENT_TYPE_PLHIV_NEWLY_ENROLLED_INTO_HIV_CARE_TREATMENT_', '2020-04-23 00:00:00', 'guest@lamisplus.org', '2020-04-23 00:00:00', 'guest@lamisplus.org', 0);
+            INSERT INTO base_application_codeset (id, codeset_group, display, language, version, code, date_created, created_by, date_modified, modified_by, archived) OVERRIDING SYSTEM VALUE VALUES (1005, 'TPT_OUTCOME_STOPPED_REASON', 'Others (specify)', 'en', '1', 'TPT_OUTCOME_STOPPED_REASON_OTHERS_(SPECIFY)', '2020-04-23 00:00:00', 'guest@lamisplus.org', '2020-04-23 00:00:00', 'guest@lamisplus.org', 0);
+            INSERT INTO base_application_codeset (id, codeset_group, display, language, version, code, date_created, created_by, date_modified, modified_by, archived) OVERRIDING SYSTEM VALUE VALUES (1006, 'TPT_OUTCOME_STOPPED_REASON', 'Poor adherence', 'en', '1', 'TPT_OUTCOME_STOPPED_REASON_POOR_ADHERENCE', '2020-04-23 00:00:00', 'guest@lamisplus.org', '2020-04-23 00:00:00', 'guest@lamisplus.org', 0);
+            INSERT INTO base_application_codeset (id, codeset_group, display, language, version, code, date_created, created_by, date_modified, modified_by, archived) OVERRIDING SYSTEM VALUE VALUES (1007, 'TPT_OUTCOME_STOPPED_REASON', 'Developed neurological symptoms', 'en', '1', 'TPT_OUTCOME_STOPPED_REASON_DEVELOPED_NEUROLOGICAL_SYMPTOMS', '2020-04-23 00:00:00', 'guest@lamisplus.org', '2020-04-23 00:00:00', 'guest@lamisplus.org', 0);
+            INSERT INTO base_application_codeset (id, codeset_group, display, language, version, code, date_created, created_by, date_modified, modified_by, archived) OVERRIDING SYSTEM VALUE VALUES (1008, 'TPT_OUTCOME_STOPPED_REASON', 'Developed symptoms of hepatitis', 'en', '1', 'TPT_OUTCOME_STOPPED_REASON_DEVELOPED_SYMPTOMS_OF_HEPATITIS', '2020-04-23 00:00:00', 'guest@lamisplus.org', '2020-04-23 00:00:00', 'guest@lamisplus.org', 0);
+            INSERT INTO base_application_codeset (id, codeset_group, display, language, version, code, date_created, created_by, date_modified, modified_by, archived) OVERRIDING SYSTEM VALUE VALUES (1009, 'TPT_OUTCOME', 'Lost to follow up  ', 'en', '1', 'TPT_OUTCOME_LOST_TO_FOLLOW_UP__', '2020-04-23 00:00:00', 'guest@lamisplus.org', '2020-04-23 00:00:00', 'guest@lamisplus.org', 0);
+            INSERT INTO base_application_codeset (id, codeset_group, display, language, version, code, date_created, created_by, date_modified, modified_by, archived) OVERRIDING SYSTEM VALUE VALUES (1010, 'TPT_OUTCOME', 'Stopped IPT', 'en', '1', 'TPT_OUTCOME_STOPPED_IPT', '2020-04-23 00:00:00', 'guest@lamisplus.org', '2020-04-23 00:00:00', 'guest@lamisplus.org', 0);
+            INSERT INTO base_application_codeset (id, codeset_group, display, language, version, code, date_created, created_by, date_modified, modified_by, archived) OVERRIDING SYSTEM VALUE VALUES (1011, 'TPT_OUTCOME', 'Transferred out', 'en', '1', 'TPT_OUTCOME_TRANSFERRED_OUT', '2020-04-23 00:00:00', 'guest@lamisplus.org', '2020-04-23 00:00:00', 'guest@lamisplus.org', 0);
+            INSERT INTO base_application_codeset (id, codeset_group, display, language, version, code, date_created, created_by, date_modified, modified_by, archived) OVERRIDING SYSTEM VALUE VALUES (1012, 'TPT_OUTCOME', 'Died', 'en', '1', 'TPT_OUTCOME_DIED', '2020-04-23 00:00:00', 'guest@lamisplus.org', '2020-04-23 00:00:00', 'guest@lamisplus.org', 0);
+            INSERT INTO base_application_codeset (id, codeset_group, display, language, version, code, date_created, created_by, date_modified, modified_by, archived) OVERRIDING SYSTEM VALUE VALUES (1013, 'TPT_OUTCOME', 'Developed active TB', 'en', '1', 'TPT_OUTCOME_DEVELOPED_ACTIVE_TB', '2020-04-23 00:00:00', 'guest@lamisplus.org', '2020-04-23 00:00:00', 'guest@lamisplus.org', 0);
+            INSERT INTO base_application_codeset (id, codeset_group, display, language, version, code, date_created, created_by, date_modified, modified_by, archived) OVERRIDING SYSTEM VALUE VALUES (1014, 'TPT_OUTCOME', 'IPT Completed', 'en', '1', 'TPT_OUTCOME_IPT_COMPLETED', '2020-04-23 00:00:00', 'guest@lamisplus.org', '2020-04-23 00:00:00', 'guest@lamisplus.org', 0);
+            INSERT INTO base_application_codeset (id, codeset_group, display, language, version, code, date_created, created_by, date_modified, modified_by, archived) OVERRIDING SYSTEM VALUE VALUES (1015, 'SOURCE_REFERRAL', 'CBO', 'en', '1', 'SOURCE_REFERRAL_CBO', '2020-04-23 00:00:00', 'guest@lamisplus.org', '2020-04-23 00:00:00', 'guest@lamisplus.org', 0);
+
+            SELECT pg_catalog.setval('base_application_codeset_id_seq', 1015, true);
         </sql>
     </changeSet>
 </databaseChangeLog>
