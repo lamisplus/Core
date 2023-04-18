@@ -24,7 +24,7 @@
         </sql>
     </changeSet>
 
-    <changeSet failOnError="true" id="core-updates-000003" author="Dr. Java">
+    <changeSet failOnError="true" id="core-updates-0000031" author="Dr. Java">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">
                 SELECT COUNT(*) FROM base_organisation_unit_identifier WHERE code='cYdxH1tF7Di';
@@ -67,7 +67,7 @@
         </sql>
     </changeSet>
 
-    <changeSet failOnError="true" id="core-updates-000005" author="Dr. Java">
+    <changeSet failOnError="true" id="core-updates-0000051" author="Dr. Java">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">
                 SELECT COUNT(*) FROM base_organisation_unit_identifier WHERE code='rAilliFFqMN';
