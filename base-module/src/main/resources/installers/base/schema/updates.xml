@@ -24,7 +24,7 @@
         </sql>
     </changeSet>
 
-    <changeSet failOnError="true" id="core-updates-3" author="Dr. Java">
+    <changeSet failOnError="true" id="core-updates-03" author="Dr. Java">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">
                 SELECT COUNT(*) FROM base_organisation_unit_identifier WHERE code='cYdxH1tF7Di';
@@ -39,16 +39,16 @@
                                                 'Emeka Ilozue', '36edc807-36fa-4438-85ae-d8ee9c52bdd6');
 
             SELECT pg_catalog.setval('base_organisation_unit_id_seq',
-            (SELECT MAX(id) FROM base_organisation_unit), true);
+            (SELECT MAX(id) FROM base_organisation_unit WHERE organisation_unit_level_id !=8), true);
 
             INSERT INTO base_organisation_unit_hierarchy(id,
                 organisation_unit_id, parent_organisation_unit_id, organisation_unit_level_id)
-            VALUES (SELECT MAX(id) + 1 FROM base_organisation_unit_hierarchy, 2025, 200, 4),
-                   (SELECT MAX(id) + 2 FROM base_organisation_unit_hierarchy, 2025, 9, 4),
-                   (SELECT MAX(id) + 3 FROM base_organisation_unit_hierarchy, 2025,1, 4);
+            VALUES ((SELECT MAX(id) + 1 FROM base_organisation_unit_hierarchy),2025, 200, 4),
+                   ((SELECT MAX(id) + 2 FROM base_organisation_unit_hierarchy),2025, 9, 4),
+                   ((SELECT MAX(id) + 3 FROM base_organisation_unit_hierarchy),2025,1, 4);
 
             SELECT pg_catalog.setval('base_organisation_unit_hierarchy_id_seq',
-                    (SELECT MAX(id) FROM base_organisation_unit WHERE organisation_unit_level_id !=8), true);
+                    (SELECT MAX(id) FROM base_organisation_unit_hierarchy), true);
 
             INSERT INTO base_organisation_unit_identifier(organisation_unit_id, code, name)
             VALUES (2025, 'cYdxH1tF7Di', 'DATIM_ID');
