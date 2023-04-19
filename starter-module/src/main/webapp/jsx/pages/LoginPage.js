@@ -153,7 +153,7 @@ const handleKeyPress = (e) => {
           <div className=" col-sm-4"></div>
             <div className=" ml-10 col-sm-4">
             <p>
-              Copyright © LAMISPlus 2.0.1 
+              Copyright © LAMISPlus 2.0.2
               {" "}{" "}
               {/* {d.getFullYear()} */}
             </p>
