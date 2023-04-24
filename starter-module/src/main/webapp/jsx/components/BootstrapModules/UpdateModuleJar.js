@@ -154,8 +154,10 @@ const BootstrapModule = (props) => {
     const [restartmodal, setRestartModal] = useState(false) //Modal
     const toggleRestartModal = () => setRestartModal(!restartmodal);
     const [open, setOpen] = useState(false);
+    const [saving, setSaving] = useState(false);
 
     useEffect(() => {
+
         const onSuccess = (data) => {
             //setUploadResponse(data)
             setUploadModuleList(data)
@@ -224,11 +226,12 @@ const BootstrapModule = (props) => {
     };
 
     const handleInstallModule = (obj) => {
-
+       
         setDisabledNextButton(true)
         setInstallationOverlay(true)
         setDisableNextButtonProcess(true)
         const onSuccess = (installResponse) => {
+            
             const installModuleDetail = installResponse
             // var foundIndex = uploadResponse.findIndex(x => x.batchNo == installModuleDetail.batchNo);
             //uploadResponse[foundIndex] = installModuleDetail
@@ -249,6 +252,7 @@ const BootstrapModule = (props) => {
     }
 
     const handleUploadFile = async e => {
+
         if(fileToUpload[0]){
             setDisabledUploadButton(true)
             setDisableNextButtonProcess(true)
