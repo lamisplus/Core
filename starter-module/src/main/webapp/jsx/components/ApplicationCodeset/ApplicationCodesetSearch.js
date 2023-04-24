@@ -142,14 +142,14 @@ const processDelete = (id) => {
               <CardBody>
                    <div className={"d-flex justify-content-end pb-2"}>
                        
-                        {/*<ButtonMui variant="contained"*/}
-                        {/*  color="primary"*/}
-                        {/*  startIcon={<FaPlus size="10"/>}*/}
-                        {/*  onClick={() => openApplicationCodeset(null)}*/}
-                        {/*           style={{backgroundColor:'#014d88'}}*/}
-                        {/*>*/}
-                        {/*    <span style={{textTransform: 'capitalize'}}>Codeset</span>*/}
-                        {/*</ButtonMui>*/}
+                        <ButtonMui variant="contained"
+                          color="primary"
+                          startIcon={<FaPlus size="10"/>}
+                          onClick={() => openApplicationCodeset(null)}
+                                   style={{backgroundColor:'#014d88'}}
+                        >
+                            <span style={{textTransform: 'capitalize'}}>Codeset</span>
+                        </ButtonMui>
 
                     </div>
                     <MaterialTable
