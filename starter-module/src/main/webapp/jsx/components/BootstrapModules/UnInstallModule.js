@@ -1,4 +1,4 @@
-import React   from 'react';
+import {React, useState}   from 'react';
 import {  Row,Col,Card,CardBody
 } from 'reactstrap';
 import MatButton from '@material-ui/core/Button';
@@ -12,12 +12,15 @@ import {useHistory} from "react-router-dom";
 const UnIstallModal = (props) => {
     let history = useHistory();
     const datasample = props.datasample ? props.datasample : {};
-
+    const [saving, setSaving] = useState(false);
 
     const unistallModule = () => {
+        setSaving(true)
         const onError = () => {
+            setSaving(false)
         }
         const onSuccess = () => {
+            setSaving(false)
             props.togglestatus()
             props.loadModules()
             history.push(`/bootstrap-modules`)
@@ -54,9 +57,9 @@ const UnIstallModal = (props) => {
                                 //className={classes.button}
                                 onClick={()=> unistallModule()}
                                 className=" float-right ms-2"
-                                
+                                disabled={saving}
                             >
-                                Yes
+                               {saving===false ? "Yes" : "Processing..."} 
                             </MatButton>
                             <MatButton
                               variant='contained'
