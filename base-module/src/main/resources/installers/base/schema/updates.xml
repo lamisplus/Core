@@ -11,7 +11,7 @@
         </sql>
     </changeSet>
 
-    <changeSet failOnError="true" id="core-updates-2" author="Dr. Java">
+    <changeSet failOnError="true" id="core-updates-02" author="Dr. Java">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">
                 SELECT COUNT(*) FROM base_organisation_unit_identifier WHERE code='GxSUmojRHpC';
@@ -19,7 +19,7 @@
         </preConditions>
         <sql>
             INSERT INTO base_organisation_unit_identifier (id, organisation_unit_id, code, name)
-            VALUES (615, 1829, 'GxSUmojRHpC', 'DATIM_ID');
+            VALUES ((SELECT MAX(id) + 1 FROM base_organisation_unit_identifier), 1829, 'GxSUmojRHpC', 'DATIM_ID');
             SELECT pg_catalog.setval('base_organisation_unit_identifier_id_seq', 615, true);
         </sql>
     </changeSet>
@@ -67,7 +67,7 @@
         </sql>
     </changeSet>
 
-    <changeSet failOnError="true" id="core-updates-5" author="Dr. Java">
+    <changeSet failOnError="true" id="core-updates-05" author="Dr. Java">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">
                 SELECT COUNT(*) FROM base_organisation_unit_identifier WHERE code='rAilliFFqMN';
@@ -86,15 +86,15 @@
 
             INSERT INTO base_organisation_unit_hierarchy(
             organisation_unit_id, parent_organisation_unit_id, organisation_unit_level_id)
-            VALUES (2026, 784, 4),
-            (2026, 37, 4),
-            (2026,1, 4);
+            VALUES ((SELECT MAX(id) + 1 FROM base_organisation_unit_hierarchy), 784, 4),
+            ((SELECT MAX(id) + 2 FROM base_organisation_unit_hierarchy), 37, 4),
+            ((SELECT MAX(id) + 3 FROM base_organisation_unit_hierarchy),1, 4);
 
             SELECT pg_catalog.setval('base_organisation_unit_hierarchy_id_seq',
             (SELECT MAX(id) FROM base_organisation_unit_hierarchy), true);
 
             INSERT INTO base_organisation_unit_identifier(organisation_unit_id, code, name)
-            VALUES (2026, 'rAilliFFqMN', 'DATIM_ID');
+            VALUES ((SELECT MAX(id) + 1 FROM base_organisation_unit_identifier), 'rAilliFFqMN', 'DATIM_ID');
         </sql>
     </changeSet>
 
@@ -198,6 +198,22 @@
             INSERT INTO base_application_codeset (id, codeset_group, display, language, version, code, date_created, created_by, date_modified, modified_by, archived) OVERRIDING SYSTEM VALUE VALUES (1015, 'SOURCE_REFERRAL', 'CBO', 'en', '1', 'SOURCE_REFERRAL_CBO', '2020-04-23 00:00:00', 'guest@lamisplus.org', '2020-04-23 00:00:00', 'guest@lamisplus.org', 0);
 
             SELECT pg_catalog.setval('base_application_codeset_id_seq', 1015, true);
+        </sql>
+    </changeSet>
+
+    <changeSet failOnError="true" id="core-updates-09" author="Dr. Java">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM base_application_codeset WHERE code='REASON_DISCONTINUATION_INVALID_–_LONG-TERM_IIT';
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO base_application_codeset (id, codeset_group, display, language, version, code, date_created, created_by, date_modified, modified_by, archived) VALUES ((SELECT MAX(id) + 1 FROM base_application_codeset), 'REASON_DISCONTINUATION', 'Invalid - Biometrical Naive', 'en', '1', 'REASON_DISCONTINUATION_INVALID_-_BIOMETRICAL_NAIVE', '2023-04-20 17:44:00', 'guest@lamisplus.org', '2023-04-20 17:44:00', 'guest@lamisplus.org', 0);
+            INSERT INTO base_application_codeset (id, codeset_group, display, language, version, code, date_created, created_by, date_modified, modified_by, archived) VALUES ((SELECT MAX(id) + 1 FROM base_application_codeset), 'REASON_DISCONTINUATION', 'Invalid - Duplicates', 'en', '1', 'REASON_DISCONTINUATION_INVALID_-_DUPLICATES', '2023-04-21 17:44:00', 'guest@lamisplus.org', '2023-04-21 17:44:00', 'guest@lamisplus.org', 0);
+            INSERT INTO base_application_codeset (id, codeset_group, display, language, version, code, date_created, created_by, date_modified, modified_by, archived) VALUES ((SELECT MAX(id) + 1 FROM base_application_codeset), 'REASON_DISCONTINUATION', 'Invalid – Long-term IIT', 'en', '1', 'REASON_DISCONTINUATION_INVALID_–_LONG-TERM_IIT', '2023-04-22 17:44:00', 'guest@lamisplus.org', '2023-04-22 17:44:00', 'guest@lamisplus.org', 0);
+            INSERT INTO base_application_codeset (id, codeset_group, display, language, version, code, date_created, created_by, date_modified, modified_by, archived) VALUES ((SELECT MAX(id) + 1 FROM base_application_codeset), 'REASON_DISCONTINUATION', 'Invalid - Nonexistent', 'en', '1', 'REASON_DISCONTINUATION_INVALID_-_NONEXISTENT', '2023-04-23 17:44:00', 'guest@lamisplus.org', '2023-04-23 17:44:00', 'guest@lamisplus.org', 0);
+
+            SELECT pg_catalog.setval('base_application_codeset_id_seq', (SELECT MAX(id) FROM base_application_codeset), true);
         </sql>
     </changeSet>
 </databaseChangeLog>
