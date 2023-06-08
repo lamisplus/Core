@@ -55,7 +55,7 @@ function App(props) {
     clearTimeout(startTimerInterval.current);
 
     warningInactiveInterval.current = setInterval(() => {
-      const maxTime = 3;
+      const maxTime = 10;
 
       const diff = moment.duration(moment().diff(moment(timeString)));
       const minPast = diff.minutes();
