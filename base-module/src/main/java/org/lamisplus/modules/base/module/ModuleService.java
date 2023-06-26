@@ -227,13 +227,28 @@ public class ModuleService {
                 //List<String> dependencies = new ArrayList<>();
                 config.getDependencies().forEach((k, v)->{
                     //dependencies.add(k +" "+ v);
+
                     if(!moduleManager.isInstalled(k)){
                         module.setType(ERROR);
                         module.setMessage(module.getName() + " depends on " + k +" "+ v);
-                    } else  if(!moduleRepository.findByNameAndVersionAndActive(k, v, true).isPresent()){
+                    } else if (moduleManager.isInstalled(k)){
+                        Optional<Module> optionalModule = moduleRepository.findByNameAndActive(k, true);
+                        if(optionalModule.isPresent()){
+                            Module module1 = optionalModule.get();
+                            if(Double.valueOf(module1.getVersion()) < Double.valueOf(v)){
+                                module.setType(SUCCESS);
+                                module.setMessage(module.getName() + " depends on " + k +" "+ v +" which is a lower version");
+                                String desc = module.getDescription() + " " + module.getName() + " depends on " + k +" "+ v +" which is a lower version";
+                                module.setDescription(desc);
+                            } else  if(Double.valueOf(module1.getVersion()) > Double.valueOf(v)){
+                                module.setType(ERROR);
+                                module.setMessage(module.getName() + " depends on " + k +" "+ v);
+                            }
+                        }
+                    }/*else  if(!moduleRepository.findByNameAndVersionAndActive(k, v, true).isPresent()){
                         module.setType(ERROR);
                         module.setMessage(module.getName() + " depends on " + k +" "+ v);
-                    }
+                    }*/
                 });
             }
         }
