@@ -65,22 +65,22 @@ function App(props) {
         console.log("logout");
         clearInterval(warningInactiveInterval.current);
         sessionStorage.removeItem("lastTimeStamp");
-        localStorage.clear();
-        window.location.href = "/login";
+        //localStorage.clear();
+        //window.location.href = "/login";
       }
     }, 1000);
   };
 
-  useEffect(() => {
-    events.forEach((event) => {
-      window.addEventListener(event, setTimestamp);
-    });
-
-    timerCheck();
-    return () => {
-      clearTimeout(startTimerInterval.current);
-    };
-  }, [setTimestamp, events, timerCheck]);
+//  useEffect(() => {
+//    events.forEach((event) => {
+//      window.addEventListener(event, setTimestamp);
+//    });
+//
+//    timerCheck();
+//    return () => {
+//      clearTimeout(startTimerInterval.current);
+//    };
+//  }, [setTimestamp, events, timerCheck]);
 
   // useEffect(() => {
   //    // checkAutoLogin(dispatch, props.history);
