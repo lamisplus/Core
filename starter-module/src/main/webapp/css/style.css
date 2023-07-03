@@ -37592,12 +37592,12 @@ code {
   background-color: #e83e8c; }
 
 .progress {
-  height: 6px;
+  height: 20px;
   overflow: hidden; }
   [data-theme-version="dark"] .progress {
     background-color: #24292d; }
   .progress-bar {
-    border-radius: 4px; }
+    border-radius: 2px; }
 
 .progress-vertical {
   display: inline-block;

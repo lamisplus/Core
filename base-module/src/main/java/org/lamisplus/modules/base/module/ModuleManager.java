@@ -149,7 +149,7 @@ public class ModuleManager {
                 ModuleUtils.copyPathFromJar(storageService.getURL(module.getArtifact()), "/", moduleRuntimePath);
             }
             ModuleUtils.addClassPathUrl(moduleRuntimePath.toUri().toURL(), ModuleLifecycle.class.getClassLoader());
-            LOG.info("MODULE IS HERE {}", moduleRuntimePath.toUri().toURL());
+            //LOG.info("MODULE IS HERE {}", moduleRuntimePath.toUri().toURL());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -282,7 +282,6 @@ public class ModuleManager {
                         removeBean(bdn);
                     }
                 });
-
     }
 
     private void removeDuplicateRepositories() {

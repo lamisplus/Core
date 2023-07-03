@@ -74,4 +74,6 @@ public interface ModuleRepository extends JpaRepository<Module, Long> {
     Optional<Module> findLikeByMenu(String moduleName);
 
     Optional<Module> findByNameAndVersionAndActive(String name, String version, boolean active);
+
+    Optional<Module> findByNameAndActive(String name, boolean active);
 }
