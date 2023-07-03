@@ -1,5 +1,5 @@
 # lamisplus-core-enhancement application
-
+# Run with java version 8.
 ## Setting up the database
 This application uses `postgres` database; create a database on postgres 
 and set up the database credentials in the application.yml in lamisplus module
