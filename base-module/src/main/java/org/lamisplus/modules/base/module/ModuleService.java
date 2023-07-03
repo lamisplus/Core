@@ -221,19 +221,30 @@ public class ModuleService {
                     .stream()
                     .map(permission -> {permission.setModuleName(config.getName()); return permission;})
                             .collect(Collectors.toSet()));
-            //module.setPermissions(new HashSet<>(config.getPermissions()));
             module.setPriority(config.getPriority());
             if(!config.getDependencies().isEmpty()){
-                //List<String> dependencies = new ArrayList<>();
                 config.getDependencies().forEach((k, v)->{
-                    //dependencies.add(k +" "+ v);
                     if(!moduleManager.isInstalled(k)){
                         module.setType(ERROR);
                         module.setMessage(module.getName() + " depends on " + k +" "+ v);
-                    } else  if(!moduleRepository.findByNameAndVersionAndActive(k, v, true).isPresent()){
+                    } else if (moduleManager.isInstalled(k)){
+                        Optional<Module> optionalModule = moduleRepository.findByNameAndActive(k, true);
+                        if(optionalModule.isPresent()){
+                            Module module1 = optionalModule.get();
+                            if(Integer.valueOf(module1.getVersion().replace(".", "")) > Integer.valueOf(v.replace(".", ""))){
+                                module.setType(SUCCESS);
+                                module.setMessage(module.getName() + " [ depends on " + k +" "+ v +" which is a lower version]");
+                                String desc = module.getDescription() + " " + module.getName() + " [ depends on " + k +" "+ v +" which is a lower version]";
+                                module.setDescription(desc);
+                            } else  if(Integer.valueOf(module1.getVersion().replace(".", "")) > Integer.valueOf(v.replace(".", ""))){
+                                module.setType(ERROR);
+                                module.setMessage(module.getName() + " depends on " + k +" "+ v);
+                            }
+                        }
+                    }/*else  if(!moduleRepository.findByNameAndVersionAndActive(k, v, true).isPresent()){
                         module.setType(ERROR);
                         module.setMessage(module.getName() + " depends on " + k +" "+ v);
-                    }
+                    }*/
                 });
             }
         }

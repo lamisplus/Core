@@ -189,9 +189,9 @@ const BootstrapModule = (props) => {
       //history.push(`/bootstrap-modules`)
     }
     const onError = () => {
-      setDisabledNextButton(false)
-      setInstallationOverlay(false)
-      setDisableNextButtonProcess(false) 
+      // setDisabledNextButton(false)
+      // setInstallationOverlay(false)
+      // setDisableNextButtonProcess(false)
     }
     props.installBootstrapModule(obj, onSuccess, onError);
   }
