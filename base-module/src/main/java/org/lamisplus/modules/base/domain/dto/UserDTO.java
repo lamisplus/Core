@@ -44,6 +44,7 @@ public class UserDTO {
     private String designation;
 
     private Long currentOrganisationUnitId;
+    private String datimCode ;
 
     @ToString.Exclude
     private List<ApplicationUserOrganisationUnit> applicationUserOrganisationUnits = new ArrayDeque<>();

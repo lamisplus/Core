@@ -64,11 +64,9 @@ public class ApplicationUserOrganisationUnitService {
         }
 
         ApplicationUserOrganisationUnit applicationUserOrganisationUnit = new ApplicationUserOrganisationUnit();
-
         applicationUserOrganisationUnit.setId( applicationUserOrganisationUnitDTO.getId() );
         applicationUserOrganisationUnit.setApplicationUserId( applicationUserOrganisationUnitDTO.getApplicationUserId() );
         applicationUserOrganisationUnit.setOrganisationUnitId( applicationUserOrganisationUnitDTO.getOrganisationUnitId() );
-
         return applicationUserOrganisationUnit;
     }
     private ApplicationUserOrganisationUnitDTO toApplicationUserOrganisationUnitDTO(ApplicationUserOrganisationUnit applicationUserOrganisationUnit) {
@@ -77,7 +75,6 @@ public class ApplicationUserOrganisationUnitService {
         }
 
         ApplicationUserOrganisationUnitDTO applicationUserOrganisationUnitDTO = new ApplicationUserOrganisationUnitDTO();
-
         applicationUserOrganisationUnitDTO.setId( applicationUserOrganisationUnit.getId() );
         applicationUserOrganisationUnitDTO.setApplicationUserId( applicationUserOrganisationUnit.getApplicationUserId() );
         applicationUserOrganisationUnitDTO.setOrganisationUnitId( applicationUserOrganisationUnit.getOrganisationUnitId() );

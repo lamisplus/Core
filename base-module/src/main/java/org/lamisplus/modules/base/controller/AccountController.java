@@ -1,16 +1,17 @@
 package org.lamisplus.modules.base.controller;
 
+import com.esotericsoftware.minlog.Log;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.lamisplus.modules.base.controller.apierror.EntityNotFoundException;
 import org.lamisplus.modules.base.domain.dto.UserDTO;
-import org.lamisplus.modules.base.domain.entities.ApplicationUserOrganisationUnit;
-import org.lamisplus.modules.base.domain.entities.Role;
-import org.lamisplus.modules.base.domain.entities.User;
+import org.lamisplus.modules.base.domain.entities.*;
 import org.lamisplus.modules.base.domain.mapper.UserMapper;
 import org.lamisplus.modules.base.domain.repositories.ApplicationUserOrganisationUnitRepository;
 import org.lamisplus.modules.base.domain.repositories.RoleRepository;
 import org.lamisplus.modules.base.domain.repositories.UserRepository;
 import org.lamisplus.modules.base.security.SecurityUtils;
+import org.lamisplus.modules.base.service.OrganisationUnitService;
 import org.lamisplus.modules.base.service.UserService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -33,6 +34,8 @@ public class AccountController {
 
     private final UserService userService;
 
+    private final OrganisationUnitService organisationUnitService;
+
     private final ApplicationUserOrganisationUnitRepository applicationUserOrganisationUnitRepository;
 
     //Versioning through URI Path
@@ -48,7 +51,8 @@ public class AccountController {
 
             if(user.getCurrentOrganisationUnitId() == null && !user.getApplicationUserOrganisationUnits().isEmpty()){
                 for (ApplicationUserOrganisationUnit applicationUserOrganisationUnit : user.getApplicationUserOrganisationUnits()) {
-                    user.setCurrentOrganisationUnitId(applicationUserOrganisationUnit.getOrganisationUnitId());
+                    Long facilityId = applicationUserOrganisationUnit.getOrganisationUnitId();
+                    user.setCurrentOrganisationUnitId(facilityId);
                     userRepository.save(user);
                     break;
                 }
@@ -58,14 +62,26 @@ public class AccountController {
                 applicationUserOrganisationUnit.setOrganisationUnitId(user.getCurrentOrganisationUnitId());
                 applicationUserOrganisationUnitRepository.save(applicationUserOrganisationUnit);
             }
-
             return userService
                     .getUserWithRoles()
                     .map(UserDTO::new)
+                    .map(this::getUserDTOWithDatimCode)
                     .orElseThrow(() -> new EntityNotFoundException(User.class,"Name:","User"));
         } else{
             throw new EntityNotFoundException(User.class,"Name:","User");
         }
+    }
+
+    @NotNull
+    private UserDTO getUserDTOWithDatimCode(UserDTO userDTO) {
+        Log.info("I am in to the modification");
+        OrganisationUnit organizationUnit = organisationUnitService.getOrganizationUnit(userDTO.getCurrentOrganisationUnitId());
+        Optional<OrganisationUnitIdentifier> datimId = organizationUnit.getOrganisationUnitIdentifiers()
+                .stream()
+                .filter(o -> o.getName().equals("DATIM_ID"))
+                .findFirst();
+        datimId.ifPresent(organisationUnitIdentifier -> userDTO.setDatimCode(organisationUnitIdentifier.getCode()));
+        return userDTO;
     }
 
     @GetMapping(BASE_URL_VERSION_ONE + "/account/roles")
