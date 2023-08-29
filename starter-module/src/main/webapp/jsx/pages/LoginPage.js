@@ -1,64 +1,61 @@
-import React,{useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { Link } from "react-router-dom";
 // import { connect, useDispatch } from 'react-redux';
-import {  Alert, Button } from "react-bootstrap";
+import { Alert, Button } from "react-bootstrap";
 
 import logo from "../../images/lamisPlus/logo_200.png";
 import { authentication } from "../../_services/authentication";
 
 function Register(props) {
-
   /* Code from LamisPlus */
-let history = useHistory();
-const [username, setUsername] = useState("");
-const [password, setPassword] = useState("");
-const [remember, setRemember] = useState("");
-const [submitText, setSubmittext] = useState("Sign In");
-const [isButtonDisabled, setIsButtonDisabled] = useState(true);
-const [helperText, setHelperText] = useState("");
-const [error, setError] = useState(false);
+  let history = useHistory();
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [remember, setRemember] = useState("");
+  const [submitText, setSubmittext] = useState("Sign In");
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+  const [helperText, setHelperText] = useState("");
+  const [error, setError] = useState(false);
 
-useEffect(() => {
-  if (username.trim() && password.trim()) {
-    setIsButtonDisabled(false);
-  } else {
-    setIsButtonDisabled(true);
-  }
-}, [username, password]);
-
-const handleLogin = (e) => {
-  
-  e.preventDefault(); 
-  setIsButtonDisabled(true)
-  setSubmittext("Login Please wait...")
-  setIsButtonDisabled(true)
-  authentication.login(username, password, remember).then(
-    (user) => {
-      setError(false);
-      setHelperText("Login Successfully");
-     history.push("", {user : user} );
-     window.location.href = "";
-    },
-    (error) => {
-      setIsButtonDisabled(false)
-      setSubmittext("Sign In")
-      setError(true);
-      setHelperText("Incorrect username or password");
+  useEffect(() => {
+    if (username.trim() && password.trim()) {
+      setIsButtonDisabled(false);
+    } else {
+      setIsButtonDisabled(true);
     }
-  );
-};
-var d = new Date();
-const handleKeyPress = (e) => {
-  if (e.keyCode === 13 || e.which === 13) {
-    isButtonDisabled || handleLogin();
-  }
-};
-/* Endof the code */
+  }, [username, password]);
 
-    let errorsObj = { email: '', password: '' };
-    const [errors, setErrors] = useState(errorsObj);
+  const handleLogin = (e) => {
+    e.preventDefault();
+    setIsButtonDisabled(true);
+    setSubmittext("Login Please wait...");
+    setIsButtonDisabled(true);
+    authentication.login(username, password, remember).then(
+      (user) => {
+        setError(false);
+        setHelperText("Login Successfully");
+        history.push("", { user: user });
+        window.location.href = "";
+      },
+      (error) => {
+        setIsButtonDisabled(false);
+        setSubmittext("Sign In");
+        setError(true);
+        setHelperText("Incorrect username or password");
+      }
+    );
+  };
+  var d = new Date();
+  const handleKeyPress = (e) => {
+    if (e.keyCode === 13 || e.which === 13) {
+      isButtonDisabled || handleLogin();
+    }
+  };
+  /* Endof the code */
 
+  let errorsObj = { email: "", password: "" };
+  const [errors, setErrors] = useState(errorsObj);
 
   return (
     <div className="authincation h-100 p-meddle">
@@ -74,68 +71,81 @@ const handleKeyPress = (e) => {
                         <img src={logo} alt="" />
                       </Link>
                     </div>
-                    <h4 className="text-center mb-4 ">Login into your account</h4>
-                    {helperText !=="" ? 
-                      (
-                        <Alert  variant="danger" >
-                          Incorrect Username /Password                      
-                        </Alert>
-                      ) : " "
-                    }
-                    
-                    
-                        {props.errorMessage && (
-                          <div className=''>
-                            {props.errorMessage}
-                          </div>
-                        )}
-                        {props.successMessage && (
-                          <div className=''>
-                            {props.successMessage}
-                          </div>
-                        )}
-                    <form 
-                      onSubmit={handleLogin}
-                    >
-                      
+                    <h4 className="text-center mb-4 ">
+                      Login into your account
+                    </h4>
+                    {helperText !== "" ? (
+                      <Alert variant="danger">
+                        Incorrect Username /Password
+                      </Alert>
+                    ) : (
+                      " "
+                    )}
+
+                    {props.errorMessage && (
+                      <div className="">{props.errorMessage}</div>
+                    )}
+                    {props.successMessage && (
+                      <div className="">{props.successMessage}</div>
+                    )}
+                    <form onSubmit={handleLogin}>
                       <div className="form-group mb-3">
                         <label className="mb-1 ">
                           <strong>Email/Username</strong>
                         </label>
-                        <input type="text" className="form-control"
-                        value={username}
-                        //onChange={(e) => setEmail(e.target.value)}
-                        style={{border: "1px solid #014D88",borderRadius:"0.2rem"}}
-                        name="email"
-                        onChange={(e) => setUsername(e.target.value)}
-                        onKeyPress={(e) => handleKeyPress(e)}
-                      />
-								       {errors.email && <div className="text-danger fs-12">{errors.email}</div>}
-                     </div>
+                        <input
+                          type="text"
+                          className="form-control"
+                          value={username}
+                          //onChange={(e) => setEmail(e.target.value)}
+                          style={{
+                            border: "1px solid #014D88",
+                            borderRadius: "0.2rem",
+                          }}
+                          name="email"
+                          onChange={(e) => setUsername(e.target.value)}
+                          onKeyPress={(e) => handleKeyPress(e)}
+                        />
+                        {errors.email && (
+                          <div className="text-danger fs-12">
+                            {errors.email}
+                          </div>
+                        )}
+                      </div>
                       <div className="form-group mb-3">
                         <label className="mb-1 ">
                           <strong>Password</strong>
                         </label>
                         <input
-                            type="password"
-                            className="form-control"
-                            value={password}
-                            // onChange={(e) =>
-                            //     setPassword(e.target.value)
-                            // }
-                           // helperText={helperText}
-                           style={{border: "1px solid #014D88",borderRadius:"0.2rem"}}
+                          type="password"
+                          className="form-control"
+                          value={password}
+                          // onChange={(e) =>
+                          //     setPassword(e.target.value)
+                          // }
+                          // helperText={helperText}
+                          style={{
+                            border: "1px solid #014D88",
+                            borderRadius: "0.2rem",
+                          }}
                           onChange={(e) => setPassword(e.target.value)}
                           onKeyPress={(e) => handleKeyPress(e)}
                         />
-                        {errors.password && <div className="text-danger fs-12">{errors.password}</div>}
+                        {errors.password && (
+                          <div className="text-danger fs-12">
+                            {errors.password}
+                          </div>
+                        )}
                       </div>
-					  
-                      <div className="text-center mt-4" >
+
+                      <div className="text-center mt-4">
                         <button
                           type="submit"
                           className="btn btn-primary btn-block"
-                          style={{ backgroundColor: '#0D3068', borderRadius:"0.2rem" }}
+                          style={{
+                            backgroundColor: "#0D3068",
+                            borderRadius: "0.2rem",
+                          }}
                           onClick={() => handleLogin()}
                           disabled={isButtonDisabled}
                         >
@@ -143,21 +153,21 @@ const handleKeyPress = (e) => {
                         </button>
                       </div>
                     </form>
-                    
                   </div>
                 </div>
               </div>
             </div>
           </div>
           <div className="row">
-          <div className=" col-sm-4"></div>
+            <div className=" col-sm-4"></div>
             <div className=" ml-10 col-sm-4">
-            <p>
-              Copyright © LAMISPlus 2.0.4
-              {" "}{" "}
-              {/* {d.getFullYear()} */}
-            </p>
-           
+              <p>
+                Copyright © LAMISPlus 2.0.4 |{" "}
+                <Link to="/policy">
+                  <b>Terms & Policy</b>
+                </Link>
+                {/* {d.getFullYear()} */}
+              </p>
             </div>
             <div className=" col-sm-4"></div>
           </div>
@@ -165,9 +175,6 @@ const handleKeyPress = (e) => {
       </div>
     </div>
   );
-};
-
-
+}
 
 export default Register;
-
