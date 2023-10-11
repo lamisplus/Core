@@ -1,9 +1,9 @@
 spring:
     datasource:
         driver-class-name: org.postgresql.Driver
-        username: postgres
-        password: emeka
-        url: jdbc:postgresql://localhost:5432/sani
+        username: *
+        password: *
+        url: jdbc:postgresql://localhost:5432/*
         hibernate:
             ddl-auto: none
             event.merge.entry_copy_observer: allow
@@ -30,9 +30,9 @@ lamisplus:
     datasource:
         module:
             driver-class-name: org.postgresql.Driver
-            username: postgres
-            password: emeka
-            url: jdbc:postgresql://localhost:5432/sani
+            username: *
+            password: *
+            url: jdbc:postgresql://localhost:5432/*
 
             hikari:
                     auto-commit: true
