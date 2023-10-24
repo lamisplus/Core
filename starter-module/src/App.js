@@ -25,70 +25,71 @@ const Login = lazy(() => {
 
 function App(props) {
   const dispatch = useDispatch();
-  const [events, setEvents] = useState(["click", "load", "scroll"]);
+  //  const [events, setEvents] = useState(["click", "load", "scroll"]);
+  //
+  //  let timeStamp;
+  //  let startTimerInterval = useRef();
+  //  let warningInactiveInterval = useRef();
+  //
+  //  const timerCheck = () => {
+  //    startTimerInterval.current = setTimeout(() => {
+  //      timeStamp = sessionStorage.getItem("lastTimeStamp");
+  //      logOff(timeStamp);
+  //    }, 60000);
+  //  };
+  //
+  //  const setTimestamp = () => {
+  //    clearTimeout(startTimerInterval.current);
+  //    clearInterval(warningInactiveInterval.current);
+  //
+  //    if (currentUserSubject._value !== null) {
+  //      let currentTimestamp = moment();
+  //      sessionStorage.setItem("lastTimeStamp", currentTimestamp);
+  //      timerCheck();
+  //    } else {
+  //      clearInterval(warningInactiveInterval.current);
+  //      sessionStorage.removeItem("lastTimeStamp");
+  //    }
+  //  };
+  //
+  //  const logOff = (timeString) => {
+  //    clearTimeout(startTimerInterval.current);
+  //
+  //    warningInactiveInterval.current = setInterval(() => {
+  //      const maxTime = 10;
+  //
+  //      const diff = moment.duration(moment().diff(moment(timeString)));
+  //      const minPast = diff.minutes();
+  //      const leftSecond = 60 - diff.seconds();
+  //
+  //      if (minPast === maxTime) {
+  //        console.log("logout");
+  //        clearInterval(warningInactiveInterval.current);
+  //        sessionStorage.removeItem("lastTimeStamp");
+  //        //localStorage.clear();
+  //        //window.location.href = "/login";
+  //      }
+  //    }, 1000);
+  //  };
 
-  let timeStamp;
-  let startTimerInterval = useRef();
-  let warningInactiveInterval = useRef();
+  //  useEffect(() => {
+  //    events.forEach((event) => {
+  //      window.addEventListener(event, setTimestamp);
+  //    });
+  //
+  //    timerCheck();
+  //    return () => {
+  //      clearTimeout(startTimerInterval.current);
+  //    };
+  //  }, [setTimestamp, events, timerCheck]);
 
-  const timerCheck = () => {
-    startTimerInterval.current = setTimeout(() => {
-      timeStamp = sessionStorage.getItem("lastTimeStamp");
-      logOff(timeStamp);
-    }, 60000);
-  };
+  // useEffect(() => {
+  //    // checkAutoLogin(dispatch, props.history);
+  //    if (currentUserSubject._value!==null) {
+  //         window.location.href = "/login";
+  //    }
+  // }, [currentUserSubject._value]);
 
-  const setTimestamp = () => {
-    clearTimeout(startTimerInterval.current);
-    clearInterval(warningInactiveInterval.current);
-
-    if (currentUserSubject._value !== null) {
-      let currentTimestamp = moment();
-      sessionStorage.setItem("lastTimeStamp", currentTimestamp);
-      timerCheck();
-    } else {
-      clearInterval(warningInactiveInterval.current);
-      sessionStorage.removeItem("lastTimeStamp");
-    }
-  };
-
-  const logOff = (timeString) => {
-    clearTimeout(startTimerInterval.current);
-
-    warningInactiveInterval.current = setInterval(() => {
-      const maxTime = 240;
-
-      const diff = moment.duration(moment().diff(moment(timeString)));
-      const minPast = diff.minutes();
-      const leftSecond = 60 - diff.seconds();
-
-      if (minPast === maxTime) {
-        console.log("logout", minPast);
-        clearInterval(warningInactiveInterval.current);
-        sessionStorage.removeItem("lastTimeStamp");
-        localStorage.clear();
-        window.location.href = "/login";
-      }
-    }, 1000);
-  };
-
-  useEffect(() => {
-    events.forEach((event) => {
-      window.addEventListener(event, setTimestamp);
-    });
-
-    timerCheck();
-    return () => {
-      clearTimeout(startTimerInterval.current);
-    };
-  }, [setTimestamp, events, timerCheck]);
-
-  useEffect(() => {
-    // checkAutoLogin(dispatch, props.history);
-    if (currentUserSubject._value !== null) {
-      window.location.href = "/login";
-    }
-  }, [currentUserSubject._value]);
 
   let routes = (
     <Switch>
