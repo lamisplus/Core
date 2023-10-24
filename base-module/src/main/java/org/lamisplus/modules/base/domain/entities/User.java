@@ -14,7 +14,7 @@ import java.util.Set;
 
 @Entity
 @Data
-@NoArgsConstructor
+@NoArgsConstructor(force = true)
 @RequiredArgsConstructor
 @Table(name = "base_application_user")
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)

@@ -198,7 +198,7 @@ public class UserService {
         if(loginInUser != null) {
             user = userRepository.findOneByUserName(loginInUser).orElse(new User());
         }
-        return user.getCurrentOrganisationUnitId() != null? false:true;
+        return user.getCurrentOrganisationUnitId() == null;
     }
 
     public FacilitySetupDTO facilitySetup(FacilitySetupDTO facilitySetupDTO)
