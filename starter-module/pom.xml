@@ -62,6 +62,7 @@
 		<jjwt.version>0.11.2</jjwt.version>
 		<java.version>1.8</java.version>
 		<blaze-persistence.version>1.6.3</blaze-persistence.version>
+		<jpmml.version>1.5.16</jpmml.version>
 	</properties>
 
 	<dependencyManagement>
@@ -219,6 +220,27 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-mapper-asl</artifactId>
+			<version>1.9.13</version>
+		</dependency>
+		<dependency>
+			<groupId>com.googlecode.json-simple</groupId>
+			<artifactId>json-simple</artifactId>
+			<version>1.1.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jpmml</groupId>
+			<artifactId>pmml-evaluator</artifactId>
+			<version>${jpmml.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jpmml</groupId>
+			<artifactId>pmml-evaluator-extension</artifactId>
+			<version>${jpmml.version}</version>
 		</dependency>
 
 <!--		<dependency>-->
