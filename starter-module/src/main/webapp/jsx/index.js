@@ -35,6 +35,7 @@ import Test from "./components/TestPage/Index";
 import Modules from "./components/Modules/Index";
 import OrganizationUnit from "./components/OrganizationUnit/Index";
 import ApplicationCodeset from "./components/ApplicationCodeset/ApplicationCodesetSearch";
+import ModuleUpdate from "./components/ModuleUpdates/ModuleUpdate";
 import ParentOrganizationUnit from "./components/OrganizationUnit/ParentOrganizationalUnit";
 import MenuList from "./components/Menu/MenuList";
 import BiometricList from "./components/Biometric/BiometricList";
@@ -84,6 +85,7 @@ const Markup = () => {
     { url: "modules", component: Modules },
     { url: "organisation-unit", component: OrganizationUnit },
     { url: "application-codeset", component: ApplicationCodeset },
+    { url: "module-update", component: ModuleUpdate },
     {
       url: "admin-parent-organization-unit",
       component: ParentOrganizationUnit,

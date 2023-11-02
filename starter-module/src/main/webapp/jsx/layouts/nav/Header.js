@@ -11,6 +11,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { authentication } from "./../../../_services/authentication";
 import * as ACTION_TYPES from "./../../../actions/types";
 import store from "./../../../store";
+import swal from "sweetalert";
 //import AssignFacilityModal from './../../components/Users/AssignFacilityModalFirst'
 
 import Box from '@mui/material/Box';
@@ -103,6 +104,7 @@ const Header = (props) => {
     const currentUser = authentication.getCurrentUser();
     useEffect(() => {
         fetchMe();
+        swal('Update available!', 'Kindly download it here...', "info");
 
     }, []);
 
@@ -141,7 +143,7 @@ const Header = (props) => {
                                 </Dropdown.Toggle>
 
                                 <Dropdown.Menu align="right" className="mt-2 dropdown-menu-end">
-                                    <Link to="#" className="dropdown-item ai-icon" onClick={()=> window.open("https://datafinigeria.on.spiceworks.com/portal", "_blank")}>
+                                    <Link to="#" className="dropdown-item ai-icon" onClick={()=> window.open("https://thepalladiumgroup.atlassian.net/servicedesk/customer/portal/20", "_blank")}>
                                         <i class="fa fa-bolt" aria-hidden="true"></i>
                                         <span className="ms-2">Help </span>
                                     </Link>
