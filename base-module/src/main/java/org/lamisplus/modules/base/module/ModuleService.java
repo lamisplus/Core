@@ -183,6 +183,11 @@ public class ModuleService {
         return moduleManager.shutdownModule(module, uninstall, false);
     }
 
+    /**
+     * upload & check module data on module.yml
+     * @param file
+     * @return Module
+     */
     @SneakyThrows
     public Module uploadModuleData(MultipartFile file) {
         List<ModuleConfig> configs = new ArrayList<>();
@@ -231,12 +236,14 @@ public class ModuleService {
                         Optional<Module> optionalModule = moduleRepository.findByNameAndActive(k, true);
                         if(optionalModule.isPresent()){
                             Module module1 = optionalModule.get();
-                            if(Integer.valueOf(module1.getVersion().replace(".", "")) > Integer.valueOf(v.replace(".", ""))){
+                            int installedVersion = Integer.valueOf(module1.getVersion().replace(".", ""));
+                            int uploadedVersion = Integer.valueOf(v.replace(".", ""));
+                            if(installedVersion > uploadedVersion){
                                 module.setType(SUCCESS);
                                 module.setMessage(module.getName() + " [ depends on " + k +" "+ v +" which is a lower version]");
                                 String desc = module.getDescription() + " " + module.getName() + " [ depends on " + k +" "+ v +" which is a lower version]";
                                 module.setDescription(desc);
-                            } else  if(Integer.valueOf(module1.getVersion().replace(".", "")) > Integer.valueOf(v.replace(".", ""))){
+                            } else  if(uploadedVersion > installedVersion){
                                 module.setType(ERROR);
                                 module.setMessage(module.getName() + " depends on " + k +" "+ v);
                             }
