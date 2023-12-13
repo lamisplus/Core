@@ -33,6 +33,7 @@ public class UserDTO {
     private String lastName;
 
     private String email;
+    private List<Long> facilities;
 
     @NotBlank(message = "phoneNumber is mandatory")
     private String phoneNumber;
@@ -47,6 +48,8 @@ public class UserDTO {
 
     @ToString.Exclude
     private List<ApplicationUserOrganisationUnit> applicationUserOrganisationUnits = new ArrayDeque<>();
+
+    private Set<Long> facilityIds = new HashSet<>();
 
     private String currentOrganisationUnitName;
     private int managedPatientCount;
