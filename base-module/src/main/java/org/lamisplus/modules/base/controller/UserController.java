@@ -126,7 +126,6 @@ public class UserController {
     @GetMapping(BASE_URL_VERSION_ONE +"/configure/app")
     public boolean isLamisPlusConfigured() {
         return userService.isLamisPlusConfigured();
-
     }
     @PostMapping(BASE_URL_VERSION_ONE +"/facility/setup")
     public FacilitySetupDTO facilitySetup(@RequestBody FacilitySetupDTO facilitySetupDTO) {
