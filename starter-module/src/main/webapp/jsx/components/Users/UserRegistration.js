@@ -266,6 +266,7 @@ const UserRegistration = (props) => {
     const dateOfBirth = moment(values.dateOfBirth).format("YYYY-MM-DD");
     values["dateOfBirth"] = dateOfBirth;
     values["roles"] = selectedOption
+    values["facilityIds"] = selectedOrganisations
     setSaving();
 
     axios.post(`${baseUrl}users`, values)
