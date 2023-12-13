@@ -165,7 +165,7 @@ const processDelete = (id) => {
                           onClick={() => openApplicationCodeset(null)}
                                    style={{backgroundColor:'#014d88'}}
                         >
-                            <span style={{textTransform: 'capitalize'}}>Codeset</span>
+                            <span style={{textTransform: 'capitalize'}}>Refresh</span>
                         </ButtonMui>
 
                     </div>
