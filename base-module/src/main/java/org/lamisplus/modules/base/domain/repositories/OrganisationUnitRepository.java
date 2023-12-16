@@ -1,5 +1,6 @@
 package org.lamisplus.modules.base.domain.repositories;
 
+import org.lamisplus.modules.base.domain.entities.CentralPartnerMapping;
 import org.lamisplus.modules.base.domain.entities.OrganisationUnit;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -51,5 +52,9 @@ public interface OrganisationUnitRepository extends JpaRepository<OrganisationUn
     @Query(value = "SELECT * FROM base_organisation_unit ou WHERE ou.name ilike ?1 " +
             "AND organisation_unit_level_id=?2 AND ou.archived = ?3", nativeQuery = true)
     Optional<OrganisationUnit> findLikeOrganisationUnitInState(String name, Integer level, int archived);
+
+    @Query(value = "SELECT id, facility_name AS facilityName FROM central_partner_mapping WHERE ip_code=?1",
+            nativeQuery = true)
+    List<CentralPartnerMapping> findByOrgUnitInIp(Long orgUnit);
 
 }

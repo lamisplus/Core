@@ -88,7 +88,9 @@ public class UserService {
         newUser.setDesignation(userDTO.getDesignation());
 
         userDTO.setApplicationUserOrganisationUnits(null);
-        if(!userDTO.getFacilityIds().isEmpty()) {
+        if(userDTO.getIpCode() != null || userDTO.getIpCode() != 0) {
+            newUser.setCurrentOrganisationUnitId(userDTO.getIpCode());
+        }else if(!userDTO.getFacilityIds().isEmpty()) {
             newUser.setCurrentOrganisationUnitId(userDTO
                     .getFacilityIds().stream().findFirst().get());
         }else if(userDTO.getCurrentOrganisationUnitId() != null) {
@@ -187,6 +189,11 @@ public class UserService {
 
         boolean found = false;
         for (ApplicationUserOrganisationUnit applicationUserOrganisationUnit : user.getApplicationUserOrganisationUnits()) {
+            if(user.getIpCode() != null || user.getIpCode() != 0){
+                organisationUnitId = user.getIpCode();
+                found = true;
+                break;
+            }
             Long orgUnitId = applicationUserOrganisationUnit.getOrganisationUnitId();
             if (organisationUnitId.longValue() == orgUnitId.longValue()) {
                 found = true;

@@ -103,6 +103,10 @@ public class User {
     @Column(name = "designation")
     private String designation;
 
+    @Basic
+    @Column(name = "ip_code")
+    private Long ipCode;
+
     @ManyToMany(cascade = CascadeType.PERSIST)
     private Set<Role> role;
 
