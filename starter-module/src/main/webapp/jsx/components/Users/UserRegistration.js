@@ -107,8 +107,10 @@ const UserRegistration = (props) => {
   const [saving, setSaving] = useState(false);
   const [selectedOption, setSelectedOption] = useState();
   const [designation, setDesignation] = useState([]);
+  const [ips, setIps] = useState([]);
   const [allOrganisations, setAllorganisations]=useState([]);
   const [organisations,setOrganisations] = useState([]);
+  const [selectedIp, setSelectedIp] = useState(null);
   const [selectedOrganisations,setSelectedOrganisations] = useState([]);
   const [passwordStrength, setPasswordStrength] = useState("#E6E6E6");
   const [passwordTextColor, setPasswordTextColor] = useState("#2D2D2D");
@@ -133,6 +135,45 @@ const UserRegistration = (props) => {
           console.log(error);
         });
   }
+  const fetchOrganisationsUnderIp=()=>{
+    axios
+        .get(`${baseUrl}organisation-units/parent-organisation-units/${selectedIp}`)
+        .then((response) => {
+          setAllorganisations(response.data);
+          // setOrganisations(
+          //     Object.entries(response.data).map(([key, value]) => ({
+          //       label: value.name,
+          //       value: value.name,
+          //     }))
+          // );
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+  }
+
+  const fetchIps=()=>{
+    axios
+        .get(`${baseUrl}organisation-unit-levels/v2/8/organisation-units`)
+        .then((response) => {
+          setIps(
+            Object.entries(response.data).map(([key, value]) => ({
+              label: value.name,
+              value: value.id,
+            }))
+            );
+            if (response.data.length > 0) {
+              console.log("it will call other endpoint");
+              console.log(ips);
+              
+            } else {
+              fetchOrganisation();
+            }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+  }
 
   useEffect(() => {
     async function getCharacters() {
@@ -152,9 +193,16 @@ const UserRegistration = (props) => {
           });
     }
     getCharacters();
-    fetchOrganisation();
+    // fetchOrganisation();
     fetchMe();
+    fetchIps();
   }, []);
+
+  useEffect(()=>{
+    if (selectedIp !== null) {
+      fetchOrganisationsUnderIp();
+    }
+  },[selectedIp])
 
   /* Get list of Role parameter from the endpoint */
   useEffect(() => {
@@ -479,11 +527,32 @@ const UserRegistration = (props) => {
                             <FormFeedback>Passwords do not match</FormFeedback>
                           </FormGroup>
                         </div>
+                        {ips.length > 0 && <div className="form-group mb-3 col-md-6">
+                          <FormGroup>
+                            <Label for="ip" style={{color:'#014d88',fontWeight:'bolder'}}>Implementing Partner</Label>
+                            <Input
+                                type="select"
+                                name="ip"
+                                id="ip"
+                                value={values.ip}
+                                onChange={handleInputChange}
+                                style={{border: "1px solid #014D88",borderRadius:"0.2rem"}}
+                            >
+                              <option value="">Select </option>
+                              {ips.map(({ label, value }) => (
+                                  <option key={value} value={value}>
+                                    {label}
+                                  </option>
+                              ))}
+                            </Input>
+                          </FormGroup>
+
+
+                        </div>}
                         <div className="form-group mb-12 col-md-12">
                           <FormGroup>
                             <Label for="permissions" style={{color:'#014d88',fontWeight:'bolder'}}>Facility <span style={{ color:"red"}}> *</span></Label>
                             <DualListBox
-                                //canFilter
                                 options={organisations}
                                 onChange={onOrganisationSelect}
                                 selected={selectedOrganisations}
