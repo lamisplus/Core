@@ -139,39 +139,38 @@ const UserRegistration = (props) => {
     axios
         .get(`${baseUrl}organisation-units/parent-organisation-units/${selectedIp}`)
         .then((response) => {
-          setAllorganisations(response.data);
-          // setOrganisations(
-          //     Object.entries(response.data).map(([key, value]) => ({
-          //       label: value.name,
-          //       value: value.name,
-          //     }))
-          // );
+          // setAllorganisations(response.data);
+          setAllorganisations(
+              Object.entries(response.data).map(([key, value]) => ({
+                label: value.name,
+                value: value.id,
+              }))
+          );
         })
         .catch((error) => {
           console.log(error);
         });
   }
 
-  const fetchIps=()=>{
-    axios
+  const fetchIps= async () =>{
+    await axios
         .get(`${baseUrl}organisation-unit-levels/v2/8/organisation-units`)
         .then((response) => {
+          console.log(response);
+          console.log(response.data);
           setIps(
             Object.entries(response.data).map(([key, value]) => ({
               label: value.name,
               value: value.id,
             }))
             );
-            if (response.data.length > 0) {
-              console.log("it will call other endpoint");
-              console.log(ips);
-              
-            } else {
+            if (response.data.length === 0) {
               fetchOrganisation();
             }
         })
         .catch((error) => {
           console.log(error);
+          fetchOrganisation();
         });
   }
 
@@ -232,12 +231,12 @@ const UserRegistration = (props) => {
           .then((response) => {
             setUser(response.data);
             //console.log(response.data)
-            setOrganisations(
-                Object.entries(response.data.applicationUserOrganisationUnits).map(([key, value]) => ({
-                  label: value.organisationUnitName,
-                  value: value.organisationUnitId,
-                }))
-            );
+            // setOrganisations(
+            //     Object.entries(response.data.applicationUserOrganisationUnits).map(([key, value]) => ({
+            //       label: value.organisationUnitName,
+            //       value: value.organisationUnitId,
+            //     }))
+            // );
           })
           .catch((error) => {
             //authentication.logout();
@@ -532,10 +531,13 @@ const UserRegistration = (props) => {
                             <Label for="ip" style={{color:'#014d88',fontWeight:'bolder'}}>Implementing Partner</Label>
                             <Input
                                 type="select"
-                                name="ip"
-                                id="ip"
+                                name="ipCode"
+                                id="ipCode"
                                 value={values.ip}
-                                onChange={handleInputChange}
+                                onChange={(e)=>{
+                                  handleInputChange(e)
+                                  setSelectedIp(e.target.value)
+                                }}
                                 style={{border: "1px solid #014D88",borderRadius:"0.2rem"}}
                             >
                               <option value="">Select </option>
@@ -553,7 +555,7 @@ const UserRegistration = (props) => {
                           <FormGroup>
                             <Label for="permissions" style={{color:'#014d88',fontWeight:'bolder'}}>Facility <span style={{ color:"red"}}> *</span></Label>
                             <DualListBox
-                                options={organisations}
+                                options={allOrganisations}
                                 onChange={onOrganisationSelect}
                                 selected={selectedOrganisations}
                             />

@@ -2,8 +2,11 @@ spring:
     datasource:
         driver-class-name: org.postgresql.Driver
         username: postgres
-        password: emeka
-        url: jdbc:postgresql://localhost:5432/FALETI
+        password: 12345
+#        url: jdbc:postgresql://localhost:5432/test
+#        url: jdbc:postgresql://localhost:5432/syncdb
+        url: jdbc:postgresql://localhost:5432/syncdb121302
+#        url: jdbc:postgresql://localhost:5432/syncdb04122023
         hibernate:
             ddl-auto: none
             event.merge.entry_copy_observer: allow
@@ -31,8 +34,11 @@ lamisplus:
         module:
             driver-class-name: org.postgresql.Driver
             username: postgres
-            password: emeka
-            url: jdbc:postgresql://localhost:5432/FALETI
+            password: 12345
+#            url: jdbc:postgresql://localhost:5432/test
+            url: jdbc:postgresql://localhost:5432/syncdb121302
+#            url: jdbc:postgresql://localhost:5432/syncdb04122023
+#            url: jdbc:postgresql://localhost:5432/syncdb
 
             hikari:
                     auto-commit: true
