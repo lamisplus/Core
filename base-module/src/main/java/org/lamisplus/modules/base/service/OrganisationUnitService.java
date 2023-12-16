@@ -2,20 +2,12 @@ package org.lamisplus.modules.base.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.audit4j.core.util.Log;
+import org.springframework.beans.BeanUtils;
 import org.lamisplus.modules.base.controller.apierror.EntityNotFoundException;
 import org.lamisplus.modules.base.controller.apierror.IllegalTypeException;
 import org.lamisplus.modules.base.controller.apierror.RecordExistException;
 import org.lamisplus.modules.base.domain.dto.OrganisationUnitDTO;
-import org.lamisplus.modules.base.domain.dto.OrganisationUnitExtraction;
-import org.lamisplus.modules.base.domain.entities.OrganisationUnit;
-import org.lamisplus.modules.base.domain.entities.OrganisationUnitHierarchy;
-import org.lamisplus.modules.base.domain.entities.OrganisationUnitIdentifier;
-import org.lamisplus.modules.base.domain.entities.OrganisationUnitLevel;
+import org.lamisplus.modules.base.domain.entities.*;
 import org.lamisplus.modules.base.domain.repositories.OrganisationUnitHierarchyRepository;
 import org.lamisplus.modules.base.domain.repositories.OrganisationUnitIdentifierRepository;
 import org.lamisplus.modules.base.domain.repositories.OrganisationUnitRepository;
@@ -23,18 +15,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
-import static java.sql.Types.BOOLEAN;
-import static java.sql.Types.NUMERIC;
-import static org.apache.tomcat.util.bcel.classfile.ElementValue.STRING;
 import static org.lamisplus.modules.base.util.Constants.ArchiveStatus.ARCHIVED;
 import static org.lamisplus.modules.base.util.Constants.ArchiveStatus.UN_ARCHIVED;
 
@@ -44,6 +29,8 @@ import static org.lamisplus.modules.base.util.Constants.ArchiveStatus.UN_ARCHIVE
 @RequiredArgsConstructor
 public class OrganisationUnitService {
     private static final Long FIRST_ORG_LEVEL = 1L;
+    public static final int IP_CODE = 20000000;
+    public static final long FACILITY_CODE = 4;
     private final OrganisationUnitRepository organisationUnitRepository;
     private final OrganisationUnitIdentifierRepository organisationUnitIdentifierRepository;
     private final OrganisationUnitHierarchyRepository organisationUnitHierarchyRepository;
@@ -134,6 +121,21 @@ public class OrganisationUnitService {
     }
 
     public List<OrganisationUnit> getOrganisationUnitByParentOrganisationUnitId(Long id) {
+        if(id != null && id > IP_CODE){
+            List<CentralPartnerMapping> mappings = organisationUnitRepository.findByOrgUnitInIp(id);
+            //if data fi or other agency higher than IPs
+            if(mappings.isEmpty() && organisationUnitRepository.findById(id).isPresent()){
+                return organisationUnitRepository.findAllByOrganisationUnitLevelId(FACILITY_CODE);
+            }
+            return mappings.stream()
+                    .map(mapping->{
+                        OrganisationUnit orgUnit = new OrganisationUnit();
+                        orgUnit.setName(mapping.getFacilityName());
+                        orgUnit.setId(mapping.getId());
+                        return orgUnit;
+                    })
+                    .collect(Collectors.toList());
+        }
         return organisationUnitRepository.findAllOrganisationUnitByParentOrganisationUnitIdAndArchived (id, UN_ARCHIVED);
     }
 

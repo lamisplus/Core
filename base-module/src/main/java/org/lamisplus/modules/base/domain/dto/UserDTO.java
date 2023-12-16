@@ -46,6 +46,8 @@ public class UserDTO {
 
     private Long currentOrganisationUnitId;
 
+    private Long ipCode;
+
     @ToString.Exclude
     private List<ApplicationUserOrganisationUnit> applicationUserOrganisationUnits = new ArrayDeque<>();
 
