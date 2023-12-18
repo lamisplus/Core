@@ -326,7 +326,7 @@ const UserRegistration = (props) => {
           });
         }) .catch((error) => {
       setSaving(false);
-      toast.error(`An error occurred, adding facility`);
+      toast.error(`An error occurred, while adding user`);
     });
     //updateUserOrganisations();
   };
