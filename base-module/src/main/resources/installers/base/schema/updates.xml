@@ -460,4 +460,38 @@
         </sql>
     </changeSet>
 
+    <changeSet failOnError="true" id="19122023111304" author="Emeka Ilozue">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*)
+                FROM pg_attribute
+                WHERE attrelid = (SELECT oid FROM pg_class WHERE relname = 'base_application_user')
+                  AND attname = 'ip_code';
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            ALTER TABLE IF EXISTS base_application_user
+                ADD COLUMN ip_code bigint;
+        </sql>
+    </changeSet>
+
+    <changeSet failOnError="true" id="19122023111305" author="Emeka Ilozue">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*)
+                FROM pg_attribute
+                WHERE attrelid = (SELECT oid FROM pg_class WHERE relname = 'base_module')
+                  AND attname = 'git_hub_link';
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            ALTER TABLE IF EXISTS base_module
+                ADD COLUMN git_hub_link character varying;
+            ALTER TABLE IF EXISTS base_module
+                ADD COLUMN latest_version character varying;
+            ALTER TABLE IF EXISTS base_module
+                ADD COLUMN download_url character varying;
+        </sql>
+    </changeSet>
+
 </databaseChangeLog>

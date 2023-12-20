@@ -120,7 +120,7 @@ const Header = (props) => {
                                 {/* Content can go here */}
                                 {user && user.currentOrganisationUnitName?
                                     <div>
-                                        <span style={{color:'#d9fbff',fontSize:'18px', fontWeight:'bold'}}>{'Welcome to' } </span><
+                                        <span style={{color:'#d9fbff',fontSize:'18px', fontWeight:'bold'}}>{'Welcome' } </span><
                                         span>&nbsp;:</span>
                                         <span>&nbsp;</span>
                                         <span style={{color:'#fff',fontSize:'24px', fontWeight:'bold', marginLeft:'10px'}}>{user.currentOrganisationUnitName}</span>

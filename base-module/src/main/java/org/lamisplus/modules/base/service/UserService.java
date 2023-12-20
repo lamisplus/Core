@@ -28,6 +28,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.lamisplus.modules.base.util.Constants.ArchiveStatus.ARCHIVED;
 
@@ -78,11 +79,7 @@ public class UserService {
         newUser.setEmail(userDTO.getEmail());
         newUser.setPhoneNumber(userDTO.getPhoneNumber());
         newUser.setGender(userDTO.getGender());
-        if(userDTO.getCurrentOrganisationUnitId() != null) {
-            newUser.setCurrentOrganisationUnitId(newUser.getCurrentOrganisationUnitId());
-        } else {
-            newUser.setCurrentOrganisationUnitId(getUserWithRoles().get().getCurrentOrganisationUnitId());
-        }
+
         //newUser.setTargetGroup(getUserWithRoles().get().getTargetGroup());
 
         newUser.setPassword(encryptedPassword);
@@ -90,9 +87,19 @@ public class UserService {
         newUser.setLastName(userDTO.getLastName());
         newUser.setDesignation(userDTO.getDesignation());
 
-        if(!userDTO.getApplicationUserOrganisationUnits().isEmpty()) {
-            newUser.setApplicationUserOrganisationUnits(userDTO.getApplicationUserOrganisationUnits());
+        userDTO.setApplicationUserOrganisationUnits(null);
+        if(userDTO.getIpCode() != null || userDTO.getIpCode() != 0) {
+            newUser.setCurrentOrganisationUnitId(userDTO.getIpCode());
+            newUser.setIpCode(userDTO.getIpCode());
+        }else if(!userDTO.getFacilityIds().isEmpty()) {
+            newUser.setCurrentOrganisationUnitId(userDTO
+                    .getFacilityIds().stream().findFirst().get());
+        }else if(userDTO.getCurrentOrganisationUnitId() != null) {
+            newUser.setCurrentOrganisationUnitId(newUser.getCurrentOrganisationUnitId());
+        } else {
+            newUser.setCurrentOrganisationUnitId(getUserWithRoles().get().getCurrentOrganisationUnitId());
         }
+
         if (userDTO.getDetails() != null) {
             newUser.setDetails(userDTO.getDetails());
         }
@@ -109,7 +116,16 @@ public class UserService {
         } else {
             newUser.setRole(getRolesFromStringSet(userDTO.getRoles()));
         }
-        userRepository.save(newUser);
+        User user = userRepository.save(newUser);
+        if(!userDTO.getFacilityIds().isEmpty()) {
+            applicationUserOrganisationUnitRepository.saveAll(userDTO.getFacilityIds().stream().map(facilityId->{
+                ApplicationUserOrganisationUnit orgUser = new ApplicationUserOrganisationUnit();
+                orgUser.setOrganisationUnitId(facilityId);
+                orgUser.setApplicationUserId(user.getId());
+                return orgUser;
+            }).collect(Collectors.toList()));
+
+        }
         return newUser;
     }
 
@@ -174,6 +190,11 @@ public class UserService {
 
         boolean found = false;
         for (ApplicationUserOrganisationUnit applicationUserOrganisationUnit : user.getApplicationUserOrganisationUnits()) {
+            if(user.getIpCode() != null || user.getIpCode() != 0){
+                organisationUnitId = user.getIpCode();
+                found = true;
+                break;
+            }
             Long orgUnitId = applicationUserOrganisationUnit.getOrganisationUnitId();
             if (organisationUnitId.longValue() == orgUnitId.longValue()) {
                 found = true;

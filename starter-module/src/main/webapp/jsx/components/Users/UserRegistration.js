@@ -107,8 +107,10 @@ const UserRegistration = (props) => {
   const [saving, setSaving] = useState(false);
   const [selectedOption, setSelectedOption] = useState();
   const [designation, setDesignation] = useState([]);
+  const [ips, setIps] = useState([]);
   const [allOrganisations, setAllorganisations]=useState([]);
   const [organisations,setOrganisations] = useState([]);
+  const [selectedIp, setSelectedIp] = useState(null);
   const [selectedOrganisations,setSelectedOrganisations] = useState([]);
   const [passwordStrength, setPasswordStrength] = useState("#E6E6E6");
   const [passwordTextColor, setPasswordTextColor] = useState("#2D2D2D");
@@ -133,6 +135,44 @@ const UserRegistration = (props) => {
           console.log(error);
         });
   }
+  const fetchOrganisationsUnderIp=()=>{
+    axios
+        .get(`${baseUrl}organisation-units/parent-organisation-units/${selectedIp}`)
+        .then((response) => {
+          // setAllorganisations(response.data);
+          setAllorganisations(
+              Object.entries(response.data).map(([key, value]) => ({
+                label: value.name,
+                value: value.id,
+              }))
+          );
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+  }
+
+  const fetchIps= async () =>{
+    await axios
+        .get(`${baseUrl}organisation-unit-levels/v2/8/organisation-units`)
+        .then((response) => {
+          console.log(response);
+          console.log(response.data);
+          setIps(
+            Object.entries(response.data).map(([key, value]) => ({
+              label: value.name,
+              value: value.id,
+            }))
+            );
+            if (response.data.length === 0) {
+              fetchOrganisation();
+            }
+        })
+        .catch((error) => {
+          console.log(error);
+          fetchOrganisation();
+        });
+  }
 
   useEffect(() => {
     async function getCharacters() {
@@ -152,9 +192,16 @@ const UserRegistration = (props) => {
           });
     }
     getCharacters();
-    fetchOrganisation();
+    // fetchOrganisation();
     fetchMe();
+    fetchIps();
   }, []);
+
+  useEffect(()=>{
+    if (selectedIp !== null) {
+      fetchOrganisationsUnderIp();
+    }
+  },[selectedIp])
 
   /* Get list of Role parameter from the endpoint */
   useEffect(() => {
@@ -184,12 +231,12 @@ const UserRegistration = (props) => {
           .then((response) => {
             setUser(response.data);
             //console.log(response.data)
-            setOrganisations(
-                Object.entries(response.data.applicationUserOrganisationUnits).map(([key, value]) => ({
-                  label: value.organisationUnitName,
-                  value: value.organisationUnitId,
-                }))
-            );
+            // setOrganisations(
+            //     Object.entries(response.data.applicationUserOrganisationUnits).map(([key, value]) => ({
+            //       label: value.organisationUnitName,
+            //       value: value.organisationUnitId,
+            //     }))
+            // );
           })
           .catch((error) => {
             //authentication.logout();
@@ -266,6 +313,7 @@ const UserRegistration = (props) => {
     const dateOfBirth = moment(values.dateOfBirth).format("YYYY-MM-DD");
     values["dateOfBirth"] = dateOfBirth;
     values["roles"] = selectedOption
+    values["facilityIds"] = selectedOrganisations
     setSaving();
 
     axios.post(`${baseUrl}users`, values)
@@ -278,7 +326,7 @@ const UserRegistration = (props) => {
           });
         }) .catch((error) => {
       setSaving(false);
-      toast.error(`An error occurred, adding facility`);
+      toast.error(`An error occurred, while adding user`);
     });
     //updateUserOrganisations();
   };
@@ -478,12 +526,36 @@ const UserRegistration = (props) => {
                             <FormFeedback>Passwords do not match</FormFeedback>
                           </FormGroup>
                         </div>
+                        {ips.length > 0 && <div className="form-group mb-3 col-md-6">
+                          <FormGroup>
+                            <Label for="ip" style={{color:'#014d88',fontWeight:'bolder'}}>Implementing Partner</Label>
+                            <Input
+                                type="select"
+                                name="ipCode"
+                                id="ipCode"
+                                value={values.ip}
+                                onChange={(e)=>{
+                                  handleInputChange(e)
+                                  setSelectedIp(e.target.value)
+                                }}
+                                style={{border: "1px solid #014D88",borderRadius:"0.2rem"}}
+                            >
+                              <option value="">Select </option>
+                              {ips.map(({ label, value }) => (
+                                  <option key={value} value={value}>
+                                    {label}
+                                  </option>
+                              ))}
+                            </Input>
+                          </FormGroup>
+
+
+                        </div>}
                         <div className="form-group mb-12 col-md-12">
                           <FormGroup>
                             <Label for="permissions" style={{color:'#014d88',fontWeight:'bolder'}}>Facility <span style={{ color:"red"}}> *</span></Label>
                             <DualListBox
-                                //canFilter
-                                options={organisations}
+                                options={allOrganisations}
                                 onChange={onOrganisationSelect}
                                 selected={selectedOrganisations}
                             />

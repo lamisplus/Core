@@ -1,7 +1,8 @@
 package org.lamisplus.modules.base.controller;
 
-import org.lamisplus.modules.base.domain.dto.ModuleReleaseDto;
-import org.lamisplus.modules.base.service.ModuleReleaseService;
+import lombok.RequiredArgsConstructor;
+import org.lamisplus.modules.base.domain.entities.Module;
+import org.lamisplus.modules.base.service.ModuleUpdateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,40 +10,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 public class ModuleReleaseController {
-    @Autowired
-    private ModuleReleaseService moduleReleaseService;
+    private final ModuleUpdateService moduleUpdateService;
     private final String BASE_MODULE_RELEASE_URL = "/api/v1/module-releases";
     @PostMapping(BASE_MODULE_RELEASE_URL)
-    public ResponseEntity<ModuleReleaseDto> createModuleRelease(
-            @RequestBody ModuleReleaseDto moduleReleaseDto) {
-        return ResponseEntity.ok(moduleReleaseService.createModuleRelease(moduleReleaseDto));
+    public ResponseEntity<List<Module>> createModuleRelease() {
+        return ResponseEntity.ok(moduleUpdateService.checkForUpdates());
     }
-
-    @PostMapping(BASE_MODULE_RELEASE_URL+ "/check-updates")
-    public ResponseEntity<List<ModuleReleaseDto>> checkForUpdates (
-            @RequestBody List<ModuleReleaseDto> moduleReleaseDtos) {
-        return ResponseEntity.ok(moduleReleaseService
-                .checkAndReturnUpdatedModuleReleases(moduleReleaseDtos));
-    }
-
-    @GetMapping(BASE_MODULE_RELEASE_URL)
-    public ResponseEntity<List<ModuleReleaseDto>> getLatestModuleReleases() {
-        return ResponseEntity.ok(moduleReleaseService.getLatestModuleReleases());
-    }
-
-    @PutMapping(BASE_MODULE_RELEASE_URL + "/{id}")
-    public ResponseEntity<ModuleReleaseDto> updateModuleRelease(
-            @PathVariable Long id,
-            @RequestBody ModuleReleaseDto moduleReleaseDto){
-        return ResponseEntity.ok(
-                moduleReleaseService.updateModuleRelease(id, moduleReleaseDto));
-    }
-    @DeleteMapping(BASE_MODULE_RELEASE_URL + "/{id}")
-    public ResponseEntity<String> deleteModuleRelease(
-            @PathVariable Long id){
-        return ResponseEntity.ok(
-                moduleReleaseService.deleteModuleRelease(id));
-    }
-
 }

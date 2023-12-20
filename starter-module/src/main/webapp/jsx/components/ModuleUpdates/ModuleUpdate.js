@@ -89,6 +89,7 @@ const ApplicationCodesetSearch = (props) => {
      props.fetchAll(onSuccess, onError);
     }
 
+
 const processDelete = (id) => {
      setDeleting(true);
     const onSuccess = () => {
@@ -140,14 +141,18 @@ const processDelete = (id) => {
             "name":"HIV/ART",
             "version":"2.1.5",
             "dateReleased":"11/02/2023",
-            "currentVersion":"2.1.4"
+            "currentVersion":"2.1.4",
+            "url":"https://localhost:9090/this-module",
+            "releaseNotes":"Lorem ipssum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation",
 
         },
         {
             "name":"Report",
             "version":"2.1.5",
             "dateReleased":"11/02/2023",
-            "currentVersion":"2.1.4"
+            "currentVersion":"2.1.4",
+            "url":"https://localhost:9090/this-module",
+            "releaseNotes":"Lorem ipssum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation",
 
         }
     ]
@@ -180,15 +185,16 @@ const processDelete = (id) => {
                             { title: "Latest Version", field: "version" },
                             { title: "Date Released", field: "dateReleased" },
                             { title: "Current Version", field: "currentVersion" },
+                            { title: "Url", field: "url" },
                             { title: "Action", field: "action" },
                         ]}
                         isLoading={loading}
                         data={update.map((row) => ({
                             name: row.name,
-                            
                             version: row.version,
                             dateReleased: row.dateReleased,
                             currentVersion: row.currentVersion,
+                            url: row.url,
                             action:
                             <div>
                                 {/*<SplitActionButton actions={actionItems(row)} />*/}

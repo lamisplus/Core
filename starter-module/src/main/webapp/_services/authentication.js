@@ -114,3 +114,26 @@ async function fetchMe(){
             return null;
         });
 }
+
+async function fetchModuleUpdates(){
+
+   await axios
+        .get(`${baseUrl}module-releases
+        `)
+        .then((response) => {
+            localStorage.setItem('currentUser_Permission', JSON.stringify(response.data));
+
+            dispatch({
+                type: ACTION_TYPES.FETCH_ME,
+                payload: response.data,
+            });
+            return response.data.permissions;
+        })
+        .catch((error) => {
+            dispatch({
+                type: ACTION_TYPES.FETCH_ME,
+                payload: null,
+            });
+            return null;
+        });
+}

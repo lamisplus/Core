@@ -110,8 +110,13 @@
     "yup": "^0.32.8"
   },
   "scripts": {
+<<<<<<< HEAD
     "start": "react-scripts start",
     "build": "react-scripts  build && xcopy /s /y build src\\main\\resources\\static",
+=======
+    "start": "react-scripts --openssl-legacy-provider start",
+    "build": "react-scripts build && xcopy /s /y build src\\main\\resources\\static",
+>>>>>>> 444c51e63b515c8a857484d7550b9f8bc6603bd5
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

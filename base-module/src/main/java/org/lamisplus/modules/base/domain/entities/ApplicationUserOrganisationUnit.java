@@ -20,7 +20,7 @@ public class ApplicationUserOrganisationUnit extends Audit<String> {
 
     @Basic
     @Column(name = "application_user_id")
-    private Long applicationUserId;
+    private Long applicationUserId ;
 
     @Basic
     @Column(name = "organisation_unit_id")

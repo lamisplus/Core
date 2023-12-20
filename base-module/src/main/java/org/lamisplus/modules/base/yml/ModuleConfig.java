@@ -29,4 +29,6 @@ public class ModuleConfig {
     private List<Dependency> deps = new ArrayList<>();
     private String summary;
     private List<Permission> permissions = new ArrayList<>();
+
+    private String gitHubLink;
 }
