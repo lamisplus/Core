@@ -90,6 +90,7 @@ public class UserService {
         userDTO.setApplicationUserOrganisationUnits(null);
         if(userDTO.getIpCode() != null || userDTO.getIpCode() != 0) {
             newUser.setCurrentOrganisationUnitId(userDTO.getIpCode());
+            newUser.setIpCode(userDTO.getIpCode());
         }else if(!userDTO.getFacilityIds().isEmpty()) {
             newUser.setCurrentOrganisationUnitId(userDTO
                     .getFacilityIds().stream().findFirst().get());

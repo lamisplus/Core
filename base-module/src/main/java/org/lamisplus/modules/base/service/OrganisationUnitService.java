@@ -131,7 +131,7 @@ public class OrganisationUnitService {
                     .map(mapping->{
                         OrganisationUnit orgUnit = new OrganisationUnit();
                         orgUnit.setName(mapping.getFacilityName());
-                        orgUnit.setId(mapping.getId());
+                        orgUnit.setId(mapping.getFacilityId());
                         return orgUnit;
                     })
                     .collect(Collectors.toList());

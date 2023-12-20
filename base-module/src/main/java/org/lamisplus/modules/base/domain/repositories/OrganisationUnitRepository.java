@@ -53,7 +53,7 @@ public interface OrganisationUnitRepository extends JpaRepository<OrganisationUn
             "AND organisation_unit_level_id=?2 AND ou.archived = ?3", nativeQuery = true)
     Optional<OrganisationUnit> findLikeOrganisationUnitInState(String name, Integer level, int archived);
 
-    @Query(value = "SELECT id, facility_name AS facilityName FROM central_partner_mapping WHERE ip_code=?1",
+    @Query(value = "SELECT facility_id AS facilityid, facility_name AS facilityname FROM central_partner_mapping WHERE ip_code=?1",
             nativeQuery = true)
     List<CentralPartnerMapping> findByOrgUnitInIp(Long orgUnit);
 

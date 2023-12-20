@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.lamisplus.modules.base.domain.entities.Module;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -76,4 +77,7 @@ public interface ModuleRepository extends JpaRepository<Module, Long> {
     Optional<Module> findByNameAndVersionAndActive(String name, String version, boolean active);
 
     Optional<Module> findByNameAndActive(String name, boolean active);
+
+    @Query(value = "SELECT * from base_module where active is true and git_hub_link is not null", nativeQuery = true)
+    List<Module> findAllByActiveAndGitHubLinkIsNotNull();
 }
