@@ -27,7 +27,7 @@ export const fetchAllBootstrapModule = (onSuccess, onError) => dispatch => {
         payload: response.data
       })
       //console.log(response)
-      onSuccess();
+      onSuccess(response.data);
     })
     .catch(error => {
       dispatch({
