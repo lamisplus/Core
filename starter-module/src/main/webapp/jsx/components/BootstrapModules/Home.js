@@ -5,6 +5,7 @@ import { Dropdown } from 'react-bootstrap';
 import { Badge } from "react-bootstrap";
 import PageTitle from "../../layouts/PageTitle";
 import { useSelector, useDispatch } from 'react-redux';
+import { Dropdown as DropDown2,Button as Buuton2, Menu,  } from 'semantic-ui-react';
 import { fetchAllBootstrapModule } from '../../../actions/bootstrapModule';
 import UnIstallModal from './UnInstallModule'
 import DeactivateModule from './DeactivateModule'
@@ -117,8 +118,8 @@ const PostPage = (props) => {
     }
 
     const isDifferentVersions = (row) => {
-        if (row.version !== row.latestVersion) {
-            return true;
+        if (row.latestVersion !== null) {
+            return row.version !== row.latestVersion;
         }
         return false;
     }
@@ -304,11 +305,11 @@ const PostPage = (props) => {
                                             columns={[
                                                 { title: "Module Name", field: "name" },
                                                 { title: "Current Version", field: "version" },
-                                                { title: "GitHub Link", field: "gitHubLink" },
                                                 { title: "Latest Version", field: "latestVersion" },
                                                 { title: "Update Available", field: "updateAvailable" },
-                                                { title: "Download URL", field: "downloadUrl" },
-                                                { title: "Action", field: "action" },
+                                                { title: "GitHub Link", field: "gitHubLink" },
+                                                // { title: "Download URL", field: "downloadUrl" },
+                                                { title: "Actions", field: "action" },
                                             ]}
 
                                             data={listOfAllModule.map((row) => ({
@@ -319,19 +320,40 @@ const PostPage = (props) => {
                                                 latestVersion: row.latestVersion,
                                                 updateAvailable: isDifferentVersions(row),
                                                 downloadUrl: row.downloadUrl,
-                                                action:
-                                                    <div>
+                                                // action:
+                                                //     <div>
                                                         
-                                                            <Label as='a' color='blue' className="ms-1" size='mini' onClick={() => handleLinkClick(row.downloadUrl)}>
-                                                                <CloudDownloadIcon /> Download
-                                                            </Label>
+                                                //             <Label as='a' color='blue' className="ms-1" size='mini' onClick={() => handleLinkClick(row.downloadUrl)}>
+                                                //                 <CloudDownloadIcon /> Download
+                                                //             </Label>
 
-                                                            <Label as='a' color='red' onClick={() => { }} size='mini'>
-                                                                <Icon name='pencil' /> Release Note
-                                                            </Label>
+                                                //             <Label as='a' color='red' onClick={() => { }} size='mini'>
+                                                //                 <Icon name='pencil' /> Release Note
+                                                //             </Label>
                                                         
 
-                                                    </div>
+                                                //     </div>,
+                                                action:(<div>
+                                                    <Menu.Menu position='right'  >
+                                                    <Menu.Item >
+                                                        <Buuton2 style={{backgroundColor:'rgb(153,46,98)'}} primary>
+                                                        <DropDown2 item text='Action'>
+                    
+                                                        <DropDown2.Menu style={{ marginTop:"10px", }}>
+                                                                <DropDown2.Item  onClick={() => handleLinkClick(row.downloadUrl)}><CloudDownloadIcon /> Download Latest Version
+                                                                </DropDown2.Item>
+                                                                <DropDown2.Item ><Icon name='pencil' /> Release Notes
+                                                                </DropDown2.Item>
+                                                                <DropDown2.Item ><Icon name='pencil' />Repo Link
+                                                                </DropDown2.Item>
+                    
+                                                        </DropDown2.Menu>
+                                                    </DropDown2>
+                                                        </Buuton2>
+                                                    </Menu.Item>
+                                                    </Menu.Menu>
+                                                </div>)
+                                        
                                             }))}
                                             options={{
                                                 headerStyle: {
