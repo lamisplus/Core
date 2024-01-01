@@ -14,8 +14,8 @@ import java.util.List;
 public class ModuleReleaseController {
     private final ModuleUpdateService moduleUpdateService;
     private final String BASE_MODULE_RELEASE_URL = "/api/v1/module-releases";
-    @PostMapping(BASE_MODULE_RELEASE_URL)
-    public ResponseEntity<List<Module>> createModuleRelease() {
-        return ResponseEntity.ok(moduleUpdateService.checkForUpdates());
-    }
+//    @PostMapping(BASE_MODULE_RELEASE_URL)
+//    public ResponseEntity<List<Module>> createModuleRelease() {
+//        return ResponseEntity.ok(moduleUpdateService.checkForUpdates());
+//    }
 }

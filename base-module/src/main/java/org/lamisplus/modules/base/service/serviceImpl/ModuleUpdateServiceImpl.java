@@ -9,6 +9,7 @@ import org.springframework.boot.configurationprocessor.json.JSONArray;
 import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.http.*;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -31,6 +32,7 @@ public class ModuleUpdateServiceImpl implements ModuleUpdateService {
      * @return Module
      */
     @Override
+    @Scheduled(cron = "0 0/15 * * * ?")
     public List<Module> checkForUpdates() {
         return moduleRepository.findAllByActiveAndGitHubLinkIsNotNull()
                 .stream()
