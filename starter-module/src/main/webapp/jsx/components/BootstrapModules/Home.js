@@ -22,11 +22,10 @@ import CircularProgress from '@mui/material/CircularProgress';
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
 import { Icon, Label } from "semantic-ui-react";
 import moment from "moment";
-// import ViewModuleIcon from '@mui/icons-material/ViewModule';
-// import ViewListIcon from '@mui/icons-material/ViewList';
 import { Typography } from '@material-ui/core';
 import MaterialTable from 'material-table';
-//import BootstrapSwitchButton from 'bootstrap-switch-button-react'
+import { forwardRef } from 'react';
+import Search from '@material-ui/icons/Search';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -59,9 +58,10 @@ const PostPage = (props) => {
     const listOfAllModule = useSelector(state => state.boostrapmodule.list);
     // const listOfAllModule = []
     const [gridView, setGridView] = useState(true);
-
+    
     const [restartmodal, setRestartModal] = useState(false) //Modal
     const toggleRestartModal = () => setRestartModal(!restartmodal)
+    const [isHovered, setHovered] = useState(false);
 
     useEffect(() => {
         loadModules()
@@ -130,8 +130,22 @@ const PostPage = (props) => {
       };
 
 
+      const blinkingAnimation = {
+        animation: isHovered ? 'none' : 'blinking 1s infinite',
+      };
+
+
     return (
         <>
+            <style>
+                {`
+                @keyframes blinking {
+                    0% { opacity: 1; }
+                    50% { opacity: 0; }
+                    100% { opacity: 1; }
+                }
+                `}
+            </style>
             {loading ?
                 <div style={{ width: '100%', minHeight: '600px', justifyContent: 'center', display: 'flex', alignItems: 'center' }}>
                     <CircularProgress size={200} />
@@ -237,7 +251,7 @@ const PostPage = (props) => {
                                                             </Dropdown.Item>
                                                             <Dropdown.Item
                                                                 onClick={() => handleLinkClick(contact.downloadUrl)}
-                                                            >Download Latest Jar
+                                                            >Download
                                                             </Dropdown.Item>
                                                             <Dropdown.Item
                                                                 onClick={() => unInstallModule(contact)}
@@ -288,7 +302,7 @@ const PostPage = (props) => {
                                                                 {/*<BootstrapSwitchButton checked={true} size="xs" />*/}
                                                             </span>
                                                             {isDifferentVersions(contact) && <span style={{cursor: 'pointer'}} className="text-black desc-text ms-2" onClick={() => handleLinkClick(contact.downloadUrl)}>
-                                                                <Badge variant={isDifferentVersions(contact) ? "danger badge-xs" : "primary badge-xs"}><i className="fa fa-download me-2 scale4" aria-hidden="true"></i> {isDifferentVersions(contact) ? "Update" : ""}</Badge>
+                                                                <Badge style={blinkingAnimation} onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)} variant={isDifferentVersions(contact) ? "danger badge-xs" : "primary badge-xs"}><i className="fa fa-download me-2 scale4" aria-hidden="true"></i> {isDifferentVersions(contact) ? "Download Update" : ""}</Badge>
                                                                 {/*<BootstrapSwitchButton checked={true} size="xs" />*/}
                                                             </span>}
                                                         </li>
@@ -317,35 +331,23 @@ const PostPage = (props) => {
                                                 name: row.name,
                                                 version: row.version,
                                                 gitHubLink: row.gitHubLink,
+                                                gitHubLink: <a href={row.gitHubLink} target='_blank'>{row.gitHubLink}</a>,
                                                 latestVersion: row.latestVersion,
                                                 updateAvailable: isDifferentVersions(row),
-                                                downloadUrl: row.downloadUrl,
-                                                // action:
-                                                //     <div>
-                                                        
-                                                //             <Label as='a' color='blue' className="ms-1" size='mini' onClick={() => handleLinkClick(row.downloadUrl)}>
-                                                //                 <CloudDownloadIcon /> Download
-                                                //             </Label>
-
-                                                //             <Label as='a' color='red' onClick={() => { }} size='mini'>
-                                                //                 <Icon name='pencil' /> Release Note
-                                                //             </Label>
-                                                        
-
-                                                //     </div>,
+                                                // downloadUrl: row.downloadUrl,
                                                 action:(<div>
                                                     <Menu.Menu position='right'  >
                                                     <Menu.Item >
                                                         <Buuton2 style={{backgroundColor:'rgb(153,46,98)'}} primary>
-                                                        <DropDown2 item text='Action'>
+                                                        <DropDown2 item text='Action' direction='left'>
                     
                                                         <DropDown2.Menu style={{ marginTop:"10px", }}>
                                                                 <DropDown2.Item  onClick={() => handleLinkClick(row.downloadUrl)}><CloudDownloadIcon /> Download Latest Version
                                                                 </DropDown2.Item>
                                                                 <DropDown2.Item ><Icon name='pencil' /> Release Notes
                                                                 </DropDown2.Item>
-                                                                <DropDown2.Item ><Icon name='pencil' />Repo Link
-                                                                </DropDown2.Item>
+                                                                {/* <DropDown2.Item ><Icon name='pencil' />Repo Link
+                                                                </DropDown2.Item> */}
                     
                                                         </DropDown2.Menu>
                                                     </DropDown2>
@@ -355,6 +357,7 @@ const PostPage = (props) => {
                                                 </div>)
                                         
                                             }))}
+                                            icons={{Search: forwardRef((props, ref) => <Search {...props} ref={ref} />),}}
                                             options={{
                                                 headerStyle: {
                                                     backgroundColor: "#014d88",
@@ -362,7 +365,7 @@ const PostPage = (props) => {
                                                 },
                                                 searchFieldStyle: {
                                                     width: '200%',
-                                                    margingLeft: '250px',
+                                                    margingLeft: '',
                                                 },
                                                 filtering: false,
                                                 exportButton: false,
