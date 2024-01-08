@@ -9,7 +9,7 @@ import { authentication } from "../../_services/authentication";
 
 function Register(props) {
   /* Code from LamisPlus */
-  let history = useHistory();
+  const history = useHistory();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [remember, setRemember] = useState("");
@@ -35,8 +35,8 @@ function Register(props) {
       (user) => {
         setError(false);
         setHelperText("Login Successfully");
-        history.push("", { user: user });
-        window.location.href = "";
+        history.push("/dashboard", { user: user });
+        window.location.href = "/dashboard";
       },
       (error) => {
         setIsButtonDisabled(false);
@@ -146,7 +146,7 @@ function Register(props) {
                             backgroundColor: "#0D3068",
                             borderRadius: "0.2rem",
                           }}
-                          onClick={() => handleLogin()}
+                          onClick={(e) => handleLogin(e)}
                           disabled={isButtonDisabled}
                         >
                           {submitText}
