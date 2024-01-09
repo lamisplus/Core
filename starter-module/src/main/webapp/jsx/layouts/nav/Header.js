@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { Dropdown } from "react-bootstrap";
 import {url as baseUrl} from "./../../../api";
 /// Image
@@ -11,6 +11,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { authentication } from "./../../../_services/authentication";
 import * as ACTION_TYPES from "./../../../actions/types";
 import store from "./../../../store";
+import Swal from "sweetalert2";
+import moment from "moment";
 //import AssignFacilityModal from './../../components/Users/AssignFacilityModalFirst'
 
 import Box from '@mui/material/Box';
@@ -22,6 +24,13 @@ import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Tooltip from '@mui/material/Tooltip';
+import { useSelector, useDispatch } from 'react-redux';
+import {  fetchAllBootstrapModule } from '../../../actions/bootstrapModule';
+import {
+    Modal, ModalHeader, ModalBody, Form, FormFeedback,
+    Row, Col, Card, CardBody, FormGroup, Label, Input
+} from 'reactstrap';
+
 
 
 const { dispatch } = store;
@@ -31,6 +40,7 @@ const Header = (props) => {
     //const [modal, setModal] = useState(false);
     const [roles, setRoles] = useState([]);
     const [anchorEl, setAnchorEl] = React.useState(null);
+    const listOfAllModule = useSelector(state => state.boostrapmodule.list);
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -100,11 +110,73 @@ const Header = (props) => {
 
     }
 
+    const loadModules = async ()=>{
+        const onSuccess = (data) => {
+            checkAndShowModal(data);
+            
+        }
+        const onError = () => {
+            // setLoading(false)     
+        }
+        await dispatch(fetchAllBootstrapModule(onSuccess,onError));
+    }
+
+
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            loadModules();
+            // const interval = 30 * 60 * 1000; // 30 minutes in milliseconds
+
+        }, 30 * 60 * 1000); // 30 seconds in milliseconds
+    
+        return () => {
+          clearInterval(intervalId); // Cleanup the interval on component unmount
+        };
+      }, []);
+    // }
     const currentUser = authentication.getCurrentUser();
     useEffect(() => {
         fetchMe();
-
+        loadModules();
     }, []);
+
+
+
+    const history = useHistory();
+
+    const checkAndShowModal = (listOfModules) => {
+        for (let index = 0; index < listOfModules.length; index++) {
+            const module = listOfModules[index];
+            var installedVersion = Number(module.version.split('.').join('').substring(0, 3));
+            var latestVersion = module.latestVersion ? Number(module.latestVersion.split('.').join('').substring(0, 3)) : 0;
+            if(installedVersion < latestVersion){
+                // swal('Update available!', 'Kindly download it here...', "info");
+                Swal.fire({
+                    title: "<strong>Module Updates Available</strong>",
+                    icon: "info",
+                    html: `Module Updates are available. 
+                    Please click 
+                    <a style="cursor: pointer; text-decoration: underline; color:blue;" id="navigateButton">here</a>
+                    to view them.
+                    `,
+                    showCloseButton: true,
+                    showCancelButton: false,
+                    showConfirmButton: false,
+                    focusConfirm: false,
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        // Attach a click event to the button inside the modal
+                        document.getElementById('navigateButton').addEventListener('click', () => {
+                          history.push('/bootstrap-modules');
+                          Swal.close(); 
+                        });
+                      },
+                  });
+
+                break;
+            }
+        }
+    }
 
 
     return (
@@ -141,7 +213,7 @@ const Header = (props) => {
                                 </Dropdown.Toggle>
 
                                 <Dropdown.Menu align="right" className="mt-2 dropdown-menu-end">
-                                    <Link to="#" className="dropdown-item ai-icon" onClick={()=> window.open("https://datafinigeria.on.spiceworks.com/portal", "_blank")}>
+                                    <Link to="#" className="dropdown-item ai-icon" onClick={()=> window.open("https://thepalladiumgroup.atlassian.net/servicedesk/customer/portal/20", "_blank")}>
                                         <i class="fa fa-bolt" aria-hidden="true"></i>
                                         <span className="ms-2">Help </span>
                                     </Link>
@@ -245,6 +317,7 @@ const Header = (props) => {
                 </nav>
             </div>
             {/* <AssignFacilityModal showModal={assignFacilityModal} toggleModal={() => setAssignFacilityModal(!assignFacilityModal)} user={user}/> */}
+            
         </div>
     );
 };

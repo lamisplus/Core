@@ -341,3 +341,11 @@ export const ERROR_EDIT_MODULE_MENU = 'ERROR_EDIT_MODULE_MENU'
 export const DELETE_MENU = 'DELETE_MENU'
 export const ERROR_DELETE_MENU = 'ERROR_DELETE_MENU'
 export const FETCH_ALL_SUB_MENU ='FETCH_ALL_SUB_MENU'
+
+/**
+ * @TYPES
+ * ==============================================
+ * MODULE RELEASES
+ */
+
+export const UPDATE_MODULE_RELEASES = 'UPDATE_MODULE_RELEASES'

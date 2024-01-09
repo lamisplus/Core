@@ -26,6 +26,7 @@ import SystemConfiguration from "./components/SystemConfiguration/Index";
 import HealthCheck from "./components/HealthCheck/Index";
 import ApplicationMatrics from "./components/ApplicationMatrics/Index";
 import LogConfiguration from "./components/LogConfiguration/Index";
+import ModuleUpdateList from "./components/LamisplusModuleUpdates/ModuleUpdatePage";
 import RoleList from "./components/Roles/RolesPage";
 import AddRole from "./components/Roles/AddRole";
 import EditRole from "./components/Roles/EditRole";
@@ -35,6 +36,7 @@ import Test from "./components/TestPage/Index";
 import Modules from "./components/Modules/Index";
 import OrganizationUnit from "./components/OrganizationUnit/Index";
 import ApplicationCodeset from "./components/ApplicationCodeset/ApplicationCodesetSearch";
+import ModuleUpdate from "./components/ModuleUpdates/ModuleUpdate";
 import ParentOrganizationUnit from "./components/OrganizationUnit/ParentOrganizationalUnit";
 import MenuList from "./components/Menu/MenuList";
 import BiometricList from "./components/Biometric/BiometricList";
@@ -84,6 +86,8 @@ const Markup = () => {
     { url: "modules", component: Modules },
     { url: "organisation-unit", component: OrganizationUnit },
     { url: "application-codeset", component: ApplicationCodeset },
+    { url: "module-update", component: ModuleUpdate },
+    { url: "lamisplus-module-update", component: ModuleUpdateList },
     {
       url: "admin-parent-organization-unit",
       component: ParentOrganizationUnit,
