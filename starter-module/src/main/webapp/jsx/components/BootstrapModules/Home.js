@@ -344,8 +344,8 @@ const PostPage = (props) => {
                                                         <DropDown2.Menu style={{ marginTop:"10px", }}>
                                                                 <DropDown2.Item  onClick={() => handleLinkClick(row.downloadUrl)}><CloudDownloadIcon /> Download Latest Version
                                                                 </DropDown2.Item>
-                                                                <DropDown2.Item ><Icon name='pencil' /> Release Notes
-                                                                </DropDown2.Item>
+                                                                {/* <DropDown2.Item ><Icon name='pencil' /> Release Notes
+                                                                </DropDown2.Item> */}
                                                                 {/* <DropDown2.Item ><Icon name='pencil' />Repo Link
                                                                 </DropDown2.Item> */}
                     
