@@ -222,7 +222,7 @@ public class ModuleService {
             module.setDescription(versionInfo.projectName);
             module.setUmdLocation(config.getUmdLocation());
             module.setBasePackage(config.getBasePackage());
-            module.setGitHubLink(config.getGitHubLink());
+            if(config.getGitHubLink() != null) module.setGitHubLink(config.getGitHubLink());
             module.setPermissions(config.getPermissions()
                     .stream()
                     .map(permission -> {permission.setModuleName(config.getName()); return permission;})

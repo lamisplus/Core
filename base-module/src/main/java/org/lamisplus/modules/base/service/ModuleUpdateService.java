@@ -28,15 +28,14 @@ public class ModuleUpdateService {
 
     /**
      * Checking for module updates
-     * @return Module
      */
-    @Scheduled(fixedRate = 15000) //15,000 milliseconds = 15 minutes
-    public List<Module> checkForUpdates() {
+    @Scheduled(fixedRate = 150000) //15,0000 milliseconds = 15 minutes
+    public void checkForUpdates() {
         LOG.info("checking for updates...");
-        return moduleRepository.findAllByActiveAndGitHubLinkIsNotNull()
+        moduleRepository.findAllByActiveAndGitHubLinkIsNotNull()
                 .stream()
-                .map(module -> checkUpdates(module))
-                .collect(Collectors.toList());
+                .map(module -> checkUpdates(module));
+                //.collect(Collectors.toList());
     }
 
     /**

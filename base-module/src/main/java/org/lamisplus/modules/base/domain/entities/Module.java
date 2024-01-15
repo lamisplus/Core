@@ -95,7 +95,6 @@ public class Module implements Serializable, Persistable<Long> {
     @OneToMany(mappedBy = "module", cascade = {CascadeType.ALL})
     private Set<Permission> Permissions = new HashSet<>();
 
-    @NotNull
     private String gitHubLink;
 
     private String latestVersion;
