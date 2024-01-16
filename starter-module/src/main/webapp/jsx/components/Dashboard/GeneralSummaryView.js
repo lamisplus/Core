@@ -9,6 +9,8 @@ import { ThemeContext } from "../../../context/ThemeContext";
 import axios from "axios";
 import {url as baseUrl} from "../../../api";
 import { Progress } from 'reactstrap';
+import { GetPercentage, Varient } from '../../Utils/Utils';
+import ProgressBar from "react-bootstrap/ProgressBar";
 // Load Highcharts modules
 require("highcharts/modules/exporting")(Highcharts);
 require("highcharts/modules/drilldown")(Highcharts);
@@ -33,11 +35,20 @@ const GeneralSummaryView = () => {
     const [totalIPs, setTotalIps]= useState("");
     const [totalFacilities, setTotalFacilities]= useState("")
     const [totalPatients, setToTalPatients]= useState("")
+    const [patientsIpsAndHealthFacilitiesData, setPatientsIpsAndHealthFacilitiesData]= useState(null);
+    const [reportingRateData, setReportingRateData]= useState(null);
+    const [totalSyncdata, setTotalSyncData]= useState(null);
     const [patientBarChart, setPatientBarChart]= useState([]);
     //const [drilldownValue, setDrilldownValue]= useState([]);
     const [patientBarChart2, setPatientBarChart2]= useState(null);
     const [patientPieChartBySex, setPieChartBySex]= useState(null);
     const [totalPatientsBiometric, setToTalPatientsBiometric]= useState("")
+    const [chartController, setChartController]= useState({
+      chartTitle: "Registered Patients per IP",
+      chartSubtitle: "Click to view facility registered patients",
+      yAxisText: "Number of Patients",
+      xAxisText: "Implementing Partners",
+    });
     const [reported, setReported]= useState({
                                                           reportedFacilities: 0,
                                                           reportedPercentage: 0,
@@ -49,25 +60,50 @@ const GeneralSummaryView = () => {
                                               totalPending: 0
                                             })
     const [reportedIps, setReportedIps]= useState("")
+
 	  useEffect(() => {
 		changeBackground({ value: "light", label: "Light" });
+      PatientsIpsAndHealthFacilities();
+      ReportingRate();
+      TotalSync();
+      TotalPatientBarChart();
         // TotalIP()
         // TotalFacility()
         // TotalPatientPieChartSex()
         // TotalPatient()
         // TotalBiometric()
-        // TotalSync();
-        // TotalPatientBarChart();
         // TotalPatientBarChart2();
         // GetFacilityReportInfo();
         // ReportedIps();
 	}, []);
 
+  const ReportingRate =()=>{//Sync status record
+        axios
+            .get(`${baseUrl}sync-server-dashboard/facility-status`)
+            .then((response) => {
+              setReportingRateData(response.data);
+            })
+            .catch((error) => {
+            //console.log(error);
+            });
+        
+    }
+    const PatientsIpsAndHealthFacilities =()=>{//Sync status record
+        axios
+            .get(`${baseUrl}sync-server-dashboard/ip/facility/patient-count`)
+            .then((response) => {
+              setPatientsIpsAndHealthFacilitiesData(response.data);
+            })
+            .catch((error) => {
+            //console.log(error);
+            });
+        
+    }
     const TotalSync =()=>{//Sync status record
         axios
-            .get(`${baseUrl}central-lamisplus/get-total-patient-sync-info`)
+            .get(`${baseUrl}sync-server-dashboard/sync-status`)
             .then((response) => {
-                setTotalSync(response.data);
+                setTotalSyncData(response.data);
             })
             .catch((error) => {
             //console.log(error);
@@ -154,18 +190,18 @@ const GeneralSummaryView = () => {
     }
     const TotalPatientBarChart =()=>{// Bar chart with drilldown
         axios
-            .get(`${baseUrl}central-lamisplus/get-bar-chart-with-drill`)
+            .get(`${baseUrl}sync-server-dashboard/patient-count/ip`)
             .then((response) => {
                 setPatientBarChart(response.data);
                 //console.log(response.data.drillDowns)
               //manipulation of the drilldowns
-                  const result = response.data.drillDowns.map((obj2) => {
-                    const resultobj = Object.keys(obj2.data).map((key) =>[key, obj2.data[key]]);
-                    obj2.data=resultobj  
-                    return obj2
-                  });
-                  //setDrilldownValue(result)
-                  patientBarChart.drillDowns=result
+                  // const result = response.data.drillDowns.map((obj2) => {
+                  //   const resultobj = Object.keys(obj2.data).map((key) =>[key, obj2.data[key]]);
+                  //   obj2.data=resultobj  
+                  //   return obj2
+                  // });
+                  // //setDrilldownValue(result)
+                  // patientBarChart.drillDowns=result
             })
             .catch((error) => {
             //console.log(error);
@@ -183,67 +219,67 @@ const GeneralSummaryView = () => {
             });
         
     }
-    const drilldownBarChartByIPAvtivePatients = {//Highchart object for Drill down bar chart
-      chart: {
-        type: 'column'
+  const drilldownBarChartByIPAvtivePatients = {//Highchart object for Drill down bar chart
+    chart: {
+      type: 'column'
     },
     title: {
       align: 'center',
       text: 'Registered Patient Per IP '
     },
     subtitle: {
-        align: 'center',
-        text: 'Click to view facilities registered patients'
+      align: 'center',
+      text: 'Click to view facilities registered patients'
     },
     accessibility: {
-        announceNewData: {
-            enabled: true
-        }
+      announceNewData: {
+        enabled: true
+      }
     },
     xAxis: {
-        type: 'category'
+      type: 'category'
     },
     yAxis: {
-        title: {
-            text: 'Number of Patients'
-        }
+      title: {
+        text: 'Number of Patients'
+      }
 
     },
     legend: {
-        enabled: false
+      enabled: false
     },
     plotOptions: {
-        series: {
-            borderWidth: 0,
-            dataLabels: {
-                enabled: true,
-                format: '{point.y:.1f}'
-            }
+      series: {
+        borderWidth: 0,
+        dataLabels: {
+          enabled: true,
+          format: '{point.y:.1f}'
         }
+      }
     },
 
     tooltip: {
-        headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-        pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}</b> of total<br/>'
+      headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+      pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}</b> of total<br/>'
     },
 
     series: [
-        {
-            name: 'Implementing Partners',
-            colorByPoint: true,
-            data: patientBarChart.data
-        }
+      {
+        name: 'Implementing Partners',
+        colorByPoint: true,
+        data: patientBarChart.data
+      }
     ],
     drilldown: {
-        breadcrumbs: {
-            position: {
-                align: 'left'
-            }
-        },
-        series: patientBarChart.drillDowns
+      breadcrumbs: {
+        position: {
+          align: 'left'
+        }
+      },
+      series: patientBarChart.drillDowns
 
     }
-    }
+  }
     const barChartByIPActivePatients = {// Highchart onject for bar chart of registered patient
         chart: {
           type: 'column'
@@ -331,6 +367,73 @@ const GeneralSummaryView = () => {
       }]
     }
 
+    const getPercentage = (reportingRateData) => {
+      if (reportingRateData) {
+        return GetPercentage(reportingRateData.syncedFacilities || 0, reportingRateData.expectedFacilities || 0).toFixed(2);
+      }
+      return 0;
+    }
+
+    const drilldown = (event) => {
+      // console.log(event);
+      // setChartController({
+      //   chartTitle: "Registered Patients per Facility",
+      //   chartSubtitle: "Click to view patient details",
+      //   yAxisText: "Number of Patients",
+      //   xAxisText: "Facilities",
+      // });
+    }
+
+    const barChartOptions = {
+      title: {
+        text: chartController.chartTitle,
+        align: 'center'
+      },
+      subtitle: {
+        align: 'center',
+        text: chartController.chartSubtitle
+      },
+      chart: {
+        type: 'column'
+      },
+      series: [
+        {
+          name: chartController.xAxisText,
+          colorByPoint: true,
+          data: patientBarChart ? patientBarChart.map(each => Object.values(each)[0] || 0) : []
+        }
+      ],
+      tooltip: {
+        headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+        pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}</b> of total<br/>',
+        formatter: function () {
+          // Format the tooltip to display whole numbers
+          return `<b>${this.x}</b>: ${Math.round(this.y)}`;
+        },
+      },
+      xAxis: {
+        categories: patientBarChart ? patientBarChart.map(each => Object.values(each)[1] || 0) : [],
+      },
+      yAxis: {
+        title: {
+          text: chartController.yAxisText
+        },
+      },
+      plotOptions: {
+        series: {
+          borderWidth: 0,
+          dataLabels: {
+            enabled: true,
+            format: '{point.y}'
+          },
+          events: {
+            click: drilldown,
+          }
+        }
+      },
+    }
+
+
 	return(
 		<div className="m-2 mt-0">
 			<div className="form-head mb-4 d-flex flex-wrap align-items-center">
@@ -351,7 +454,7 @@ const GeneralSummaryView = () => {
                 </span>
                 <div className="media-body">
                   <p className="mb-1">Registered Patients</p>
-                  <h4 className="mb-0">{totalPatients!=="" ? totalPatients.toLocaleString() : 0 }</h4>
+                  <h4 className="mb-0">{patientsIpsAndHealthFacilitiesData ? (patientsIpsAndHealthFacilitiesData.patientCount || 0) : 0 }</h4>
                 </div>
               </div>
             </div>
@@ -366,7 +469,7 @@ const GeneralSummaryView = () => {
                 </span>
                 <div className="media-body">
                   <p className="mb-1">Implementing Partners</p>
-                  <h4 className="mb-0">{reportedIps}</h4>
+                  <h4 className="mb-0">{patientsIpsAndHealthFacilitiesData ? (patientsIpsAndHealthFacilitiesData.ipCount || 0) : 0}</h4>
                   
                 </div>
               </div>
@@ -382,7 +485,7 @@ const GeneralSummaryView = () => {
                 </span>
                 <div className="media-body">
                   <p className="mb-1">Health Facilities</p>
-                  <h4 className="mb-0">{reported.reportedFacilities.toLocaleString()} of {reported.totalFacilities.toLocaleString()}</h4>
+                  <h4 className="mb-0">{patientsIpsAndHealthFacilitiesData ? (patientsIpsAndHealthFacilitiesData.facilitiesCount || 0) : 0}</h4>
                 </div>
               </div>
             </div>
@@ -400,11 +503,16 @@ const GeneralSummaryView = () => {
                         <span className=""><h3>Reporting Rate</h3> </span>
                         <br/>
                         <p>Facility Reported </p>
-                        <h2 className="chart-num-3  mb-0">{reported.reportedFacilities.toLocaleString()} of {reported.totalFacilities.toLocaleString()}<span className="fs-18 me-2 ms-3"></span></h2>
-                        <p>Reporting by Percentage</p>
+                        <h2 className="chart-num-3  mb-0">{reportingRateData ? (reportingRateData.syncedFacilities || 0) : 0} of {reportingRateData ? (reportingRateData.expectedFacilities || 0) : 0}<span className="fs-18 me-2 ms-3"></span></h2>
+                        <p>{`Reporting by Percentage (${getPercentage(reportingRateData)}%)`}</p>
                       </div> 
                     </div>
-                    <Progress striped animated color="info" value={reported.reportedPercentage} style={{height:"20px", fontWeight:"bolder"}}>{reported.reportedPercentage}%</Progress>
+                    <ProgressBar
+                      now={getPercentage(reportingRateData)}
+                      variant={Varient(getPercentage(reportingRateData))}
+                      style={{ width: "100%", marginTop: "10px", marginBottom: "10px" }}
+                    // label={`${reportingRateData ? GetPercentage(reportingRateData.syncedFacilities || 0, reportingRateData.expectedFacilities || 0) : 0}%`}
+                    />
                   </div>
                 </div>
         </div>
@@ -416,7 +524,7 @@ const GeneralSummaryView = () => {
                     <div className="d-sm-flex d-block pb-sm-3 align-items-end mb-2">
                       <div className="me-auto pe-3 mb-3 mb-sm-0">
                         <span className="chart-num-3 font-w200 d-block mb-sm-3 mb-2 text-white">Records Synced </span>
-                        <h2 className="chart-num-2 text-white mb-0">{totalSync.totalSynced.toLocaleString()}<span className="fs-18 me-2 ms-3"></span></h2>
+                        <h2 className="chart-num-2 text-white mb-0">{totalSyncdata ? (totalSyncdata.filesSynced || 0) : 0}<span className="fs-18 me-2 ms-3"></span></h2>
                       </div>
                       
                     </div>
@@ -438,7 +546,7 @@ const GeneralSummaryView = () => {
                     <div className="d-sm-flex d-block pb-sm-3 align-items-end mb-2">
                       <div className="me-auto pe-3 mb-3 mb-sm-0">
                         <span className="chart-num-3 font-w200 d-block mb-sm-3 mb-2 text-white">Records Processed</span>
-                        <h2 className="chart-num-2 text-white mb-0">{totalSync.totalProcessed.toLocaleString()}<span className="fs-18 me-2 ms-3"></span></h2>
+                        <h2 className="chart-num-2 text-white mb-0">{totalSyncdata ? (totalSyncdata.filesProcessed || 0) : 0}<span className="fs-18 me-2 ms-3"></span></h2>
                       </div>
                       
                     </div>
@@ -460,7 +568,7 @@ const GeneralSummaryView = () => {
                     <div className="d-sm-flex d-block pb-sm-3 align-items-end mb-2">
                       <div className="me-auto pe-3 mb-3 mb-sm-0">
                         <span className="chart-num-3 font-w200 d-block mb-sm-3 mb-2 text-white">Records Pending</span>
-                        <h2 className="chart-num-2 text-white mb-0">{totalSync.totalPending.toLocaleString()}<span className="fs-18 me-2 ms-3"></span></h2>
+                        <h2 className="chart-num-2 text-white mb-0">{totalSyncdata ? (totalSyncdata.filesPending || 0) : 0}<span className="fs-18 me-2 ms-3"></span></h2>
                       </div>
                       
                     </div>
@@ -498,7 +606,8 @@ const GeneralSummaryView = () => {
 						<div className="col-xl-12 col-xxl-12">
               <HighchartsReact
               highcharts={Highcharts}
-              options={drilldownBarChartByIPAvtivePatients}
+              // options={drilldownBarChartByIPAvtivePatients}
+              options={barChartOptions}
               />
 						</div>
 					</div>
