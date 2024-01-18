@@ -454,7 +454,7 @@ const GeneralSummaryView = () => {
                 </span>
                 <div className="media-body">
                   <p className="mb-1">Registered Patients</p>
-                  <h4 className="mb-0">{patientsIpsAndHealthFacilitiesData ? (patientsIpsAndHealthFacilitiesData.patientCount || 0) : 0 }</h4>
+                  <h4 className="mb-0">{patientsIpsAndHealthFacilitiesData ? (patientsIpsAndHealthFacilitiesData.patientCount ? patientsIpsAndHealthFacilitiesData.patientCount.toLocaleString() : 0) : 0 }</h4>
                 </div>
               </div>
             </div>
@@ -469,7 +469,7 @@ const GeneralSummaryView = () => {
                 </span>
                 <div className="media-body">
                   <p className="mb-1">Implementing Partners</p>
-                  <h4 className="mb-0">{patientsIpsAndHealthFacilitiesData ? (patientsIpsAndHealthFacilitiesData.ipCount || 0) : 0}</h4>
+                  <h4 className="mb-0">{patientsIpsAndHealthFacilitiesData ? (patientsIpsAndHealthFacilitiesData.ipCount ? patientsIpsAndHealthFacilitiesData.ipCount.toLocaleString() : 0) : 0}</h4>
                   
                 </div>
               </div>
@@ -485,7 +485,7 @@ const GeneralSummaryView = () => {
                 </span>
                 <div className="media-body">
                   <p className="mb-1">Health Facilities</p>
-                  <h4 className="mb-0">{patientsIpsAndHealthFacilitiesData ? (patientsIpsAndHealthFacilitiesData.facilitiesCount || 0) : 0}</h4>
+                  <h4 className="mb-0">{patientsIpsAndHealthFacilitiesData ? (patientsIpsAndHealthFacilitiesData.facilitiesCount ?  patientsIpsAndHealthFacilitiesData.facilitiesCount : 0) : 0}</h4>
                 </div>
               </div>
             </div>
@@ -503,7 +503,7 @@ const GeneralSummaryView = () => {
                         <span className=""><h3>Reporting Rate</h3> </span>
                         <br/>
                         <p>Facility Reported </p>
-                        <h2 className="chart-num-3  mb-0">{reportingRateData ? (reportingRateData.syncedFacilities || 0) : 0} of {reportingRateData ? (reportingRateData.expectedFacilities || 0) : 0}<span className="fs-18 me-2 ms-3"></span></h2>
+                        <h2 className="chart-num-3  mb-0">{reportingRateData ? (reportingRateData.syncedFacilities ? reportingRateData.syncedFacilities : 0) : 0} of {reportingRateData ? (reportingRateData.expectedFacilities ? reportingRateData.expectedFacilities : 0) : 0}<span className="fs-18 me-2 ms-3"></span></h2>
                         <p>{`Reporting by Percentage (${getPercentage(reportingRateData)}%)`}</p>
                       </div> 
                     </div>
@@ -524,7 +524,7 @@ const GeneralSummaryView = () => {
                     <div className="d-sm-flex d-block pb-sm-3 align-items-end mb-2">
                       <div className="me-auto pe-3 mb-3 mb-sm-0">
                         <span className="chart-num-3 font-w200 d-block mb-sm-3 mb-2 text-white">Records Synced </span>
-                        <h2 className="chart-num-2 text-white mb-0">{totalSyncdata ? (totalSyncdata.filesSynced || 0) : 0}<span className="fs-18 me-2 ms-3"></span></h2>
+                        <h2 className="chart-num-2 text-white mb-0">{totalSyncdata ? (totalSyncdata.filesSynced ? totalSyncdata.filesSynced : 0) : 0}<span className="fs-18 me-2 ms-3"></span></h2>
                       </div>
                       
                     </div>
@@ -546,7 +546,7 @@ const GeneralSummaryView = () => {
                     <div className="d-sm-flex d-block pb-sm-3 align-items-end mb-2">
                       <div className="me-auto pe-3 mb-3 mb-sm-0">
                         <span className="chart-num-3 font-w200 d-block mb-sm-3 mb-2 text-white">Records Processed</span>
-                        <h2 className="chart-num-2 text-white mb-0">{totalSyncdata ? (totalSyncdata.filesProcessed || 0) : 0}<span className="fs-18 me-2 ms-3"></span></h2>
+                        <h2 className="chart-num-2 text-white mb-0">{totalSyncdata ? (totalSyncdata.filesProcessed ? totalSyncdata.filesProcessed : 0) : 0}<span className="fs-18 me-2 ms-3"></span></h2>
                       </div>
                       
                     </div>
@@ -568,7 +568,7 @@ const GeneralSummaryView = () => {
                     <div className="d-sm-flex d-block pb-sm-3 align-items-end mb-2">
                       <div className="me-auto pe-3 mb-3 mb-sm-0">
                         <span className="chart-num-3 font-w200 d-block mb-sm-3 mb-2 text-white">Records Pending</span>
-                        <h2 className="chart-num-2 text-white mb-0">{totalSyncdata ? (totalSyncdata.filesPending || 0) : 0}<span className="fs-18 me-2 ms-3"></span></h2>
+                        <h2 className="chart-num-2 text-white mb-0">{totalSyncdata ? (totalSyncdata.filesPending ? totalSyncdata.filesPending : 0) : 0}<span className="fs-18 me-2 ms-3"></span></h2>
                       </div>
                       
                     </div>

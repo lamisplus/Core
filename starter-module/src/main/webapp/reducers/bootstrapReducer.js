@@ -1,7 +1,7 @@
 import * as ACTION_TYPES from '../actions/types'
 
 const initialState = {
-  list: [],
+  list: null,
   moduleList:[],
   moduleMenuList:[]
 
