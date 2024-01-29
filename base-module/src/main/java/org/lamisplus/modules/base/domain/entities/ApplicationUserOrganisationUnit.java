@@ -48,4 +48,6 @@ public class ApplicationUserOrganisationUnit extends Audit<String> {
         }
         return null;
     }
+    @Transient
+    private String datimId;
 }

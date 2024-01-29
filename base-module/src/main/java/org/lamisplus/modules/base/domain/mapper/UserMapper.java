@@ -17,12 +17,17 @@ public class UserMapper {
         return users.stream().filter(Objects::nonNull).map(this::userToUserDTO).collect(Collectors.toList());
     }
     public UserDTO userToUserDTO(User user) {
+        user.getApplicationUserOrganisationUnits().stream()
+                .map(applicationUserOrganisationUnit -> {
+                    //TODO:
+                    applicationUserOrganisationUnit.setDatimId();
+                })
         return new UserDTO(user);
     }
 
     public List<User> userDTOsToUsers(List<UserDTO> userDTOs) {
         return userDTOs.stream().filter(Objects::nonNull).map(this::userDTOToUser).collect(Collectors.toList());
-    }
+        add repository for identifier }
 
     public User userDTOToUser(UserDTO userDTO) {
         if (userDTO == null) {

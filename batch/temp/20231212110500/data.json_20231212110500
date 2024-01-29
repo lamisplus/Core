@@ -1,5 +1,0 @@
-{
-  "version" : "217",
-  "init" : "true",
-  "fileNames" : "[patient_encounter_20231212110500.json, patient_person_20231212110500.json, patient_visit_20231212110500.json, triage_vital_sign_20231212110500.json, prep_clinic_20231212110500.json, hts_client_20231212110500.json, hts_index_elicitation_20231212110500.json, hts_risk_stratification_20231212110500.json]"
-}

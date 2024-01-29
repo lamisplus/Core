@@ -26,6 +26,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Page<User> findAllByArchived(Pageable pageable, int archived);
 
+    List<User> findAllByArchived(int archived);
+
     Optional<User> findByIdAndArchived(Long id, int archived);
 
     @Query(value = "SELECT count(*) FROM public.base_application_user where current_organisation_unit_id !=100000 and archived != '1'", nativeQuery = true)
