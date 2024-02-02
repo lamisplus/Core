@@ -43,7 +43,7 @@ const Home = () => {
 	  useEffect(() => {
 		changeBackground({ value: "light", label: "Light" });
 	}, []);
-	console.log(listOfAllModule);
+	// console.log(listOfAllModule);
 
 	useEffect(() => {
 		if (listOfAllModule) {

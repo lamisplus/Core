@@ -26,6 +26,7 @@ import { Typography } from '@material-ui/core';
 import MaterialTable from 'material-table';
 import { forwardRef } from 'react';
 import Search from '@material-ui/icons/Search';
+import {toast} from "react-toastify";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -117,15 +118,25 @@ const PostPage = (props) => {
         setActivateModal(!activateModal)
     }
 
-    const isDifferentVersions = (row) => {
-        if (row.latestVersion !== null) {
-            return row.version !== row.latestVersion;
-        }
-        return false;
+    const gitHubLinkIsNullOrIsDifferentVersions = (row) => {
+        // should return true if row does not have a gitHubLink (null or undefined ) 
+        // or if the version is different from the latestVersion, or if the latestversion is null
+        return row.gitHubLink === null 
+        || row.gitHubLink === undefined 
+        || !row.gitHubLink.startsWith("http")
+        || row.latestVersion === null
+        || row.latestVersion === undefined
+        || row.version !== row.latestVersion;
     }
 
     
     const handleLinkClick = (link) => {
+        // if link is null or undefined, toast an error message saying 
+        // "Cannot download module because the link is not provided", else, open link in new tab
+        if (link === null || link === undefined) {
+            toast.error("Cannot download module because the download link is not provided.");
+            return;
+        }
         window.open(link, '_blank');
       };
 
@@ -301,8 +312,8 @@ const PostPage = (props) => {
                                                                 <Badge variant={contact.active === true ? "primary badge-xs" : "danger badge-xs"}><i className="fa fa-check-square me-2 scale4" aria-hidden="true"></i> {contact.active === true ? "Active" : "Inactive"}</Badge>
                                                                 {/*<BootstrapSwitchButton checked={true} size="xs" />*/}
                                                             </span>
-                                                            {isDifferentVersions(contact) && <span style={{cursor: 'pointer'}} className="text-black desc-text ms-2" onClick={() => handleLinkClick(contact.downloadUrl)}>
-                                                                <Badge style={blinkingAnimation} onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)} variant={isDifferentVersions(contact) ? "danger badge-xs" : "primary badge-xs"}><i className="fa fa-download me-2 scale4" aria-hidden="true"></i> {isDifferentVersions(contact) ? "Download Update" : ""}</Badge>
+                                                            {gitHubLinkIsNullOrIsDifferentVersions(contact) && <span style={{cursor: 'pointer'}} className="text-black desc-text ms-2" onClick={() => handleLinkClick(contact.downloadUrl)}>
+                                                                <Badge style={blinkingAnimation} onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)} variant={gitHubLinkIsNullOrIsDifferentVersions(contact) ? "danger badge-xs" : "primary badge-xs"}><i className="fa fa-download me-2 scale4" aria-hidden="true"></i> {gitHubLinkIsNullOrIsDifferentVersions(contact) ? "Download Update" : ""}</Badge>
                                                                 {/*<BootstrapSwitchButton checked={true} size="xs" />*/}
                                                             </span>}
                                                         </li>
@@ -322,7 +333,7 @@ const PostPage = (props) => {
                                                 { title: "Latest Version", field: "latestVersion" },
                                                 { title: "Update Available", field: "updateAvailable" },
                                                 { title: "GitHub Link", field: "gitHubLink" },
-                                                // { title: "Download URL", field: "downloadUrl" },
+                                                { title: "Download URL", field: "downloadUrl" },
                                                 { title: "Actions", field: "action" },
                                             ]}
 
@@ -333,8 +344,22 @@ const PostPage = (props) => {
                                                 gitHubLink: row.gitHubLink,
                                                 gitHubLink: <a href={row.gitHubLink} target='_blank'>{row.gitHubLink}</a>,
                                                 latestVersion: row.latestVersion,
-                                                updateAvailable: isDifferentVersions(row),
-                                                // downloadUrl: row.downloadUrl,
+                                                updateAvailable: gitHubLinkIsNullOrIsDifferentVersions(row),
+                                                downloadUrl: (<>{gitHubLinkIsNullOrIsDifferentVersions(row)
+                                                    && <span style={{ cursor: 'pointer' }}
+                                                        className="text-black desc-text ms-2"
+                                                        onClick={() => handleLinkClick(row.downloadUrl)}
+                                                    >
+                                                        <Badge
+                                                            style={blinkingAnimation}
+                                                            onMouseEnter={() => setHovered(true)}
+                                                            onMouseLeave={() => setHovered(false)}
+                                                            variant={gitHubLinkIsNullOrIsDifferentVersions(row) ? "danger badge-xs" : "primary badge-xs"}
+                                                        >
+                                                            <i className="fa fa-download me-2 scale4" aria-hidden="true"></i>
+                                                            {gitHubLinkIsNullOrIsDifferentVersions(row) ? "Download Update" : ""}
+                                                        </Badge>
+                                                    </span>}</>),
                                                 action:(<div>
                                                     <Menu.Menu position='right'  >
                                                     <Menu.Item >
