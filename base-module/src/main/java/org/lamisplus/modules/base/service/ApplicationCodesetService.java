@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.beans.Beans;
+import java.io.IOException;
+import java.io.Writer;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -21,6 +23,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
 
 @Service
 @Transactional
@@ -130,5 +134,35 @@ public class ApplicationCodesetService {
         return applicationCodeSet.stream()
                 .map(this::convertApplicationCodeSetToDto)
                 .collect(Collectors.toList());
+    }
+
+    public void getApplicationCodeSetsAsCsv(Writer writer) {
+        List<ApplicationCodeSet> applicationCodeSets =
+        applicationCodesetRepository.findAllByArchivedNotOrderByIdAsc(ARCHIVED);
+        try {
+
+            CSVPrinter printer = new CSVPrinter(writer, CSVFormat.DEFAULT);
+            printer.printRecord("id", "code", "version", "codeset_group",
+                    "display", "language", "archived", "created_by",
+                    "date_created", "modified_by", "date_modified"
+            );
+            for (ApplicationCodeSet applicationCodeSet : applicationCodeSets) {
+                printer.printRecord(
+                        applicationCodeSet.getId(),
+                        applicationCodeSet.getCode(),
+                        applicationCodeSet.getVersion(),
+                        applicationCodeSet.getCodesetGroup(),
+                        applicationCodeSet.getDisplay(),
+                        applicationCodeSet.getLanguage(),
+                        applicationCodeSet.getArchived(),
+                        applicationCodeSet.getDateCreated(),
+                        applicationCodeSet.getCreatedBy(),
+                        applicationCodeSet.getDateModified(),
+                        applicationCodeSet.getModifiedBy()
+                );
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -6,12 +6,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.lamisplus.modules.base.domain.dto.ApplicationCodesetDTO;
 import org.lamisplus.modules.base.domain.entities.ApplicationCodeSet;
 import org.lamisplus.modules.base.service.ApplicationCodesetService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -60,4 +63,12 @@ public class ApplicationCodeSetController {
     public void delete(@PathVariable Long id) {
         this.applicationCodesetService.delete(id);
     }
+
+    @GetMapping(BASE_URL_VERSION_ONE + "/exportCsv")
+    public void exportIntoCSV(HttpServletResponse response) throws IOException {
+        response.setContentType("text/csv");
+        response.addHeader("Content-Disposition", "attachment; filename=\"student.csv\"");
+        applicationCodesetService.getApplicationCodeSetsAsCsv(response.getWriter());
+    }
+
 }
