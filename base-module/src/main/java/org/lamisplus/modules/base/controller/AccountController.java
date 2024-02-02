@@ -16,6 +16,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -59,10 +60,17 @@ public class AccountController {
                 applicationUserOrganisationUnitRepository.save(applicationUserOrganisationUnit);
             }
 
-            return userService
+            User foundUser = userService
                     .getUserWithRoles()
-                    .map(UserDTO::new)
                     .orElseThrow(() -> new EntityNotFoundException(User.class,"Name:","User"));
+
+//            return userService
+//                    .getUserWithRoles()
+//                    .map(UserDTO::new)
+//                    .orElseThrow(() -> new EntityNotFoundException(User.class,"Name:","User"));
+
+
+            return userMapper.userToUserDTO(foundUser);
         } else{
             throw new EntityNotFoundException(User.class,"Name:","User");
         }
