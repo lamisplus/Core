@@ -12,6 +12,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,8 +35,8 @@ public class ModuleUpdateService {
         LOG.info("checking for updates...");
         moduleRepository.findAllByActiveAndGitHubLinkIsNotNull()
                 .stream()
-                .map(module -> checkUpdates(module));
-                //.collect(Collectors.toList());
+                .map(module -> checkUpdates(module))
+                .collect(Collectors.toList());
     }
 
     /**
@@ -69,6 +70,7 @@ public class ModuleUpdateService {
                     LOG.info("downloadLink is {}", downloadLink);
                     if(downloadLink.contains(DOT_JAR)){
                         module.setDownloadUrl(downloadLink);
+                        module.setLastSuccessfulUpdateCheck(LocalDateTime.now());
                         break;
                     }
                 }

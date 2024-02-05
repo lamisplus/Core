@@ -9,6 +9,7 @@ import org.springframework.data.domain.Persistable;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.HashSet;
 import java.util.List;
@@ -100,4 +101,6 @@ public class Module implements Serializable, Persistable<Long> {
     private String latestVersion;
 
     private String downloadUrl;
+
+    private LocalDateTime lastSuccessfulUpdateCheck;
 }

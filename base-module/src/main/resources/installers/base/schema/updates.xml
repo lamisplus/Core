@@ -494,4 +494,20 @@
         </sql>
     </changeSet>
 
+    <changeSet failOnError="true" id="19122023111306" author="Peter Abiodun">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*)
+                FROM pg_attribute
+                WHERE attrelid = (SELECT oid FROM pg_class WHERE relname = 'base_module')
+                  AND attname = 'last_successful_update_check';
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            ALTER TABLE IF EXISTS base_module
+                ADD COLUMN last_successful_update_check timestamp without time zone;
+
+        </sql>
+    </changeSet>
+
 </databaseChangeLog>
