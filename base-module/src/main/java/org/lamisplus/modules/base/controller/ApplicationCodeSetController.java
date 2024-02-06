@@ -5,12 +5,15 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.lamisplus.modules.base.domain.dto.ApplicationCodesetDTO;
 import org.lamisplus.modules.base.domain.entities.ApplicationCodeSet;
+import org.lamisplus.modules.base.domain.repositories.ApplicationCodesetRepository;
 import org.lamisplus.modules.base.service.ApplicationCodesetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -22,6 +25,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ApplicationCodeSetController {
     private final ApplicationCodesetService applicationCodesetService;
+    private final ApplicationCodesetRepository applicationCodesetRepository;
 
     //Versioning through URI Path
     private final String BASE_URL_VERSION_ONE = "/api/v1/application-codesets";
@@ -69,6 +73,34 @@ public class ApplicationCodeSetController {
         response.setContentType("text/csv");
         response.addHeader("Content-Disposition", "attachment; filename=\"student.csv\"");
         applicationCodesetService.getApplicationCodeSetsAsCsv(response.getWriter());
+    }
+
+    //import csv file for applicationCodeSet
+//    @PostMapping(BASE_URL_VERSION_ONE + "/import")
+//    public String handleFileUpload(@RequestParam("file") MultipartFile file) {
+//        try {
+//            List<ApplicationCodeSet> appCodes = applicationCodesetService.readCsv(file);
+//            applicationCodesetRepository.saveAll(appCodes);
+//            return "File uploaded and data saved successfully!";
+//        } catch (IOException e) {
+//            return "Error occurred while processing the file: " + e.getMessage();
+//        }
+
+    @PostMapping("/import")
+    public ResponseEntity<String> handleFileUpload(@RequestParam("file") MultipartFile file) {
+        if (file.isEmpty()) {
+            return new ResponseEntity<>("Please select a file to upload.", HttpStatus.BAD_REQUEST);
+        }
+
+        try {
+            List<ApplicationCodesetDTO> codesetDTOList = applicationCodesetService.readCsv(file);
+            List<ApplicationCodesetDTO> savedCodesets = applicationCodesetService.saveCodesets(codesetDTOList);
+
+            return new ResponseEntity<>("File uploaded and codesets saved successfully.", HttpStatus.OK);
+        } catch (IOException e) {
+            return new ResponseEntity<>("Error occurred while processing the file: " + e.getMessage(),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 }

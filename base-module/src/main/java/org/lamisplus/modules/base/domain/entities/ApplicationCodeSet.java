@@ -1,5 +1,6 @@
 package org.lamisplus.modules.base.domain.entities;
 
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;

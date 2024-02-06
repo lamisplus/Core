@@ -5,9 +5,11 @@ import org.lamisplus.modules.base.domain.dto.ApplicationCodesetDTO;
 import org.lamisplus.modules.base.domain.entities.ApplicationCodeSet;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,4 +42,20 @@ public interface ApplicationCodesetRepository extends JpaRepository<ApplicationC
     List<String> findAllGender();
 
     List<ApplicationCodeSet> findAllByCodeAndArchived(String code, int archived);
+
+
+        @Modifying
+        @Transactional
+        @Query(value = "INSERT INTO public.base_application_codeset " +
+                "(id, codeset_group, display, language, version, code, date_created, created_by, " +
+                "date_modified, modified_by, archived) " +
+                "VALUES (:id, :codesetGroup, :display, :language, :version, :code, :dateCreated, " +
+                ":createdBy, :dateModified, :modifiedBy, :archived) " +
+                "ON CONFLICT (code) DO UPDATE SET " +
+                "codeset_group = EXCLUDED.codeset_group, display = EXCLUDED.display, " +
+                "language = EXCLUDED.language, version = EXCLUDED.version, code = EXCLUDED.code",
+                nativeQuery = true)
+        List<ApplicationCodeSet> insertOrUpdateAll (List<ApplicationCodeSet> applicationCodeSets);
+
+
 }

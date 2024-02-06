@@ -1,30 +1,31 @@
 package org.lamisplus.modules.base.service;
 
 
+import io.micrometer.core.instrument.Counter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
 import org.lamisplus.modules.base.controller.apierror.EntityNotFoundException;
 import org.lamisplus.modules.base.controller.apierror.RecordExistException;
 import org.lamisplus.modules.base.domain.dto.ApplicationCodesetDTO;
 import org.lamisplus.modules.base.domain.entities.ApplicationCodeSet;
 import org.lamisplus.modules.base.domain.repositories.ApplicationCodesetRepository;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.beans.Beans;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.Writer;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVPrinter;
+//import org.apache.commons.csv.CSVFormat;
+//import org.apache.commons.csv.CSVPrinter;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @Transactional
@@ -165,4 +166,150 @@ public class ApplicationCodesetService {
             e.printStackTrace();
         }
     }
+
+    // application codeset import
+//    public List<ApplicationCodeSet> readCsv(MultipartFile file) throws IOException {
+//        System.out.println("***************** Here");
+//        try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream()))) {
+//            System.out.println("***************** Here *****");
+//                        return reader.lines()
+//                    .skip(1) // Skip header
+//                    .map(line -> {
+//                        System.out.println("***************** Here Read");
+//                        String[] fields = line.split(",");
+//                        ApplicationCodeSet appCode = new ApplicationCodeSet();
+//                        appCode.setId(Long.parseLong(fields[0]));
+//                        System.out.println("id's " );
+//                        appCode.setCode(fields[1]);
+//                        appCode.setVersion(fields[2]);
+//                        appCode.setCodesetGroup(fields[3]);
+//                        appCode.setDisplay(fields[4]);
+//                        appCode.setLanguage(fields[5]);
+//                        appCode.setArchived(Integer.parseInt(fields[6]));
+//                        return appCode;
+//                    })
+//                    .collect(Collectors.toList());
+//        }
+//    }
+
+    @Transactional
+    public List<ApplicationCodesetDTO> readCsv(MultipartFile file) throws IOException {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream()))) {
+            return reader.lines()
+                    .skip(1) // Skip header
+                    .map(line -> {
+                        String[] fields = line.split(",");
+                        System.out.println("Got here-----------");
+                        ApplicationCodesetDTO appCode = new ApplicationCodesetDTO();
+                        appCode.setId(Long.parseLong(fields[0]));
+                        appCode.setCode(fields[1]);
+                        appCode.setVersion(fields[2]);
+                        System.out.println("Got here-----------q");
+                        appCode.setCodesetGroup(fields[3]);
+                        appCode.setDisplay(fields[4]);
+                        appCode.setLanguage(fields[5]);
+                        return appCode;
+                    })
+                    .collect(Collectors.toList());
+        }
+    }
+
+        //working correctively
+//    @Transactional
+//    public List<ApplicationCodesetDTO> saveCodesets(List<ApplicationCodesetDTO> codesetDTOList) {
+//        List<ApplicationCodeSet> savedCodesets = applicationCodesetRepository.saveAll(
+//                codesetDTOList.stream()
+//                        .map(dto -> {
+//                            ApplicationCodeSet entity = new ApplicationCodeSet();
+//                            entity.setId(dto.getId());
+//                            entity.setCode(dto.getCode());
+//                            entity.setVersion(dto.getVersion());
+//                            entity.setCodesetGroup(dto.getCodesetGroup());
+//                            entity.setDisplay(dto.getDisplay());
+//                            entity.setLanguage(dto.getLanguage());
+//                            // Set other properties as needed
+//                            return entity;
+//                        })
+//                        .collect(Collectors.toList())
+//        );
+//
+//        // Transform the saved entities back to DTOs and return the list
+//        return savedCodesets.stream()
+//                .map(entity -> ApplicationCodesetDTO.builder()
+//                        .id(entity.getId())
+//                        .code(entity.getCode())
+//                        .version(entity.getVersion())
+//                        .codesetGroup(entity.getCodesetGroup())
+//                        .display(entity.getDisplay())
+//                        .language(entity.getLanguage())
+//                        .build())
+//                .collect(Collectors.toList());
+//    }
+
+//    @Transactional
+//    public List<ApplicationCodesetDTO> saveCodesets(List<ApplicationCodesetDTO> codesetDTOList) {
+//        List<ApplicationCodeSet> entitiesToSave = codesetDTOList.stream()
+//                .map(dto -> {
+//                    ApplicationCodeSet entity = new ApplicationCodeSet();
+//                    entity.setId(dto.getId());
+//                    entity.setCode(dto.getCode());
+//                    entity.setVersion(dto.getVersion());
+//                    entity.setCodesetGroup(dto.getCodesetGroup());
+//                    entity.setDisplay(dto.getDisplay());
+//                    entity.setLanguage(dto.getLanguage());
+//                    // Set other properties as needed
+//                    return entity;
+//                })
+//                .collect(Collectors.toList());
+//
+//        for (ApplicationCodeSet entity : entitiesToSave) {
+//            applicationCodesetRepository.insertOrUpdateAll(entity);
+//        }
+//
+//        return entitiesToSave.stream()
+//                .map(entity -> ApplicationCodesetDTO.builder()
+//                        .id(entity.getId())
+//                        .code(entity.getCode())
+//                        .version(entity.getVersion())
+//                        .codesetGroup(entity.getCodesetGroup())
+//                        .display(entity.getDisplay())
+//                        .language(entity.getLanguage())
+//                        .build())
+//                .collect(Collectors.toList());
+//    }
+
+    @Transactional
+    public List<ApplicationCodesetDTO> saveCodesets(List<ApplicationCodesetDTO> codesetDTOList) {
+        // Convert DTOs to entities
+        List<ApplicationCodeSet> entitiesToSave = codesetDTOList.stream()
+                .map(dto -> {
+                    ApplicationCodeSet entity = new ApplicationCodeSet();
+                    entity.setId(dto.getId());
+                    entity.setCode(dto.getCode());
+                    entity.setVersion(dto.getVersion());
+                    entity.setCodesetGroup(dto.getCodesetGroup());
+                    entity.setDisplay(dto.getDisplay());
+                    entity.setLanguage(dto.getLanguage());
+                    // Set other properties as needed
+                    return entity;
+                })
+                .collect(Collectors.toList());
+
+        // Insert or update entities in bulk
+        List<ApplicationCodeSet> savedEntities = applicationCodesetRepository.insertOrUpdateAll(entitiesToSave);
+
+        // Convert saved entities back to DTOs
+        return savedEntities.stream()
+                .map(entity -> ApplicationCodesetDTO.builder()
+                        .id(entity.getId())
+                        .code(entity.getCode())
+                        .version(entity.getVersion())
+                        .codesetGroup(entity.getCodesetGroup())
+                        .display(entity.getDisplay())
+                        .language(entity.getLanguage())
+                        // Map other properties as needed
+                        .build())
+                .collect(Collectors.toList());
+    }
+
 }
