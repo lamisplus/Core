@@ -43,19 +43,6 @@ public interface ApplicationCodesetRepository extends JpaRepository<ApplicationC
 
     List<ApplicationCodeSet> findAllByCodeAndArchived(String code, int archived);
 
-
-        @Modifying
-        @Transactional
-        @Query(value = "INSERT INTO public.base_application_codeset " +
-                "(id, codeset_group, display, language, version, code, date_created, created_by, " +
-                "date_modified, modified_by, archived) " +
-                "VALUES (:id, :codesetGroup, :display, :language, :version, :code, :dateCreated, " +
-                ":createdBy, :dateModified, :modifiedBy, :archived) " +
-                "ON CONFLICT (code) DO UPDATE SET " +
-                "codeset_group = EXCLUDED.codeset_group, display = EXCLUDED.display, " +
-                "language = EXCLUDED.language, version = EXCLUDED.version, code = EXCLUDED.code",
-                nativeQuery = true)
-        List<ApplicationCodeSet> insertOrUpdateAll (List<ApplicationCodeSet> applicationCodeSets);
-
+    Optional<ApplicationCodeSet> findByCode (String code);
 
 }

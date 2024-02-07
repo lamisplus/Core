@@ -75,19 +75,8 @@ public class ApplicationCodeSetController {
         applicationCodesetService.getApplicationCodeSetsAsCsv(response.getWriter());
     }
 
-    //import csv file for applicationCodeSet
-//    @PostMapping(BASE_URL_VERSION_ONE + "/import")
-//    public String handleFileUpload(@RequestParam("file") MultipartFile file) {
-//        try {
-//            List<ApplicationCodeSet> appCodes = applicationCodesetService.readCsv(file);
-//            applicationCodesetRepository.saveAll(appCodes);
-//            return "File uploaded and data saved successfully!";
-//        } catch (IOException e) {
-//            return "Error occurred while processing the file: " + e.getMessage();
-//        }
-
-    @PostMapping("/import")
-    public ResponseEntity<String> handleFileUpload(@RequestParam("file") MultipartFile file) {
+    @PostMapping(BASE_URL_VERSION_ONE + "/import")
+    public ResponseEntity<String> uploadCsvFile(@RequestParam("file") MultipartFile file) {
         if (file.isEmpty()) {
             return new ResponseEntity<>("Please select a file to upload.", HttpStatus.BAD_REQUEST);
         }
