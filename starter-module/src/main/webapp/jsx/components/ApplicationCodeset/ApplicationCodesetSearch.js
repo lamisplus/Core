@@ -4,13 +4,16 @@ import { connect } from "react-redux";
 import { fetchAll, deleteApplicationCodeset} from "./../../../actions/applicationCodeset";
 import {
     Card,
-    CardBody,  Spinner,
+    CardBody,  FormGroup,  Input,  Spinner,
 } from 'reactstrap';
+import { url as baseUrl } from "../../../api";
+import axios from 'axios';
+import FileSaver from "file-saver";
 import Breadcrumbs from "@material-ui/core/Breadcrumbs";
 import Typography from "@material-ui/core/Typography";
 import { Link } from 'react-router-dom'
 import ButtonMui from "@material-ui/core/Button";
-import {FaEye, FaPlus} from "react-icons/fa";
+import {FaDownload, FaEye, FaPlus, FaUpload} from "react-icons/fa";
 import NewApplicationCodeset from "./NewApplicationCodeset";
 import SaveIcon from "@material-ui/icons/Delete";
 import CancelIcon from "@material-ui/icons/Cancel";
@@ -37,6 +40,7 @@ import ViewColumn from '@material-ui/icons/ViewColumn';
 import {Icon, Label} from "semantic-ui-react";
 import {MdModeEdit, MdPerson, MdDelete} from "react-icons/md";
 import SplitActionButton from "../Button/SplitActionButton";
+import ServerInstalled from '../../Utils/ServerInstalled';
 // import EditIcon from "@material-ui/icons/Edit";
 // import DeleteIcon from "@material-ui/icons/Delete";
 
@@ -68,12 +72,17 @@ const useStyles = makeStyles(theme => ({
 const ApplicationCodesetSearch = (props) => {
     const [loading, setLoading] = React.useState(true);
     const [deleting, setDeleting] = React.useState(false);
+    const [importing, setImporting] = React.useState(false);
     const [showModal, setShowModal] = React.useState(false);
     const [showDeleteModal, setShowDeleteModal] = React.useState(false);
+    const [showImportModal, setShowImportModal] = React.useState(false);
     const [currentCodeset, setCurrentCodeset] = React.useState(null);
+    const [applicationCodesetImportedFile, setApplicationCodesetImportedFile] = React.useState(null);
     const toggleModal = () => setShowModal(!showModal)
     const toggleDeleteModal = () => setShowDeleteModal(!showDeleteModal)
+    const toggleImportModal = () => setShowImportModal(!showImportModal)
     const classes = useStyles()
+    const serverInstalled = ServerInstalled();
 
     useEffect(() => {
         loadApplicationCodeset()
@@ -134,22 +143,85 @@ const processDelete = (id) => {
             }
         ]
     }
+
+    const exportApplicationCodeset = () => {
+    axios
+      .get(`${baseUrl}application-codesets/exportCsv`,
+        { responseType: 'blob'}
+      )
+      .then((response) => {
+        const responseData = response.data
+        let blob = new Blob([responseData], { type: "application/octet-stream" });
+        FileSaver.saveAs(blob, `Appplication-codeset.csv`);
+      })
+    }
+
+    const importApplicationCodeset = () => {
+        toggleImportModal()
+    }
+    const handleImportFileChange = (event) => {
+        setApplicationCodesetImportedFile(event.target.files[0]);
+    }
+
+    const triggerImportApplicationCodeset = () => {
+        setImporting(true);
+        if (!applicationCodesetImportedFile) {
+            toast.error("Please select a file to import");
+            setImporting(false);
+            return;
+        }
+        const formData = new FormData();
+        formData.append('file', applicationCodesetImportedFile);
+        axios.post(`${baseUrl}application-codesets/import`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        }).then((response) => {
+            setImporting(false);
+            toggleImportModal();
+            toast.success("Application codeset imported successfully!");
+            setApplicationCodesetImportedFile(null);
+            loadApplicationCodeset();
+        }).catch((error) => {
+            // toggleImportModal();
+            setImporting(false);
+            toast.error("Failed to import application codesets, please contact administration");
+        });
+    }
+
     return (
         <div>
         <PageTitle activeMenu="Application Codeset List" motherMenu="Application Codeset" />
             <Card>
                 <ToastContainer />
               <CardBody>
-                   <div className={"d-flex justify-content-end pb-2"}>
+                   <div className={"d-flex justify-content-end"}>
                        
-                        <ButtonMui variant="contained"
+                        {serverInstalled && <ButtonMui variant="contained"
                           color="primary"
                           startIcon={<FaPlus size="10"/>}
                           onClick={() => openApplicationCodeset(null)}
-                                   style={{backgroundColor:'#014d88'}}
+                                   style={{backgroundColor:'#014d88', margin: '10px'}}
                         >
-                            <span style={{textTransform: 'capitalize'}}>Codeset</span>
-                        </ButtonMui>
+                            <span style={{textTransform: 'capitalize'}}>Add Codeset</span>
+                        </ButtonMui>}
+                        {!serverInstalled && <ButtonMui variant="contained"
+                          color="primary"
+                          startIcon={<FaUpload size="10"/>}
+                          disabled={importing}
+                          onClick={() => importApplicationCodeset()}
+                                   style={{backgroundColor:'#014d88', margin: '10px'}}
+                        >
+                            <span style={{textTransform: 'capitalize'}}>{importing ? <Spinner /> : "Import Codeset"}</span>
+                        </ButtonMui>}
+                        {serverInstalled && <ButtonMui variant="contained"
+                          color="primary"
+                          startIcon={<FaDownload size="10"/>}
+                          onClick={() => exportApplicationCodeset()}
+                                   style={{backgroundColor:'#014d88', margin: '10px'}}
+                        >
+                            <span style={{textTransform: 'capitalize'}}>Export Codeset</span>
+                        </ButtonMui>}
 
                     </div>
                     <MaterialTable
@@ -247,6 +319,58 @@ const processDelete = (id) => {
                         Cancel
                     </ButtonMui>
                 </Modal.Footer>
+        </Modal>
+        <Modal show={showImportModal}  size="lg">
+                    <Modal.Header toggle={props.toggleDeleteModal}>
+
+                        <Modal.Title>Import Application Codesets</Modal.Title>
+                        <Button
+                            variant=""
+                            className="btn-close"
+                            onClick={toggleImportModal}
+                        >
+
+                        </Button>
+                        
+                    </Modal.Header>
+                    
+                    <Modal.Body>
+                            <div style={{marginBottom:"15px", fontSize:"14px"}}>Select Application Codeset CSV File</div>
+                    {/* <FormGroup> */}
+                            <Input
+                                type='file'
+                                name='importCodeset'
+                                id='importCodeset'
+                                accept='.csv'
+                                placeholder='Select Codeset CSV file.'
+                                // value={applicationCodesetImportedFile}
+                                onChange={handleImportFileChange}
+                                style={{ height: "40px", borderRadius: '5px', fontWeight: 'bolder' }}
+                                required
+                            />
+                            {/* <span>{applicationCodesetImportedFile?.name}</span> */}
+                        {/* </FormGroup> */}
+                        <Modal.Footer>
+                        <ButtonMui variant="contained"
+                          color="primary"
+                          startIcon={<FaUpload size="10"/>}
+                          onClick={() => triggerImportApplicationCodeset()}
+                                   style={{backgroundColor:'#014d88', margin: '10px'}}
+                          disabled={deleting}
+                        >
+                            <span style={{textTransform: 'capitalize'}}>{importing ? <Spinner /> : "Import Codeset"}</span>
+                        </ButtonMui>
+                            <ButtonMui
+                                variant='contained'
+                                color='default'
+                                onClick={toggleImportModal}
+                                startIcon={<CancelIcon />}
+                            >
+                                Cancel
+                            </ButtonMui>
+                        </Modal.Footer>
+                    </Modal.Body>
+
         </Modal>
         </Card>
     </div>
