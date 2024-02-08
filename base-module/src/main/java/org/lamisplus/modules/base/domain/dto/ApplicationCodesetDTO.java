@@ -27,14 +27,18 @@ public class ApplicationCodesetDTO {
 
     private String code;
 
+    private Integer archived;
+
     public ApplicationCodesetDTO(){
     }
 
-    public ApplicationCodesetDTO(Long id, String display, String code, String codesetGroup, String version){
+    public ApplicationCodesetDTO(Long id, String display, String code, String codesetGroup, String version,
+                                 Integer archived){
         this.id = id;
         this.display = display;
         this.code = code;
         this.codesetGroup = codesetGroup;
         this.version = version;
+        this.archived = archived;
     }
 }

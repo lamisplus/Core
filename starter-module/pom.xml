@@ -508,6 +508,12 @@
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-core</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>com.foreach.across</groupId>
+			<artifactId>across-core</artifactId>
+			<version>5.1.0.RELEASE</version>
+			<scope>compile</scope>
+		</dependency>
 
 	</dependencies>
 
