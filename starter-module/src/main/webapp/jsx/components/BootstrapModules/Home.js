@@ -134,7 +134,7 @@ const PostPage = (props) => {
         // if link is null or undefined, toast an error message saying 
         // "Cannot download module because the link is not provided", else, open link in new tab
         if (link === null || link === undefined) {
-            toast.error("Cannot download module because the download link is not provided.");
+            toast.error("Cannot download module because the download link is not provided. Please run auto update script, or contact administrator.");
             return;
         }
         window.open(link, '_blank');
