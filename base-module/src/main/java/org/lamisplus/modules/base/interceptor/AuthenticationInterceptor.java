@@ -1,7 +1,10 @@
 package org.lamisplus.modules.base.interceptor;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
+import org.lamisplus.modules.base.domain.entities.User;
+import org.lamisplus.modules.base.service.UserService;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -13,14 +16,15 @@ import java.security.Principal;
 
 @Component
 @Slf4j
+@RequiredArgsConstructor
 public class AuthenticationInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle (HttpServletRequest request, HttpServletResponse response, Object handler) {
 
         if (request.getRequestURI().contains("/api/")) {
-            LOG.info("Request URL {}", request.getRequestURI());
-
+            String details = request.getRemoteUser() + " | " +  request.getRemoteAddr() + " | " + request.getRequestURI();
+            LOG.info("Request Username | IP | URL => {}", details);
             return true;
         }
         else{
