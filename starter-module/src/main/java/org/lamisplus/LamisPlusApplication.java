@@ -21,9 +21,8 @@ import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @AcrossApplication(
         modules = {
@@ -41,8 +40,23 @@ public class LamisPlusApplication  {
 
     public static void main(String[] args) {
         SpringApplication springApplication = new SpringApplication(new Class[]{LamisPlusApplication.class});
-        springApplication.setDefaultProperties(Collections.singletonMap("spring.config.additional-location", userDir + File.separator + "db-config.yml"));
+        //String ymlFiles = userDir + File.separator + "db-config.yml " + userDir + File.separator + "query.yml";
+        springApplication.setDefaultProperties(Collections.singletonMap("spring.config.additional-location", findAllYmlFiles()));
         context = springApplication.run(args);
+    }
+
+    /*
+     * find all Yml Files in application current directory
+     * @return String
+     */
+    private static String findAllYmlFiles(){
+        File folder = new File(userDir);
+        String files = Arrays.stream(folder.listFiles())
+                .filter(file -> file.getAbsolutePath().endsWith(".yml"))
+                .map(n -> String.valueOf(n))
+                .collect(Collectors.joining(","));
+        //System.out.println("files are - " + files);
+        return files;
     }
     /*
      * Provides sensible defaults and convenience methods for configuration.

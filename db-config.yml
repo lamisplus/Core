@@ -1,9 +1,11 @@
 spring:
+    config:
+        name: query
     datasource:
         driver-class-name: org.postgresql.Driver
         username: postgres
         password: emeka
-        url: jdbc:postgresql://localhost:5432/edolamisplus
+        url: jdbc:postgresql://localhost:5432/Family
         hibernate:
             ddl-auto: none
             event.merge.entry_copy_observer: allow
@@ -32,7 +34,7 @@ lamisplus:
             driver-class-name: org.postgresql.Driver
             username: postgres
             password: emeka
-            url: jdbc:postgresql://localhost:5432/edolamisplus
+            url: jdbc:postgresql://localhost:5432/Family
             hikari:
                     auto-commit: true
                     data-source-properties:
