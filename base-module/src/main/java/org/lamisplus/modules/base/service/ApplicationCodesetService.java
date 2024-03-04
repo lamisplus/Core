@@ -143,8 +143,8 @@ public class ApplicationCodesetService {
 
             CSVPrinter printer = new CSVPrinter(writer, CSVFormat.DEFAULT);
             printer.printRecord("id", "code", "version", "codeset_group",
-                    "display", "language", "archived", "created_by",
-                    "date_created", "modified_by", "date_modified"
+                    "display", "language", "archived", "date_created",
+                    "created_by", "date_modified", "modified_by"
             );
             for (ApplicationCodeSet applicationCodeSet : applicationCodeSets) {
                 printer.printRecord(
