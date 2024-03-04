@@ -35,6 +35,7 @@ import java.util.stream.Collectors;
 @EnableAsync
 @EnableScheduling
 public class LamisPlusApplication  {
+    private static final String DOT_YML = ".yml";
     private static ConfigurableApplicationContext context;
     public static String userDir = System.getProperty ("user.dir");
 
@@ -52,7 +53,7 @@ public class LamisPlusApplication  {
     private static String findAllYmlFiles(){
         File folder = new File(userDir);
         String files = Arrays.stream(folder.listFiles())
-                .filter(file -> file.getAbsolutePath().endsWith(".yml"))
+                .filter(file -> file.getAbsolutePath().endsWith(DOT_YML))
                 .map(n -> String.valueOf(n))
                 .collect(Collectors.joining(","));
         //System.out.println("files are - " + files);
