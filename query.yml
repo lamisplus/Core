@@ -33,3 +33,58 @@ query:
                 WHERE hc.archived=0 AND hc.facility_id=%d AND
                 hc.date_visit BETWEEN CAST('%s' AS DATE) 
                 AND CAST('%s' AS DATE)
+  biometric-query-name: biometric
+  biometric-query:  SELECT result.state AS "State", result.lga AS "LGA", result.facility AS "Facility",
+                    result.uuid AS "Patient ID", result.hospitalNumber AS "Hospital Number",
+                    base.enrollment_date AS "Date Base Biometrics Enrolled (yyyy-mm-dd)",
+                    base.count AS "Number of Base Fingerprint Captured",
+                    first_recapture.enrollment_date AS "Date of 1st Biometric Recapture",
+                    first_recapture.count AS "Number of 1st Biometric Recaptured Fingerprints",
+                    second_recapture.enrollment_date AS "Date of 2nd Biometric Recapture",
+                    second_recapture.count AS "Number of 2nd Recapture Fingerprints Captured"
+                    FROM
+                    ( SELECT pp.hospital_number AS hospitalNumber, pp.facility_id,
+                    pp.uuid, facility.name AS facility, state.name AS state, lga.name AS lga
+                    FROM patient_person pp
+                    INNER JOIN hiv_enrollment he ON he.person_uuid=pp.uuid AND he.archived=0
+                    LEFT JOIN base_organisation_unit facility ON facility.id=pp.facility_id
+                    LEFT JOIN base_organisation_unit state ON state.id=facility.parent_organisation_unit_id
+                    LEFT JOIN base_organisation_unit lga ON lga.id=state.parent_organisation_unit_id
+                    LEFT JOIN base_organisation_unit_identifier boui ON boui.organisation_unit_id=pp.facility_id
+                    AND boui.name='DATIM_ID'
+                    WHERE pp.archived=0 AND pp.facility_id=%d
+                    AND pp.date_of_registration BETWEEN CAST('%s' AS DATE) AND CAST('%s' AS DATE)
+                    ) AS result
+                    LEFT JOIN (
+                    SELECT
+                    person_uuid,
+                    MAX(enrollment_date) enrollment_date,
+                    count
+                    FROM
+                    biometric
+                    WHERE
+                    recapture = 0 AND archived=0 AND count is not null and enrollment_date is not null
+                    GROUP BY person_uuid, count
+                    ) base ON result.uuid = base.person_uuid
+                    LEFT JOIN (
+                    SELECT
+                    person_uuid,
+                    MAX(enrollment_date) enrollment_date,
+                    count
+                    FROM
+                    biometric
+                    WHERE
+                    recapture = 1 AND archived=0 AND count is not null and enrollment_date is not null
+                    GROUP BY person_uuid, count
+                    ) AS first_recapture ON result.uuid = first_recapture.person_uuid
+                    LEFT JOIN (
+                    SELECT
+                    person_uuid,
+                    MAX(enrollment_date) enrollment_date,
+                    count
+                    FROM
+                    biometric
+                    WHERE
+                    recapture = 2 AND archived=0 AND count is not null and enrollment_date is not null
+                    GROUP BY person_uuid, count
+                    ) AS second_recapture ON result.uuid = second_recapture.person_uuid
