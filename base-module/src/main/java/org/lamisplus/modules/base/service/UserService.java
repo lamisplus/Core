@@ -190,7 +190,7 @@ public class UserService {
 
         boolean found = false;
         for (ApplicationUserOrganisationUnit applicationUserOrganisationUnit : user.getApplicationUserOrganisationUnits()) {
-            if(user.getIpCode() != null || user.getIpCode() != 0){
+            if(user.getIpCode() != null && user.getIpCode() != 0){
                 organisationUnitId = user.getIpCode();
                 found = true;
                 break;
