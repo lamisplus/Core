@@ -111,11 +111,17 @@ public class UserController {
         userService.delete(id);
     }
 
+//    @GetMapping(BASE_URL_VERSION_ONE)
+//    public ResponseEntity<List<UserDTO>> getAllUsers(Pageable pageable) {
+//        final Page<UserDTO> page = userService.getAllManagedUsers(pageable);
+//        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+//        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+//    }
     @GetMapping(BASE_URL_VERSION_ONE)
-    public ResponseEntity<List<UserDTO>> getAllUsers(Pageable pageable) {
-        final Page<UserDTO> page = userService.getAllManagedUsers(pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
-        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    public ResponseEntity<List<UserDTO>> getAllUsers() {
+        final List<UserDTO> page = userService.getAllManagedUsers();
+//        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return new ResponseEntity<>(page, HttpStatus.OK);
     }
 
     @PostMapping(BASE_URL_VERSION_ONE + "/organisationUnit/{id}")

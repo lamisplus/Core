@@ -1,6 +1,7 @@
 package org.lamisplus.modules.base.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.lamisplus.modules.base.controller.apierror.EntityNotFoundException;
@@ -34,6 +35,7 @@ import static org.lamisplus.modules.base.util.Constants.ArchiveStatus.ARCHIVED;
 
 
 @Service
+@Slf4j
 @Transactional
 @RequiredArgsConstructor
 public class UserService {
@@ -149,6 +151,11 @@ public class UserService {
     @Transactional(readOnly = true)
     public Page<UserDTO> getAllManagedUsers(Pageable pageable) {
         return userRepository.findAllByArchived(pageable, 0).map(UserDTO::new);
+    }
+    @Transactional(readOnly = true)
+    public List<UserDTO> getAllManagedUsers() {
+//        LOG.info("Page size: {}, Page Number: {}", pageable.getPageSize(), pageable.getPageNumber());
+        return userRepository.findAllByArchived(0).stream().map(UserDTO::new).collect(Collectors.toList());
     }
 
     public User update(Long id, User user) {
