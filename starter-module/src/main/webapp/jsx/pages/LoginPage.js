@@ -162,7 +162,7 @@ function Register(props) {
             <div className=" col-sm-4"></div>
             <div className=" ml-10 col-sm-4">
               <p>
-                Copyright © LAMISPlus 2.1.0 |{" "}
+                Copyright © LAMISPlus 2.1.1 |{" "}
                 <Link to="/policy">
                   <b>Terms & Policy</b>
                 </Link>

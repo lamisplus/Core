@@ -30,6 +30,7 @@ import {
     Modal, ModalHeader, ModalBody, Form, FormFeedback,
     Row, Col, Card, CardBody, FormGroup, Label, Input
 } from 'reactstrap';
+import ServerInstalled from "../../Utils/ServerInstalled";
 
 
 
@@ -48,6 +49,8 @@ const Header = (props) => {
     const handleClose = () => {
         setAnchorEl(null);
     };
+    const serverInstalled = ServerInstalled();
+    useEffect(()=>{},[ServerInstalled])
 
     useEffect(() => {
         async function getCharacters() {
