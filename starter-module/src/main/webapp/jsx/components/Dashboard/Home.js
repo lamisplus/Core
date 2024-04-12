@@ -119,7 +119,7 @@ const Home = () => {
                     style={{ width: "100%" }}
                   /> */}
                 </div>
-                <div className="container">
+                <div className="container-fluid">
                   <div className="row">
                     <div className="col-xl-4 col-xxl-4 col-sm-6 ">
                       <div className="card">
@@ -151,7 +151,7 @@ const Home = () => {
                             </h2>
                           </div>
                           <span>
-                            <i class="fa-solid fa-fingerprint fa-4x"></i>
+                            <i class="fa-solid fa-fingerprint fa-4x "></i>
                           </span>
                         </div>
                         <div className="card-body pt-0 chart-body-wrapper">
