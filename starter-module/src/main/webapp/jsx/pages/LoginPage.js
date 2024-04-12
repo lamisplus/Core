@@ -160,12 +160,16 @@ function Register(props) {
           </div>
           <div className="row">
             <div className=" col-sm-4"></div>
-            <div className=" ml-10 col-sm-4">
+            <div className=" ml-10 col-sm-6">
               <p>
                 Copyright © LAMISPlus 2.1.0 |{" "}
                 <Link to="/policy">
                   <b>Terms & Policy</b>
-                </Link>
+                </Link>{" "}
+                |{" "}
+                <a href="https://hiscop.org/">
+                  <b>Resources</b>
+                </a>
                 {/* {d.getFullYear()} */}
               </p>
             </div>
