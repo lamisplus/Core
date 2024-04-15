@@ -98,7 +98,7 @@ const UserRegistration = (props) => {
   const [designation, setDesignation] = useState([]);
   const [allOrganisations, setAllorganisations]=useState([]);
   const [organisations,setOrganisations] = useState([]);
-  const [selectedOrganisations,setSelectedOrganisations] = useState([ "CHC ZUNGERU" ]);
+  const [selectedOrganisations,setSelectedOrganisations] = useState([]);
   const [passwordStrength, setPasswordStrength] = useState("#E6E6E6");
   const [passwordTextColor, setPasswordTextColor] = useState("#2D2D2D");
   const [passwordFeedback, setPasswordFeedback] = useState('Minimum 6 characters, one uppercase and lowercase letter and one number');
