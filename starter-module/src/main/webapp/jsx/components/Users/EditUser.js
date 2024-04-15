@@ -98,7 +98,7 @@ const UserRegistration = (props) => {
   const [designation, setDesignation] = useState([]);
   const [allOrganisations, setAllorganisations]=useState([]);
   const [organisations,setOrganisations] = useState([]);
-  const [selectedOrganisations,setSelectedOrganisations] = useState([ "CHC ZUNGERU" ]);
+  const [selectedOrganisations,setSelectedOrganisations] = useState([]);
   const [passwordStrength, setPasswordStrength] = useState("#E6E6E6");
   const [passwordTextColor, setPasswordTextColor] = useState("#2D2D2D");
   const [passwordFeedback, setPasswordFeedback] = useState('Minimum 6 characters, one uppercase and lowercase letter and one number');
@@ -111,15 +111,15 @@ const UserRegistration = (props) => {
     axios
         .get(`${baseUrl}organisation-unit-levels/v2/4/organisation-units`)
         .then((response) => {
-          setAllorganisations(response.data);
+          // setAllorganisations(response.data);
           setOrganisations(
               Object.entries(response.data).map(([key, value]) => ({
                 label: value.name,
-                value: value.name,
+                value: value.id,
               }))
           );
           setSelectedOrganisations(
-              _.uniq(_.map(userDetail.applicationUserOrganisationUnits, 'organisationUnitName'))
+              _.uniq(_.map(userDetail.applicationUserOrganisationUnits, 'organisationUnitId'))
           )
 
         })
@@ -127,28 +127,28 @@ const UserRegistration = (props) => {
           console.log(error);
         });
   }
-  useEffect(() => {
 
-    async function getCharacters() {
-      axios
-      .get(`${baseUrl}application-codesets/v2/DESIGNATION`)
-      .then((response) => {
-        
-        setDesignation(
-          Object.entries(response.data).map(([key, value]) => ({
-            label: value.display,
-            value: value.display,
-          }))
-        );
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
+  useEffect(() => {
     getCharacters();
     fetchOrganisation();
   }, []);
-
+  
+  async function getCharacters() {
+    axios
+    .get(`${baseUrl}application-codesets/v2/DESIGNATION`)
+    .then((response) => {
+      
+      setDesignation(
+        Object.entries(response.data).map(([key, value]) => ({
+          label: value.display,
+          value: value.display,
+        }))
+      );
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
   
   /* Get list of Role parameter from the endpoint */
   useEffect(() => {
@@ -245,42 +245,44 @@ const UserRegistration = (props) => {
   }*/
 
   const updateUserOrganisations=()=>{
-    if(selectedOrganisations.length >0){
-      //First delete all current organisations
-/*      var defaultFacility= _.find(allOrganisations, {name:selectedOrganisations[0]});
-      switchFacility(defaultFacility.id);*/
-      if(userDetail.applicationUserOrganisationUnits.length >0){
-        userDetail.applicationUserOrganisationUnits.map((organisation) =>{
-          var orgDetails = _.find(allOrganisations, {id:organisation.organisationUnitId});
-          axios.delete(`${baseUrl}application_user_organisation_unit/${orgDetails.id}`, )
-              .then(response => {
-                toast.success(`successfully added`);
-              }) .catch((error) => {
-            toast.error(`An error occurred, adding facility`);
-          });
-        });
+//     if(selectedOrganisations.length >0){
+//       //First delete all current organisations
+// /*      var defaultFacility= _.find(allOrganisations, {name:selectedOrganisations[0]});
+//       switchFacility(defaultFacility.id);*/
+//       if(userDetail.applicationUserOrganisationUnits.length >0){
+//         userDetail.applicationUserOrganisationUnits.map((organisation) =>{
+//           var orgDetails = _.find(allOrganisations, {id:organisation.organisationUnitId});
+//           axios.delete(`${baseUrl}application_user_organisation_unit/${orgDetails.id}`, )
+//               .then(response => {
+//                 toast.success(`successfully added`);
+//               }) .catch((error) => {
+//             toast.error(`An error occurred, adding facility`);
+//           });
+//         });
 
 
-      }
-      console.log()
-      //Add Organisations
-      let facilityDetails = [];
-      selectedOrganisations.map((organisation) =>{
-        var orgDetails = _.find(allOrganisations, {name:organisation});
-        facilityDetails.push({
-          "applicationUserId": userDetail.id,
-          "organisationUnitId": orgDetails.id
-        })
+//       }
+//       console.log()
+//       //Add Organisations
+//       let facilityDetails = [];
+//       selectedOrganisations.map((organisation) =>{
+//         var orgDetails = _.find(allOrganisations, {name:organisation});
+//         facilityDetails.push({
+//           "applicationUserId": userDetail.id,
+//           "organisationUnitId": orgDetails.id
+//         })
 
-      });
-      axios.post(`${baseUrl}application_user_organisation_unit`, facilityDetails)
-          .then(response => {
-            toast.success(`successfully added`);
-          }) .catch((error) => {
-        toast.error(`An error occurred, adding facility`);
-      });
-    }
+//       });
+//       axios.post(`${baseUrl}application_user_organisation_unit`, facilityDetails)
+//           .then(response => {
+//             toast.success(`successfully added`);
+//           }) .catch((error) => {
+//         toast.error(`An error occurred, adding facility`);
+//       });
+//     }
   }
+
+  console.log(selectedOrganisations);
 
 
   const handleSubmit = (e) => {
@@ -291,6 +293,7 @@ const UserRegistration = (props) => {
     const dateOfBirth = moment(values.dateOfBirth).format("YYYY-MM-DD");
     values["dateOfBirth"] = dateOfBirth;
     values["roles"] = selectedOption
+    values["facilityIds"] = selectedOrganisations
     setSaving(true);
     const onSuccess = () => {
       setSaving(false);

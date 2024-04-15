@@ -400,7 +400,7 @@ const GeneralSummaryView = () => {
         {
           name: chartController.xAxisText,
           colorByPoint: true,
-          data: patientBarChart ? patientBarChart.map(each => Object.values(each)[0] || 0) : []
+          data: patientBarChart ? patientBarChart.map(each => each.patientCount || 0) : []
         }
       ],
       tooltip: {
@@ -412,7 +412,7 @@ const GeneralSummaryView = () => {
         },
       },
       xAxis: {
-        categories: patientBarChart ? patientBarChart.map(each => Object.values(each)[1] || 0) : [],
+        categories: patientBarChart.length > 0 ? patientBarChart.map(each => each.orgUnit || 0) : [],
       },
       yAxis: {
         title: {

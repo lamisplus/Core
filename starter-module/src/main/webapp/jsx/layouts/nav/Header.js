@@ -30,6 +30,7 @@ import {
     Modal, ModalHeader, ModalBody, Form, FormFeedback,
     Row, Col, Card, CardBody, FormGroup, Label, Input
 } from 'reactstrap';
+import ServerInstalled from "../../Utils/ServerInstalled";
 
 
 
@@ -48,6 +49,8 @@ const Header = (props) => {
     const handleClose = () => {
         setAnchorEl(null);
     };
+    const serverInstalled = ServerInstalled();
+    useEffect(()=>{},[ServerInstalled])
 
     useEffect(() => {
         async function getCharacters() {
@@ -148,9 +151,16 @@ const Header = (props) => {
         for (let index = 0; index < listOfModules.length; index++) {
             const module = listOfModules[index];
            
-            var installedVersion = Number(module.version.split('.').join('').substring(0, 3));
-            var latestVersion = module.latestVersion ? Number(module.latestVersion.split('.').join('').substring(0, 3)) : 0;
-            if(module.git_hub_link === null || module.git_hub_link === undefined || module.git_hub_link === '' || installedVersion < latestVersion){
+            // var installedVersion = Number(module.version.split('.').join('').substring(0, 3));
+            // var latestVersion = module.latestVersion ? Number(module.latestVersion.split('.').join('').substring(0, 3)) : 0;
+            if(
+                module.gitHubLink === null 
+                || module.gitHubLink === undefined 
+                || !module.gitHubLink.startsWith("http")
+                || module.latestVersion === null
+                || module.latestVersion === undefined
+                || module.version !== module.latestVersion
+            ){
                 // swal('Update available!', 'Kindly download it here...', "info");
                 Swal.fire({
                     title: "<strong>Module Updates Available</strong>",
