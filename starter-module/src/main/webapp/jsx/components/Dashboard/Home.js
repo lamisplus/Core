@@ -35,7 +35,7 @@ const Home = () => {
       .get(`${url}patient?searchParam=*&pageNo=0&pageSize=10`, {
         headers: { Authorization: `Bearer ${token}` },
       })
-      .then((response) => setPatientCount(response.data.totalRecords));
+      .then((response) => setPatientCount(response.data));
   };
 
   const getPatientWithBiometricsCount = () => {
@@ -46,7 +46,7 @@ const Home = () => {
           headers: { Authorization: `Bearer ${token}` },
         }
       )
-      .then((response) => setPatientBiometricCount(response.data.totalRecords));
+      .then((response) => setPatientBiometricCount(response.data));
   };
 
   const getPatientWithNoBiometricsCount = () => {
@@ -57,9 +57,7 @@ const Home = () => {
           headers: { Authorization: `Bearer ${token}` },
         }
       )
-      .then((response) =>
-        setPatientNoBiometricCount(response.data.totalRecords)
-      );
+      .then((response) => setPatientNoBiometricCount(response.data));
   };
 
   const getSexCount = () => {
@@ -99,9 +97,17 @@ const Home = () => {
       }
       setLoading(false);
     }
-    getPatientCount();
-    getPatientWithBiometricsCount();
-    getPatientWithNoBiometricsCount();
+    if (!patientCount?.totalRecords) {
+      getPatientCount();
+    }
+
+    if (!patientBiometricCount?.totalRecords) {
+      getPatientWithBiometricsCount();
+    }
+
+    if (!patientNoBiometricCount?.totalRecords) {
+      getPatientWithNoBiometricsCount();
+    }
 
     if (!sexCount[0]?.name) {
       getSexCount();
@@ -160,7 +166,7 @@ const Home = () => {
                         <div className="card-header border-1 pb-0">
                           <div className="d-flex align-items-center">
                             <h2 className="chart-num font-w800 mb-0">
-                              {patientCount}
+                              {patientCount?.totalRecords}
                             </h2>
                           </div>
                           <div>
@@ -181,7 +187,7 @@ const Home = () => {
                         <div className="card-header border-1 pb-0">
                           <div className="d-flex align-items-center">
                             <h2 className="chart-num font-w800 mb-0">
-                              {patientBiometricCount}
+                              {patientBiometricCount?.totalRecords}
                             </h2>
                           </div>
                           <span>
@@ -200,7 +206,7 @@ const Home = () => {
                         <div className="card-header border-1 pb-0">
                           <div className="d-flex align-items-center">
                             <h2 className="chart-num font-w800 mb-0">
-                              {patientNoBiometricCount}
+                              {patientNoBiometricCount?.totalRecords}
                             </h2>
                           </div>
                           <span>
