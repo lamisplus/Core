@@ -167,7 +167,7 @@ function Register(props) {
                   <b>Terms & Policy</b>
                 </Link>{" "}
                 |{" "}
-                <a href="https://hiscop.org/" target="_blank">
+                <a href="https://hiscop.org/" target="_blank" rel="noreferrer">
                   <b>Resources</b>
                 </a>
                 {/* {d.getFullYear()} */}

@@ -20,6 +20,11 @@ const Home = () => {
   const [patientCount, setPatientCount] = useState(0);
   const [patientBiometricCount, setPatientBiometricCount] = useState(0);
   const [patientNoBiometricCount, setPatientNoBiometricCount] = useState(0);
+
+  const [sexCount, setSexCount] = useState([]);
+
+  const [sexYearCount, setSexYearCount] = useState([]);
+
   const handleTabsChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -57,15 +62,33 @@ const Home = () => {
       );
   };
 
-  useEffect(() => {
-    changeBackground({ value: "light", label: "Light" });
-    getPatientCount();
-    getPatientWithBiometricsCount();
-    getPatientWithNoBiometricsCount();
-  }, []);
-  // console.log(listOfAllModule);
+  const getSexCount = () => {
+    axios
+      .get(`${url}patient/count-by-sex`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => setSexCount(response.data));
+  };
+
+  const getSexYearCount = () => {
+    axios
+      .get(`${url}patient/count-by-year-and-sex`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
+        const sortByYear = (a, b) => {
+          return a.year - b.year;
+        };
+
+        setSexYearCount(
+          response.data.sort(sortByYear).filter((entry) => entry.year >= 2010)
+        );
+      });
+  };
 
   useEffect(() => {
+    changeBackground({ value: "light", label: "Light" });
+
     if (listOfAllModule) {
       if (listOfAllModule.length > 0) {
         listOfAllModule.map((item) => {
@@ -76,7 +99,18 @@ const Home = () => {
       }
       setLoading(false);
     }
-  }, [listOfAllModule]);
+    getPatientCount();
+    getPatientWithBiometricsCount();
+    getPatientWithNoBiometricsCount();
+
+    if (!sexCount[0]?.name) {
+      getSexCount();
+    }
+
+    if (!sexYearCount[0]?.year) {
+      getSexYearCount();
+    }
+  }, [listOfAllModule, sexCount, sexYearCount]);
 
   return (
     <>
@@ -185,14 +219,23 @@ const Home = () => {
                     <div className="col-xl-6 col-xxl-6 col-sm-6 ">
                       <div className="card">
                         <div className="card-body pt-0 chart-body-wrapper">
-                          <Pie />
+                          <Pie
+                            plotData={sexCount}
+                            title="Patient Enrollment by Sex"
+                            seriesName="Active patients"
+                          />
                         </div>
                       </div>
                     </div>
                     <div className="col-xl-6 col-xxl-6 col-sm-6 ">
                       <div className="card">
                         <div className="card-body pt-0 chart-body-wrapper">
-                          <LineGraph />
+                          <LineGraph
+                            LineGraphData={sexYearCount}
+                            title={`Patient Enrollment Trends by Year and Sex`}
+                            xName={`Year`}
+                            yName={`Patient`}
+                          />
                         </div>
                       </div>
                     </div>
