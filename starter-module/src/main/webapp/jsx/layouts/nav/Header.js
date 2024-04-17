@@ -107,6 +107,7 @@ const Header = (props) => {
                 toast.success('Facility switched successfully!');
                 fetchMe();
                 //toggleAssignFacilityModal();
+                window.location.reload();
             }) .catch((error) => {
                 toast.error('An error occurred, could not switch facility.');
             });

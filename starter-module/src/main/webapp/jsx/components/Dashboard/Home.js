@@ -17,6 +17,7 @@ const Home = () => {
   const [hasServerInstalled, setHasServerInstalled] = useState(false);
   const [value, setValue] = React.useState("2");
   const [loading, setLoading] = useState(true);
+  const [dashboardDataLoading, setDashboardDataLoading] = useState(false);
   const [patientCount, setPatientCount] = useState(0);
   const [patientBiometricCount, setPatientBiometricCount] = useState(0);
   const [patientNoBiometricCount, setPatientNoBiometricCount] = useState(0);
@@ -84,6 +85,16 @@ const Home = () => {
       });
   };
 
+  const fetchDashboardData = () =>{
+    setDashboardDataLoading(true);
+    getPatientCount();
+    getPatientWithBiometricsCount();
+    getPatientWithNoBiometricsCount();
+    getSexCount();
+    getSexYearCount();
+    setDashboardDataLoading(false);
+  }
+
   useEffect(() => {
     changeBackground({ value: "light", label: "Light" });
 
@@ -97,30 +108,35 @@ const Home = () => {
       }
       setLoading(false);
     }
-    if (!patientCount?.totalRecords) {
-      getPatientCount();
-    }
+    // if (!patientCount?.totalRecords) {
+    //   getPatientCount();
+    // }
 
-    if (!patientBiometricCount?.totalRecords) {
-      getPatientWithBiometricsCount();
-    }
+    // if (!patientBiometricCount?.totalRecords) {
+    //   getPatientWithBiometricsCount();
+    // }
 
-    if (!patientNoBiometricCount?.totalRecords) {
-      getPatientWithNoBiometricsCount();
-    }
+    // if (!patientNoBiometricCount?.totalRecords) {
+    //   getPatientWithNoBiometricsCount();
+    // }
 
-    if (!sexCount[0]?.name) {
-      getSexCount();
-    }
+    // if (!sexCount[0]?.name) {
+    //   getSexCount();
+    // }
 
-    if (!sexYearCount[0]?.year) {
-      getSexYearCount();
-    }
-  }, [listOfAllModule, sexCount, sexYearCount]);
+    // if (!sexYearCount[0]?.year) {
+    //   getSexYearCount();
+    // }
+    
+  }, [listOfAllModule]);
+
+  useEffect(() => {
+    fetchDashboardData();
+  }, []);
 
   return (
     <>
-      {!loading ? (
+      {(!loading && !dashboardDataLoading) ? (
         <>
           {hasServerInstalled ? (
             <TabContext value={value}>
