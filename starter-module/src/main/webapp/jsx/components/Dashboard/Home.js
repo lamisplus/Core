@@ -66,7 +66,11 @@ const Home = () => {
       .get(`${url}patient/count-by-sex`, {
         headers: { Authorization: `Bearer ${token}` },
       })
-      .then((response) => setSexCount(response.data));
+      .then((response) => setSexCount(response.data))
+      .catch((error) => {
+        console.log(error)
+        setSexCount([]);
+      });
   };
 
   const getSexYearCount = () => {
@@ -82,6 +86,10 @@ const Home = () => {
         setSexYearCount(
           response.data.sort(sortByYear).filter((entry) => entry.year >= 2010)
         );
+      })
+      .catch((error) => {
+        console.log(error);
+        setSexYearCount([]);
       });
   };
 
@@ -138,7 +146,7 @@ const Home = () => {
     <>
       {(!loading && !dashboardDataLoading) ? (
         <>
-          {hasServerInstalled ? (
+          {!hasServerInstalled ? (
             <TabContext value={value}>
               {/* <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <TabList onChange={handleTabsChange} aria-label="lab API tabs example">

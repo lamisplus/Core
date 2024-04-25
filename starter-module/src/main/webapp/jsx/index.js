@@ -51,6 +51,7 @@ import ErrorMissingOrganisation from "./pages/ErrorMissingOrganisation";
 import FacilitiesList from "./components/FaciltyConfig/FacilitiesPage";
 import AddFacility from "./components/FaciltyConfig/AddFacility";
 import FacilitySetup from "./pages/FacilitySetup";
+import WebLog from "./components/weblog/WebLog";
 
 const Markup = () => {
   const [user, setUser] = useState(null);
@@ -96,6 +97,7 @@ const Markup = () => {
     { url: "biometrics", component: BiometricList },
     { url: "facility", component: FacilitiesList },
     { url: "facility-config", component: AddFacility },
+    { url: "weblog", component: WebLog },
   ];
   let path = window.location.pathname;
   path = path.split("/");

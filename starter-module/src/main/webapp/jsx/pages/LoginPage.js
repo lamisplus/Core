@@ -4,7 +4,9 @@ import { Link } from "react-router-dom";
 // import { connect, useDispatch } from 'react-redux';
 import { Alert, Button } from "react-bootstrap";
 
-import logo from "../../images/lamisPlus/logo_200.png";
+import logo_2 from "../../images/lamisPlus/logo_200.png";
+import logo from "../../images/lamisPlus/lamislogo.png";
+
 import { authentication } from "../../_services/authentication";
 
 function Register(props) {
@@ -66,11 +68,17 @@ function Register(props) {
               <div className="row no-gutters">
                 <div className="col-xl-12">
                   <div className="auth-form">
-                    <div className="text-center mb-3">
                       <Link to="/login">
-                        <img src={logo} alt="" />
-                      </Link>
+                    <div className="text-center mb-1">
+                        <img src={logo} alt="" style={{height: '137px', width:"137px"}} />
+                        <div style={{fontSize: "35px", fontWeight:500, color:"#4651a3",  letterSpacing: "1.5px"}}>LAMISPlus</div>
                     </div>
+                      </Link>
+                    {/* <div className="text-center mb-3">
+                      <Link to="/login">
+                        <img src={logo_2} alt="" />
+                      </Link>
+                    </div> */}
                     <h4 className="text-center mb-4 ">
                       Login into your account
                     </h4>

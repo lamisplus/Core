@@ -11,6 +11,7 @@ import {url as baseUrl} from "../../../api";
 import { Progress } from 'reactstrap';
 import { GetPercentage, Varient } from '../../Utils/Utils';
 import ProgressBar from "react-bootstrap/ProgressBar";
+import WeekFilter from '../utils/WeekFilter';
 // Load Highcharts modules
 require("highcharts/modules/exporting")(Highcharts);
 require("highcharts/modules/drilldown")(Highcharts);
@@ -192,7 +193,11 @@ const GeneralSummaryView = () => {
         axios
             .get(`${baseUrl}sync-server-dashboard/patient-count/ip`)
             .then((response) => {
+              if (response.data && typeof(response.data) === 'array') {
                 setPatientBarChart(response.data);
+              } else {
+                setPatientBarChart([]);
+              }
                 //console.log(response.data.drillDowns)
               //manipulation of the drilldowns
                   // const result = response.data.drillDowns.map((obj2) => {
@@ -441,6 +446,9 @@ const GeneralSummaryView = () => {
 					<h2 className="font-w600 mb-0">Dashboard</h2>
 				</div>	
 			</div>
+      {/* <div>
+        <WeekFilter/>
+      </div> */}
 			<div className="row" >
 				<div className="col-xl-12">
 					<div className="row">

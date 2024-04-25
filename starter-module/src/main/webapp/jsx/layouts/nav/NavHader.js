@@ -14,9 +14,9 @@ const NavHader = () => {
     <div className="nav-header" style={{ backgroundColor: '#fff',height:'65px', border:'solid 2px #ddd',marginRight:'1px' }}>
       <Link to="/dashboard" className="brand-logo" >
 			<Fragment style={{padding:'5px'}}>
-                <img src={logo} alt="" className="logo-abbr"  width="60" height="60"/>
+                <img src={logo} alt="" width="40px" height="40px"/>
                 {"  "}
-                <text style={{color:'#014d88'}}>{!toggle?'LAMISPlus':''}</text>
+                <text style={{color:'#014d88', fontWeight: 600, marginLeft: "10px"}}>{!toggle?'LAMISPlus':''}</text>
 			</Fragment>
       </Link>
 
