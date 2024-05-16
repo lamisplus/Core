@@ -42,6 +42,7 @@ import {MdModeEdit, MdPerson, MdDelete} from "react-icons/md";
 import SplitActionButton from "../Button/SplitActionButton";
 import ServerInstalled from '../../Utils/ServerInstalled';
 import { authentication } from '../../../_services/authentication';
+import { Dropdown,Button as Button2, Menu,  } from 'semantic-ui-react'
 // import EditIcon from "@material-ui/icons/Edit";
 // import DeleteIcon from "@material-ui/icons/Delete";
 
@@ -124,6 +125,7 @@ const processDelete = (id) => {
     props.delete(id, onSuccess, onError);
     }
     const openApplicationCodeset = (row) => {
+        console.log("It tried");
         setCurrentCodeset(row);
         toggleModal();
     }
@@ -134,12 +136,12 @@ const processDelete = (id) => {
     }
     function actionItems(row){
         return  [
-            {
-                type:'link',
-                name:'View',
-                icon:<FaEye  size="22"/>,
-                to:{}
-            },
+            // {
+            //     type:'link',
+            //     name:'View',
+            //     icon:<FaEye  size="22"/>,
+            //     to:{}
+            // },
             {
                 type:'button',
                 name:'Edit',
@@ -249,7 +251,7 @@ const processDelete = (id) => {
                             { title: "Value", field: "display" },
                             { title: "Version", field: "version" },
                             { title: "Language", field: "language" },
-                            //{ title: "Action", field: "action" },
+                            { title: "Action", field: "action", hidden: !hasAdminWriteRole},
                         ]}
                         isLoading={loading}
                         data={props.applicationCodesetList.map((row) => ({
@@ -258,18 +260,27 @@ const processDelete = (id) => {
                             display: row.display,
                             language: row.language,
                             version: row.version,
-                            // action:
-                            // <div>
-                            //     <SplitActionButton actions={actionItems(row)} />
-                            //    <Label as='a' color='blue' className="ms-1" size='mini' onClick={() => openApplicationCodeset(row)}>
-                            //         <Icon name='pencil' /> Edit
-                            //     </Label>
-                            //
-                            //     <Label as='a' color='red' onClick={() => deleteApplicationCodeset( row)} size='mini'>
-                            //         <Icon name='trash' /> Delete
-                            //     </Label>
-                            //
-                            // </div>
+                            action:
+                            <div>
+                                    <Menu.Menu position='right'  >
+                                        <Menu.Item >
+                                            <Button2 style={{ backgroundColor: 'rgb(153,46,98)' }} primary>
+                                                <Dropdown item text='Action'>
+
+                                                    <Dropdown.Menu style={{ marginTop: "10px", }}>
+
+                                                        <Dropdown.Item onClick={() => openApplicationCodeset(row)}><MdModeEdit size="20" color='#014d88' /> Edit Codeset
+                                                        </Dropdown.Item>
+                                                        <Dropdown.Item onClick={() => deleteApplicationCodeset(row)}><MdDelete size="20" color='#014d88' /> Delete Codeset
+                                                        </Dropdown.Item>
+
+                                                    </Dropdown.Menu>
+                                                </Dropdown>
+                                            </Button2>
+                                        </Menu.Item>
+                                    </Menu.Menu>
+
+                                </div>
 
                         }))}
 

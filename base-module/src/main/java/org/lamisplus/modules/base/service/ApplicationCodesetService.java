@@ -4,7 +4,13 @@ package org.lamisplus.modules.base.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVPrinter;
+import org.apache.commons.csv.CSVRecord;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.lamisplus.modules.base.controller.apierror.EntityNotFoundException;
 import org.lamisplus.modules.base.controller.apierror.RecordExistException;
 import org.lamisplus.modules.base.domain.dto.ApplicationCodesetDTO;
@@ -14,9 +20,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Writer;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
@@ -54,9 +64,9 @@ public class ApplicationCodesetService {
         //the sql - update base_application_codeset
         //set code = REPLACE(REPLACE(TRIM(UPPER(codeset_group || '_' || display)), '/', ''), ' ', '_')
         final ApplicationCodeSet applicationCodeset = convertApplicationCodeDtoSet (applicationCodesetDTO);
-        applicationCodeset.setCode(UUID.randomUUID().toString());
+//        applicationCodeset.setCode(UUID.randomUUID().toString());
         applicationCodeset.setArchived(UN_ARCHIVED);
-        String code = applicationCodeset.getCodesetGroup()+"_"+applicationCodeset.getDisplay();
+        String code = applicationCodeset.getCodesetGroup()+"_"+applicationCodeset.getDisplay().trim();
         code = code.replace("/", "_").replace(" ", "_");
         //code = code.replaceAll("[\\p{Punct}&&[^_]]+|^_+|\\p{Punct}+(?=_|$)", "_");
         applicationCodeset.setCode(code.toUpperCase().trim());
@@ -137,8 +147,11 @@ public class ApplicationCodesetService {
     }
 
     public void getApplicationCodeSetsAsCsv(Writer writer) {
+        LOG.info("Exporting application code sets to CSV");
+
         List<ApplicationCodeSet> applicationCodeSets =
-        applicationCodesetRepository.findAllByArchivedNotOrderByIdAsc(ARCHIVED);
+//        applicationCodesetRepository.findAllByArchivedNotOrderByIdAsc(ARCHIVED);
+        applicationCodesetRepository.findAllByOrderByIdAsc();
         try {
 
             CSVPrinter printer = new CSVPrinter(writer, CSVFormat.DEFAULT);
@@ -161,30 +174,37 @@ public class ApplicationCodesetService {
                         applicationCodeSet.getModifiedBy()
                 );
             }
+            writer.close();
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+//            createLog();
         }
     }
 
     @Transactional
     public List<ApplicationCodesetDTO> readCsv(MultipartFile file) throws IOException {
+        List<ApplicationCodesetDTO> listOfCodesets = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream()))) {
-            return reader.lines()
-                    .skip(1) // Skip header
-                    .map(line -> {
-                        String[] fields = line.split(",");
-                        ApplicationCodesetDTO appCode = new ApplicationCodesetDTO();
-                        appCode.setId(Long.parseLong(fields[0]));
-                        appCode.setCode(fields[1]);
-                        appCode.setVersion(fields[2]);
-                        appCode.setCodesetGroup(fields[3]);
-                        appCode.setDisplay(fields[4]);
-                        appCode.setLanguage(fields[5]);
-//                        appCode.setArchived(Integer.parseInt(fields[6]));
-                        return appCode;
-                    })
-                    .collect(Collectors.toList());
+            CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT.withHeader());
+            for (CSVRecord csvRecord : csvParser) {
+                ApplicationCodesetDTO appCode = new ApplicationCodesetDTO();
+                appCode.setId(Long.parseLong(csvRecord.get("id")));
+                appCode.setCode(csvRecord.get("code"));
+                appCode.setVersion(csvRecord.get("version"));
+                appCode.setCodesetGroup(csvRecord.get("codeset_group"));
+                appCode.setDisplay(csvRecord.get("display"));
+                appCode.setLanguage(csvRecord.get("language"));
+                appCode.setArchived(Integer.valueOf(csvRecord.get("archived")));
+                listOfCodesets.add(appCode);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw e;
         }
+
+//        createLog();
+        return listOfCodesets;
     }
 
         //working correctively
@@ -203,7 +223,7 @@ public class ApplicationCodesetService {
                 existingAppCode.setCodesetGroup(dto.getCodesetGroup());
                 existingAppCode.setDisplay(dto.getDisplay());
                 existingAppCode.setLanguage(dto.getLanguage());
-//                existingAppCode.setArchived(dto.getArchived());
+                existingAppCode.setArchived(dto.getArchived());
                 savedCodesets.add(applicationCodesetRepository.save(existingAppCode));
             } else {
                 // add new application code set when is not existing
@@ -213,7 +233,7 @@ public class ApplicationCodesetService {
                 newAppCode.setCodesetGroup(dto.getCodesetGroup());
                 newAppCode.setDisplay(dto.getDisplay());
                 newAppCode.setLanguage(dto.getLanguage());
-//                newAppCode.setArchived(dto.getArchived());
+                newAppCode.setArchived(dto.getArchived());
                 savedCodesets.add(applicationCodesetRepository.save(newAppCode));
                 savedCodesets.size();
             }
