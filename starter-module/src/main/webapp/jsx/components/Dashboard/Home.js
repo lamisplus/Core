@@ -36,7 +36,11 @@ const Home = () => {
       .get(`${url}patient?searchParam=*&pageNo=0&pageSize=10`, {
         headers: { Authorization: `Bearer ${token}` },
       })
-      .then((response) => setPatientCount(response.data));
+      .then((response) => {
+        if (typeof(response.data) === 'object'){
+          setPatientCount(response.data)
+        }
+      });
   };
 
   const getPatientWithBiometricsCount = () => {
@@ -47,46 +51,69 @@ const Home = () => {
           headers: { Authorization: `Bearer ${token}` },
         }
       )
-      .then((response) => setPatientBiometricCount(response.data));
-  };
-
-  const getPatientWithNoBiometricsCount = () => {
-    axios
+      .then((response) => {
+        if (typeof(response.data) === 'object'){
+          setPatientBiometricCount(response.data)
+        }
+      });
+    };
+    
+    const getPatientWithNoBiometricsCount = () => {
+      axios
       .get(
         `${url}patient/getall-patients-with-no-biometric?searchParam=*&pageNo=0&pageSize=10`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       )
-      .then((response) => setPatientNoBiometricCount(response.data));
-  };
-
-  const getSexCount = () => {
-    axios
+      .then((response) => {
+        if (typeof(response.data) === 'object'){
+          setPatientNoBiometricCount(response.data);
+        }
+      });
+    };
+    
+    const getSexCount = () => {
+      axios
       .get(`${url}patient/count-by-sex`, {
         headers: { Authorization: `Bearer ${token}` },
       })
-      .then((response) => setSexCount(response.data))
+      .then((response) => {
+        if (typeof(response.data) === 'object'){
+          setSexCount(response.data);
+        }
+      })
       .catch((error) => {
         console.log(error)
         setSexCount([]);
       });
-  };
-
-  const getSexYearCount = () => {
-    axios
+    };
+    
+    const getSexYearCount = () => {
+      axios
       .get(`${url}patient/count-by-year-and-sex`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        const sortByYear = (a, b) => {
-          return a.year - b.year;
-        };
-
-        setSexYearCount(
-          response.data.sort(sortByYear).filter((entry) => entry.year >= 2010)
-        );
+        if (typeof(response.data) === 'object'){
+          const sortByYear = (a, b) => {
+            return a.year - b.year;
+          };
+  
+          setSexYearCount(
+            response.data.sort(sortByYear).filter((entry) => entry.year >= 2010)
+          );
+        }
       })
+      // .then((response) => {
+      //   const sortByYear = (a, b) => {
+      //     return a.year - b.year;
+      //   };
+
+      //   setSexYearCount(
+      //     response.data.sort(sortByYear).filter((entry) => entry.year >= 2010)
+      //   );
+      // })
       .catch((error) => {
         console.log(error);
         setSexYearCount([]);
@@ -146,7 +173,7 @@ const Home = () => {
     <>
       {(!loading && !dashboardDataLoading) ? (
         <>
-          {!hasServerInstalled ? (
+          {hasServerInstalled ? (
             <TabContext value={value}>
               {/* <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <TabList onChange={handleTabsChange} aria-label="lab API tabs example">
