@@ -143,7 +143,7 @@ const UserList = (props) => {
                 icon:<FaEye  size="22"/>,
                 to:{
                     pathname: "/edit-user",
-                    state: { user: row, defRole: roles  }
+                    state: { user: row, defRole: roles, isUpdate: false }
                 }
             },
             {
@@ -152,7 +152,7 @@ const UserList = (props) => {
                 icon:<MdPerson size="20" color='#014d88' />,
                 to:{
                     pathname: "/edit-user",
-                    state: { user: row, defRole: roles  }
+                    state: { user: row, defRole: roles, isUpdate: true }
                 }
             },
             {

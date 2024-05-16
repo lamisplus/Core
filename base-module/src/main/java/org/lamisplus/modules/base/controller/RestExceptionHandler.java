@@ -238,8 +238,8 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
      */
     @ExceptionHandler(java.lang.IllegalArgumentException.class)
     protected ResponseEntity<Object> IllegalArgumentException(java.lang.IllegalArgumentException ex) {
-        ApiError apiError = new ApiError(FORBIDDEN);
-        apiError.setStatusCode(FORBIDDEN.value());
+        ApiError apiError = new ApiError(BAD_REQUEST);
+        apiError.setStatusCode(BAD_REQUEST.value());
         apiError.setMessage(ex.getMessage());
         return buildResponseEntity(apiError);
     }

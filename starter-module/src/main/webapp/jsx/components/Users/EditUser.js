@@ -76,11 +76,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 let  arrVal = [];
 
+const disabledColor = '#E6E6E6';
 const UserRegistration = (props) => {
    //
   const userDetail = props.location && props.location.state ? props.location.state.user : null;
   const [currentUser, setCurrentUser]=useState(null)
   const rolesDef = props.location && props.location.state ? props.location.state.defRole : null;
+  const [isView, setIsView] = useState(false);
   const classes = useStyles();
   const { values, setValues, handleInputChange, resetForm } = useForm(
     props.location && props.location.state ? props.location.state.user :  initialfieldState_userRegistration 
@@ -104,6 +106,7 @@ const UserRegistration = (props) => {
   const [passwordFeedback, setPasswordFeedback] = useState('Minimum 6 characters, one uppercase and lowercase letter and one number');
   const strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
   const mediumRegex = new RegExp("^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})");
+  const disabledBorder = '#ccc';
 
 
 
@@ -180,6 +183,13 @@ const UserRegistration = (props) => {
     }
     getCharacters();
   }, []);
+
+  useEffect(()=> {
+    if (!props.location.state.isUpdate) {
+      setIsView(true)
+    }
+
+  }, [props.location.state.isUpdate])
 
 
   const onPermissionSelect = (selectedValues) => {
@@ -282,7 +292,7 @@ const UserRegistration = (props) => {
 //     }
   }
 
-  console.log(selectedOrganisations);
+  // console.log(selectedOrganisations);
 
 
   const handleSubmit = (e) => {
@@ -315,7 +325,7 @@ const UserRegistration = (props) => {
   return (
     <>
     <ToastContainer autoClose={3000} hideProgressBar />
-        <PageTitle activeMenu={userDetail===null ? "User Registration" : "Edit User"} motherMenu="Users" />
+        <PageTitle activeMenu={userDetail===null ? "User Registration" : isView ? "View User" : "Edit User"} motherMenu="Users" />
         <Card className={classes.cardBottom}>
         <CardContent>
             <Link
@@ -342,7 +352,7 @@ const UserRegistration = (props) => {
       <div className="col-xl-12 col-lg-12">
           <div className="card">
             <div className="card-header">
-              <h4 className="card-title" style={{color:'#014d88',fontWeight:'bolder'}}>{userDetail===null ? "User Information" : "Edit User Information"}</h4>
+              <h4 className="card-title" style={{color:'#014d88',fontWeight:'bolder'}}>{userDetail===null ? "User Information" : isView ? "View User Information" : "Edit User Information"}</h4>
             </div>
             <div className="card-body">
               <div className="basic-form">
@@ -357,7 +367,8 @@ const UserRegistration = (props) => {
                       id="firstName"
                       value={values.firstName}
                       onChange={handleInputChange}
-                      style={{height:"40px",border:'solid 1px #014d88',borderRadius:'5px'}}
+                      style={{height:"40px",border:`solid 1px ${isView ? disabledBorder : '#014d88' }`, backgroundColor:`${isView && disabledColor}`, borderRadius:'5px'}}
+                      disabled={isView}
                       required
                     />
                   </FormGroup>
@@ -371,7 +382,8 @@ const UserRegistration = (props) => {
                       id="lastName"
                       onChange={handleInputChange}
                       value={values.lastName}
-                      style={{height:"40px",border:'solid 1px #014d88',borderRadius:'5px'}}
+                      style={{height:"40px",border:`solid 1px ${isView ? disabledBorder : '#014d88' }`, backgroundColor:`${isView && disabledColor}`, borderRadius:'5px'}}
+                      disabled={isView}
                       required
                     />
                   </FormGroup>
@@ -385,7 +397,8 @@ const UserRegistration = (props) => {
                       id="userName"
                       onChange={handleInputChange}
                       value={values.userName}
-                      style={{height:"40px",border:'solid 1px #014d88',borderRadius:'5px'}}
+                      style={{height:"40px",border:`solid 1px ${isView ? disabledBorder : '#014d88' }`, backgroundColor:`${isView && disabledColor}`, borderRadius:'5px'}}
+                      disabled={isView}
                       required
                     />
                   </FormGroup>
@@ -399,7 +412,8 @@ const UserRegistration = (props) => {
                       id="email"
                       onChange={handleInputChange}
                       value={values.email}
-                      style={{height:"40px",border:'solid 1px #014d88',borderRadius:'5px'}}
+                      style={{height:"40px",border:`solid 1px ${isView ? disabledBorder : '#014d88' }`, backgroundColor:`${isView && disabledColor}`, borderRadius:'5px'}}
+                      disabled={isView}
                       required
                     />
                   </FormGroup>
@@ -427,7 +441,8 @@ const UserRegistration = (props) => {
                         id="designation"
                         value={values.designation}
                         onChange={handleInputChange}
-                        style={{height:"40px",border:'solid 1px #014d88',borderRadius:'5px'}}
+                        style={{height:"40px",border:`solid 1px ${isView ? disabledBorder : '#014d88' }`, backgroundColor:`${isView && disabledColor}`, borderRadius:'5px'}}
+                        disabled={isView}
                         required
                       >
                        
@@ -448,7 +463,8 @@ const UserRegistration = (props) => {
                         id="phoneNumber"
                         onChange={handleInputChange}
                         value={values.phoneNumber}
-                        style={{height:"40px",border:'solid 1px #014d88',borderRadius:'5px'}}
+                        style={{height:"40px",border:`solid 1px ${isView ? disabledBorder : '#014d88' }`, backgroundColor:`${isView && disabledColor}`, borderRadius:'5px'}}
+                        disabled={isView}
                         required
                       />
                       </FormGroup>                                     
@@ -462,9 +478,10 @@ const UserRegistration = (props) => {
                             id="password"
                             onChange={handlePassword}
                             value={values.password}
-                            style={{height:"40px",border:'solid 1px #014d88',borderRadius:'5px',backgroundColor:`${passwordStrength}`}}
+                            style={{height:"40px",border:`solid 1px ${isView ? disabledBorder : '#014d88' }`,borderRadius:'5px',backgroundColor:`${isView ? '#E6E6E6' : passwordStrength}`}}
                             className={validPasswordClass}
                             autoComplete="new-password"
+                            disabled={isView}
                           />
                           <div style={{color:`${passwordTextColor}`,opacity:'1'}}>
                             {passwordFeedback}
@@ -483,8 +500,9 @@ const UserRegistration = (props) => {
                         id="confirm"
                         onChange={handleConfirmPassword}
                         value={confirm}
-                        style={{height:"40px",border:'solid 1px #014d88',borderRadius:'5px'}}
+                        style={{height:"40px",border:`solid 1px ${isView ? disabledBorder : '#014d88' }`, backgroundColor:`${isView && disabledColor}`, borderRadius:'5px'}}
                         className={matchingPasswordClass}
+                        disabled={isView}
                         autoComplete="new-password"
                       />
                       <FormFeedback>Passwords do not match</FormFeedback>
@@ -504,6 +522,7 @@ const UserRegistration = (props) => {
                           onChange={onOrganisationSelect}
                           selected={selectedOrganisations}
                           required
+                          disabled={isView}
                       />
                     </FormGroup>
                   </div>
@@ -520,6 +539,7 @@ const UserRegistration = (props) => {
                           options={role}
                           onChange={onPermissionSelect}
                           selected={selectedOption}
+                          disabled={isView}
                         />
                       </FormGroup>
                     </div>
@@ -552,8 +572,8 @@ const UserRegistration = (props) => {
                 color="primary"
                 className={classes.button}
                 startIcon={<SaveIcon />}
-                disabled={!(validPassword && matchingPassword)}
-                style={{backgroundColor:'#014d88',color:'#fff'}}
+                disabled={!(validPassword && matchingPassword) || isView}
+                style={{backgroundColor: isView ? "grey" : '#014d88',color:'#fff'}}
               >
                 {!saving ? (
                   <span style={{ textTransform: "capitalize" }}>Save</span>

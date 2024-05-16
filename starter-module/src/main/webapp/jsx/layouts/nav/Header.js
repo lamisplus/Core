@@ -37,6 +37,7 @@ import ServerInstalled from "../../Utils/ServerInstalled";
 const { dispatch } = store;
 
 const Header = (props) => {
+    const isAuthorised = window.location.pathname !== '/unauthorised';
     const [user, setUser] = useState(null);
     //const [modal, setModal] = useState(false);
     const [roles, setRoles] = useState([]);
@@ -53,22 +54,25 @@ const Header = (props) => {
     useEffect(()=>{},[ServerInstalled])
 
     useEffect(() => {
-        async function getCharacters() {
-            axios
-                .get(`${baseUrl}roles`)
-                .then((response) => {
-                    setRoles(
-                        Object.entries(response.data).map(([key, value]) => ({
-                            label: value.name,
-                            value: value.name,
-                        }))
-                    );
-                })
-                .catch((error) => {
+        if(isAuthorised) {
 
-                });
+            async function getCharacters() {
+                axios
+                    .get(`${baseUrl}roles`)
+                    .then((response) => {
+                        setRoles(
+                            Object.entries(response.data).map(([key, value]) => ({
+                                label: value.name,
+                                value: value.name,
+                            }))
+                        );
+                    })
+                    .catch((error) => {
+    
+                    });
+            }
+            getCharacters();
         }
-        getCharacters();
     }, []);
     const [assignFacilityModal, setAssignFacilityModal] = useState(false);
     //TO ASSIGN FACILITIES
@@ -127,21 +131,25 @@ const Header = (props) => {
 
 
     useEffect(() => {
-        const intervalId = setInterval(() => {
-            loadModules();
-            // const interval = 30 * 60 * 1000; // 30 minutes in milliseconds
-
-        }, 30 * 60 * 1000); // 30 seconds in milliseconds
+        if(isAuthorised) {
+            const intervalId = setInterval(() => {
+                loadModules();
+                // const interval = 30 * 60 * 1000; // 30 minutes in milliseconds
     
-        return () => {
-          clearInterval(intervalId); // Cleanup the interval on component unmount
-        };
+            }, 30 * 60 * 1000); // 30 seconds in milliseconds
+        
+            return () => {
+              clearInterval(intervalId); // Cleanup the interval on component unmount
+            };
+        }
       }, []);
     // }
     const currentUser = authentication.getCurrentUser();
     useEffect(() => {
         fetchMe();
-        loadModules();
+        if(isAuthorised) {
+            loadModules();
+        }
     }, []);
 
 
@@ -193,7 +201,7 @@ const Header = (props) => {
 
     return (
         /*<div className="header" style={{ backgroundColor: '#303f9f', height:'55px' }}>*/
-        <div className="header" style={{ backgroundColor: '#014d88', height:'65px' }}>
+        <div className="header" style={{ backgroundColor: '#014d88', height:'65px', zIndex: 130 }}>
             <div className="header-content" style={{borderLeft: "solid 1px #fff"}}>
                 <nav className="navbar navbar-expand">
                     <div className="collapse navbar-collapse justify-content-between">
@@ -246,7 +254,7 @@ const Header = (props) => {
 
                                     <React.Fragment>
                                         <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center',marginLeft:'5px' }}>
-                                            <Tooltip title="Account settings">
+                                            {/* <Tooltip title="Account settings"> */}
                                                 <IconButton
                                                     onClick={handleClick}
                                                     size="small"
@@ -258,7 +266,7 @@ const Header = (props) => {
                                                     <i className="fa fa-bolt" style={{color:'#992E62'}} aria-hidden="true"></i>
                                                     <span className="ms-2" style={{color:'#992E62'}}>Switch Facility</span>
                                                 </IconButton>
-                                            </Tooltip>
+                                            {/* </Tooltip> */}
                                         </Box>
                                         <Menu
                                             anchorEl={anchorEl}

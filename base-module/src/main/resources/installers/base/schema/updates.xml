@@ -531,5 +531,23 @@
             SELECT pg_catalog.setval('base_application_user_organisation_unit_id_seq', (SELECT MAX(id) FROM base_application_user_organisation_unit) , true);;
         </sql>
     </changeSet>
+    <changeSet failOnError="true" id="180996478997" author="Peter Abiodun">
+        <preConditions onFail="MARK_RAN" >
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*)
+                FROM base_permission
+                WHERE name = 'user';
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO base_permission (name, description, date_created, created_by, date_modified, modified_by, archived)
+                VALUES ('user', 'User', now(), 'Abiodun Peter', now(), 'Abiodun Peter', 0);
+
+            INSERT INTO base_role (name, code, date_created, created_by, date_modified, modified_by, archived)
+                VALUES ('User', '550e8400-e29b-41d4-a716-446655440000', now(), 'Abiodun Peter', now(), 'Abiodun Peter', 0);
+            INSERT INTO base_role_permission (role_id, permission_id)
+            VALUES ((select id from base_role where name = 'User'), (select id from base_permission where name = 'user'));
+        </sql>
+    </changeSet>
 
 </databaseChangeLog>
