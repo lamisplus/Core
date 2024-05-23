@@ -73,11 +73,15 @@ const useStyles = makeStyles((theme) => ({
   inline: {
     display: "inline",
   },
+  error: {
+    color: "red",
+  },
 }));
 let  arrVal = [];
 
 const disabledColor = '#E6E6E6';
 const UserRegistration = (props) => {
+  const [errors, setErrors] = useState({});
    //
   const userDetail = props.location && props.location.state ? props.location.state.user : null;
   const [currentUser, setCurrentUser]=useState(null)
@@ -254,70 +258,66 @@ const UserRegistration = (props) => {
 
   }*/
 
-  const updateUserOrganisations=()=>{
-//     if(selectedOrganisations.length >0){
-//       //First delete all current organisations
-// /*      var defaultFacility= _.find(allOrganisations, {name:selectedOrganisations[0]});
-//       switchFacility(defaultFacility.id);*/
-//       if(userDetail.applicationUserOrganisationUnits.length >0){
-//         userDetail.applicationUserOrganisationUnits.map((organisation) =>{
-//           var orgDetails = _.find(allOrganisations, {id:organisation.organisationUnitId});
-//           axios.delete(`${baseUrl}application_user_organisation_unit/${orgDetails.id}`, )
-//               .then(response => {
-//                 toast.success(`successfully added`);
-//               }) .catch((error) => {
-//             toast.error(`An error occurred, adding facility`);
-//           });
-//         });
 
+  const handleInputChangePhoneNumber = (e) => {
+    const acceptedNumber = e.target.value;
+    // Remove any non-numeric characters, and limit to 11 numbers
+    const cleanedNumber = acceptedNumber.replace(/[^0-9]/g, '').slice(0, 11);
+    setValues({ ...values, phoneNumber: cleanedNumber });
+  
+  };
 
-//       }
-//       console.log()
-//       //Add Organisations
-//       let facilityDetails = [];
-//       selectedOrganisations.map((organisation) =>{
-//         var orgDetails = _.find(allOrganisations, {name:organisation});
-//         facilityDetails.push({
-//           "applicationUserId": userDetail.id,
-//           "organisationUnitId": orgDetails.id
-//         })
+  const validate = () => {
+    let temp = { ...errors };
+    temp.phoneNumber = values.phoneNumber
+        ? ""
+        : "Phone Number is required. Kindly enter a valid phone number.";
+    temp.firstName = values.firstName
+            ? ""
+            : "First Name is required";
+    temp.lastName = values.lastName
+            ? ""
+            : "Last Name is required";
+    temp.userName = values.userName
+            ? ""
+            : "Username is required";
+    temp.email = values.email
+            ? ""
+            : "Email is required";
+    temp.designation = values.designation
+            ? ""
+            : "Designation is required";
 
-//       });
-//       axios.post(`${baseUrl}application_user_organisation_unit`, facilityDetails)
-//           .then(response => {
-//             toast.success(`successfully added`);
-//           }) .catch((error) => {
-//         toast.error(`An error occurred, adding facility`);
-//       });
-//     }
-  }
-
-  // console.log(selectedOrganisations);
+    setErrors({
+        ...temp,
+    });
+    return Object.values(temp).every((x) => x === "");
+};
 
 
   const handleSubmit = (e) => {
 
     e.preventDefault();
-    updateUserOrganisations();
+    if (validate()) {
+      const dateOfBirth = moment(values.dateOfBirth).format("YYYY-MM-DD");
+      values["dateOfBirth"] = dateOfBirth;
+      values["roles"] = selectedOption
+      values["facilityIds"] = selectedOrganisations
+      setSaving(true);
+      const onSuccess = () => {
+        setSaving(false);
+        toast.success("User Updated Successful");
+        resetForm();
+        props.history.push("/users")
+      };
+      const onError = () => {
+        setSaving(false);
+        toast.error("Something went wrong");
+      };
 
-    const dateOfBirth = moment(values.dateOfBirth).format("YYYY-MM-DD");
-    values["dateOfBirth"] = dateOfBirth;
-    values["roles"] = selectedOption
-    values["facilityIds"] = selectedOrganisations
-    setSaving(true);
-    const onSuccess = () => {
-      setSaving(false);
-      toast.success("User Updated Successful");
-      resetForm();
-      props.history.push("/users")
-    };
-    const onError = () => {
-      setSaving(false);
-      toast.error("Something went wrong");
-    };
-
-    
-    props.update(userDetail.id,values, onSuccess, onError);
+      
+      props.update(userDetail.id,values, onSuccess, onError);
+    }
   };
 
 
@@ -369,8 +369,11 @@ const UserRegistration = (props) => {
                       onChange={handleInputChange}
                       style={{height:"40px",border:`solid 1px ${isView ? disabledBorder : '#014d88' }`, backgroundColor:`${isView && disabledColor}`, borderRadius:'5px'}}
                       disabled={isView}
-                      required
+                      // required
                     />
+                    {errors.facilityId !=="" ? (
+                                    <span className={classes.error}>{errors.firstName}</span>
+                                ) : "" }
                   </FormGroup>
                     </div>
                     <div className="form-group mb-3 col-md-6">
@@ -384,8 +387,11 @@ const UserRegistration = (props) => {
                       value={values.lastName}
                       style={{height:"40px",border:`solid 1px ${isView ? disabledBorder : '#014d88' }`, backgroundColor:`${isView && disabledColor}`, borderRadius:'5px'}}
                       disabled={isView}
-                      required
+                      // required
                     />
+                    {errors.facilityId !=="" ? (
+                                    <span className={classes.error}>{errors.lastName}</span>
+                                ) : "" }
                   </FormGroup>
                     </div>
                     <div className="form-group mb-3 col-md-6">
@@ -399,8 +405,11 @@ const UserRegistration = (props) => {
                       value={values.userName}
                       style={{height:"40px",border:`solid 1px ${isView ? disabledBorder : '#014d88' }`, backgroundColor:`${isView && disabledColor}`, borderRadius:'5px'}}
                       disabled={isView}
-                      required
+                      // required
                     />
+                    {errors.facilityId !=="" ? (
+                                    <span className={classes.error}>{errors.userName}</span>
+                                ) : "" }
                   </FormGroup>
                     </div>
                     <div className="form-group mb-3 col-md-6">
@@ -414,8 +423,11 @@ const UserRegistration = (props) => {
                       value={values.email}
                       style={{height:"40px",border:`solid 1px ${isView ? disabledBorder : '#014d88' }`, backgroundColor:`${isView && disabledColor}`, borderRadius:'5px'}}
                       disabled={isView}
-                      required
+                      // required
                     />
+                    {errors.facilityId !=="" ? (
+                                    <span className={classes.error}>{errors.email}</span>
+                                ) : "" }
                   </FormGroup>
                    
                     </div>
@@ -443,7 +455,7 @@ const UserRegistration = (props) => {
                         onChange={handleInputChange}
                         style={{height:"40px",border:`solid 1px ${isView ? disabledBorder : '#014d88' }`, backgroundColor:`${isView && disabledColor}`, borderRadius:'5px'}}
                         disabled={isView}
-                        required
+                        // required
                       >
                        
                         {designation.map(({ label, value }) => (
@@ -452,6 +464,9 @@ const UserRegistration = (props) => {
                           </option>
                         ))}
                       </Input>
+                      {errors.facilityId !=="" ? (
+                                    <span className={classes.error}>{errors.designation}</span>
+                                ) : "" }
                     </FormGroup>                  
                     </div>
                     <div className="form-group mb-3 col-md-6">
@@ -461,12 +476,15 @@ const UserRegistration = (props) => {
                         type="number"
                         name="phoneNumber"
                         id="phoneNumber"
-                        onChange={handleInputChange}
+                        onChange={(e) => handleInputChangePhoneNumber(e)}
                         value={values.phoneNumber}
                         style={{height:"40px",border:`solid 1px ${isView ? disabledBorder : '#014d88' }`, backgroundColor:`${isView && disabledColor}`, borderRadius:'5px'}}
                         disabled={isView}
-                        required
+                        // required
                       />
+                      {errors.facilityId !=="" ? (
+                                    <span className={classes.error}>{errors.phoneNumber}</span>
+                                ) : "" }
                       </FormGroup>                                     
                     </div>
                     <div className="form-group mb-3 col-md-6">
