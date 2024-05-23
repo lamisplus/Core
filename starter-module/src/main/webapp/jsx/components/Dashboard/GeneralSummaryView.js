@@ -64,7 +64,7 @@ const GeneralSummaryView = () => {
     totalPending: 0
   })
   const [reportedIps, setReportedIps] = useState("")
-  const [dateRange, setDateRange] = useState([moment().day(5).subtract(6, 'day').format("DD-MM-YYYY"), moment().day(5).format("DD-MM-YYYY")]);
+  const [dateRange, setDateRange] = useState([moment().day(0).subtract(6, 'day').format("DD-MM-YYYY"), moment().day(0).format("DD-MM-YYYY")]);
 
   useEffect( async () => {
     changeBackground({ value: "light", label: "Light" });
@@ -89,6 +89,7 @@ const GeneralSummaryView = () => {
   }, [dateRange]);
 
   const fetchDashboardData = async () => {
+    console.log("dateRange", dateRange);
     PatientsIpsAndHealthFacilities();
     ReportingRate();
     TotalSync();
@@ -476,6 +477,7 @@ const GeneralSummaryView = () => {
 
   // Original function
   const fetchDashboardDataForSelectedWeek = (range) => {
+    console.log(range);
     debouncedSetDateRange(range);
   };
 
