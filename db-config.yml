@@ -3,8 +3,8 @@ spring:
         name: query
     datasource:
         driver-class-name: org.postgresql.Driver
-        username: postgres
-        password: emeka
+        username: username
+        password: password
         url: jdbc:postgresql://localhost:5432/Family
         hibernate:
             ddl-auto: none
@@ -32,8 +32,8 @@ lamisplus:
     datasource:
         module:
             driver-class-name: org.postgresql.Driver
-            username: postgres
-            password: emeka
+            username: username
+            password: password
             url: jdbc:postgresql://localhost:5432/Family
             hikari:
                     auto-commit: true
