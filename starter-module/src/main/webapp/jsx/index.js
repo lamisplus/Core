@@ -53,6 +53,7 @@ import FacilitiesList from "./components/FaciltyConfig/FacilitiesPage";
 import AddFacility from "./components/FaciltyConfig/AddFacility";
 import FacilitySetup from "./pages/FacilitySetup";
 import WebLog from "./components/weblog/WebLog";
+import Unauthorised from "./components/utils/UnauthorisedPage";
 
 const Markup = () => {
   const [user, setUser] = useState(null);
@@ -100,6 +101,7 @@ const Markup = () => {
     { url: "facility", component: FacilitiesList },
     { url: "facility-config", component: AddFacility },
     { url: "weblog", component: WebLog },
+    { url: "unauthorised", component: Unauthorised },
   ];
   let path = window.location.pathname;
   path = path.split("/");

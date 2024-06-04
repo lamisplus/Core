@@ -14,7 +14,6 @@ import * as ACTION_TYPES from "./../../../actions/types";
 import store from "./../../../store";
 import Swal from "sweetalert2";
 import moment from "moment";
-// import XLSX from 'xlsx';
 //import AssignFacilityModal from './../../components/Users/AssignFacilityModalFirst'
 
 import Box from '@mui/material/Box';
@@ -43,6 +42,7 @@ import { FaBell } from "react-icons/fa";
 const { dispatch } = store;
 
 const Header = (props) => {
+    const isAuthorised = window.location.pathname !== '/unauthorised';
     const [user, setUser] = useState(null);
     const [notificationConfigList, setNotificationConfigList] = useState([]);
     const [appointmentList, setAppointmentList] = useState([]);
@@ -61,22 +61,25 @@ const Header = (props) => {
     useEffect(() => { }, [ServerInstalled])
 
     useEffect(() => {
-        async function getCharacters() {
-            axios
-                .get(`${baseUrl}roles`)
-                .then((response) => {
-                    setRoles(
-                        Object.entries(response.data).map(([key, value]) => ({
-                            label: value.name,
-                            value: value.name,
-                        }))
-                    );
-                })
-                .catch((error) => {
+        if(isAuthorised) {
 
-                });
+            async function getCharacters() {
+                axios
+                    .get(`${baseUrl}roles`)
+                    .then((response) => {
+                        setRoles(
+                            Object.entries(response.data).map(([key, value]) => ({
+                                label: value.name,
+                                value: value.name,
+                            }))
+                        );
+                    })
+                    .catch((error) => {
+
+                    });
+            }
+            getCharacters();
         }
-        getCharacters();
     }, []);
     const [assignFacilityModal, setAssignFacilityModal] = useState(false);
     //TO ASSIGN FACILITIES
@@ -135,21 +138,25 @@ const Header = (props) => {
 
 
     useEffect(() => {
-        const intervalId = setInterval(() => {
-            loadModules();
-            // const interval = 30 * 60 * 1000; // 30 minutes in milliseconds
+        if(isAuthorised) {
+            const intervalId = setInterval(() => {
+                loadModules();
+                // const interval = 30 * 60 * 1000; // 30 minutes in milliseconds
 
-        }, 30 * 60 * 1000); // 30 seconds in milliseconds
+            }, 30 * 60 * 1000); // 30 seconds in milliseconds
 
-        return () => {
-            clearInterval(intervalId); // Cleanup the interval on component unmount
-        };
-    }, []);
+            return () => {
+              clearInterval(intervalId); // Cleanup the interval on component unmount
+            };
+        }
+      }, []);
     // }
     const currentUser = authentication.getCurrentUser();
     useEffect(() => {
         fetchMe();
-        loadModules();
+        if(isAuthorised) {
+            loadModules();
+        }
     }, []);
 
 
@@ -179,7 +186,7 @@ const Header = (props) => {
     // const handleAppointment = (() => {
     // //     axios.get(`${baseUrl}notification/appointments`, {
     // //         headers: { Authorization: `Bearer ${token}` },
-    // //     }).then((response) => { 
+    // //     }).then((response) => {
     // //         setAppointmentList(response.data); }
     // //     )
     // console.log(appointmentList)
@@ -229,9 +236,9 @@ const Header = (props) => {
             console.error('appointmentList is not an array');
             return;
         }
-    
+
         let csvContent = 'ID,First Name,Surname,Age,Sex,Hospital Number,Regimen,Last Visit,Refill Duration,Appointment Date\n';
-    
+
         appointmentList.forEach(appointment => {
             // Clean up field values to remove commas and newline characters
             const cleanFields = {
@@ -246,17 +253,17 @@ const Header = (props) => {
                 refillPeriod: appointment.refillPeriod,
                 appointmentDate: appointment.appointmentDate
             };
-    
+
             // Concatenate fields with commas
             const row = Object.values(cleanFields).join(',');
-    
+
             // Append row to CSV content with newline
             csvContent += row + '\n';
         });
-    
+
         // Create a blob containing the CSV content
         const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    
+
         // Create a temporary anchor element to trigger download
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
@@ -267,7 +274,7 @@ const Header = (props) => {
         a.click();
         window.URL.revokeObjectURL(url);
     };
-    
+
 
     const [dataChanged, setDataChanged] = useState(false);
 
@@ -337,8 +344,8 @@ const Header = (props) => {
 
     return (
         /*<div className="header" style={{ backgroundColor: '#303f9f', height:'55px' }}>*/
-        <div className="header" style={{ backgroundColor: '#014d88', height: '65px' }}>
-            <div className="header-content" style={{ borderLeft: "solid 1px #fff" }}>
+        <div className="header" style={{ backgroundColor: '#014d88', height:'65px', zIndex: 130 }}>
+            <div className="header-content" style={{borderLeft: "solid 1px #fff"}}>
                 <nav className="navbar navbar-expand">
                     <div className="collapse navbar-collapse justify-content-between">
                         <div className="header-left">
@@ -371,7 +378,7 @@ const Header = (props) => {
                                     <FaBell size={35} style={{color: 'white' }} onClick={reloadWithAdditionalData}/>
                                     </Badge>
                                 </Dropdown.Toggle>
-                                
+
                                 {/* <Dropdown.Menu align="right" className="mt-2 dropdown-menu-end">
                                 {notificationConfigList.map(() => ({
                             period,
@@ -421,8 +428,8 @@ const Header = (props) => {
 
 
                                     <React.Fragment>
-                                        <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center', marginLeft: '5px' }}>
-                                            <Tooltip title="Account settings">
+                                        <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center',marginLeft:'5px' }}>
+                                            {/* <Tooltip title="Account settings"> */}
                                                 <IconButton
                                                     onClick={handleClick}
                                                     size="small"
@@ -434,7 +441,7 @@ const Header = (props) => {
                                                     <i className="fa fa-bolt" style={{ color: '#992E62' }} aria-hidden="true"></i>
                                                     <span className="ms-2" style={{ color: '#992E62' }}>Switch Facility</span>
                                                 </IconButton>
-                                            </Tooltip>
+                                            {/* </Tooltip> */}
                                         </Box>
                                         <Menu
                                             anchorEl={anchorEl}

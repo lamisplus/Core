@@ -47,8 +47,6 @@ function login(username, password, remember) {
 
 function logout(history) {
 
-            localStorage.removeItem('currentUser');
-            localStorage.removeItem('currentUser_Permissions');
             currentUserSubject.next(null);
             localStorage.clear();
             // you can also like localStorage.removeItem('Token');

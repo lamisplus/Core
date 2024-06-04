@@ -69,7 +69,11 @@ const SideBar = (props) => {
 
     btn.addEventListener("click", toggleFunc);
 
-    fetchExternalMenu();
+    console.log('This path',  window.location.pathname);
+
+    if(window.location.pathname !== '/unauthorised') {
+      fetchExternalMenu();
+    }
     fetchPermisisons();
   }, []); //props.menuList to continuous checking for menu list
 

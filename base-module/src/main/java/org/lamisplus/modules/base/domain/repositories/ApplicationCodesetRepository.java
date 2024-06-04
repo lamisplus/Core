@@ -29,7 +29,7 @@ public interface ApplicationCodesetRepository extends JpaRepository<ApplicationC
     Optional<ApplicationCodeSet> findByIdAndArchivedNot(Long id, int archive);
 
 
-    List<ApplicationCodeSet> findAllByArchivedOrderByIdAsc(int archived);
+    List<ApplicationCodeSet> findAllByOrderByIdAsc();
 
     List<ApplicationCodeSet> findAllByArchivedNotOrderByIdAsc(int archived);
 

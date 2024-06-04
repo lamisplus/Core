@@ -11,7 +11,7 @@ const NavHader = () => {
   );
   return (
   /*  <div className="nav-header" style={{ backgroundColor: '#f2f7f8',height:'65px' }}>*/
-    <div className="nav-header" style={{ backgroundColor: '#fff',height:'65px', border:'solid 2px #ddd',marginRight:'1px' }}>
+    <div className="nav-header" style={{ backgroundColor: '#fff',height:'65px', border:'solid 2px #ddd',marginRight:'1px', zIndex: 140 }}>
       <Link to="/dashboard" className="brand-logo" >
 			<Fragment style={{padding:'5px'}}>
                 <img src={logo} alt="" width="40px" height="40px"/>
