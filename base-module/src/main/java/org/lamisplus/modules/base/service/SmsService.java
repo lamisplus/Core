@@ -53,21 +53,6 @@ public class SmsService {
         }
     }
 
-
-
-
-
-//    private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
-
-//    public void start() {
-//        scheduler.scheduleWithFixedDelay(() -> {
-//            try {
-//                SendDrugRefillReminderSms7DaysPrior();
-//            } catch (Exception e) {
-//                // Handle exception
-//            }
-//        }, 0, 1, TimeUnit.DAYS);
-//    }
     static final String DUE_IN_7_DAYS = "'7 days'";
     static final String WEEKLY = "Weekly";
     static final String DUE_IN_30_DAYS = "'30 days'";
@@ -149,27 +134,6 @@ public class SmsService {
                 System.out.println("checkout string paramater***********"+DUE_IN_7_DAYS );
 
                 // Call the getPhoneNumbersDueIn method here
-                // DAILY
-//                Optional<SmsSetup> dailyFrequency = smsRepository.findByFrequency(DAILY);
-//                if (dailyFrequency.isPresent()) {
-//                    List<PhoneNumbersDto> values = smsRepository.getPhoneNumbersDueIn(facilityId, DUE_IN_1_DAYS);
-//                    System.out.println("checkout string paramater***********" + DUE_IN_1_DAYS);
-//                }
-//
-//                // WEEKLY
-//                Optional<SmsSetup> weeklyFrequency = smsRepository.findByFrequency(WEEKLY);
-//                if (weeklyFrequency.isPresent()) {
-//                    List<PhoneNumbersDto> weeklyValues = smsRepository.getPhoneNumbersDueIn(facilityId, DUE_IN_7_DAYS);
-//                    System.out.println("checkout string paramater***********" + DUE_IN_7_DAYS);
-//                }
-//
-//                // MONTHLY
-//                Optional<SmsSetup> monthlyFrequency = smsRepository.findByFrequency(MONTHLY);
-//                if (monthlyFrequency.isPresent()) {
-//                    List<PhoneNumbersDto> monthlyValues = smsRepository.getPhoneNumbersDueIn(facilityId, MONTHLY);
-//                    System.out.println("checkout string paramater***********" + MONTHLY);
-//                }
-
 //                Optional<SmsSetup> dailyFrequency = smsRepository.findByFrequency(DAILY);
 //                if (dailyFrequency.isPresent()) {
 //                    List<PhoneNumbersDto> values = smsRepository.getPhoneNumbersDueIn(facilityId, DUE_IN_1_DAYS);
