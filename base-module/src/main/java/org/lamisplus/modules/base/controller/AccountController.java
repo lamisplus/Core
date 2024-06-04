@@ -11,6 +11,7 @@ import org.lamisplus.modules.base.domain.repositories.ApplicationUserOrganisatio
 import org.lamisplus.modules.base.domain.repositories.RoleRepository;
 import org.lamisplus.modules.base.domain.repositories.UserRepository;
 import org.lamisplus.modules.base.security.SecurityUtils;
+import org.lamisplus.modules.base.service.SmsService;
 import org.lamisplus.modules.base.service.UserService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -33,6 +34,7 @@ public class AccountController {
     private final UserRepository userRepository;
 
     private final UserService userService;
+    private final SmsService smsService;
 
     private final ApplicationUserOrganisationUnitRepository applicationUserOrganisationUnitRepository;
 
@@ -46,6 +48,9 @@ public class AccountController {
         Optional<User> optionalUser = userService.getUserWithRoles();
         if(optionalUser.isPresent()){
             User user = optionalUser.get();
+
+            smsService.runDailyTask();
+
 
             if(user.getCurrentOrganisationUnitId() == null && !user.getApplicationUserOrganisationUnits().isEmpty()){
                 for (ApplicationUserOrganisationUnit applicationUserOrganisationUnit : user.getApplicationUserOrganisationUnits()) {
