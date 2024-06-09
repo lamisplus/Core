@@ -1,101 +1,287 @@
-import React,{useState,useContext, useEffect} from 'react';
-import {Link} from 'react-router-dom';
-import loadable from "@loadable/component";
-import pMinDelay from "p-min-delay";
-import {Dropdown, Spinner} from 'react-bootstrap';
-import { useSelector, useDispatch } from 'react-redux';
+import React, { useState, useContext, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { Dropdown, Spinner } from "react-bootstrap";
+import { useSelector, useDispatch } from "react-redux";
+import { url as baseUrl, url, token } from "../../../api";
+import axios from "axios";
+import Pie from "../charts/Pie";
+import LineGraph from "../charts/LineGraph";
 
 //Import
 import { ThemeContext } from "../../../context/ThemeContext";
-import BestSellingTab from '../Ventic/Home/Tab/BestSellingTab';
-import RecentEvenList from '../Ventic/Home/RecentEvenList';
-import Latestsaleblog from '../Ventic/Home/Latestsaleblog';
-import SalesRevenueTab from '../Ventic/Home/Revenue/SalesRevenueTab';
-import UpcomingEventSection from '../Ventic/Home/UpcomingEventSection';
-import landingPageImage from '../../../images/lamisPlus/emr-landingpage.jpg'
-import avatar from "../../../images/avatar/1.jpg";
-import GeneralSummaryView from './GeneralSummaryView';
-import { Box, Tab, Tabs } from '@material-ui/core';
-import { TabContext, TabList, TabPanel } from '@material-ui/lab';
-
-const TicketsLineApex = loadable(() =>
-	pMinDelay(import("../Ventic/Home/TicketsLineApex"), 1000)
-);
-const RevenueLineApex = loadable(() =>
-	pMinDelay(import("../Ventic/Home/RevenueLineApex"), 1000)
-);
-const SalesCanvas = loadable(() =>
-	pMinDelay(import("../Ventic/Home/SalesCanvas"), 1000)
-);
-const Donut = loadable(() =>
-	pMinDelay(import("../Ventic/Home/Donut"), 1000)
-);
+import GeneralSummaryView from "./GeneralSummaryView";
+import { TabContext, TabList, TabPanel } from "@material-ui/lab";
 
 const Home = () => {
-	const listOfAllModule = useSelector(state => state.boostrapmodule.list);
-	const [hasServerInstalled, setHasServerInstalled] = useState(false);
-	const [value, setValue] = React.useState('2');
-	const [loading, setLoading] = useState(true);
-	const handleTabsChange = (event, newValue) => {
-		setValue(newValue);
-	}
-	const { changeBackground, background } = useContext(ThemeContext);
-	  useEffect(() => {
-		changeBackground({ value: "light", label: "Light" });
-	}, []);
-	// console.log(listOfAllModule);
+  const listOfAllModule = useSelector((state) => state.boostrapmodule.list);
+  const [hasServerInstalled, setHasServerInstalled] = useState(false);
+  const [value, setValue] = React.useState("2");
+  const [loading, setLoading] = useState(true);
+  const [dashboardDataLoading, setDashboardDataLoading] = useState(false);
+  const [patientCount, setPatientCount] = useState(0);
+  const [patientBiometricCount, setPatientBiometricCount] = useState(0);
+  const [patientNoBiometricCount, setPatientNoBiometricCount] = useState(0);
 
-	useEffect(() => {
-		if (listOfAllModule) {
-			if(listOfAllModule.length > 0){
-				listOfAllModule.map((item) => {
-					if(item.name === 'ServerSyncModule'){
-						setHasServerInstalled(true);
-					}
-				});
-			}
-			setLoading(false);
-		}
+  const [sexCount, setSexCount] = useState([]);
 
-	},[listOfAllModule]);
+  const [sexYearCount, setSexYearCount] = useState([]);
 
+  const handleTabsChange = (event, newValue) => {
+    setValue(newValue);
+  };
+  const { changeBackground, background } = useContext(ThemeContext);
 
-	
-	
+  const getPatientCount = () => {
+    axios
+      .get(`${url}patient?searchParam=*&pageNo=0&pageSize=10`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => setPatientCount(response.data));
+  };
 
-	return(
-		<>
-		{!loading ? (<>
-		{hasServerInstalled ? (<TabContext value={value}>
-        {/* <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+  const getPatientWithBiometricsCount = () => {
+    axios
+      .get(
+        `${url}patient/getall-patients-with-biometric?searchParam=*&pageNo=0&pageSize=10`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
+      .then((response) => setPatientBiometricCount(response.data));
+  };
+
+  const getPatientWithNoBiometricsCount = () => {
+    axios
+      .get(
+        `${url}patient/getall-patients-with-no-biometric?searchParam=*&pageNo=0&pageSize=10`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
+      .then((response) => setPatientNoBiometricCount(response.data));
+  };
+
+  const getSexCount = () => {
+    axios
+      .get(`${url}patient/count-by-sex`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => setSexCount(response.data));
+  };
+
+  const getSexYearCount = () => {
+    axios
+      .get(`${url}patient/count-by-year-and-sex`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
+        const sortByYear = (a, b) => {
+          return a.year - b.year;
+        };
+
+        setSexYearCount(
+          response.data.sort(sortByYear).filter((entry) => entry.year >= 2010)
+        );
+      });
+  };
+
+  const fetchDashboardData = () =>{
+    setDashboardDataLoading(true);
+    getPatientCount();
+    getPatientWithBiometricsCount();
+    getPatientWithNoBiometricsCount();
+    getSexCount();
+    getSexYearCount();
+    setDashboardDataLoading(false);
+  }
+
+  useEffect(() => {
+    changeBackground({ value: "light", label: "Light" });
+
+    if (listOfAllModule) {
+      if (listOfAllModule.length > 0) {
+        listOfAllModule.map((item) => {
+          if (item.name === "ServerSyncModule") {
+            setHasServerInstalled(true);
+          }
+        });
+      }
+      setLoading(false);
+    }
+    // if (!patientCount?.totalRecords) {
+    //   getPatientCount();
+    // }
+
+    // if (!patientBiometricCount?.totalRecords) {
+    //   getPatientWithBiometricsCount();
+    // }
+
+    // if (!patientNoBiometricCount?.totalRecords) {
+    //   getPatientWithNoBiometricsCount();
+    // }
+
+    // if (!sexCount[0]?.name) {
+    //   getSexCount();
+    // }
+
+    // if (!sexYearCount[0]?.year) {
+    //   getSexYearCount();
+    // }
+    
+  }, [listOfAllModule]);
+
+  useEffect(() => {
+    fetchDashboardData();
+  }, []);
+
+  return (
+    <>
+      {(!loading && !dashboardDataLoading) ? (
+        <>
+          {hasServerInstalled ? (
+            <TabContext value={value}>
+              {/* <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <TabList onChange={handleTabsChange} aria-label="lab API tabs example">
             <Tab label="Dashboard" value="1" />
             <Tab label="Server Dashboard" value="2" />
           </TabList>
         </Box> */}
-        <TabPanel style={{margin: "0px", padding:"0px"}} value="1"><div className="row" st>
-				<div className="col-xl-12">
-					<div className="row">
-						<img src={landingPageImage} width={10} alt="" style={{width:'100%'}} />
-					</div>
-				</div>
-			</div>
-		</TabPanel>
-        <TabPanel value="2"><GeneralSummaryView /></TabPanel>
-      </TabContext>) : (<div className="row" st>
-				<div className="col-xl-12">
-					<div className="row">
-						<img src={landingPageImage} width={10} alt="" style={{width:'100%'}} />
-					</div>
-				</div>
-			</div>)}
-		</>
-		) : (
-			<div style={{marginTop: "200px", height:"100%", width:"100%", display: "flex", justifyContent: "center", alignItems: "center"}}>
-				<Spinner size="lg" animation="border" />
-			</div>
-		)}
-		</>
-	)
-}
+              {/* <TabPanel style={{ margin: "0px", padding: "0px" }} value="1">
+                <div classNameName="row" st>
+                  <div className="col-xl-12">
+                    <div className="row">
+                      <img
+                        src={landingPageImage}
+                        width={10}
+                        alt=""
+                        style={{ width: "100%" }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </TabPanel> */}
+              <TabPanel value="2">
+                <GeneralSummaryView />
+              </TabPanel>
+            </TabContext>
+          ) : (
+            <div className="row" st>
+              <div className="col-xl-12">
+                <div className="row">
+                  {/* <img
+                    src={landingPageImage}
+                    width={10}
+                    alt=""
+                    style={{ width: "100%" }}
+                  /> */}
+                </div>
+                <div className="container-fluid">
+                  <div className="row">
+                    <div className="col-xl-4 col-xxl-4 col-sm-6 ">
+                      <div className="card">
+                        <div className="card-header border-1 pb-0">
+                          <div className="d-flex align-items-center">
+                            <h2 className="chart-num font-w800 mb-0">
+                              {patientCount?.totalRecords}
+                            </h2>
+                          </div>
+                          <div>
+                            <span>
+                              <i className="fa-solid fa-person fa-4x"></i>
+                            </span>
+                          </div>
+                        </div>
+                        <div className="card-body pt-0 chart-body-wrapper">
+                          <h4 className="text-black font-w400 mb-0 m-4">
+                            Active Patients
+                          </h4>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-xl-4 col-xxl-4 col-sm-6 ">
+                      <div className="card">
+                        <div className="card-header border-1 pb-0">
+                          <div className="d-flex align-items-center">
+                            <h2 className="chart-num font-w800 mb-0">
+                              {patientBiometricCount?.totalRecords}
+                            </h2>
+                          </div>
+                          <span>
+                            <i class="fa-solid fa-fingerprint fa-4x "></i>
+                          </span>
+                        </div>
+                        <div className="card-body pt-0 chart-body-wrapper">
+                          <h4 className="text-black font-w400 mb-0 m-4">
+                            Patients With Biometrics
+                          </h4>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-xl-4 col-xxl-4 col-sm-6 ">
+                      <div className="card">
+                        <div className="card-header border-1 pb-0">
+                          <div className="d-flex align-items-center">
+                            <h2 className="chart-num font-w800 mb-0">
+                              {patientNoBiometricCount?.totalRecords}
+                            </h2>
+                          </div>
+                          <span>
+                            <i class="fa-solid fa-fingerprint fa-4x text-danger"></i>
+                          </span>
+                        </div>
+                        <div className="card-body pt-0 chart-body-wrapper">
+                          <h4 className="text-black font-w400 mb-0 m-4">
+                            Patients with no Biometrics
+                          </h4>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="col-xl-6 col-xxl-6 col-sm-6 ">
+                      <div className="card">
+                        <div className="card-body pt-0 chart-body-wrapper">
+                          <Pie
+                            plotData={sexCount}
+                            title="Patient Enrollment by Sex"
+                            seriesName="Active patients"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-xl-6 col-xxl-6 col-sm-6 ">
+                      <div className="card">
+                        <div className="card-body pt-0 chart-body-wrapper">
+                          <LineGraph
+                            LineGraphData={sexYearCount}
+                            title={`Patient Enrollment Trends by Year and Sex`}
+                            xName={`Year`}
+                            yName={`Patient`}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </>
+      ) : (
+        <div
+          style={{
+            marginTop: "200px",
+            height: "100%",
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Spinner size="lg" animation="border" />
+        </div>
+      )}
+    </>
+  );
+};
 export default Home;

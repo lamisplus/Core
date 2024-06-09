@@ -123,13 +123,13 @@ const UserRegistration = (props) => {
     axios
         .get(`${baseUrl}organisation-unit-levels/v2/4/organisation-units`)
         .then((response) => {
-          setAllorganisations(response.data);
-          // setOrganisations(
-          //     Object.entries(response.data).map(([key, value]) => ({
-          //       label: value.name,
-          //       value: value.name,
-          //     }))
-          // );
+          // setAllorganisations(response.data);
+          setAllorganisations(
+              Object.entries(response.data).map(([key, value]) => ({
+                label: value.name,
+                value: value.id,
+              }))
+          );
         })
         .catch((error) => {
           console.log(error);
@@ -173,6 +173,8 @@ const UserRegistration = (props) => {
           fetchOrganisation();
         });
   }
+
+  console.log(selectedOrganisations);
 
   useEffect(() => {
     async function getCharacters() {

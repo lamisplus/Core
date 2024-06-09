@@ -1,4 +1,4 @@
-import React, {useEffect, forwardRef} from 'react';
+import React, {useEffect, forwardRef, useState} from 'react';
 import MaterialTable from 'material-table';
 import { connect } from "react-redux";
 import { fetchAll, deleteApplicationCodeset} from "./../../../actions/applicationCodeset";
@@ -41,6 +41,7 @@ import {Icon, Label} from "semantic-ui-react";
 import {MdModeEdit, MdPerson, MdDelete} from "react-icons/md";
 import SplitActionButton from "../Button/SplitActionButton";
 import ServerInstalled from '../../Utils/ServerInstalled';
+import { authentication } from '../../../_services/authentication';
 // import EditIcon from "@material-ui/icons/Edit";
 // import DeleteIcon from "@material-ui/icons/Delete";
 
@@ -83,10 +84,20 @@ const ApplicationCodesetSearch = (props) => {
     const toggleImportModal = () => setShowImportModal(!showImportModal)
     const classes = useStyles()
     const serverInstalled = ServerInstalled();
+    const [hasAdminReadRole, setHasAdminReadRole] = useState(false);
+    const [hasAdminWriteRole, setHasAdminWriteRole] = useState(false);
 
     useEffect(() => {
         loadApplicationCodeset()
+        loadAdminReadWriteRoles()
     }, []); //componentDidMount
+
+    const loadAdminReadWriteRoles = () => {
+        const hasAdminReadRole = authentication?.userHasRole(['admin_read']);
+        const hasAdminWriteRole = authentication?.userHasRole(['admin_write']);
+        setHasAdminReadRole(hasAdminReadRole);
+        setHasAdminWriteRole(hasAdminWriteRole);
+    }
 
  const loadApplicationCodeset = () => {
      const onSuccess = () => {
@@ -197,7 +208,8 @@ const processDelete = (id) => {
               <CardBody>
                    <div className={"d-flex justify-content-end"}>
                        
-                        {serverInstalled && <ButtonMui variant="contained"
+                        {/* {serverInstalled && <ButtonMui variant="contained" */}
+                        {hasAdminWriteRole && <ButtonMui variant="contained"
                           color="primary"
                           startIcon={<FaPlus size="10"/>}
                           onClick={() => openApplicationCodeset(null)}
@@ -205,7 +217,8 @@ const processDelete = (id) => {
                         >
                             <span style={{textTransform: 'capitalize'}}>Add Codeset</span>
                         </ButtonMui>}
-                        {!serverInstalled && <ButtonMui variant="contained"
+                        {/* {!serverInstalled && <ButtonMui variant="contained" */}
+                        {hasAdminWriteRole && <ButtonMui variant="contained"
                           color="primary"
                           startIcon={<FaUpload size="10"/>}
                           disabled={importing}
@@ -214,7 +227,8 @@ const processDelete = (id) => {
                         >
                             <span style={{textTransform: 'capitalize'}}>{importing ? <Spinner /> : "Import Codeset"}</span>
                         </ButtonMui>}
-                        {serverInstalled && <ButtonMui variant="contained"
+                        {/* {serverInstalled && <ButtonMui variant="contained" */}
+                        {hasAdminReadRole && <ButtonMui variant="contained"
                           color="primary"
                           startIcon={<FaDownload size="10"/>}
                           onClick={() => exportApplicationCodeset()}

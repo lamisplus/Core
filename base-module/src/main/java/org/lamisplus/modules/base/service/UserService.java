@@ -1,6 +1,7 @@
 package org.lamisplus.modules.base.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.lamisplus.modules.base.controller.apierror.EntityNotFoundException;
@@ -31,9 +32,11 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.lamisplus.modules.base.util.Constants.ArchiveStatus.ARCHIVED;
+import static org.lamisplus.modules.base.util.Constants.ArchiveStatus.UN_ARCHIVED;
 
 
 @Service
+@Slf4j
 @Transactional
 @RequiredArgsConstructor
 public class UserService {
@@ -87,8 +90,10 @@ public class UserService {
         newUser.setLastName(userDTO.getLastName());
         newUser.setDesignation(userDTO.getDesignation());
 
+        // check if applicationUserOrganisationUnits has data, if it does, collect all the organisationUnitId
+        // into a list and delete all by applicationUserId
         userDTO.setApplicationUserOrganisationUnits(null);
-        if(userDTO.getIpCode() != null || userDTO.getIpCode() != 0) {
+        if(userDTO.getIpCode() != null && userDTO.getIpCode() != 0) {
             newUser.setCurrentOrganisationUnitId(userDTO.getIpCode());
             newUser.setIpCode(userDTO.getIpCode());
         }else if(!userDTO.getFacilityIds().isEmpty()) {
@@ -117,7 +122,37 @@ public class UserService {
             newUser.setRole(getRolesFromStringSet(userDTO.getRoles()));
         }
         User user = userRepository.save(newUser);
-        if(!userDTO.getFacilityIds().isEmpty()) {
+        // check if the user has an id, meaning that it is an update operation
+        // if it is an update operation, fetch all the applicationUserOrganisationUnits by applicationUserId
+        // update the list based on the facilityIds coming in from the userDTO
+        // if the facilityIds is empty, delete all applicationUserOrganisationUnits by applicationUserId
+        // if make sure the facilityIds in the userDto and the applicationUserOrganisationUnits are the same
+        // if there are new facilityIds, add them to the applicationUserOrganisationUnits
+        // if there are facilityIds that are not in the userDto, delete them from the applicationUserOrganisationUnits
+        if(userDTO.getId() != null) {
+            List<ApplicationUserOrganisationUnit> applicationUserOrganisationUnits = applicationUserOrganisationUnitRepository.findAllByApplicationUserIdAndArchived(user.getId(), UN_ARCHIVED);
+            if(userDTO.getFacilityIds().isEmpty()) {
+                applicationUserOrganisationUnitRepository.deleteAll(applicationUserOrganisationUnits);
+            } else {
+                List<Long> facilityIds = applicationUserOrganisationUnits.stream().map(ApplicationUserOrganisationUnit::getOrganisationUnitId).collect(Collectors.toList());
+                Set<Long> newFacilityIds = userDTO.getFacilityIds();
+                List<Long> toDelete = facilityIds.stream().filter(facilityId -> !newFacilityIds.contains(facilityId)).collect(Collectors.toList());
+                List<Long> toAdd = newFacilityIds.stream().filter(facilityId -> !facilityIds.contains(facilityId)).collect(Collectors.toList());
+                if(!toDelete.isEmpty()) {
+                    applicationUserOrganisationUnitRepository.deleteAllByApplicationUserIdAndOrganisationUnitIdIn(user.getId(), toDelete);
+                }
+                if(!toAdd.isEmpty()) {
+                    applicationUserOrganisationUnitRepository.saveAll(toAdd.stream().map(facilityId->{
+                        ApplicationUserOrganisationUnit newAppUserOrgUnit = new ApplicationUserOrganisationUnit();
+                        newAppUserOrgUnit.setOrganisationUnitId(facilityId);
+                        newAppUserOrgUnit.setApplicationUserId(user.getId());
+                        return newAppUserOrgUnit;
+                    }).collect(Collectors.toList()));
+                }
+            }
+        }
+
+        /*if(!userDTO.getFacilityIds().isEmpty()) {
             applicationUserOrganisationUnitRepository.saveAll(userDTO.getFacilityIds().stream().map(facilityId->{
                 ApplicationUserOrganisationUnit orgUser = new ApplicationUserOrganisationUnit();
                 orgUser.setOrganisationUnitId(facilityId);
@@ -125,7 +160,7 @@ public class UserService {
                 return orgUser;
             }).collect(Collectors.toList()));
 
-        }
+        }*/
         return newUser;
     }
 
@@ -149,6 +184,11 @@ public class UserService {
     @Transactional(readOnly = true)
     public Page<UserDTO> getAllManagedUsers(Pageable pageable) {
         return userRepository.findAllByArchived(pageable, 0).map(UserDTO::new);
+    }
+    @Transactional(readOnly = true)
+    public List<UserDTO> getAllManagedUsers() {
+//        LOG.info("Page size: {}, Page Number: {}", pageable.getPageSize(), pageable.getPageNumber());
+        return userRepository.findAllByArchived(0).stream().map(UserDTO::new).collect(Collectors.toList());
     }
 
     public User update(Long id, User user) {
@@ -190,7 +230,7 @@ public class UserService {
 
         boolean found = false;
         for (ApplicationUserOrganisationUnit applicationUserOrganisationUnit : user.getApplicationUserOrganisationUnits()) {
-            if(user.getIpCode() != null || user.getIpCode() != 0){
+            if(user.getIpCode() != null && user.getIpCode() != 0){
                 organisationUnitId = user.getIpCode();
                 found = true;
                 break;

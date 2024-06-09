@@ -20,4 +20,5 @@ public interface ApplicationUserOrganisationUnitRepository extends JpaRepository
 
     List<ApplicationUserOrganisationUnit> findAllByApplicationUserIdAndArchived(Long applicationUserId, int archived);
 
+    void deleteAllByApplicationUserIdAndOrganisationUnitIdIn(Long id, List<Long> toDelete);
 }
