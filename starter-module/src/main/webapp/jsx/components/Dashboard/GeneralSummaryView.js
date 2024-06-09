@@ -44,8 +44,8 @@ const GeneralSummaryView = () => {
     const [patientPieChartBySex, setPieChartBySex]= useState(null);
     const [totalPatientsBiometric, setToTalPatientsBiometric]= useState("")
     const [chartController, setChartController]= useState({
-      chartTitle: "Registered Patients per IP",
-      chartSubtitle: "Click to view facility registered patients",
+      chartTitle: "Ever Enrolled per IP",
+      chartSubtitle: "Click to view facility ever enrolled",
       yAxisText: "Number of Patients",
       xAxisText: "Implementing Partners",
     });
@@ -280,51 +280,51 @@ const GeneralSummaryView = () => {
 
     }
   }
-    const barChartByIPActivePatients = {// Highchart onject for bar chart of registered patient
-        chart: {
-          type: 'column'
-      },
-      title: {
-          text: 'Number of registered patients per IP'
-      },
-      subtitle: {
-          text: ''
-      },
-      xAxis: {
-          categories: patientBarChart2 && patientBarChart2.xaxis ? patientBarChart2.xaxis.categories :[
-              'ACE1',
-              'ACE2',
-              'ACE3',
-              'ACE4',
-              'ACE5',
-              'ACE6',
-              'TMEC RISE',
-              'KP CARE 1',
-              'KP Care 2',
-          ],
-          crosshair: true
-      },
-      yAxis: {
-          min: 0,
-          title: {
-              text: 'Total Patients'
-          }
-      },
-
-      plotOptions: {
-          column: {
-              pointPadding: 0.2,
-              borderWidth: 0
-          }
-      },
-
-      series: [{
-        colorByPoint: true,
-          name: 'Implementing Partners',
-          data: patientBarChart2 && patientBarChart2.series ? patientBarChart2.series[0].data : []
-
-      }]
-    }
+    // const barChartByIPActivePatients = {// Highchart onject for bar chart of registered patient
+    //     chart: {
+    //       type: 'column'
+    //   },
+    //   title: {
+    //       text: 'Number of registered patients per IP'
+    //   },
+    //   subtitle: {
+    //       text: ''
+    //   },
+    //   xAxis: {
+    //       categories: patientBarChart2 && patientBarChart2.xaxis ? patientBarChart2.xaxis.categories :[
+    //           'ACE1',
+    //           'ACE2',
+    //           'ACE3',
+    //           'ACE4',
+    //           'ACE5',
+    //           'ACE6',
+    //           'TMEC RISE',
+    //           'KP CARE 1',
+    //           'KP Care 2',
+    //       ],
+    //       crosshair: true
+    //   },
+    //   yAxis: {
+    //       min: 0,
+    //       title: {
+    //           text: 'Total Patients'
+    //       }
+    //   },
+    //
+    //   plotOptions: {
+    //       column: {
+    //           pointPadding: 0.2,
+    //           borderWidth: 0
+    //       }
+    //   },
+    //
+    //   series: [{
+    //     colorByPoint: true,
+    //       name: 'Implementing Partners',
+    //       data: patientBarChart2 && patientBarChart2.series ? patientBarChart2.series[0].data : []
+    //
+    //   }]
+    // }
     const pieChartBySex2 = {//Highchart object for pie CHart by SEX
       chart: {
         plotBackgroundColor: null,
@@ -400,7 +400,7 @@ const GeneralSummaryView = () => {
         {
           name: chartController.xAxisText,
           colorByPoint: true,
-          data: patientBarChart ? patientBarChart.map(each => Object.values(each)[0] || 0) : []
+          data: patientBarChart ? patientBarChart.map(each => each.patientCount || 0) : []
         }
       ],
       tooltip: {
@@ -412,7 +412,7 @@ const GeneralSummaryView = () => {
         },
       },
       xAxis: {
-        categories: patientBarChart ? patientBarChart.map(each => Object.values(each)[1] || 0) : [],
+        categories: patientBarChart.length > 0 ? patientBarChart.map(each => each.orgUnit || 0) : [],
       },
       yAxis: {
         title: {
@@ -453,7 +453,7 @@ const GeneralSummaryView = () => {
                   <i className="la la-users"></i>
                 </span>
                 <div className="media-body">
-                  <p className="mb-1">Registered Patients</p>
+                  <p className="mb-1">Ever Enrolled</p>
                   <h4 className="mb-0">{patientsIpsAndHealthFacilitiesData ? (patientsIpsAndHealthFacilitiesData.patientCount ? patientsIpsAndHealthFacilitiesData.patientCount.toLocaleString() : 0) : 0 }</h4>
                 </div>
               </div>

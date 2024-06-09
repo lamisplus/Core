@@ -509,5 +509,27 @@
 
         </sql>
     </changeSet>
+    <changeSet failOnError="true" id="19122023111307" author="Peter Abiodun">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="1">
+                SELECT COUNT(*)
+                FROM base_organisation_unit_level
+                WHERE id = 7;
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            UPDATE base_organisation_unit
+            SET archived = 1
+            WHERE organisation_unit_level_id = 7;
+        </sql>
+    </changeSet>
+    <changeSet failOnError="true" id="1809964680" author="Peter Abiodun">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="base_application_user_organisation_unit"/>
+        </preConditions>
+        <sql>
+            SELECT pg_catalog.setval('base_application_user_organisation_unit_id_seq', (SELECT MAX(id) FROM base_application_user_organisation_unit) , true);;
+        </sql>
+    </changeSet>
 
 </databaseChangeLog>
