@@ -49,7 +49,7 @@ public class AccountController {
         if(optionalUser.isPresent()){
             User user = optionalUser.get();
 
-            smsService.runDailyTask();
+//            smsService.runDailyTask();
 
 
             if(user.getCurrentOrganisationUnitId() == null && !user.getApplicationUserOrganisationUnits().isEmpty()){

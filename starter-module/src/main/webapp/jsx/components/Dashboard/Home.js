@@ -11,10 +11,13 @@ import LineGraph from "../charts/LineGraph";
 import { ThemeContext } from "../../../context/ThemeContext";
 import GeneralSummaryView from "./GeneralSummaryView";
 import { TabContext, TabList, TabPanel } from "@material-ui/lab";
+import { systemSettingsHelper } from "../../../_services/SystemSettingsHelper";
+import { authentication } from "../../../_services/authentication";
 
 const Home = () => {
   const listOfAllModule = useSelector((state) => state.boostrapmodule.list);
-  const [hasServerInstalled, setHasServerInstalled] = useState(false);
+  const instance = systemSettingsHelper.getSingleSystemSetting("instance")
+  const [isServerInstance, setIsServerInstance] = useState(true);
   const [value, setValue] = React.useState("2");
   const [loading, setLoading] = useState(true);
   const [dashboardDataLoading, setDashboardDataLoading] = useState(false);
@@ -130,40 +133,56 @@ const Home = () => {
     setDashboardDataLoading(false);
   }
 
-  useEffect(() => {
-    changeBackground({ value: "light", label: "Light" });
+  // useEffect(() => {
+  //   changeBackground({ value: "light", label: "Light" });
 
-    if (listOfAllModule) {
-      if (listOfAllModule.length > 0) {
-        listOfAllModule.map((item) => {
-          if (item.name === "ServerSyncModule") {
-            setHasServerInstalled(true);
-          }
-        });
-      }
-      setLoading(false);
-    }
-    // if (!patientCount?.totalRecords) {
-    //   getPatientCount();
-    // }
+  //   if (listOfAllModule) {
+  //     if (listOfAllModule.length > 0) {
+  //       listOfAllModule.map((item) => {
+  //         if (item.name === "ServerSyncModule") {
+  //           setIsServerInstance(true);
+  //         }
+  //       });
+  //     }
+  //     setLoading(false);
+  //   }
+  //   // if (!patientCount?.totalRecords) {
+  //   //   getPatientCount();
+  //   // }
 
-    // if (!patientBiometricCount?.totalRecords) {
-    //   getPatientWithBiometricsCount();
-    // }
+  //   // if (!patientBiometricCount?.totalRecords) {
+  //   //   getPatientWithBiometricsCount();
+  //   // }
 
-    // if (!patientNoBiometricCount?.totalRecords) {
-    //   getPatientWithNoBiometricsCount();
-    // }
+  //   // if (!patientNoBiometricCount?.totalRecords) {
+  //   //   getPatientWithNoBiometricsCount();
+  //   // }
 
-    // if (!sexCount[0]?.name) {
-    //   getSexCount();
-    // }
+  //   // if (!sexCount[0]?.name) {
+  //   //   getSexCount();
+  //   // }
 
-    // if (!sexYearCount[0]?.year) {
-    //   getSexYearCount();
-    // }
+  //   // if (!sexYearCount[0]?.year) {
+  //   //   getSexYearCount();
+  //   // }
     
-  }, [listOfAllModule]);
+  // }, [listOfAllModule]);
+
+  useEffect(async ()=> {
+    if (instance !== null && instance !== undefined) {
+      const serverInstance = instance.value === "1"
+      setIsServerInstance(serverInstance)
+      setLoading(false)
+    } else {
+      await systemSettingsHelper.fetchAllSystemSettings()
+      const newInstance = systemSettingsHelper.getSingleSystemSetting("instance")
+      const newServerInstance = newInstance.value === "1"
+      setIsServerInstance(newServerInstance)
+      setLoading(false)
+
+    }
+    setLoading(false)
+  },[instance])
 
   useEffect(() => {
     fetchDashboardData();
@@ -173,7 +192,7 @@ const Home = () => {
     <>
       {(!loading && !dashboardDataLoading) ? (
         <>
-          {hasServerInstalled ? (
+          {isServerInstance ? (
             <TabContext value={value}>
               {/* <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <TabList onChange={handleTabsChange} aria-label="lab API tabs example">

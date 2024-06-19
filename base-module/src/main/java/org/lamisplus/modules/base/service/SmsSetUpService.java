@@ -3,29 +3,23 @@ package org.lamisplus.modules.base.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.lamisplus.modules.base.controller.apierror.EntityNotFoundException;
-import org.lamisplus.modules.base.domain.dto.NotificationDTO;
 import org.lamisplus.modules.base.domain.dto.SmsSetupDTO;
-import org.lamisplus.modules.base.domain.entities.Notification;
 import org.lamisplus.modules.base.domain.entities.SmsSetup;
 import org.lamisplus.modules.base.domain.repositories.SmsSetupRepository;
 import org.lamisplus.modules.base.security.SecurityUtils;
 import org.springframework.beans.BeanUtils;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import reactor.util.UUIDUtils;
 
-import javax.swing.text.html.Option;
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class SmsSetUpService {
 
-    private final CurrentUserOrganizationService currentUserOrganizationService;
+    private final CurrentUserOrganizationUnitService currentUserOrganizationUnitService;
     private final SmsSetupRepository smsSetupRepository;
     static final Long UN_ARCHIVED = 0L;
     static final Integer ARCHIVED = 1;
@@ -45,7 +39,7 @@ public class SmsSetUpService {
                 }
             BeanUtils.copyProperties(smsSetupDTO, smsSetup);
             smsSetup.setUuid(UUIDUtils.random().toString());
-            smsSetup.setFacilityId(currentUserOrganizationService.getCurrentUserOrganization());
+            smsSetup.setFacilityId(currentUserOrganizationUnitService.getCurrentUserOrganization());
             return convertSmsSetupToDto(smsSetupRepository.save(smsSetup));
         }
 

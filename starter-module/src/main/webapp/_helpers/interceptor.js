@@ -25,7 +25,7 @@ axios.interceptors.response.use(function (response) {
     console.log(error);
     //return;
 
-    if (error && error.response && error.response.status && error.response.status == 403 && authentication.currentUserValue != null) {
+    if (error && error.response && error.response.status && error.response.status === 403 && authentication.currentUserValue !== null) {
         // do nothing if the api has to do with an encounter, this is for custom handling of api response rather than redirecting to the unauthorised page
         //console.log(error.request.responseURL);
         const url = error.request && error.request.responseURL ? error.request.responseURL.toString() : null;

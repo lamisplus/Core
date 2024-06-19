@@ -12,11 +12,10 @@ import javax.persistence.*;
 @Table(name = "system_settings")
 public class SystemSettings extends Audit {
     @Id
-//    @GeneratedValue(strategy = GenerationType.AUTO)
-//    private Long id;
     @Column(unique = true, nullable = false)
     private String key;
     private String value;
+    private String description;
 
 
 }

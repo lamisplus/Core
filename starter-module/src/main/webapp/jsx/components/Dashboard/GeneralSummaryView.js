@@ -89,7 +89,7 @@ const GeneralSummaryView = () => {
   }, [dateRange]);
 
   const fetchDashboardData = async () => {
-    console.log("dateRange", dateRange);
+    // console.log("dateRange", dateRange);
     PatientsIpsAndHealthFacilities();
     ReportingRate();
     TotalSync();
@@ -477,7 +477,6 @@ const GeneralSummaryView = () => {
 
   // Original function
   const fetchDashboardDataForSelectedWeek = (range) => {
-    console.log(range);
     debouncedSetDateRange(range);
   };
 

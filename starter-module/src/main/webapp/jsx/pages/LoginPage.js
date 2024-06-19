@@ -28,12 +28,12 @@ function Register(props) {
     }
   }, [username, password]);
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     setIsButtonDisabled(true);
     setSubmittext("Login Please wait...");
     setIsButtonDisabled(true);
-    authentication.login(username, password, remember).then(
+    await authentication.login(username, password, remember).then(
       (user) => {
         setError(false);
         setHelperText("Login Successfully");
@@ -49,11 +49,11 @@ function Register(props) {
     );
   };
   var d = new Date();
-  const handleKeyPress = (e) => {
-    if (e.keyCode === 13 || e.which === 13) {
-      isButtonDisabled || handleLogin();
-    }
-  };
+  // const handleKeyPress = (e) => {
+  //   if (e.keyCode === 13 || e.which === 13) {
+  //     isButtonDisabled || handleLogin();
+  //   }
+  // };
   /* Endof the code */
 
   let errorsObj = { email: "", password: "" };
@@ -112,7 +112,7 @@ function Register(props) {
                           }}
                           name="email"
                           onChange={(e) => setUsername(e.target.value)}
-                          onKeyPress={(e) => handleKeyPress(e)}
+                          // onKeyPress={(e) => handleKeyPress(e)}
                         />
                         {errors.email && (
                           <div className="text-danger fs-12">
@@ -137,7 +137,7 @@ function Register(props) {
                             borderRadius: "0.2rem",
                           }}
                           onChange={(e) => setPassword(e.target.value)}
-                          onKeyPress={(e) => handleKeyPress(e)}
+                          // onKeyPress={(e) => handleKeyPress(e)}
                         />
                         {errors.password && (
                           <div className="text-danger fs-12">

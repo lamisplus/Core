@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.lamisplus.modules.base.domain.dto.AppointmentProjectionDto;
 import org.lamisplus.modules.base.domain.dto.NotificationDTO;
-import org.lamisplus.modules.base.service.CurrentUserOrganizationService;
+import org.lamisplus.modules.base.service.CurrentUserOrganizationUnitService;
 import org.lamisplus.modules.base.service.NotificationService;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +20,7 @@ import java.util.concurrent.ExecutionException;
 public class NotificationController {
 
     private final NotificationService notificationService;
-    private final CurrentUserOrganizationService organizationService;
+    private final CurrentUserOrganizationUnitService organizationService;
 
 
     @PostMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -47,6 +47,7 @@ public class NotificationController {
     @GetMapping(value = "/appointments", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<AppointmentProjectionDto>> getAppointments () throws ExecutionException, InterruptedException {
         Long facility = organizationService.getCurrentUserOrganization();
+        LOG.info("Facility Id found: {}", facility);
         return ResponseEntity.ok(notificationService.getAppointmentCategory(facility));
     }
 }

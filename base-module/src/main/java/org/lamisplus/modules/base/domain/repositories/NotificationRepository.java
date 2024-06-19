@@ -30,8 +30,8 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
     List<Notification> getAllByfacilityIdAndArchived(Long facilityId, int archived);
 
 
-    @Query(value = "SELECT period from base_application_notification_config WHERE facility_id = ?1 AND archived = 0", nativeQuery = true)
-    String getPeriodAndIndicatorFromDatabase (Long facilityId);
+    @Query(value = "SELECT DISTINCT period from base_application_notification_config WHERE facility_id = ?1 AND archived = 0", nativeQuery = true)
+    List<String> getPeriodAndIndicatorFromDatabase (Long facilityId);
 
 
     @Query(value = "SELECT  p.uuid, surname, first_name AS firstName, hospital_number AS hospitalNumber, sex, \n" +

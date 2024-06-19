@@ -8,7 +8,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class CurrentUserOrganizationService {
+public class CurrentUserOrganizationUnitService {
 
     private  final UserService userService;
 

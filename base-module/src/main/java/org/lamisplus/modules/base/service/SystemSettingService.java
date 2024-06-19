@@ -4,8 +4,9 @@ package org.lamisplus.modules.base.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVPrinter;
-import org.lamisplus.modules.base.domain.dto.SystemSettingDto;
+import org.apache.commons.csv.CSVRecord;
 import org.lamisplus.modules.base.domain.entities.SystemSettings;
 import org.lamisplus.modules.base.domain.repositories.SystemSettingsRepository;
 import org.springframework.stereotype.Service;
@@ -13,8 +14,8 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 @Service
@@ -26,12 +27,13 @@ public class SystemSettingService {
     private final SystemSettingsRepository systemSettingsRepository;
 
 
-    public SystemSettings updateSystemSetting(String key, SystemSettingDto request) {
+    public SystemSettings updateSystemSetting(String key, SystemSettings request) {
         SystemSettings systemSettings = systemSettingsRepository.findByKey(key)
                 .orElseThrow(() -> new EntityNotFoundException("System setting " + key + " not found"));
 
 
         systemSettings.setValue(request.getValue());
+        systemSettings.setDescription(request.getDescription());
 
         systemSettingsRepository.save(systemSettings);
 
@@ -53,14 +55,14 @@ public class SystemSettingService {
 
     public void exportSystemSettingAsCSV(PrintWriter writer) {
 
-            List<SystemSettings> settings = systemSettingsRepository.findAll();
+        List<SystemSettings> settings = systemSettingsRepository.findAll();
 
         try {
             CSVPrinter printer = new CSVPrinter(writer, CSVFormat.DEFAULT);
-            printer.printRecord("Key","Value");
+            printer.printRecord("key","value", "description");
 
                 for (SystemSettings setting : settings) {
-                    printer.printRecord(setting.getKey(),setting.getValue());
+                    printer.printRecord(setting.getKey(),setting.getValue(), setting.getDescription());
                 }
             } catch (IOException e) {
                 throw new RuntimeException("Error generating CSV file", e);
@@ -69,28 +71,26 @@ public class SystemSettingService {
 
 
     @Transactional
-    public Object importSystemSettingAsCSV(MultipartFile file) {
+    public Object importSystemSettingAsCSV(MultipartFile file) throws IOException {
+
+        List<SystemSettings> systemSettingsList = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream()))) {
-            List<SystemSettings> settings = reader.lines()
-                    .skip(1)
-                    .map(line -> {
-                        String[] fields = line.split(",");
-                        SystemSettings systemSettings = new SystemSettings();
-                        systemSettings.setKey(fields[0].trim());
-                        systemSettings.setValue(fields[1].trim());
-                        return systemSettings;
-                    })
-                    .collect(Collectors.toList());
-
-
-            systemSettingsRepository.saveAll(settings);
-
-
-            return "System settings imported successfully";
-
+            CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT.withHeader());
+            for (CSVRecord csvRecord : csvParser) {
+                if (systemSettingsRepository.findByKey(csvRecord.get("key")).isPresent()){
+                    SystemSettings systemSetting = new SystemSettings();
+                    systemSetting.setKey(csvRecord.get("key"));
+                    systemSetting.setValue(csvRecord.get("value"));
+                    systemSetting.setDescription(csvRecord.get("description"));
+                    systemSettingsList.add(systemSetting);
+                }
+            }
         } catch (IOException e) {
-            throw new RuntimeException("Error importing CSV file", e);
+            e.printStackTrace();
+            throw e;
         }
+
+        return systemSettingsRepository.saveAll(systemSettingsList);
 
     }
 

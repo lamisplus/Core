@@ -13,7 +13,7 @@ import { MdImportExport } from "react-icons/md";
 import SmsPage from "./SmsPage";
 
 const  UiTab = () => {
-    const [key, setKey] = useState('home');
+    const [key, setKey] = useState('notifications');
 
 
   return (

@@ -6,6 +6,7 @@ import * as ACTION_TYPES from "../actions/types";
 import jwt_decode from "jwt-decode";
 import _ from 'lodash';
 import axios from "axios";
+import { systemSettingsHelper } from './SystemSettingsHelper';
 
 const { dispatch } = store;
 const currentUserSubject = new BehaviorSubject(JSON.parse(localStorage.getItem('currentUser')));
@@ -32,7 +33,7 @@ function login(username, password, remember) {
 
     return fetch(`${url}authenticate`, requestOptions)
         .then(handleResponse)
-        .then(user => {
+        .then( async user => {
             dispatch({
                 type: ACTION_TYPES.AUTHENTICATION,
                 payload: "Authenticated"
@@ -40,6 +41,7 @@ function login(username, password, remember) {
             // store user details and jwt token in local storage to keep user logged in between page refreshes
             localStorage.setItem('currentUser', JSON.stringify(user));
             currentUserSubject.next(user);
+            await systemSettingsHelper.fetchAllSystemSettings();
             fetchMe();
             return user;
         });

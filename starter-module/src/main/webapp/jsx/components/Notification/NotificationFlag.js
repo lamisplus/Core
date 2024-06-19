@@ -96,7 +96,7 @@ const NotificationFlag = (props) => {
         axios.get(`${baseUrl}patient-flag/patient-flag-configs`, {
             headers: { Authorization: `Bearer ${token}` },
         }).then((response) => {
-            setNotificationConfigList(response.data);
+            setNotificationConfigList(typeof response.data === 'object' ? response.data : [])
         })
     }
 

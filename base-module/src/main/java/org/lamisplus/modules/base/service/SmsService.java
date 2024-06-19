@@ -1,6 +1,5 @@
 package org.lamisplus.modules.base.service;
 
-import com.sun.net.httpserver.HttpsServer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
@@ -12,6 +11,7 @@ import org.lamisplus.modules.base.domain.entities.SmsSetup;
 import org.lamisplus.modules.base.domain.repositories.SmsRepository;
 import org.lamisplus.modules.base.domain.repositories.SmsSetupRepository;
 import org.springframework.beans.BeanUtils;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -32,9 +32,10 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@EnableScheduling
 public class SmsService {
 
-    private final CurrentUserOrganizationService currentUserOrganizationService;
+    private final CurrentUserOrganizationUnitService currentUserOrganizationUnitService;
     private final SmsRepository smsRepository;
     private final SmsSetupRepository smsSetupRepository;
     private final InternetConnectivityService internetConnectivityService;
@@ -125,7 +126,7 @@ public class SmsService {
             DateTimeFormatter dTF = DateTimeFormatter.ofPattern("dd-MMM-yyyy");
             String date = dTF.format(aWeekFromToday);
             String notificationCount = "First";
-            Long facilityId = currentUserOrganizationService.getCurrentUserOrganization();
+            Long facilityId = currentUserOrganizationUnitService.getCurrentUserOrganization();
             // Check if bulk sms has been sent today for this message category;
             Boolean messageSentPerDateAndPerSmsCategory = smsRepository.messageSentPerDateAndPerSmsCategory("ARV Refill Reminder Message", today, notificationCount);
             if (!messageSentPerDateAndPerSmsCategory) {
@@ -180,7 +181,7 @@ public class SmsService {
             DateTimeFormatter dTF = DateTimeFormatter.ofPattern("dd-MMM-yyyy");
             String date = dTF.format(aWeekFromToday);
             String notificationCount = "First";
-            Long facilityId = currentUserOrganizationService.getCurrentUserOrganization();
+            Long facilityId = currentUserOrganizationUnitService.getCurrentUserOrganization();
             // Check if bulk sms has been sent today for this message category;
             Boolean messageSentPerDateAndPerSmsCategory = smsRepository.messageSentPerDateAndPerSmsCategory("ARV Refill Reminder Message", today, notificationCount);
             if (!messageSentPerDateAndPerSmsCategory) {
@@ -235,7 +236,7 @@ public class SmsService {
             DateTimeFormatter dTF = DateTimeFormatter.ofPattern("dd-MMM-yyyy");
             String date = dTF.format(aWeekFromToday);
             String notificationCount = "First";
-            Long facilityId = currentUserOrganizationService.getCurrentUserOrganization();
+            Long facilityId = currentUserOrganizationUnitService.getCurrentUserOrganization();
             // Check if bulk sms has been sent today for this message category;
             Boolean messageSentPerDateAndPerSmsCategory = smsRepository.messageSentPerDateAndPerSmsCategory("ARV Refill Reminder Message", today, notificationCount);
             if (!messageSentPerDateAndPerSmsCategory) {

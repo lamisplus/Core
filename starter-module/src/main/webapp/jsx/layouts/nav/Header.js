@@ -36,12 +36,15 @@ import {
 } from 'reactstrap';
 import ServerInstalled from "../../Utils/ServerInstalled";
 import { FaBell } from "react-icons/fa";
+import { systemSettingsHelper } from "../../../_services/SystemSettingsHelper";
 
 
 
 const { dispatch } = store;
 
 const Header = (props) => {
+    const instance = systemSettingsHelper.getSingleSystemSetting("instance");
+    const [isServerInstance, setIsServerInstance] = useState(true);
     const isAuthorised = window.location.pathname !== '/unauthorised';
     const [user, setUser] = useState(null);
     const [notificationConfigList, setNotificationConfigList] = useState([]);
@@ -59,6 +62,18 @@ const Header = (props) => {
     };
     const serverInstalled = ServerInstalled();
     useEffect(() => { }, [ServerInstalled])
+
+    useEffect(async ()=> {
+        if (instance !== null && instance !== undefined) {
+          const serverInstance = instance.value === "1"
+          setIsServerInstance(serverInstance)
+        } else {
+            await systemSettingsHelper.fetchAllSystemSettings()
+            const newInstance = systemSettingsHelper.getSingleSystemSetting("instance")
+            const newServerInstance = newInstance.value === "1"
+            setIsServerInstance(newServerInstance)
+          }
+      },[instance])
 
     useEffect(() => {
         if(isAuthorised) {
@@ -105,8 +120,8 @@ const Header = (props) => {
 
                 })
                 .catch((error) => {
-                    authentication.logout();
-                    // console.log(error);
+                    // authentication.logout();
+                    console.log(error);
                 });
         }
     }
@@ -135,12 +150,11 @@ const Header = (props) => {
         }
         await dispatch(fetchAllBootstrapModule(onSuccess, onError));
     }
-
-
+    
     useEffect(() => {
-        if(isAuthorised) {
+        if(isAuthorised && isServerInstance === false) {
             const intervalId = setInterval(() => {
-                loadModules();
+                // loadModules();
                 // const interval = 30 * 60 * 1000; // 30 minutes in milliseconds
 
             }, 30 * 60 * 1000); // 30 seconds in milliseconds
@@ -154,10 +168,11 @@ const Header = (props) => {
     const currentUser = authentication.getCurrentUser();
     useEffect(() => {
         fetchMe();
-        if(isAuthorised) {
+        if(isAuthorised && isServerInstance === false) {
+            console.log("Is not server instance, so Loading modules");
             loadModules();
         }
-    }, []);
+    }, [isServerInstance]);
 
 
     const fetchNotificationConfigs = () => {
@@ -176,7 +191,10 @@ const Header = (props) => {
     }
 
     useEffect(() => {
-        fetchAppointment();
+        if (isAuthorised) {
+            fetchAppointment();
+            fetchNotificationConfigs();
+        }
         // notificationConfigList.length()
     },[])
 
@@ -278,12 +296,6 @@ const Header = (props) => {
 
     const [dataChanged, setDataChanged] = useState(false);
 
-    useEffect(() => {
-        fetchNotificationConfigs();
-        if (dataChanged) {
-            // setDataChanged(false); // Reset dataChanged after fetching
-        }
-    }, []);
 
     // Call this function when you want to reload with additional data
     const reloadWithAdditionalData = () => {
@@ -291,10 +303,6 @@ const Header = (props) => {
     };
 
 
-    // useEffect(() => {
-    //     fetchNotificationConfigs();
-    //     // loadAdminReadWriteRoles();
-    // }, [fetchNotificationConfigs])
 
 
     const history = useHistory();
@@ -430,7 +438,7 @@ const Header = (props) => {
                                     <React.Fragment>
                                         <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center',marginLeft:'5px' }}>
                                             {/* <Tooltip title="Account settings"> */}
-                                                <IconButton
+                                                {/* <IconButton
                                                     onClick={handleClick}
                                                     size="small"
                                                     sx={{ ml: 2 }}
@@ -440,7 +448,7 @@ const Header = (props) => {
                                                 >
                                                     <i className="fa fa-bolt" style={{ color: '#992E62' }} aria-hidden="true"></i>
                                                     <span className="ms-2" style={{ color: '#992E62' }}>Switch Facility</span>
-                                                </IconButton>
+                                                </IconButton> */}
                                             {/* </Tooltip> */}
                                         </Box>
                                         <Menu
@@ -478,7 +486,7 @@ const Header = (props) => {
                                             transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                                             anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
                                         >
-                                            {user && user.applicationUserOrganisationUnits.length > 0 ?
+                                            {user && user?.applicationUserOrganisationUnits?.length > 0 ?
                                                 user.applicationUserOrganisationUnits.map((organisation, index) => (
                                                     <MenuItem style={{ color: '#014d88', fontWeight: '400', fontFamily: `'poppins', sans-serif` }} onClick={() => switchFacility(organisation.organisationUnitId)}>
                                                         <i className="fa fa-hospital-o" aria-hidden="true" style={{ color: '#992E62', marginRight: '5px' }}></i>

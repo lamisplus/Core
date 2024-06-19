@@ -2,6 +2,7 @@ import React, {useEffect, forwardRef, useState} from 'react';
 import MaterialTable from 'material-table';
 import { connect } from "react-redux";
 import { fetchAll, deleteApplicationCodeset} from "./../../../actions/applicationCodeset";
+// import { Dropdown } from "react-bootstrap";
 import {
     Card,
     CardBody,  FormGroup,  Input,  Spinner,
@@ -42,7 +43,7 @@ import {MdModeEdit, MdPerson, MdDelete} from "react-icons/md";
 import SplitActionButton from "../Button/SplitActionButton";
 import ServerInstalled from '../../Utils/ServerInstalled';
 import { authentication } from '../../../_services/authentication';
-import { Dropdown,Button as Button2, Menu,  } from 'semantic-ui-react'
+import { Dropdown,Button as Button2, Menu } from 'semantic-ui-react'
 // import EditIcon from "@material-ui/icons/Edit";
 // import DeleteIcon from "@material-ui/icons/Delete";
 
@@ -87,6 +88,7 @@ const ApplicationCodesetSearch = (props) => {
     const serverInstalled = ServerInstalled();
     const [hasAdminReadRole, setHasAdminReadRole] = useState(false);
     const [hasAdminWriteRole, setHasAdminWriteRole] = useState(false);
+    const [importFileType, setImportFileType] = useState("json")
 
     useEffect(() => {
         loadApplicationCodeset()
@@ -157,19 +159,20 @@ const processDelete = (id) => {
         ]
     }
 
-    const exportApplicationCodeset = () => {
+    const exportApplicationCodeset = (fileType) => {
     axios
-      .get(`${baseUrl}application-codesets/exportCsv`,
+      .get(`${baseUrl}application-codesets/exportFile?fileType=${fileType}`,
         { responseType: 'blob'}
       )
       .then((response) => {
         const responseData = response.data
         let blob = new Blob([responseData], { type: "application/octet-stream" });
-        FileSaver.saveAs(blob, `Appplication-codeset.csv`);
+        FileSaver.saveAs(blob, `Appplication-codeset.${fileType}`);
       })
     }
 
-    const importApplicationCodeset = () => {
+    const importApplicationCodeset = (fileType) => {
+        setImportFileType(fileType)
         toggleImportModal()
     }
     const handleImportFileChange = (event) => {
@@ -185,7 +188,7 @@ const processDelete = (id) => {
         }
         const formData = new FormData();
         formData.append('file', applicationCodesetImportedFile);
-        axios.post(`${baseUrl}application-codesets/import`, formData, {
+        axios.post(`${baseUrl}application-codesets/import?fileType=${importFileType}`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data'
             }
@@ -224,20 +227,51 @@ const processDelete = (id) => {
                           color="primary"
                           startIcon={<FaUpload size="10"/>}
                           disabled={importing}
-                          onClick={() => importApplicationCodeset()}
+                          onClick={() => importApplicationCodeset("json")}
                                    style={{backgroundColor:'#014d88', margin: '10px'}}
                         >
                             <span style={{textTransform: 'capitalize'}}>{importing ? <Spinner /> : "Import Codeset"}</span>
                         </ButtonMui>}
+                        {/* {hasAdminReadRole &&
+                            <Menu.Menu >
+                                <Menu.Item >
+                                    <Button2 icon style={{ backgroundColor: '#014d88', margin: "10px" }} primary><Dropdown item text='Import Codeset'>
+                                        <Dropdown.Menu style={{ marginTop: "10px", }}>
+                                            <Dropdown.Item onClick={() => importApplicationCodeset("csv")}> CSV
+                                            </Dropdown.Item>
+                                            <Dropdown.Item onClick={() => importApplicationCodeset("json")}> JSON
+                                            </Dropdown.Item>
+                                        </Dropdown.Menu>
+                                    </Dropdown>
+                                    </Button2>
+                                </Menu.Item>
+                            </Menu.Menu>} */}
                         {/* {serverInstalled && <ButtonMui variant="contained" */}
                         {hasAdminReadRole && <ButtonMui variant="contained"
                           color="primary"
                           startIcon={<FaDownload size="10"/>}
-                          onClick={() => exportApplicationCodeset()}
+                          onClick={() => exportApplicationCodeset("json")}
                                    style={{backgroundColor:'#014d88', margin: '10px'}}
                         >
                             <span style={{textTransform: 'capitalize'}}>Export Codeset</span>
                         </ButtonMui>}
+
+                        {/* {hasAdminReadRole &&
+                            <Menu.Menu >
+                                <Menu.Item >
+                                    <Button2 style={{ backgroundColor: '#014d88', margin: "10px" }} primary><Dropdown item text='Export Codeset'>
+                                        <Dropdown.Menu style={{ marginTop: "10px", }}>
+                                            <Dropdown.Item onClick={() => exportApplicationCodeset("csv")}> CSV
+                                            </Dropdown.Item>
+                                            <Dropdown.Item onClick={() => exportApplicationCodeset("json")}> JSON
+                                            </Dropdown.Item>
+                                        </Dropdown.Menu>
+                                    </Dropdown>
+                                    </Button2>
+                                </Menu.Item>
+                            </Menu.Menu>} */}
+
+                        
 
                     </div>
                     <MaterialTable
@@ -360,14 +394,14 @@ const processDelete = (id) => {
                     </Modal.Header>
                     
                     <Modal.Body>
-                            <div style={{marginBottom:"15px", fontSize:"14px"}}>Select Application Codeset CSV File</div>
+                            <div style={{marginBottom:"15px", fontSize:"14px"}}>Select Application Codeset {importFileType.toUpperCase()} File</div>
                     {/* <FormGroup> */}
                             <Input
                                 type='file'
                                 name='importCodeset'
                                 id='importCodeset'
-                                accept='.csv'
-                                placeholder='Select Codeset CSV file.'
+                                accept={`.${importFileType}`}
+                                placeholder={`'Select Codeset ${importFileType} file.`}
                                 // value={applicationCodesetImportedFile}
                                 onChange={handleImportFileChange}
                                 style={{ height: "40px", borderRadius: '5px', fontWeight: 'bolder' }}

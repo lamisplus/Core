@@ -2,7 +2,6 @@ package org.lamisplus.modules.base.controller;
 
 
 import lombok.RequiredArgsConstructor;
-import org.lamisplus.modules.base.domain.dto.SystemSettingDto;
 import org.lamisplus.modules.base.domain.entities.SystemSettings;
 import org.lamisplus.modules.base.service.SystemSettingService;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +15,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/system-settings")
+@RequestMapping("/api/v1/system-settings")
 public class SystemSettingController {
 
     private final SystemSettingService systemSettingService;
@@ -32,7 +31,7 @@ public class SystemSettingController {
     }
 
     @PutMapping("/{key}")
-    public ResponseEntity<SystemSettings> updateSystemSetting(@PathVariable String key, @RequestBody SystemSettingDto request) {
+    public ResponseEntity<SystemSettings> updateSystemSetting(@PathVariable String key, @RequestBody SystemSettings request) {
         return ResponseEntity.ok(systemSettingService.updateSystemSetting(key, request));
     }
 
@@ -44,7 +43,7 @@ public class SystemSettingController {
     }
 
     @PostMapping("/import-csv")
-    public ResponseEntity<Object> importCSV(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<Object> importCSV(@RequestParam("file") MultipartFile file) throws IOException {
         Object response = systemSettingService.importSystemSettingAsCSV(file);
         return ResponseEntity.ok(response);
     }
