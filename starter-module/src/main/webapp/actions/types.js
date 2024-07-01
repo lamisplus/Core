@@ -317,6 +317,7 @@ export const FETCH_LOGGER = 'FETCH_LOGGER'
 export const FETCH_LOGGER_ERROR = 'FETCH_LOGGER_ERROR'
 export const FETCH_HEALTH = 'FETCH_HEALTH'
 export const FETCH_HEALTH_ERROR = 'FETCH_HEALTH_ERROR'
+export const FETCH_ALL_SYSTEM_SETTINGS = 'FETCH_ALL_SYSTEM_SETTINGS'
 /**
  * @TYPES
  * ==============================================

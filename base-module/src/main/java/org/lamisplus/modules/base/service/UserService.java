@@ -121,16 +121,9 @@ public class UserService {
         } else {
             newUser.setRole(getRolesFromStringSet(userDTO.getRoles()));
         }
-        User user = userRepository.save(newUser);
-        // check if the user has an id, meaning that it is an update operation
-        // if it is an update operation, fetch all the applicationUserOrganisationUnits by applicationUserId
-        // update the list based on the facilityIds coming in from the userDTO
-        // if the facilityIds is empty, delete all applicationUserOrganisationUnits by applicationUserId
-        // if make sure the facilityIds in the userDto and the applicationUserOrganisationUnits are the same
-        // if there are new facilityIds, add them to the applicationUserOrganisationUnits
-        // if there are facilityIds that are not in the userDto, delete them from the applicationUserOrganisationUnits
+        User savedUser = userRepository.save(newUser);
         if(userDTO.getId() != null) {
-            List<ApplicationUserOrganisationUnit> applicationUserOrganisationUnits = applicationUserOrganisationUnitRepository.findAllByApplicationUserIdAndArchived(user.getId(), UN_ARCHIVED);
+            List<ApplicationUserOrganisationUnit> applicationUserOrganisationUnits = applicationUserOrganisationUnitRepository.findAllByApplicationUserIdAndArchived(savedUser.getId(), UN_ARCHIVED);
             if(userDTO.getFacilityIds().isEmpty()) {
                 applicationUserOrganisationUnitRepository.deleteAll(applicationUserOrganisationUnits);
             } else {
@@ -139,28 +132,27 @@ public class UserService {
                 List<Long> toDelete = facilityIds.stream().filter(facilityId -> !newFacilityIds.contains(facilityId)).collect(Collectors.toList());
                 List<Long> toAdd = newFacilityIds.stream().filter(facilityId -> !facilityIds.contains(facilityId)).collect(Collectors.toList());
                 if(!toDelete.isEmpty()) {
-                    applicationUserOrganisationUnitRepository.deleteAllByApplicationUserIdAndOrganisationUnitIdIn(user.getId(), toDelete);
+                    applicationUserOrganisationUnitRepository.deleteAllByApplicationUserIdAndOrganisationUnitIdIn(savedUser.getId(), toDelete);
                 }
                 if(!toAdd.isEmpty()) {
                     applicationUserOrganisationUnitRepository.saveAll(toAdd.stream().map(facilityId->{
                         ApplicationUserOrganisationUnit newAppUserOrgUnit = new ApplicationUserOrganisationUnit();
                         newAppUserOrgUnit.setOrganisationUnitId(facilityId);
-                        newAppUserOrgUnit.setApplicationUserId(user.getId());
+                        newAppUserOrgUnit.setApplicationUserId(savedUser.getId());
                         return newAppUserOrgUnit;
                     }).collect(Collectors.toList()));
                 }
             }
-        }
-
-        /*if(!userDTO.getFacilityIds().isEmpty()) {
+        } else if (!userDTO.getFacilityIds().isEmpty()) {
             applicationUserOrganisationUnitRepository.saveAll(userDTO.getFacilityIds().stream().map(facilityId->{
-                ApplicationUserOrganisationUnit orgUser = new ApplicationUserOrganisationUnit();
-                orgUser.setOrganisationUnitId(facilityId);
-                orgUser.setApplicationUserId(user.getId());
-                return orgUser;
+                ApplicationUserOrganisationUnit applicationUserOrganisationUnit = new ApplicationUserOrganisationUnit();
+                applicationUserOrganisationUnit.setOrganisationUnitId(facilityId);
+                applicationUserOrganisationUnit.setApplicationUserId(savedUser.getId());
+                return applicationUserOrganisationUnit;
             }).collect(Collectors.toList()));
 
-        }*/
+        }
+
         return newUser;
     }
 

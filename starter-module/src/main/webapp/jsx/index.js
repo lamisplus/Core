@@ -40,6 +40,7 @@ import ModuleUpdate from "./components/ModuleUpdates/ModuleUpdate";
 import ParentOrganizationUnit from "./components/OrganizationUnit/ParentOrganizationalUnit";
 import MenuList from "./components/Menu/MenuList";
 import BiometricList from "./components/Biometric/BiometricList";
+import Notification from "./components/Notification/Notifications"
 
 import SubMenuList from "./components/Menu/SubMenuList";
 import { ThemeContext } from "../context/ThemeContext";
@@ -51,6 +52,8 @@ import ErrorMissingOrganisation from "./pages/ErrorMissingOrganisation";
 import FacilitiesList from "./components/FaciltyConfig/FacilitiesPage";
 import AddFacility from "./components/FaciltyConfig/AddFacility";
 import FacilitySetup from "./pages/FacilitySetup";
+import WebLog from "./components/weblog/WebLog";
+import Unauthorised from "./components/utils/UnauthorisedPage";
 
 const Markup = () => {
   const [user, setUser] = useState(null);
@@ -86,6 +89,7 @@ const Markup = () => {
     { url: "modules", component: Modules },
     { url: "organisation-unit", component: OrganizationUnit },
     { url: "application-codeset", component: ApplicationCodeset },
+    { url: "notification", component: Notification },
     { url: "module-update", component: ModuleUpdate },
     { url: "lamisplus-module-update", component: ModuleUpdateList },
     {
@@ -96,6 +100,8 @@ const Markup = () => {
     { url: "biometrics", component: BiometricList },
     { url: "facility", component: FacilitiesList },
     { url: "facility-config", component: AddFacility },
+    { url: "weblog", component: WebLog },
+    { url: "unauthorised", component: Unauthorised },
   ];
   let path = window.location.pathname;
   path = path.split("/");
@@ -109,10 +115,10 @@ const Markup = () => {
         .get(`${baseUrl}account`)
         .then((response) => {
           setUser(response.data);
-          console.log(response.data);
+          // console.log(response.data);
         })
         .catch((error) => {
-          authentication.logout();
+          // authentication.logout();
           // console.log(error);
         });
     }
@@ -131,9 +137,10 @@ const Markup = () => {
     }
   }
 
+  // debugger;
   useEffect(() => {
     fetchMe();
-    configApp();
+    // configApp();
   }, []);
 
   return (
@@ -142,7 +149,7 @@ const Markup = () => {
       {/*    <>*/}
       {user !== null ? (
         <>
-          {user && user.currentOrganisationUnitId !== null ? (
+          {user && user?.currentOrganisationUnitId !== null ? (
             <>
               <div
                 id={`${!pagePath ? "main-wrapper" : ""}`}

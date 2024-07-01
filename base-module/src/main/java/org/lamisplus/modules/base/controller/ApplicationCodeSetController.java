@@ -5,10 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.lamisplus.modules.base.domain.dto.ApplicationCodesetDTO;
 import org.lamisplus.modules.base.domain.entities.ApplicationCodeSet;
-import org.lamisplus.modules.base.domain.repositories.ApplicationCodesetRepository;
 import org.lamisplus.modules.base.service.ApplicationCodesetService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -25,7 +22,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ApplicationCodeSetController {
     private final ApplicationCodesetService applicationCodesetService;
-    private final ApplicationCodesetRepository applicationCodesetRepository;
 
     //Versioning through URI Path
     private final String BASE_URL_VERSION_ONE = "/api/v1/application-codesets";
@@ -68,28 +64,41 @@ public class ApplicationCodeSetController {
         this.applicationCodesetService.delete(id);
     }
 
-    @GetMapping(BASE_URL_VERSION_ONE + "/exportCsv")
-    public void exportIntoCSV(HttpServletResponse response) throws IOException {
-        response.setContentType("text/csv");
-        response.addHeader("Content-Disposition", "attachment; filename=\"student.csv\"");
-        applicationCodesetService.getApplicationCodeSetsAsCsv(response.getWriter());
+    @GetMapping(value = BASE_URL_VERSION_ONE + "/exportFile", produces = "application/json; charset=UTF-8")
+    public void exportCodesetFile(HttpServletResponse response, @RequestParam("fileType") String fileType) throws IOException {
+        response.addHeader("Content-Disposition", "attachment; filename=Application-Codeset." + fileType);
+        if (fileType.equalsIgnoreCase("csv")) {
+            response.setContentType("text/csv");
+            response.setCharacterEncoding("UTF-8");
+            applicationCodesetService.getApplicationCodeSetsAsCsv(response.getWriter());
+
+        } else if (fileType.equalsIgnoreCase("json")) {
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.setHeader("Content-Type", "application/octet-stream");
+            applicationCodesetService.getApplicationCodeSetsFile(response.getOutputStream(), fileType);
+
+        }
     }
 
     @PostMapping(BASE_URL_VERSION_ONE + "/import")
-    public ResponseEntity<String> uploadCsvFile(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<String> uploadCodesetFile(@RequestParam("file") MultipartFile file,
+                                                    @RequestParam(value = "fileType") String fileType) {
         if (file.isEmpty()) {
-            return new ResponseEntity<>("Please select a file to upload.", HttpStatus.BAD_REQUEST);
+            throw new IllegalArgumentException("Please select a file to upload.");
+        }
+
+        if (fileType == null || fileType.isEmpty()) {
+            throw new IllegalArgumentException("Please select a file type to upload.");
         }
 
         try {
-            List<ApplicationCodesetDTO> codesetDTOList = applicationCodesetService.readCsv(file);
+            List<ApplicationCodesetDTO> codesetDTOList = applicationCodesetService.readFileData(file, fileType);
             List<ApplicationCodesetDTO> savedCodesets = applicationCodesetService.saveCodesets(codesetDTOList);
 
             return new ResponseEntity<>("File uploaded and codesets saved successfully.", HttpStatus.OK);
         } catch (IOException e) {
-            return new ResponseEntity<>("Error occurred while processing the file: " + e.getMessage(),
-                    HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new RuntimeException("Error occurred while processing the file: " + e.getMessage());
         }
     }
-
 }

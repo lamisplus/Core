@@ -8,6 +8,7 @@ import org.springframework.boot.configurationprocessor.json.JSONArray;
 import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.http.*;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@EnableScheduling
 public class ModuleUpdateService {
     private static final boolean ACTIVE = true;
     private static final String TAG_NAME = "tag_name";
@@ -30,7 +32,7 @@ public class ModuleUpdateService {
     /**
      * Checking for module updates
      */
-    @Scheduled(fixedRate = 150000) //15,0000 milliseconds = 15 minutes
+    @Scheduled(fixedRate = 10800000) //10800000 milliseconds = 3 hours
     public void checkForUpdates() {
         LOG.info("checking for updates...");
         moduleRepository.findAllByActiveAndGitHubLinkIsNotNull()

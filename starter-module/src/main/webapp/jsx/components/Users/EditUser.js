@@ -73,14 +73,20 @@ const useStyles = makeStyles((theme) => ({
   inline: {
     display: "inline",
   },
+  error: {
+    color: "red",
+  },
 }));
 let  arrVal = [];
 
+const disabledColor = '#E6E6E6';
 const UserRegistration = (props) => {
+  const [errors, setErrors] = useState({});
    //
   const userDetail = props.location && props.location.state ? props.location.state.user : null;
   const [currentUser, setCurrentUser]=useState(null)
   const rolesDef = props.location && props.location.state ? props.location.state.defRole : null;
+  const [isView, setIsView] = useState(false);
   const classes = useStyles();
   const { values, setValues, handleInputChange, resetForm } = useForm(
     props.location && props.location.state ? props.location.state.user :  initialfieldState_userRegistration 
@@ -104,6 +110,7 @@ const UserRegistration = (props) => {
   const [passwordFeedback, setPasswordFeedback] = useState('Minimum 6 characters, one uppercase and lowercase letter and one number');
   const strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
   const mediumRegex = new RegExp("^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})");
+  const disabledBorder = '#ccc';
 
 
 
@@ -181,6 +188,13 @@ const UserRegistration = (props) => {
     getCharacters();
   }, []);
 
+  useEffect(()=> {
+    if (!props.location.state.isUpdate) {
+      setIsView(true)
+    }
+
+  }, [props.location.state.isUpdate])
+
 
   const onPermissionSelect = (selectedValues) => {
     setSelectedOption(selectedValues);
@@ -244,70 +258,66 @@ const UserRegistration = (props) => {
 
   }*/
 
-  const updateUserOrganisations=()=>{
-//     if(selectedOrganisations.length >0){
-//       //First delete all current organisations
-// /*      var defaultFacility= _.find(allOrganisations, {name:selectedOrganisations[0]});
-//       switchFacility(defaultFacility.id);*/
-//       if(userDetail.applicationUserOrganisationUnits.length >0){
-//         userDetail.applicationUserOrganisationUnits.map((organisation) =>{
-//           var orgDetails = _.find(allOrganisations, {id:organisation.organisationUnitId});
-//           axios.delete(`${baseUrl}application_user_organisation_unit/${orgDetails.id}`, )
-//               .then(response => {
-//                 toast.success(`successfully added`);
-//               }) .catch((error) => {
-//             toast.error(`An error occurred, adding facility`);
-//           });
-//         });
 
+  const handleInputChangePhoneNumber = (e) => {
+    const acceptedNumber = e.target.value;
+    // Remove any non-numeric characters, and limit to 11 numbers
+    const cleanedNumber = acceptedNumber.replace(/[^0-9]/g, '').slice(0, 11);
+    setValues({ ...values, phoneNumber: cleanedNumber });
+  
+  };
 
-//       }
-//       console.log()
-//       //Add Organisations
-//       let facilityDetails = [];
-//       selectedOrganisations.map((organisation) =>{
-//         var orgDetails = _.find(allOrganisations, {name:organisation});
-//         facilityDetails.push({
-//           "applicationUserId": userDetail.id,
-//           "organisationUnitId": orgDetails.id
-//         })
+  const validate = () => {
+    let temp = { ...errors };
+    temp.phoneNumber = values.phoneNumber
+        ? ""
+        : "Phone Number is required. Kindly enter a valid phone number.";
+    temp.firstName = values.firstName
+            ? ""
+            : "First Name is required";
+    temp.lastName = values.lastName
+            ? ""
+            : "Last Name is required";
+    temp.userName = values.userName
+            ? ""
+            : "Username is required";
+    temp.email = values.email
+            ? ""
+            : "Email is required";
+    temp.designation = values.designation
+            ? ""
+            : "Designation is required";
 
-//       });
-//       axios.post(`${baseUrl}application_user_organisation_unit`, facilityDetails)
-//           .then(response => {
-//             toast.success(`successfully added`);
-//           }) .catch((error) => {
-//         toast.error(`An error occurred, adding facility`);
-//       });
-//     }
-  }
-
-  console.log(selectedOrganisations);
+    setErrors({
+        ...temp,
+    });
+    return Object.values(temp).every((x) => x === "");
+};
 
 
   const handleSubmit = (e) => {
 
     e.preventDefault();
-    updateUserOrganisations();
+    if (validate()) {
+      const dateOfBirth = moment(values.dateOfBirth).format("YYYY-MM-DD");
+      values["dateOfBirth"] = dateOfBirth;
+      values["roles"] = selectedOption
+      values["facilityIds"] = selectedOrganisations
+      setSaving(true);
+      const onSuccess = () => {
+        setSaving(false);
+        toast.success("User Updated Successful");
+        resetForm();
+        props.history.push("/users")
+      };
+      const onError = () => {
+        setSaving(false);
+        toast.error("Something went wrong");
+      };
 
-    const dateOfBirth = moment(values.dateOfBirth).format("YYYY-MM-DD");
-    values["dateOfBirth"] = dateOfBirth;
-    values["roles"] = selectedOption
-    values["facilityIds"] = selectedOrganisations
-    setSaving(true);
-    const onSuccess = () => {
-      setSaving(false);
-      toast.success("User Updated Successful");
-      resetForm();
-      props.history.push("/users")
-    };
-    const onError = () => {
-      setSaving(false);
-      toast.error("Something went wrong");
-    };
-
-    
-    props.update(userDetail.id,values, onSuccess, onError);
+      
+      props.update(userDetail.id,values, onSuccess, onError);
+    }
   };
 
 
@@ -315,7 +325,7 @@ const UserRegistration = (props) => {
   return (
     <>
     <ToastContainer autoClose={3000} hideProgressBar />
-        <PageTitle activeMenu={userDetail===null ? "User Registration" : "Edit User"} motherMenu="Users" />
+        <PageTitle activeMenu={userDetail===null ? "User Registration" : isView ? "View User" : "Edit User"} motherMenu="Users" />
         <Card className={classes.cardBottom}>
         <CardContent>
             <Link
@@ -342,7 +352,7 @@ const UserRegistration = (props) => {
       <div className="col-xl-12 col-lg-12">
           <div className="card">
             <div className="card-header">
-              <h4 className="card-title" style={{color:'#014d88',fontWeight:'bolder'}}>{userDetail===null ? "User Information" : "Edit User Information"}</h4>
+              <h4 className="card-title" style={{color:'#014d88',fontWeight:'bolder'}}>{userDetail===null ? "User Information" : isView ? "View User Information" : "Edit User Information"}</h4>
             </div>
             <div className="card-body">
               <div className="basic-form">
@@ -357,9 +367,13 @@ const UserRegistration = (props) => {
                       id="firstName"
                       value={values.firstName}
                       onChange={handleInputChange}
-                      style={{height:"40px",border:'solid 1px #014d88',borderRadius:'5px'}}
-                      required
+                      style={{height:"40px",border:`solid 1px ${isView ? disabledBorder : '#014d88' }`, backgroundColor:`${isView && disabledColor}`, borderRadius:'5px'}}
+                      disabled={isView}
+                      // required
                     />
+                    {errors.facilityId !=="" ? (
+                                    <span className={classes.error}>{errors.firstName}</span>
+                                ) : "" }
                   </FormGroup>
                     </div>
                     <div className="form-group mb-3 col-md-6">
@@ -371,9 +385,13 @@ const UserRegistration = (props) => {
                       id="lastName"
                       onChange={handleInputChange}
                       value={values.lastName}
-                      style={{height:"40px",border:'solid 1px #014d88',borderRadius:'5px'}}
-                      required
+                      style={{height:"40px",border:`solid 1px ${isView ? disabledBorder : '#014d88' }`, backgroundColor:`${isView && disabledColor}`, borderRadius:'5px'}}
+                      disabled={isView}
+                      // required
                     />
+                    {errors.facilityId !=="" ? (
+                                    <span className={classes.error}>{errors.lastName}</span>
+                                ) : "" }
                   </FormGroup>
                     </div>
                     <div className="form-group mb-3 col-md-6">
@@ -385,9 +403,13 @@ const UserRegistration = (props) => {
                       id="userName"
                       onChange={handleInputChange}
                       value={values.userName}
-                      style={{height:"40px",border:'solid 1px #014d88',borderRadius:'5px'}}
-                      required
+                      style={{height:"40px",border:`solid 1px ${isView ? disabledBorder : '#014d88' }`, backgroundColor:`${isView && disabledColor}`, borderRadius:'5px'}}
+                      disabled={isView}
+                      // required
                     />
+                    {errors.facilityId !=="" ? (
+                                    <span className={classes.error}>{errors.userName}</span>
+                                ) : "" }
                   </FormGroup>
                     </div>
                     <div className="form-group mb-3 col-md-6">
@@ -399,9 +421,13 @@ const UserRegistration = (props) => {
                       id="email"
                       onChange={handleInputChange}
                       value={values.email}
-                      style={{height:"40px",border:'solid 1px #014d88',borderRadius:'5px'}}
-                      required
+                      style={{height:"40px",border:`solid 1px ${isView ? disabledBorder : '#014d88' }`, backgroundColor:`${isView && disabledColor}`, borderRadius:'5px'}}
+                      disabled={isView}
+                      // required
                     />
+                    {errors.facilityId !=="" ? (
+                                    <span className={classes.error}>{errors.email}</span>
+                                ) : "" }
                   </FormGroup>
                    
                     </div>
@@ -427,8 +453,9 @@ const UserRegistration = (props) => {
                         id="designation"
                         value={values.designation}
                         onChange={handleInputChange}
-                        style={{height:"40px",border:'solid 1px #014d88',borderRadius:'5px'}}
-                        required
+                        style={{height:"40px",border:`solid 1px ${isView ? disabledBorder : '#014d88' }`, backgroundColor:`${isView && disabledColor}`, borderRadius:'5px'}}
+                        disabled={isView}
+                        // required
                       >
                        
                         {designation.map(({ label, value }) => (
@@ -437,6 +464,9 @@ const UserRegistration = (props) => {
                           </option>
                         ))}
                       </Input>
+                      {errors.facilityId !=="" ? (
+                                    <span className={classes.error}>{errors.designation}</span>
+                                ) : "" }
                     </FormGroup>                  
                     </div>
                     <div className="form-group mb-3 col-md-6">
@@ -446,11 +476,15 @@ const UserRegistration = (props) => {
                         type="number"
                         name="phoneNumber"
                         id="phoneNumber"
-                        onChange={handleInputChange}
+                        onChange={(e) => handleInputChangePhoneNumber(e)}
                         value={values.phoneNumber}
-                        style={{height:"40px",border:'solid 1px #014d88',borderRadius:'5px'}}
-                        required
+                        style={{height:"40px",border:`solid 1px ${isView ? disabledBorder : '#014d88' }`, backgroundColor:`${isView && disabledColor}`, borderRadius:'5px'}}
+                        disabled={isView}
+                        // required
                       />
+                      {errors.facilityId !=="" ? (
+                                    <span className={classes.error}>{errors.phoneNumber}</span>
+                                ) : "" }
                       </FormGroup>                                     
                     </div>
                     <div className="form-group mb-3 col-md-6">
@@ -462,9 +496,10 @@ const UserRegistration = (props) => {
                             id="password"
                             onChange={handlePassword}
                             value={values.password}
-                            style={{height:"40px",border:'solid 1px #014d88',borderRadius:'5px',backgroundColor:`${passwordStrength}`}}
+                            style={{height:"40px",border:`solid 1px ${isView ? disabledBorder : '#014d88' }`,borderRadius:'5px',backgroundColor:`${isView ? '#E6E6E6' : passwordStrength}`}}
                             className={validPasswordClass}
                             autoComplete="new-password"
+                            disabled={isView}
                           />
                           <div style={{color:`${passwordTextColor}`,opacity:'1'}}>
                             {passwordFeedback}
@@ -483,8 +518,9 @@ const UserRegistration = (props) => {
                         id="confirm"
                         onChange={handleConfirmPassword}
                         value={confirm}
-                        style={{height:"40px",border:'solid 1px #014d88',borderRadius:'5px'}}
+                        style={{height:"40px",border:`solid 1px ${isView ? disabledBorder : '#014d88' }`, backgroundColor:`${isView && disabledColor}`, borderRadius:'5px'}}
                         className={matchingPasswordClass}
+                        disabled={isView}
                         autoComplete="new-password"
                       />
                       <FormFeedback>Passwords do not match</FormFeedback>
@@ -504,6 +540,7 @@ const UserRegistration = (props) => {
                           onChange={onOrganisationSelect}
                           selected={selectedOrganisations}
                           required
+                          disabled={isView}
                       />
                     </FormGroup>
                   </div>
@@ -520,6 +557,7 @@ const UserRegistration = (props) => {
                           options={role}
                           onChange={onPermissionSelect}
                           selected={selectedOption}
+                          disabled={isView}
                         />
                       </FormGroup>
                     </div>
@@ -552,8 +590,8 @@ const UserRegistration = (props) => {
                 color="primary"
                 className={classes.button}
                 startIcon={<SaveIcon />}
-                disabled={!(validPassword && matchingPassword)}
-                style={{backgroundColor:'#014d88',color:'#fff'}}
+                disabled={!(validPassword && matchingPassword) || isView}
+                style={{backgroundColor: isView ? "grey" : '#014d88',color:'#fff'}}
               >
                 {!saving ? (
                   <span style={{ textTransform: "capitalize" }}>Save</span>

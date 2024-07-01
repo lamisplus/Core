@@ -56,7 +56,7 @@ const PostPage = (props) => {
     const toggleActivateModal = () => setActivateModal(!activateModal)
     const [loading, setLoading] = useState(false)
     const dispatch = useDispatch();
-    const listOfAllModule = useSelector(state => state.boostrapmodule.list);
+    const listOfAllModule = useSelector(state => state.boostrapmodule.list) || [];
     // const listOfAllModule = []
     const [gridView, setGridView] = useState(true);
     

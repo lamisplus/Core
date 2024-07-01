@@ -85,18 +85,23 @@ const useStyles = makeStyles((theme) => ({
   inline: {
     display: "inline",
   },
+  error: {
+    color: "red",
+  }
 
 }));
 //let  arrVal = [];
 
 const UserRegistration = (props) => {
   const history = useHistory();
+  const [errors, setErrors] = useState({});
   const userDetail = props.location && props.location.state ? props.location.state.user : null;
   //const rolesDef = props.location && props.location.state ? props.location.state.defRole : null;
   const classes = useStyles();
   const { values, setValues, handleInputChange, resetForm } = useForm(
       props.location && props.location.state ? props.location.state.user :  initialfieldState_userRegistration
   );
+
   //const [gender, setGender] = useState([]);
   const [role, setRole] = useState([]);
   const [confirm, setConfirm] = useState("");
@@ -118,6 +123,7 @@ const UserRegistration = (props) => {
   const strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
   const mediumRegex = new RegExp("^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})");
   const [user, setUser] = useState(null);
+  const [phoneNumber, setPhoneNumber] = useState(null);
 
   const fetchOrganisation=()=>{
     axios
@@ -156,8 +162,6 @@ const UserRegistration = (props) => {
     await axios
         .get(`${baseUrl}organisation-unit-levels/v2/8/organisation-units`)
         .then((response) => {
-          console.log(response);
-          console.log(response.data);
           setIps(
             Object.entries(response.data).map(([key, value]) => ({
               label: value.name,
@@ -173,8 +177,6 @@ const UserRegistration = (props) => {
           fetchOrganisation();
         });
   }
-
-  console.log(selectedOrganisations);
 
   useEffect(() => {
     async function getCharacters() {
@@ -310,27 +312,56 @@ const UserRegistration = (props) => {
   //   return false;
   // }
 
+  const validate = () => {
+    let temp = { ...errors };
+    temp.phoneNumber = values.phoneNumber
+        ? ""
+        : "Phone Number is required. Kindly enter a valid phone number.";
+    temp.firstName = values.firstName
+            ? ""
+            : "First Name is required";
+    temp.lastName = values.lastName
+            ? ""
+            : "Last Name is required";
+    temp.userName = values.userName
+            ? ""
+            : "Username is required";
+    temp.email = values.email
+            ? ""
+            : "Email is required";
+    temp.designation = values.designation
+            ? ""
+            : "Designation is required";
+
+    setErrors({
+        ...temp,
+    });
+    return Object.values(temp).every((x) => x === "");
+};
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const dateOfBirth = moment(values.dateOfBirth).format("YYYY-MM-DD");
-    values["dateOfBirth"] = dateOfBirth;
-    values["roles"] = selectedOption
-    values["facilityIds"] = selectedOrganisations
-    setSaving();
+    if (validate()) {
+      const dateOfBirth = moment(values.dateOfBirth).format("YYYY-MM-DD");
+      values["dateOfBirth"] = dateOfBirth;
+      values["roles"] = selectedOption
+      values["facilityIds"] = selectedOrganisations
+      setSaving();
 
-    axios.post(`${baseUrl}users`, values)
-        .then(response => {
-          setSaving(false);
-          toast.success(`successfully added`);
-          //console.log(response.data)
-          history.push({
-            pathname: '/users',
-          });
-        }) .catch((error) => {
-      setSaving(false);
-      toast.error(`An error occurred, while adding user`);
-    });
-    //updateUserOrganisations();
+      axios.post(`${baseUrl}users`, values)
+          .then(response => {
+            setSaving(false);
+            toast.success(`successfully added`);
+            //console.log(response.data)
+            history.push({
+              pathname: '/users',
+            });
+          }) .catch((error) => {
+        setSaving(false);
+        toast.error(`An error occurred, while adding user`);
+      });
+      //updateUserOrganisations();
+  }
   };
 
   const onPermissionSelect = (selectedValues) => {
@@ -344,12 +375,15 @@ const UserRegistration = (props) => {
     const acceptedNumber= e.slice(0, limit)
     return  acceptedNumber   
 }
-  const handleInputChangePhoneNumber=(e, inputName)=>{
-    const limit = 11;
-    const acceptedNumber= e.target.value.slice(0, limit)
-    setValues({...values, ['phoneNumber']: acceptedNumber})
-      return  acceptedNumber
-  }
+const handleInputChangePhoneNumber = (e) => {
+  const acceptedNumber = e.target.value;
+  // Remove any non-numeric characters, and limit to 11 numbers
+  const cleanedNumber = acceptedNumber.replace(/[^0-9]/g, '').slice(0, 11);
+  setValues({ ...values, phoneNumber: cleanedNumber });
+
+};
+
+console.log("values", values);
 
   return (
       <>
@@ -398,8 +432,11 @@ const UserRegistration = (props) => {
                                 onChange={handleInputChange}
                                 //style={{height:"40px",border:'solid 1px #014d88',borderRadius:'5px'}}
                                 style={{border: "1px solid #014D88",borderRadius:"0.2rem"}}
-                                required
+                                // required
                             />
+                            {errors.facilityId !=="" ? (
+                                    <span className={classes.error}>{errors.firstName}</span>
+                                ) : "" }
                           </FormGroup>
                         </div>
                         <div className="form-group mb-3 col-md-6">
@@ -412,8 +449,11 @@ const UserRegistration = (props) => {
                                 onChange={handleInputChange}
                                 value={values.lastName}
                                 style={{border: "1px solid #014D88",borderRadius:"0.2rem"}}
-                                required
+                                // required
                             />
+                            {errors.facilityId !=="" ? (
+                                    <span className={classes.error}>{errors.lastName}</span>
+                                ) : "" }
                           </FormGroup>
                         </div>
                         <div className="form-group mb-3 col-md-6">
@@ -426,8 +466,11 @@ const UserRegistration = (props) => {
                                 onChange={handleInputChange}
                                 value={values.userName}
                                 style={{border: "1px solid #014D88",borderRadius:"0.2rem"}}
-                                required
+                                // required
                             />
+                            {errors.facilityId !=="" ? (
+                                    <span className={classes.error}>{errors.userName}</span>
+                                ) : "" }
                           </FormGroup>
                         </div>
                         <div className="form-group mb-3 col-md-6">
@@ -440,8 +483,11 @@ const UserRegistration = (props) => {
                                 onChange={handleInputChange}
                                 value={values.email}
                                 style={{border: "1px solid #014D88",borderRadius:"0.2rem"}}
-                                required
+                                // required
                             />
+                            {errors.facilityId !=="" ? (
+                                    <span className={classes.error}>{errors.email}</span>
+                                ) : "" }
                           </FormGroup>
 
                         </div>
@@ -464,6 +510,9 @@ const UserRegistration = (props) => {
                                   </option>
                               ))}
                             </Input>
+                            {errors.facilityId !=="" ? (
+                                    <span className={classes.error}>{errors.designation}</span>
+                                ) : "" }
                           </FormGroup>
 
 
@@ -473,14 +522,18 @@ const UserRegistration = (props) => {
                           <FormGroup>
                             <Label for="phoneNumber" style={{color:'#014d88',fontWeight:'bolder'}}>Phone Number <span style={{ color:"red"}}> *</span></Label>
                             <Input
-                                type="number"
+                                // type="number"
+                                type="text"
                                 name="phoneNumber"
                                 id="phoneNumber"
-                                onChange={handleInputChangePhoneNumber}
+                                onChange={(e)=> handleInputChangePhoneNumber(e)}
                                 value={values.phoneNumber}
                                 style={{border: "1px solid #014D88",borderRadius:"0.2rem"}}
-                                required
+                                // required
                             />
+                            {errors.facilityId !=="" ? (
+                                    <span className={classes.error}>{errors.phoneNumber}</span>
+                                ) : "" }
                           </FormGroup>
 
                         </div>
