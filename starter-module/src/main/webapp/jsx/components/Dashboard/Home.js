@@ -247,7 +247,7 @@ const Home = () => {
                         </div>
                         <div className="card-body pt-0 chart-body-wrapper">
                           <h4 className="text-black font-w400 mb-0 m-4">
-                            Active Patients
+                            Total Patients
                           </h4>
                         </div>
                       </div>

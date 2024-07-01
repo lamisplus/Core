@@ -115,10 +115,10 @@ const Markup = () => {
         .get(`${baseUrl}account`)
         .then((response) => {
           setUser(response.data);
-          console.log(response.data);
+          // console.log(response.data);
         })
         .catch((error) => {
-          authentication.logout();
+          // authentication.logout();
           // console.log(error);
         });
     }
@@ -137,9 +137,10 @@ const Markup = () => {
     }
   }
 
+  // debugger;
   useEffect(() => {
     fetchMe();
-    configApp();
+    // configApp();
   }, []);
 
   return (
@@ -148,7 +149,7 @@ const Markup = () => {
       {/*    <>*/}
       {user !== null ? (
         <>
-          {user && user.currentOrganisationUnitId !== null ? (
+          {user && user?.currentOrganisationUnitId !== null ? (
             <>
               <div
                 id={`${!pagePath ? "main-wrapper" : ""}`}

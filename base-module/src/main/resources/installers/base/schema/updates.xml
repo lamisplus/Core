@@ -692,5 +692,10 @@
                  splitStatements="false"
                  stripComments="true"/>
     </changeSet>
+    <changeSet failOnError="true" id="19099647908989" author="Peter Abiodun">
+        <sql>
+            UPDATE base_application_codeset set archived = 1;
+        </sql>
+    </changeSet>
 
 </databaseChangeLog>

@@ -438,7 +438,7 @@ const Header = (props) => {
                                     <React.Fragment>
                                         <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center',marginLeft:'5px' }}>
                                             {/* <Tooltip title="Account settings"> */}
-                                                {/* <IconButton
+                                                <IconButton
                                                     onClick={handleClick}
                                                     size="small"
                                                     sx={{ ml: 2 }}
@@ -448,7 +448,7 @@ const Header = (props) => {
                                                 >
                                                     <i className="fa fa-bolt" style={{ color: '#992E62' }} aria-hidden="true"></i>
                                                     <span className="ms-2" style={{ color: '#992E62' }}>Switch Facility</span>
-                                                </IconButton> */}
+                                                </IconButton>
                                             {/* </Tooltip> */}
                                         </Box>
                                         <Menu
