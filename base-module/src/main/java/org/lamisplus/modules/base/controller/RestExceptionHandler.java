@@ -2,6 +2,7 @@ package org.lamisplus.modules.base.controller;
 
 import com.foreach.across.core.annotations.Exposed;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.connector.ClientAbortException;
 import org.hibernate.exception.ConstraintViolationException;
 import org.lamisplus.modules.base.controller.apierror.*;
 import org.springframework.core.Ordered;
@@ -17,6 +18,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
@@ -24,6 +27,7 @@ import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.NoSuchElementException;
 
 import static org.springframework.http.HttpStatus.*;
@@ -257,6 +261,51 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
             return buildResponseEntity(new ApiError(HttpStatus.CONFLICT, "Database error - " + ex.getMessage(), ex.getCause()));
         }
         return buildResponseEntity(new ApiError(INTERNAL_SERVER_ERROR, ex));
+    }
+
+    /**
+     * Handle Generic Exceptions.
+     *
+     * @param ex the Exception
+     * @return the ApiError object
+     */
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ResponseEntity<Object> handleGenericException(Exception ex) {
+        ApiError apiError = new ApiError(BAD_REQUEST);
+        apiError.setStatusCode(BAD_REQUEST.value());
+        apiError.setMessage(ex.getMessage());
+        return buildResponseEntity(apiError);
+    }
+
+    /**
+     * Handle ClientAbortException, thrown when client aborts request
+     *
+     * @param ex the ClientAbortException
+     * @return the ApiError object
+     */
+    @ExceptionHandler(ClientAbortException.class)
+    public ResponseEntity<Object> clientAbortExceptionHandler(HttpServletRequest request, ClientAbortException ex) {
+        LOG.warn("ClientAbortException: message={}", ex.getMessage());
+        ApiError apiError = new ApiError(BAD_REQUEST);
+        apiError.setStatusCode(BAD_REQUEST.value());
+        apiError.setMessage(ex.getMessage());
+        return buildResponseEntity(apiError);
+    }
+
+    /**
+     * Handle HttpClientErrorException, thrown when client aborts request
+     *
+     * @param ex the HttpClientErrorException
+     * @return the ApiError object
+     */
+    @ExceptionHandler(HttpClientErrorException.class)
+    public ResponseEntity<Object> handleHttpClientErrorException(
+            HttpClientErrorException ex) {
+        ApiError apiError = new ApiError(BAD_REQUEST);
+        apiError.setStatusCode(BAD_REQUEST.value());
+        apiError.setMessage(ex.getMessage());
+        return buildResponseEntity(apiError);
     }
 
     /**

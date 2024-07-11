@@ -189,28 +189,28 @@ const NotificationFlag = (props) => {
                         icons={tableIcons}
                         title="Find Patient Flag"
                         columns={[
-                            {
-                                title: "Grace Period",
-                                field: "gracePeriod",
-                            },
+                            // {
+                            //     title: "Grace Period",
+                            //     field: "gracePeriod",
+                            // },
                             { title: "Surpression Value", field: "surpressionValue" },
                             // {
                             //     title: "Api",
                             //     field: "api",
                             // },
-                            {
-                                title: "Message",
-                                field: "message",
-                            },
+                            // {
+                            //     title: "Message",
+                            //     field: "message",
+                            // },
                             
                             { title: "Action", field: "action" }
                         ]}
                         isLoading={loading}
                         data={notificationConfigList.map((row) => ({
-                            gracePeriod: row.gracePeriod,
+                            // gracePeriod: row.gracePeriod,
                             surpressionValue: row.surpressionValue,
-                            api: row.api,
-                            message: row.message,
+                            // api: row.api,
+                            // message: row.message,
                             action:
                                 <div>
                                     <SplitActionButton actions={actionItems(row)} />

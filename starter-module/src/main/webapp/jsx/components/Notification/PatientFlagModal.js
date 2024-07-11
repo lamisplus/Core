@@ -121,22 +121,22 @@ const PatientFlagCreation = (props) => {
             </Modal.Header>
 
             <Modal.Body>
-                <Col md={12}>
-                    <FormGroup>
-                        <Label style={{ color: '#014d88', fontWeight: 'bolder' }}>Grace Period <span style={{ cursor: "pointer", color: "blue" }}
-                        >
-                        </span></Label>
-                        <Input
-                            type="text"
-                            name="gracePeriod"
-                            id="gracePeriod"
-                            onChange={handleChange}
-                            style={{ border: "1px solid #014D88", borderRadius: "0.2rem" }}
-                            value={notificationObject?.gracePeriod}
-                        >
-                        </Input>
-                    </FormGroup>
-                </Col>
+                {/*<Col md={12}>*/}
+                {/*    <FormGroup>*/}
+                {/*        <Label style={{ color: '#014d88', fontWeight: 'bolder' }}>Grace Period <span style={{ cursor: "pointer", color: "blue" }}*/}
+                {/*        >*/}
+                {/*        </span></Label>*/}
+                {/*        <Input*/}
+                {/*            type="text"*/}
+                {/*            name="gracePeriod"*/}
+                {/*            id="gracePeriod"*/}
+                {/*            onChange={handleChange}*/}
+                {/*            style={{ border: "1px solid #014D88", borderRadius: "0.2rem" }}*/}
+                {/*            value={notificationObject?.gracePeriod}*/}
+                {/*        >*/}
+                {/*        </Input>*/}
+                {/*    </FormGroup>*/}
+                {/*</Col>*/}
                 <Col md={12}>
                     <FormGroup>
                         <Label style={{ color: '#014d88', fontWeight: 'bolder' }}>Surpression Value <span style={{ cursor: "pointer", color: "blue" }}
@@ -170,7 +170,7 @@ const PatientFlagCreation = (props) => {
                         </Input>
                     </FormGroup>
                 </Col> */}
-                <Col md={12}>
+                {/*<Col md={12}>
                     <FormGroup>
                         <Label style={{ color: '#014d88', fontWeight: 'bolder' }}> Message  <span style={{ cursor: "pointer", color: "blue" }}
                         >
@@ -185,7 +185,7 @@ const PatientFlagCreation = (props) => {
                         >
                         </Input>
                     </FormGroup>
-                </Col>
+                </Col> */}
                 <Modal.Footer>
                     <ButtonMui variant="contained"
                         color="primary"
