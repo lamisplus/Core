@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!-- This XML was generated from LAMISPlus application -->
+<Container>
+    <MessageHeader>
+        <MessageStatusCode>INITIAL</MessageStatusCode>
+        <MessageCreationDateTime>2024-06-03T19:15:28</MessageCreationDateTime>
+        <MessageSchemaVersion>1.6</MessageSchemaVersion>
+        <MessageUniqueID>5</MessageUniqueID>
+        <MessageSendingOrganization>
+            <FacilityName>Yenagoa Federal Medical Centre</FacilityName>
+            <FacilityID>DBYxE32AtXd</FacilityID>
+            <FacilityTypeCode>FAC</FacilityTypeCode>
+        </MessageSendingOrganization>
+    </MessageHeader>
+    <IndividualReport>
+        <PatientDemographics>
+            <PatientIdentifier>8c0f23d4-8a88-4e46-a0d0-3aac0f6a7c70_DBYxE32AtXd</PatientIdentifier>
+            <TreatmentFacility>
+                <FacilityName>Yenagoa Federal Medical Centre</FacilityName>
+                <FacilityID>DBYxE32AtXd</FacilityID>
+                <FacilityTypeCode>FAC</FacilityTypeCode>
+            </TreatmentFacility>
+            <OtherPatientIdentifiers>
+                <Identifier>
+                    <IDNumber>8c0f23d4-8a88-4e46-a0d0-3aac0f6a7c70_DBYxE32AtXd</IDNumber>
+                    <IDTypeCode>HTS</IDTypeCode>
+                </Identifier>
+            </OtherPatientIdentifiers>
+            <PatientDateOfBirth>1995-06-15</PatientDateOfBirth>
+            <PatientSexCode>F</PatientSexCode>
+            <PatientMaritalStatusCode>M</PatientMaritalStatusCode>
+            <StateOfNigeriaOriginCode>6</StateOfNigeriaOriginCode>
+        </PatientDemographics>
+        <Condition>
+            <ConditionCode>86406008</ConditionCode>
+            <ProgramArea>
+                <ProgramAreaCode>HIV</ProgramAreaCode>
+            </ProgramArea>
+            <PatientAddress>
+                <AddressTypeCode>H</AddressTypeCode>
+                <LGACode>763</LGACode>
+                <StateCode>6</StateCode>
+                <CountryCode>NGA</CountryCode>
+            </PatientAddress>
+        </Condition>
+        <HIVTestingReport
