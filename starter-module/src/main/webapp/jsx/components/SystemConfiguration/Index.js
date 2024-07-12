@@ -6,6 +6,7 @@ import SystemConfig from "./SystemConfig";
 import ApplicationConfig from './ApplicationConfig'
 import SystemEnv from "./SystemEnv";
 import SystemProperty from "./SystemProperty";
+import SystemSettings from "./SystemSettings";
 
 const UiTab = () => {
     const [key, setKey] = useState('home');
@@ -19,7 +20,7 @@ const UiTab = () => {
         <Col xl={12}>
           <Card>
             <Card.Header>
-              <Card.Title>SYSTEM CONFIGURATION</Card.Title>
+              <Card.Title>SYSTEM CONFIGURATIONS</Card.Title>
             </Card.Header>
             <Card.Body>
               {/* <!-- Nav tabs --> */}
@@ -30,7 +31,10 @@ const UiTab = () => {
                     onSelect={(k) => setKey(k)}
                     className="mb-3"
                     >
-                    <Tab eventKey="home" title="Spring configuration">
+                    <Tab eventKey="home" title="System Settings">
+                      <SystemSettings />
+                    </Tab>
+                    <Tab eventKey="config" title="Spring configuration">
                       <SystemConfig />
                     </Tab>
                     <Tab eventKey="properties" title="System Properties">

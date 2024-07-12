@@ -69,7 +69,11 @@ const SideBar = (props) => {
 
     btn.addEventListener("click", toggleFunc);
 
-    fetchExternalMenu();
+    console.log('This path',  window.location.pathname);
+
+    if(window.location.pathname !== '/unauthorised') {
+      fetchExternalMenu();
+    }
     fetchPermisisons();
   }, []); //props.menuList to continuous checking for menu list
 
@@ -136,8 +140,8 @@ const SideBar = (props) => {
   // console.log(deshBoard)
   //console.log(_.sortBy(props.menuList, ["id", "position"]))
   const toggleSubmenu = (menu_subs, menu_id, parent_id) => {
-    console.log(menu_subs);
-    console.log(parent_id);
+    // console.log(menu_subs);
+    // console.log(parent_id);
 
     if (
       parent_id == null &&
@@ -184,9 +188,9 @@ const SideBar = (props) => {
   return (
     <div
       className={`deznav ${iconHover} ${
-        sidebarposition.value === "fixed" &&
-        sidebarLayout.value === "horizontal" &&
-        headerposition.value === "static"
+        sidebarposition?.value === "fixed" &&
+        sidebarLayout?.value === "horizontal" &&
+        headerposition?.value === "static"
           ? scrollPosition > 120
             ? "fixed"
             : ""

@@ -92,9 +92,9 @@ public class UserController {
     @PostMapping(BASE_URL_VERSION_ONE)
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete', 'all_permission')")
-    public void save(@Valid @RequestBody ManagedUserVM managedUserVM) {
+    public Long save(@Valid @RequestBody ManagedUserVM managedUserVM) {
         //Check Password Length
-        userService.save(managedUserVM, managedUserVM.getPassword());
+        return userService.save(managedUserVM, managedUserVM.getPassword()).getId();
     }
 
     @PutMapping(BASE_URL_VERSION_ONE + "/{id}")
