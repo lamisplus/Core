@@ -31,7 +31,7 @@ public class NotificationService {
 
     public NotificationDTO createOrUpdateNotification(NotificationDTO notificationDTO) {
         Notification notification = new Notification();
-        Optional<Notification> existingIndicator = notificationRepository.findIndicatorByFacilityIdAndIndicator(notificationDTO.getIndicator(), notificationDTO.getPeriod());
+        Optional<Notification> existingIndicator = notificationRepository.findIndicatorByFacilityIdAndIndicator(notificationDTO.getIndicator(), notificationDTO.getPeriod(), currentUserOrganizationUnitService.getCurrentUserOrganization());
 
         if (existingIndicator.isPresent()) {
             notification.setIndicator(notificationDTO.getIndicator());

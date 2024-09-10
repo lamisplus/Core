@@ -109,17 +109,21 @@ public class UserService {
             newUser.setDetails(userDTO.getDetails());
         }
 
+        Role defaultUserRole = roleRepository.findAll().stream()
+                .filter(name -> RolesConstants.USER.equals(name.getName()))
+                .findAny()
+                .orElse(null);
         if (userDTO.getRoles() == null || userDTO.getRoles().isEmpty()) {
             Set<Role> roles = new HashSet<>();
-            Role role = roleRepository.findAll().stream()
-                    .filter(name -> RolesConstants.USER.equals(name.getName()))
-                    .findAny()
-                    .orElse(null);
-            if (role != null)
-                roles.add(role);
+            if (defaultUserRole != null)
+                roles.add(defaultUserRole);
             newUser.setRole(roles);
         } else {
-            newUser.setRole(getRolesFromStringSet(userDTO.getRoles()));
+            HashSet<Role> userRoles = getRolesFromStringSet(userDTO.getRoles());
+            if (defaultUserRole != null)
+                userRoles.add(defaultUserRole);
+
+            newUser.setRole(userRoles);
         }
         User savedUser = userRepository.save(newUser);
         if(userDTO.getId() != null) {

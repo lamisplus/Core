@@ -23,9 +23,9 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
     @Query(value = "SELECT id FROM base_application_notification_config WHERE id = ?1 AND archived = ?2", nativeQuery = true)
     Optional<Notification> findByIdAndArchived(Long id, int archived);
 
-    @Query(value = "SELECT id, indicator, period FROM base_application_notification_config WHERE indicator = ?1 AND period =?2 AND archived = 0", nativeQuery = true)
-//    Boolean findIndicatorByFacilityIdAndIndicator(String indicator, String period);
-    Optional<Notification> findIndicatorByFacilityIdAndIndicator(String indicator, String period);
+    @Query(value = "SELECT id, indicator, period FROM base_application_notification_config WHERE indicator = ?1 AND period =?2 AND facility_id = ?3 AND archived = 0", nativeQuery = true)
+    Optional<Notification> findIndicatorByFacilityIdAndIndicator(String indicator, String period, Long facilityId);
+
 
     List<Notification> getAllByfacilityIdAndArchived(Long facilityId, int archived);
 
