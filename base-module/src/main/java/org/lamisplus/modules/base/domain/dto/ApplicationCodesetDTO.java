@@ -28,6 +28,7 @@ public class ApplicationCodesetDTO {
     private String version;
 
     private String code;
+    private String altCode;
 
     private Integer archived;
     private String dateModified;
@@ -39,13 +40,14 @@ public class ApplicationCodesetDTO {
     }
 
 
-    public ApplicationCodesetDTO(Long id, String codesetGroup, String language, String display, String version, String code, Integer archived, String dateModified, String dateCreated, String createdBy, String modifiedBy) {
+    public ApplicationCodesetDTO(Long id, String codesetGroup, String language, String display, String version, String code, String altCode, Integer archived, String dateModified, String dateCreated, String createdBy, String modifiedBy) {
         this.id = id;
         this.codesetGroup = codesetGroup;
         this.language = language;
         this.display = display;
         this.version = version;
         this.code = code;
+        this.altCode = altCode;
         this.archived = archived;
         this.dateModified = dateModified;
         this.dateCreated = dateCreated;
@@ -61,6 +63,7 @@ public class ApplicationCodesetDTO {
                 .display(applicationCodeSet.getDisplay())
                 .version(applicationCodeSet.getVersion())
                 .code(applicationCodeSet.getCode())
+                .altCode(applicationCodeSet.getAltCode())
                 .archived(applicationCodeSet.getArchived())
                 .createdBy(applicationCodeSet.getCreatedBy())
                 .dateCreated(applicationCodeSet.getDateCreated()!= null ? applicationCodeSet.getDateCreated().toString() : "")

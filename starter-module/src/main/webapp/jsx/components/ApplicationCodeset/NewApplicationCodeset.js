@@ -9,11 +9,11 @@ import CancelIcon from '@material-ui/icons/Cancel'
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
-
-
+import { url as baseUrl } from "../../../api";
 import { createApplicationCodeset, updateApplicationCodeset } from './../../../actions/applicationCodeset';
 import { Spinner } from 'reactstrap';
 import Select from "react-select/creatable";
+import axios from 'axios';
 
 
 const useStyles = makeStyles(theme => ({
@@ -25,22 +25,42 @@ const useStyles = makeStyles(theme => ({
 const ModalSample = (props) => {
     const [loading, setLoading] = useState(false)
     const [showNewCodesetGroup, setShowNewCodesetGroup] = useState(false)
+    const [showNewAltCode, setShowNewAltCode] = useState(false)
     const defaultValues = {display:"", language:"", version:"", codesetGroup:""};
     const [formData, setFormData] = useState( defaultValues)
+    const [disabled, setDisabled] = useState(false)
     const classes = useStyles()
 
     useEffect(() => {
         //for application codeset edit, load form data
-        setFormData(props.formData ? props.formData : defaultValues);
+        if (props.altCode) {
+            GetCodesetByCode(props.altCode)
+            setDisabled(true)
+        } else{
+            setFormData(props.formData ? props.formData : defaultValues);
+        }
         setShowNewCodesetGroup(false);
-    }, [props.formData,  props.showModal]);
+    }, [props.formData,  props.showModal, props.altCode]);
 
     const handleInputChange = e => {
         setFormData ({ ...formData, [e.target.name]: e.target.value});
     }
 
+    const GetCodesetByCode = (code) => {
+        axios
+            .get(`${baseUrl}application-codesets/code/${code}`
+            )
+            .then((response) => {
+                setFormData(response.data)
+            })
+    }
+
     const handleCodesetGroupChange = (newValue) => {
         setFormData ({ ...formData, codesetGroup: newValue.value});
+    };
+
+    const handleAltCodeChange = (newValue) => {
+        setFormData ({ ...formData, altCode: newValue.value});
     };
 
 
@@ -116,6 +136,7 @@ const ModalSample = (props) => {
                                                 <Input
                                                     type='text'
                                                     name='codesetGroup'
+                                                    disabled={disabled}
                                                     id='codesetGroup'
                                                     placeholder='Enter new codeset group'
                                                     value={formData.codesetGroup}
@@ -133,6 +154,7 @@ const ModalSample = (props) => {
                                             <Input
                                                 type='text'
                                                 name='display'
+                                                disabled={disabled}
                                                 id='display'
                                                 placeholder=' '
                                                 value={formData.display}
@@ -148,6 +170,7 @@ const ModalSample = (props) => {
                                             <Label style={{color:'#014d88',fontWeight:'bolder'}}>Language</Label>
                                             <Input
                                                 type='text'
+                                                disabled={disabled}
                                                 name='language'
                                                 id='language'
                                                 placeholder=' '
@@ -164,6 +187,7 @@ const ModalSample = (props) => {
                                             <Label style={{color:'#014d88',fontWeight:'bolder'}}>Version</Label>
                                             <Input
                                                 type='text'
+                                                disabled={disabled}
                                                 name='version'
                                                 id='version'
                                                 placeholder=' '
@@ -173,6 +197,49 @@ const ModalSample = (props) => {
                                                 required
                                             />
                                         </FormGroup>
+                                    </Col>
+                                    <Col md={12}>
+                                        {!showNewAltCode ?
+                                            <FormGroup>
+                                                <Label style={{color:'#014d88',fontWeight:'bolder'}}>Alternate Codeset <span style={{cursor: "pointer", color: "blue"}}
+                                                                           onClick={() => setShowNewAltCode(true)}> ( or Click to create new alternate codeset)</span></Label>
+                                                <Select
+                                                    required
+                                                    name="cg"
+                                                    id="cg"
+                                                    isMulti={false}
+                                                    onChange={handleAltCodeChange}
+                                                    style={{height:"40px",border:'solid 1px #014d88',borderRadius:'5px', fontWeight:'bolder',appearance:'auto'}}
+                                                    options={props.applicationCodesetList ? Array.from(new Set(props.applicationCodesetList.map(x => x.altCode))).sort().map(altCode => ({
+                                                        value: altCode,
+                                                        label: altCode
+                                                    })) : []}
+                                                    isOptionDisabled={option => disabled}
+                                                    value={formData.altCode ? {
+                                                        value: formData.altCode,
+                                                        label: formData.altCode
+                                                    } : ""}
+                                                    isLoading={false}
+
+                                                />
+                                            </FormGroup> :
+                                            <FormGroup>
+                                                <Label style={{color:'#014d88',fontWeight:'bolder'}}>Alternate Codeset <span style={{cursor: "pointer", color: "blue"}}
+                                                                           onClick={() => setShowNewAltCode(false)}> ( or Click to pick from existing codesets)</span></Label>
+                                                <Input
+                                                    type='text'
+                                                    disabled={disabled}
+                                                    name='altCode'
+                                                    id='altCode'
+                                                    placeholder='Enter new alternate code'
+                                                    value={formData.altCode}
+                                                    onChange={handleInputChange}
+                                                    style={{height:"40px",border:'solid 1px #014d88',borderRadius:'5px', fontWeight:'bolder'}}
+                                                    required
+                                                />
+                                            </FormGroup>
+
+                                        }
                                     </Col>
                                 </Row>
 

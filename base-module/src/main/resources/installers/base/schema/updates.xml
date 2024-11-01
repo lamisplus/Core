@@ -698,4 +698,10 @@
         </sql>
     </changeSet>
 
+    <changeSet failOnError="true" id="20241029112500" author="Peter Abiodun">
+        <sql>
+            ALTER TABLE base_application_codeset ADD COLUMN alt_code CHARACTER VARYING;
+        </sql>
+    </changeSet>
+
 </databaseChangeLog>

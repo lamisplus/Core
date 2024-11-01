@@ -43,4 +43,8 @@ public class ApplicationCodeSet extends Audit<String> {
     @Basic
     @Column(name = "archived") //1 is archived, 0 is unarchived, 2 is deactivate
     private Integer archived=0;
+
+    @Basic
+    @Column(name = "alt_code", updatable = false)
+    private String altCode;
 }

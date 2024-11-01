@@ -127,7 +127,6 @@ const processDelete = (id) => {
     props.delete(id, onSuccess, onError);
     }
     const openApplicationCodeset = (row) => {
-        console.log("It tried");
         setCurrentCodeset(row);
         toggleModal();
     }
@@ -138,12 +137,7 @@ const processDelete = (id) => {
     }
     function actionItems(row){
         return  [
-            // {
-            //     type:'link',
-            //     name:'View',
-            //     icon:<FaEye  size="22"/>,
-            //     to:{}
-            // },
+            
             {
                 type:'button',
                 name:'Edit',
@@ -232,21 +226,6 @@ const processDelete = (id) => {
                         >
                             <span style={{textTransform: 'capitalize'}}>{importing ? <Spinner /> : "Import Codeset"}</span>
                         </ButtonMui>}
-                        {/* {hasAdminReadRole &&
-                            <Menu.Menu >
-                                <Menu.Item >
-                                    <Button2 icon style={{ backgroundColor: '#014d88', margin: "10px" }} primary><Dropdown item text='Import Codeset'>
-                                        <Dropdown.Menu style={{ marginTop: "10px", }}>
-                                            <Dropdown.Item onClick={() => importApplicationCodeset("csv")}> CSV
-                                            </Dropdown.Item>
-                                            <Dropdown.Item onClick={() => importApplicationCodeset("json")}> JSON
-                                            </Dropdown.Item>
-                                        </Dropdown.Menu>
-                                    </Dropdown>
-                                    </Button2>
-                                </Menu.Item>
-                            </Menu.Menu>} */}
-                        {/* {serverInstalled && <ButtonMui variant="contained" */}
                         {hasAdminReadRole && <ButtonMui variant="contained"
                           color="primary"
                           startIcon={<FaDownload size="10"/>}
@@ -255,23 +234,6 @@ const processDelete = (id) => {
                         >
                             <span style={{textTransform: 'capitalize'}}>Export Codeset</span>
                         </ButtonMui>}
-
-                        {/* {hasAdminReadRole &&
-                            <Menu.Menu >
-                                <Menu.Item >
-                                    <Button2 style={{ backgroundColor: '#014d88', margin: "10px" }} primary><Dropdown item text='Export Codeset'>
-                                        <Dropdown.Menu style={{ marginTop: "10px", }}>
-                                            <Dropdown.Item onClick={() => exportApplicationCodeset("csv")}> CSV
-                                            </Dropdown.Item>
-                                            <Dropdown.Item onClick={() => exportApplicationCodeset("json")}> JSON
-                                            </Dropdown.Item>
-                                        </Dropdown.Menu>
-                                    </Dropdown>
-                                    </Button2>
-                                </Menu.Item>
-                            </Menu.Menu>} */}
-
-                        
 
                     </div>
                     <MaterialTable
@@ -283,6 +245,7 @@ const processDelete = (id) => {
                                 field: "Group",
                             },
                             { title: "Value", field: "display" },
+                            { title: "Alternate Codeset", field: "altCode" },
                             { title: "Version", field: "version" },
                             { title: "Language", field: "language" },
                             { title: "Action", field: "action", hidden: !hasAdminWriteRole},
@@ -290,8 +253,8 @@ const processDelete = (id) => {
                         isLoading={loading}
                         data={props.applicationCodesetList.map((row) => ({
                             Group: row.codesetGroup,
-                            
                             display: row.display,
+                            altCode: row.altCode,
                             language: row.language,
                             version: row.version,
                             action:
@@ -305,6 +268,8 @@ const processDelete = (id) => {
 
                                                         <Dropdown.Item onClick={() => openApplicationCodeset(row)}><MdModeEdit size="20" color='#014d88' /> Edit Codeset
                                                         </Dropdown.Item>
+                                                        {row.altCode !== null && <Dropdown.Item onClick={() => openApplicationCodeset(row)}><FaEye size="20" color='#014d88' /> View Alternate Codeset
+                                                        </Dropdown.Item>}
                                                         <Dropdown.Item onClick={() => deleteApplicationCodeset(row)}><MdDelete size="20" color='#014d88' /> Delete Codeset
                                                         </Dropdown.Item>
 
@@ -341,7 +306,7 @@ const processDelete = (id) => {
                     />
             </CardBody>
 
-            <NewApplicationCodeset toggleModal={toggleModal} showModal={showModal} loadApplicationCodeset={loadApplicationCodeset} formData={currentCodeset}/>
+            <NewApplicationCodeset altCode={currentCodeset?.altCode} toggleModal={toggleModal} showModal={showModal} loadApplicationCodeset={loadApplicationCodeset} formData={currentCodeset}/>
             <Modal show={showDeleteModal}  size="md">
                     <Modal.Header toggle={props.toggleDeleteModal}>
 
