@@ -44,6 +44,10 @@ public class ModuleFileStorageService {
         return filename;
     }
 
+    public Boolean doesFileAlreadyExist(String path) throws FileNotFoundException {
+        return readFile(path) != null;
+    }
+
     public String store(String module, MultipartFile file) {
         module = module.toLowerCase();
         String filename = module + File.separator + StringUtils.cleanPath(file.getOriginalFilename());

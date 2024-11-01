@@ -73,6 +73,8 @@ import java.util.*;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 
+import static org.lamisplus.modules.base.module.ModuleResponse.Type.ERROR;
+
 @Slf4j
 @RequiredArgsConstructor
 @Service
@@ -108,8 +110,12 @@ public class ModuleManager {
 
         if (isInstalled(module)) {
             LOG.debug("Nothing to do, module {} already installed and running", module.getName());
-            response.setMessage(String.format("Nothing to do, module %s already installed and running", module.getName()));
-            response.setType(ModuleResponse.Type.SUCCESS);
+//            response.setMessage(String.format("Nothing to do, module %s already installed and running", module.getName()));
+//            response.setType(ModuleResponse.Type.SUCCESS);
+            response.setType(ERROR);
+            response.setMessage(module.getName() + " is already installed. " +
+                    "If you would like to provide an updated module jar, " +
+                    "kindly use the module update functionality.");
             return response;
         }
         module.setInError(true);
@@ -197,7 +203,7 @@ public class ModuleManager {
                     message = "Could not install module; module class not found";
                 }
                 response.setMessage(message);
-                response.setType(ModuleResponse.Type.ERROR);
+                response.setType(ERROR);
                 return response;
             }
             if (install) {
@@ -206,7 +212,7 @@ public class ModuleManager {
         } catch (Exception e) {
             LOG.error("Error installing module {}: {}", module.getName(), e.getMessage());
             response.setMessage(String.format("Error installing module %s: %s", module.getName(), e.getMessage()));
-            response.setType(ModuleResponse.Type.ERROR);
+            response.setType(ERROR);
             return response;
         }
 
@@ -314,8 +320,8 @@ public class ModuleManager {
         if (!update) {
             if (!moduleDependencyRepository.findDependents(module).isEmpty()) {
                 LOG.warn("Could not stop module {}; dependents still running", module.getName());
-                response.setType(ModuleResponse.Type.ERROR);
-                response.setMessage("Module is required by running module: stop dependent first");
+                response.setType(ERROR);
+                response.setMessage("Module cannot be stopped because it is required by another running module: stop dependent first");
             }
         }
         String name = module.getName();
