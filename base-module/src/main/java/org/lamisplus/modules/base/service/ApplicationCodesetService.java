@@ -61,12 +61,15 @@ public class ApplicationCodesetService {
             throw new RecordExistException(ApplicationCodeSet.class,"Display:",applicationCodesetDTO.getDisplay());
         }
 
-        confirmOrCreateAltCode(applicationCodesetDTO);
         //the sql - update base_application_codeset
         //set code = REPLACE(REPLACE(TRIM(UPPER(codeset_group || '_' || display)), '/', ''), ' ', '_')
         final ApplicationCodeSet applicationCodeset = convertApplicationCodeDtoSet (applicationCodesetDTO);
 //        applicationCodeset.setCode(UUID.randomUUID().toString());
         applicationCodeset.setArchived(UN_ARCHIVED);
+        String code = applicationCodeset.getCodesetGroup()+"_"+applicationCodeset.getDisplay().trim();
+        code = code.replace("/", "_").replace(" ", "_");
+        //code = code.replaceAll("[\\p{Punct}&&[^_]]+|^_+|\\p{Punct}+(?=_|$)", "_");
+        applicationCodeset.setCode(code.toUpperCase().trim());
 
         return applicationCodesetRepository.save(applicationCodeset);
     }
@@ -93,8 +96,6 @@ public class ApplicationCodesetService {
     public ApplicationCodeSet update(Long id, ApplicationCodesetDTO applicationCodesetDTO){
         ApplicationCodeSet applicationCodeSetOld = applicationCodesetRepository.findByIdAndArchivedNot(id, ARCHIVED)
                 .orElseThrow(() -> new EntityNotFoundException(ApplicationCodeSet.class,"Display:",id+""));
-        updateCodeAndCodeSetGroup(applicationCodesetDTO);
-        confirmOrCreateAltCode(applicationCodesetDTO);
 
         final ApplicationCodeSet applicationCodeset = convertApplicationCodeDtoSet (applicationCodesetDTO);
         applicationCodeset.setId(id);
@@ -104,22 +105,6 @@ public class ApplicationCodesetService {
             applicationCodeset.setArchived(UN_ARCHIVED);
         }
         return applicationCodesetRepository.save(applicationCodeset);
-    }
-
-    private void confirmOrCreateAltCode(ApplicationCodesetDTO applicationCodesetDTO) {
-        String altCode  = applicationCodesetDTO.getAltCode();
-        if (altCode != null){
-            updateAltCode(applicationCodesetDTO);
-            Optional<ApplicationCodeSet> applicationCodeSet = applicationCodesetRepository.findByAltCode(applicationCodesetDTO.getAltCode());
-            if (!applicationCodeSet.isPresent()){
-                ApplicationCodeSet newAppCodeSet = new ApplicationCodeSet();
-                newAppCodeSet.setDisplay(altCode);
-                newAppCodeSet.setCode(applicationCodesetDTO.getAltCode());
-                newAppCodeSet.setCodesetGroup(null);
-                newAppCodeSet.setLanguage(applicationCodesetDTO.getLanguage());
-                applicationCodesetRepository.save(newAppCodeSet);
-            }
-        }
     }
 
     public void delete(Long id){
@@ -135,7 +120,6 @@ public class ApplicationCodesetService {
     public  ApplicationCodesetDTO convertApplicationCodeSetToDto(ApplicationCodeSet applicationCodeSet){
       return   ApplicationCodesetDTO.builder ()
                 .code (applicationCodeSet.getCode ())
-                .altCode (applicationCodeSet.getAltCode ())
                 .codesetGroup (applicationCodeSet.getCodesetGroup ())
                 .id (applicationCodeSet.getId ())
                 .display (applicationCodeSet.getDisplay ())
@@ -146,34 +130,13 @@ public class ApplicationCodesetService {
     }
 
     public  ApplicationCodeSet convertApplicationCodeDtoSet(ApplicationCodesetDTO applicationCodesetDTO){
-        updateCodeAndCodeSetGroup(applicationCodesetDTO);
-
         ApplicationCodeSet applicationCodeSet = new ApplicationCodeSet ();
         applicationCodeSet.setCode (applicationCodesetDTO.getCode ());
-        applicationCodeSet.setAltCode (applicationCodesetDTO.getAltCode ());
         applicationCodeSet  .setCodesetGroup (applicationCodesetDTO.getCodesetGroup ());
         applicationCodeSet  .setId (applicationCodesetDTO.getId ());
         applicationCodeSet  .setDisplay (applicationCodesetDTO.getDisplay ());
         applicationCodeSet  .setLanguage (applicationCodesetDTO.getLanguage ());
        return applicationCodeSet;
-    }
-
-    private static void updateCodeAndCodeSetGroup(ApplicationCodesetDTO applicationCodesetDTO) {
-        String code = applicationCodesetDTO.getCodesetGroup()+"_"+ applicationCodesetDTO.getDisplay().trim();
-        code = code.replace("/", "_").replace(" ", "_");
-        applicationCodesetDTO.setCode(code.toUpperCase().trim());
-
-        String codesetGroup = applicationCodesetDTO.getCodesetGroup().trim();
-        codesetGroup = codesetGroup.replace("/", "_").replace(" ", "_");
-        applicationCodesetDTO.setCodesetGroup(codesetGroup.toUpperCase().trim());
-
-    }
-
-    private static void updateAltCode(ApplicationCodesetDTO applicationCodesetDTO) {
-        String altCode = applicationCodesetDTO.getAltCode()+"_"+ applicationCodesetDTO.getDisplay().trim();
-        altCode = altCode.replace("/", "_").replace(" ", "_");
-        applicationCodesetDTO.setAltCode(altCode.toUpperCase().trim());
-
     }
 
     public List<ApplicationCodesetDTO> getAllApplicationCodeSets(String code) {
@@ -182,13 +145,6 @@ public class ApplicationCodesetService {
         return applicationCodeSet.stream()
                 .map(this::convertApplicationCodeSetToDto)
                 .collect(Collectors.toList());
-    }
-
-
-    public ApplicationCodesetDTO getOneByCode(String code) {
-        Optional<ApplicationCodeSet> foundCodeset = applicationCodesetRepository.findByCode(code);
-        if(!foundCodeset.isPresent()) throw new EntityNotFoundException(ApplicationCodeSet.class,"Code:",code);
-        return this.convertApplicationCodeSetToDto(foundCodeset.get());
     }
 
     public void getApplicationCodeSetsAsCsv(Writer writer) {
@@ -200,7 +156,7 @@ public class ApplicationCodesetService {
         try {
 
             CSVPrinter printer = new CSVPrinter(writer, CSVFormat.DEFAULT);
-            printer.printRecord("id", "code", "alt_code", "version", "codeset_group",
+            printer.printRecord("id", "code", "version", "codeset_group",
                     "display", "language", "archived", "date_created",
                     "created_by", "date_modified", "modified_by"
             );
@@ -209,7 +165,6 @@ public class ApplicationCodesetService {
                 printer.printRecord(
                         String.valueOf(applicationCodeSet.getId()),
                         String.valueOf(applicationCodeSet.getCode()),
-                        String.valueOf(applicationCodeSet.getAltCode()),
                         String.valueOf(applicationCodeSet.getVersion()),
                         String.valueOf(applicationCodeSet.getCodesetGroup()),
                         String.valueOf(applicationCodeSet.getDisplay()),
@@ -256,7 +211,6 @@ public class ApplicationCodesetService {
                     ApplicationCodesetDTO appCode = new ApplicationCodesetDTO();
                     appCode.setId(Long.parseLong(csvRecord.get("id")));
                     appCode.setCode(csvRecord.get("code"));
-                    appCode.setAltCode(csvRecord.get("alt_code"));
                     appCode.setVersion(csvRecord.get("version"));
                     appCode.setCodesetGroup(csvRecord.get("codeset_group"));
                     appCode.setDisplay(csvRecord.get("display"));
@@ -293,7 +247,6 @@ public class ApplicationCodesetService {
                 // Update existing application Code set
                 ApplicationCodeSet existingAppCodeset = existingCode.get();
                 existingAppCodeset.setVersion(dto.getVersion());
-                existingAppCodeset.setAltCode(dto.getAltCode());
                 existingAppCodeset.setCodesetGroup(dto.getCodesetGroup());
                 existingAppCodeset.setDisplay(dto.getDisplay());
                 existingAppCodeset.setLanguage(dto.getLanguage());
@@ -303,7 +256,6 @@ public class ApplicationCodesetService {
                 // add new application code set when is not existing
                 ApplicationCodeSet newAppCodeset = new ApplicationCodeSet();
                 newAppCodeset.setCode(dto.getCode());
-                newAppCodeset.setAltCode(dto.getAltCode());
                 newAppCodeset.setVersion(dto.getVersion());
                 newAppCodeset.setCodesetGroup(dto.getCodesetGroup());
                 newAppCodeset.setDisplay(dto.getDisplay());
@@ -321,7 +273,6 @@ public class ApplicationCodesetService {
                 .map(appCode -> ApplicationCodesetDTO.builder()
                         .id(appCode.getId())
                         .code(appCode.getCode())
-                        .altCode(appCode.getAltCode())
                         .version(appCode.getVersion())
                         .codesetGroup(appCode.getCodesetGroup())
                         .display(appCode.getDisplay())

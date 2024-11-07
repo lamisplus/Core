@@ -29,7 +29,7 @@ public interface ApplicationCodesetRepository extends JpaRepository<ApplicationC
     Optional<ApplicationCodeSet> findByIdAndArchivedNot(Long id, int archive);
 
     @Query(value = "SELECT display, id, codeset_group, language, version, " +
-            "code, alt_code, date_created, created_by, date_modified, modified_by, archived FROM base_application_codeset " +
+            "code, date_created, created_by, date_modified, modified_by, archived FROM base_application_codeset " +
             "ORDER BY id ASC", nativeQuery = true)
     List<ApplicationCodeSet> findAllByOrderByIdAsc();
 
@@ -46,6 +46,5 @@ public interface ApplicationCodesetRepository extends JpaRepository<ApplicationC
     List<ApplicationCodeSet> findAllByCodeAndArchived(String code, int archived);
 
     Optional<ApplicationCodeSet> findByCode (String code);
-    Optional<ApplicationCodeSet> findByAltCode(String altCode);
 
 }
