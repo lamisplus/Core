@@ -26,21 +26,25 @@ const ModalSample = (props) => {
     const [loading, setLoading] = useState(false)
     const [showNewCodesetGroup, setShowNewCodesetGroup] = useState(false)
     const [showNewAltCode, setShowNewAltCode] = useState(false)
-    const defaultValues = {display:"", language:"", version:"", codesetGroup:""};
+    const defaultValues = {display:"", language:"", version:"", codesetGroup:"", description:"", altCode:""};
     const [formData, setFormData] = useState( defaultValues)
     const [disabled, setDisabled] = useState(false)
     const classes = useStyles()
 
     useEffect(() => {
         //for application codeset edit, load form data
-        if (props.altCode) {
-            GetCodesetByCode(props.altCode)
+        console.log("FORM DATA: ", props.formData);
+        if (props.viewAltCode === true) {
+            console.log("IT IS HERE WITH ALT CODE: ", props.formData);
+            
+            GetCodesetByCode(props?.formData?.altCode)
             setDisabled(true)
         } else{
             setFormData(props.formData ? props.formData : defaultValues);
+            setDisabled(false)
         }
         setShowNewCodesetGroup(false);
-    }, [props.formData,  props.showModal, props.altCode]);
+    }, [props.formData,  props.showModal, props.viewAltCode]);
 
     const handleInputChange = e => {
         setFormData ({ ...formData, [e.target.name]: e.target.value});
@@ -71,6 +75,7 @@ const ModalSample = (props) => {
             const onSuccess = () => {
                 setLoading(false);
                 toast.success("Application codeset saved successfully!")
+                setFormData(defaultValues)
                 props.loadApplicationCodeset();
                 props.toggleModal()
             }
@@ -167,6 +172,23 @@ const ModalSample = (props) => {
 
                                     <Col md={12}>
                                         <FormGroup>
+                                            <Label style={{color:'#014d88',fontWeight:'bolder'}}>Description</Label>
+                                            <Input
+                                                type='textarea'
+                                                name='description'
+                                                disabled={disabled}
+                                                id='description'
+                                                placeholder=' '
+                                                value={formData.description}
+                                                onChange={handleInputChange}
+                                                style={{height:"40px",border:'solid 1px #014d88',borderRadius:'5px', fontWeight:'bolder'}}
+                                                required
+                                            />
+                                        </FormGroup>
+                                    </Col>
+
+                                    <Col md={12}>
+                                        <FormGroup>
                                             <Label style={{color:'#014d88',fontWeight:'bolder'}}>Language</Label>
                                             <Input
                                                 type='text'
@@ -199,10 +221,9 @@ const ModalSample = (props) => {
                                         </FormGroup>
                                     </Col>
                                     <Col md={12}>
-                                        {!showNewAltCode ?
+                                        
                                             <FormGroup>
-                                                <Label style={{color:'#014d88',fontWeight:'bolder'}}>Alternate Codeset <span style={{cursor: "pointer", color: "blue"}}
-                                                                           onClick={() => setShowNewAltCode(true)}> ( or Click to create new alternate codeset)</span></Label>
+                                                <Label style={{color:'#014d88',fontWeight:'bolder'}}>Alternate Codeset</Label>
                                                 <Select
                                                     required
                                                     name="cg"
@@ -210,9 +231,9 @@ const ModalSample = (props) => {
                                                     isMulti={false}
                                                     onChange={handleAltCodeChange}
                                                     style={{height:"40px",border:'solid 1px #014d88',borderRadius:'5px', fontWeight:'bolder',appearance:'auto'}}
-                                                    options={props.applicationCodesetList ? Array.from(new Set(props.applicationCodesetList.map(x => x.altCode))).sort().map(altCode => ({
-                                                        value: altCode,
-                                                        label: altCode
+                                                    options={props.applicationCodesetList ? Array.from(new Set(props.applicationCodesetList.map(x => x.code))).sort().map(code => ({
+                                                            value: code,
+                                                            label: code
                                                     })) : []}
                                                     isOptionDisabled={option => disabled}
                                                     value={formData.altCode ? {
@@ -222,24 +243,7 @@ const ModalSample = (props) => {
                                                     isLoading={false}
 
                                                 />
-                                            </FormGroup> :
-                                            <FormGroup>
-                                                <Label style={{color:'#014d88',fontWeight:'bolder'}}>Alternate Codeset <span style={{cursor: "pointer", color: "blue"}}
-                                                                           onClick={() => setShowNewAltCode(false)}> ( or Click to pick from existing codesets)</span></Label>
-                                                <Input
-                                                    type='text'
-                                                    disabled={disabled}
-                                                    name='altCode'
-                                                    id='altCode'
-                                                    placeholder='Enter new alternate code'
-                                                    value={formData.altCode}
-                                                    onChange={handleInputChange}
-                                                    style={{height:"40px",border:'solid 1px #014d88',borderRadius:'5px', fontWeight:'bolder'}}
-                                                    required
-                                                />
-                                            </FormGroup>
-
-                                        }
+                                            </FormGroup> 
                                     </Col>
                                 </Row>
 

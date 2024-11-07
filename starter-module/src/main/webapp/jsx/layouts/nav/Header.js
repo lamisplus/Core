@@ -179,7 +179,7 @@ const Header = (props) => {
         axios.get(`${baseUrl}notification/notifications`, {
             headers: { Authorization: `Bearer ${token}` },
         }).then((response) => {
-            setNotificationConfigList(response.data);
+            setNotificationConfigList(typeof response.data === 'object' ? response.data : []);
         })
     }
 
@@ -201,53 +201,7 @@ const Header = (props) => {
     useEffect(()=>{
         // notificationConfigList.length
     },[notificationConfigList])
-    // const handleAppointment = (() => {
-    // //     axios.get(`${baseUrl}notification/appointments`, {
-    // //         headers: { Authorization: `Bearer ${token}` },
-    // //     }).then((response) => {
-    // //         setAppointmentList(response.data); }
-    // //     )
-    // console.log(appointmentList)
-    // console.log(appointmentList); // Optional: Log the appointment list
-
-    // // Ensure appointmentList is an array and contains iterable items
-    // if (!Array.isArray(appointmentList)) {
-    //     console.error('appointmentList is not an array');
-    //     return;
-    // }
-
-    // // Concatenate data from multiple lists
-    // const allData = [];
-    // appointmentList.forEach(list => {
-    //     // Check if each list is iterable
-    //     if (typeof list[Symbol.iterator] === 'function') {
-    //         allData.push(...list);
-    //     } else {
-    //         console.error('List is not iterable:', list);
-    //     }
-    // });
-    // // Prepare CSV content
-    // let csvContent = 'ID,First Name, Surname, age, sex, hospital Number, regimen, last visit, refill duration, appointment  date\n'; // Header row
-    // // Append data rows
-    // allData.forEach(appointment => {
-    //     csvContent += `${appointment.id},${appointment.firstName},${appointment.surname},
-    //     ${appointment.age},${appointment.sex},${appointment.hospitalNumber},${appointment.regimen},
-    //     ${appointment.lastVisit},${appointment.refillPeriod},${appointment.appointmentDate}\n`; // Add more fields as needed
-    // });
-
-    // // Create a blob containing the CSV content
-    // const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-
-    // // Create a temporary anchor element to trigger download
-    // const url = window.URL.createObjectURL(blob);
-    // const a = document.createElement('a');
-    // a.style.display = 'none';
-    // a.href = url;
-    // a.download = 'appointments.csv'; // File name for the CSV file
-    // document.body.appendChild(a);
-    // a.click();
-    // window.URL.revokeObjectURL(url);
-    // })
+   
 
     const handleAppointment = () => {
         if (!Array.isArray(appointmentList)) {
@@ -255,8 +209,8 @@ const Header = (props) => {
             return;
         }
 
-        let csvContent = 'ID,First Name,Surname,Age,Sex,Hospital Number,Regimen,Last Visit,Refill Duration,Appointment Date\n';
-
+        let csvContent = 'ID,First Name,Surname,Age,Sex,Hospital Number,Regimen,Last Visit,Refill Duration,Appointment Date, Case Manager Name\n';
+ 
         appointmentList.forEach(appointment => {
             // Clean up field values to remove commas and newline characters
             const cleanFields = {
@@ -269,7 +223,8 @@ const Header = (props) => {
                 regimen: appointment.regimen.replace(/,/g, ''),
                 lastVisit: appointment.lastVisit,
                 refillPeriod: appointment.refillPeriod,
-                appointmentDate: appointment.appointmentDate
+                appointmentDate: appointment.appointmentDate,
+                caseManagerName:appointment.caseManagerName
             };
 
             // Concatenate fields with commas

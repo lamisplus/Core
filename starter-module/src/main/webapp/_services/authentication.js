@@ -18,9 +18,10 @@ export const authentication = {
     logout,
     currentUser: currentUserSubject.asObservable(),
     get currentUserValue () { return currentUserSubject.value },
-    getCurrentUserRole,
+    getCurrentUserPermissions: getCurrentUserPermissions,
+    getCurrentUserRole: getCurrentUserRoles,
     getCurrentUser,
-    userHasRole,
+    userHasRole: userHasPermission,
     fetchMe
 };
 
@@ -58,7 +59,7 @@ function logout(history) {
              // remove user from local storage to log user out
 }
 
-function getCurrentUserRole() {
+function getCurrentUserPermissions() {
 
     const currentUserPermissions = localStorage.getItem('currentUser_Permission') != null ? JSON.parse(localStorage.getItem('currentUser_Permission')) : null;
     if(!currentUserPermissions){
@@ -72,9 +73,23 @@ function getCurrentUserRole() {
     return permissions;
 }
 
-function userHasRole(role){
-    const userRoles = getCurrentUserRole();
-    if(role && role.length > 0 && _.intersection(role, userRoles).length === 0){
+function getCurrentUserRoles() {
+
+    const currentUserRoles = localStorage.getItem('currentUser_Role') != null ? JSON.parse(localStorage.getItem('currentUser_Role')) : null;
+    if(!currentUserRoles){
+        return [];
+    }
+    // fetch all the permissions of the logged in user
+    const roles = currentUserRoles;
+    if(!roles || roles.length < 1){
+        return [];
+    }
+    return roles;
+}
+
+function userHasPermission(perm){
+    const permissions = getCurrentUserPermissions();
+    if(perm && perm.length > 0 && _.intersection(perm, permissions).length === 0){
         return false;
     }
     return true;
@@ -97,8 +112,14 @@ async function fetchMe(){
 
     axios
         .get(`${baseUrl}account`)
-        .then((response) => {
-            localStorage.setItem('currentUser_Permission', JSON.stringify(response.data.permissions));
+        .then(async (response) => {
+            const perms = JSON.stringify(response.data.permissions);
+            const roles = JSON.stringify(response.data.roles);
+            const userAccount = JSON.stringify(response.data);
+            
+            localStorage.setItem('currentUser_Permission', perms);
+            localStorage.setItem('currentUser_Roles', roles);
+            localStorage.setItem('user_account', userAccount);
 
             dispatch({
                 type: ACTION_TYPES.FETCH_ME,

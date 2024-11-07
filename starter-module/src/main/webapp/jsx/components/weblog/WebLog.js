@@ -1,11 +1,31 @@
+import { useEffect, useState } from "react";
 import PageTitle from "./../../layouts/PageTitle";
+import { systemSettingsHelper } from "../../../_services/SystemSettingsHelper";
 
 const WebLog = () => {
+    const [weblogUrl, setWeblogUrl] = useState("")
+    const [loading, setLoading] = useState(true)
+    const fetchedWeblogUrl = systemSettingsHelper.getSingleSystemSetting("weblog")
+
+    useEffect(async ()=> {
+        if (fetchedWeblogUrl !== null && fetchedWeblogUrl !== undefined && fetchedWeblogUrl !== "") {
+          setWeblogUrl(fetchedWeblogUrl)
+          setLoading(false)
+        } else {
+          await systemSettingsHelper.fetchAllSystemSettings()
+          const newWeblogUrl = systemSettingsHelper.getSingleSystemSetting("weblog")
+          setWeblogUrl(newWeblogUrl)
+          setLoading(false)
+        }
+        setLoading(false)
+      },[fetchedWeblogUrl])
+
     return (
         <div>
             <PageTitle activeMenu="Web Log" motherMenu="Administration" />
             <iframe
-                src="https://central-demo.lamisplus.org"
+                // src="https://central-demo.lamisplus.org"
+                src={weblogUrl}
                 width="100%"
                 height="700"
                 allowfullscreen

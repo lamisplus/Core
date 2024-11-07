@@ -81,7 +81,11 @@ const ApplicationCodesetSearch = (props) => {
     const [showImportModal, setShowImportModal] = React.useState(false);
     const [currentCodeset, setCurrentCodeset] = React.useState(null);
     const [applicationCodesetImportedFile, setApplicationCodesetImportedFile] = React.useState(null);
-    const toggleModal = () => setShowModal(!showModal)
+    const toggleModal = () => {
+        setCurrentCodeset(null)
+        setViewAltCode(false)
+        setShowModal(!showModal)
+    }
     const toggleDeleteModal = () => setShowDeleteModal(!showDeleteModal)
     const toggleImportModal = () => setShowImportModal(!showImportModal)
     const classes = useStyles()
@@ -89,6 +93,7 @@ const ApplicationCodesetSearch = (props) => {
     const [hasAdminReadRole, setHasAdminReadRole] = useState(false);
     const [hasAdminWriteRole, setHasAdminWriteRole] = useState(false);
     const [importFileType, setImportFileType] = useState("json")
+    const [viewAltCode, setViewAltCode] = useState(false)
 
     useEffect(() => {
         loadApplicationCodeset()
@@ -127,8 +132,14 @@ const processDelete = (id) => {
     props.delete(id, onSuccess, onError);
     }
     const openApplicationCodeset = (row) => {
+        setViewAltCode(false)
         setCurrentCodeset(row);
-        toggleModal();
+        setShowModal(true);
+    }
+    const openAltApplicationCodeset = (row) => {
+        setViewAltCode(true)
+        setCurrentCodeset(row);
+        setShowModal(true);
     }
 
     const deleteApplicationCodeset = (row) => {
@@ -245,6 +256,7 @@ const processDelete = (id) => {
                                 field: "Group",
                             },
                             { title: "Value", field: "display" },
+                            { title: "Description", field: "description" },
                             { title: "Alternate Codeset", field: "altCode" },
                             { title: "Version", field: "version" },
                             { title: "Language", field: "language" },
@@ -254,6 +266,7 @@ const processDelete = (id) => {
                         data={props.applicationCodesetList.map((row) => ({
                             Group: row.codesetGroup,
                             display: row.display,
+                            description: row.description,
                             altCode: row.altCode,
                             language: row.language,
                             version: row.version,
@@ -268,7 +281,7 @@ const processDelete = (id) => {
 
                                                         <Dropdown.Item onClick={() => openApplicationCodeset(row)}><MdModeEdit size="20" color='#014d88' /> Edit Codeset
                                                         </Dropdown.Item>
-                                                        {row.altCode !== null && <Dropdown.Item onClick={() => openApplicationCodeset(row)}><FaEye size="20" color='#014d88' /> View Alternate Codeset
+                                                        {row.altCode !== null && <Dropdown.Item onClick={() => openAltApplicationCodeset(row)}><FaEye size="20" color='#014d88' /> View Alternate Codeset
                                                         </Dropdown.Item>}
                                                         <Dropdown.Item onClick={() => deleteApplicationCodeset(row)}><MdDelete size="20" color='#014d88' /> Delete Codeset
                                                         </Dropdown.Item>
@@ -306,7 +319,7 @@ const processDelete = (id) => {
                     />
             </CardBody>
 
-            <NewApplicationCodeset altCode={currentCodeset?.altCode} toggleModal={toggleModal} showModal={showModal} loadApplicationCodeset={loadApplicationCodeset} formData={currentCodeset}/>
+            <NewApplicationCodeset applicationCodesetList={props.applicationCodesetList} viewAltCode={viewAltCode} toggleModal={toggleModal} showModal={showModal} loadApplicationCodeset={loadApplicationCodeset} formData={currentCodeset}/>
             <Modal show={showDeleteModal}  size="md">
                     <Modal.Header toggle={props.toggleDeleteModal}>
 

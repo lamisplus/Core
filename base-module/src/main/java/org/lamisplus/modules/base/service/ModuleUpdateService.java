@@ -35,6 +35,9 @@ public class ModuleUpdateService {
      * Checking for module updates
      */
 //    @Scheduled(fixedRate = 10800000) //10800000 milliseconds = 3 hours
+//    @Scheduled(cron = "14,15,16,17 0-0 ? * * *")
+//    @Scheduled(cron = "0 9,12 * * *")
+//    @Scheduled(cron = "0 */5 * * * *")
     public void checkForUpdates() {
         if (internetConnectivityService.isInternetAvailable()){
             LOG.info("checking for updates...");
@@ -52,6 +55,7 @@ public class ModuleUpdateService {
      * @return Module
      */
     private void checkUpdates(Module module){
+        LOG.info("Attempting to check for updates for {}", module.getName());
         ResponseEntity<String> responseEntity;
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
