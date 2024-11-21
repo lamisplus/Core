@@ -28,7 +28,7 @@ public class UserDetailService implements UserDetailsService {
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
         try {
             User user = entityManager
-                    .createQuery("SELECT u FROM User u LEFT JOIN FETCH u.role r LEFT JOIN FETCH r.permission p WHERE u.userName = :userName", User.class)
+                    .createQuery("SELECT u FROM User u LEFT JOIN FETCH u.role r LEFT JOIN FETCH r.permission p WHERE u.userName = :userName and u.archived = 0 ", User.class)
                     .setParameter("userName", userName)
                     .getSingleResult();
             return new UserPrincipal(user);

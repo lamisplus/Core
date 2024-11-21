@@ -40,12 +40,17 @@ function login(username, password, remember) {
                 payload: "Authenticated"
             });
             // store user details and jwt token in local storage to keep user logged in between page refreshes
-            localStorage.setItem('currentUser', JSON.stringify(user));
+            // localStorage.setItem('currentUser', JSON.stringify(user));
+            await saveToLocalStorage('currentUser', JSON.stringify(user));
             currentUserSubject.next(user);
             await systemSettingsHelper.fetchAllSystemSettings();
-            fetchMe();
+            await fetchMe();
             return user;
         });
+}
+
+async function saveToLocalStorage(key, value){
+    localStorage.setItem(key, value);
 }
 
 function logout(history) {
@@ -110,18 +115,18 @@ function getCurrentUser(){
 
 async function fetchMe(){
 
-    axios
+    await axios
         .get(`${baseUrl}account`)
         .then(async (response) => {
-            const perms = JSON.stringify(response.data.permissions);
             const roles = JSON.stringify(response.data.roles);
+            const perms = JSON.stringify(response.data.permissions);
             const userAccount = JSON.stringify(response.data);
             
-            localStorage.setItem('currentUser_Permission', perms);
-            localStorage.setItem('currentUser_Roles', roles);
-            localStorage.setItem('user_account', userAccount);
+            await saveToLocalStorage('currentUser_Roles', roles);
+            await saveToLocalStorage('currentUser_Permission', perms);
+            await saveToLocalStorage('user_account', userAccount);
 
-            dispatch({
+            await dispatch({
                 type: ACTION_TYPES.FETCH_ME,
                 payload: response.data,
             });

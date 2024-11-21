@@ -393,7 +393,7 @@ const processDelete = (id) => {
                           startIcon={<FaUpload size="10"/>}
                           onClick={() => triggerImportApplicationCodeset()}
                                    style={{backgroundColor:'#014d88', margin: '10px'}}
-                          disabled={deleting}
+                          disabled={importing}
                         >
                             <span style={{textTransform: 'capitalize'}}>{importing ? <Spinner /> : "Import Codeset"}</span>
                         </ButtonMui>

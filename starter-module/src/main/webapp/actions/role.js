@@ -109,7 +109,7 @@ export const fetchPermissions = (onSuccess, onError) => (dispatch) => {
 
 export const deleteRole = (id) => (dispatch) => {
   axios
-    .delete(`${baseUrl}roles/v2/${id}`)
+    .delete(`${baseUrl}roles/${id}`)
     .then((response) => {
       dispatch({
         type: ACTION_TYPES.ROLE_DELETE,

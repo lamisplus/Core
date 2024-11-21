@@ -127,7 +127,6 @@ const Header = (props) => {
     }
 
     async function switchFacility(facility) {
-        console.log(facility)
         await axios.post(`${baseUrl}users/organisationUnit/${facility}`, {})
             .then(response => {
                 toast.success('Facility switched successfully!');

@@ -36,7 +36,7 @@ class MM extends Component {
   componentWillUnmount() {}
   render() {
     return (
-      <div className="mm-wrapper">
+      <div className="mm-wrapper" style={{ fontSize: "10px", paddingBottom:"50px"}}>
         <ul className="metismenu" ref={(el) => (this.el = el)}>
           {this.props.children}
         </ul>
@@ -58,7 +58,6 @@ const SideBar = (props) => {
     const menuCount = JSON.parse(localStorage.getItem("menu"));
 
     function toggleFunc() {
-      console.log("clicked");
       return aaa.classList.toggle("menu-toggle");
     }
 
@@ -68,8 +67,6 @@ const SideBar = (props) => {
      }
 
     btn.addEventListener("click", toggleFunc);
-
-    console.log('This path',  window.location.pathname);
 
     if(window.location.pathname !== '/unauthorised') {
       fetchExternalMenu();
@@ -108,7 +105,6 @@ const SideBar = (props) => {
   path = path[path.length - 1];
   ///Admin Roles
   let roles = ["admin_read"];
-  //console.log(props.menuList)
   //method to determain main sidebar menu
   function sideBarParentUrl(menu) {
     // if(subMenu.url){
@@ -136,12 +132,7 @@ const SideBar = (props) => {
     deshBoard.push(item.name);
     return item;
   });
-  // console.log(props.menuList)
-  // console.log(deshBoard)
-  //console.log(_.sortBy(props.menuList, ["id", "position"]))
   const toggleSubmenu = (menu_subs, menu_id, parent_id) => {
-    // console.log(menu_subs);
-    // console.log(parent_id);
 
     if (
       parent_id == null &&
@@ -209,7 +200,7 @@ const SideBar = (props) => {
                 <li
                   id={"menu_" + menu.id}
                   className={`${deshBoard.includes(path) ? "mm-active" : ""}`}
-                  style={{ color: "#992E62", padding: "5px" }}
+                  style={{ color: "#992E62", paddingLeft: "10px", marginLeft:"5px", marginBottom:"0px" }}
                   show={"false"}
                 >
                   <Link
@@ -231,28 +222,36 @@ const SideBar = (props) => {
                       state: menu.url,
                     }}
                     style={{
-                      color: "#992E62",
-                      padding: "1px",
-                      paddingBottom: "1px",
+                      // color: "#992E62",
+                      padding: "0px",
+                      // paddingBottom: "1px",
                       backgroundColor: "white",
+                      display:"flex",
+                      justifyContent:"flex-start",
+                      alignItems:"baseline",
+                      // height:"40px",
+                      // margin:"0px"
                     }}
                   >
+                    <div style={{width:"30px", height:"30px"}}>
                     <i
                       className={
                         menu.icon !== null && menu.icon !== "wc"
                           ? menu.icon
                           : "flaticon-087-stop"
                       }
-                      style={{ color: "#014d88" }}
-                      size="xs"
+                      style={{ color: "#014d88", margin:"0px", fontSize:"18px" }}
+                      // size="xs"
                     />
+                    </div>
                     <span
                       className="nav-text"
                       style={{
                         color: "#014d88",
-                        fontWeight: "600",
-                        fontFamily: "Trebuchet",
-                        fontSize: "18px",
+                        marginLeft:"2px",
+                        fontWeight: "500",
+                        // fontFamily: "Trebuchet",
+                        fontSize: "14px",
                       }}
                       title={menu.name}
                     >
@@ -297,9 +296,9 @@ const SideBar = (props) => {
                                     />{" "}
                                     <span
                                       style={{
-                                        fontSize: "16px",
+                                        fontSize: "14px",
                                         color: "#4B5563",
-                                        fontFamily: "Trebuchet",
+                                        // fontFamily: "Trebuchet",
                                       }}
                                       title={subMenu.name}
                                     >
@@ -362,8 +361,8 @@ const SideBar = (props) => {
                                             </span>{" "}
                                             <span
                                               style={{
-                                                fontSize: "14px",
-                                                fontFamily: "Trebuchet",
+                                                fontSize: "12px",
+                                                // fontFamily: "Trebuchet",
                                               }}
                                               title={subSubMenu.name}
                                             >
