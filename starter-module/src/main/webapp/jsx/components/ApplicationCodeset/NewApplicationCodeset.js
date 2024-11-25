@@ -9,11 +9,11 @@ import CancelIcon from '@material-ui/icons/Cancel'
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
-
-
+import { url as baseUrl } from "../../../api";
 import { createApplicationCodeset, updateApplicationCodeset } from './../../../actions/applicationCodeset';
 import { Spinner } from 'reactstrap';
 import Select from "react-select/creatable";
+import axios from 'axios';
 
 
 const useStyles = makeStyles(theme => ({
@@ -25,22 +25,46 @@ const useStyles = makeStyles(theme => ({
 const ModalSample = (props) => {
     const [loading, setLoading] = useState(false)
     const [showNewCodesetGroup, setShowNewCodesetGroup] = useState(false)
-    const defaultValues = {display:"", language:"", version:"", codesetGroup:""};
+    const [showNewAltCode, setShowNewAltCode] = useState(false)
+    const defaultValues = {display:"", language:"", version:"", codesetGroup:"", description:"", altCode:""};
     const [formData, setFormData] = useState( defaultValues)
+    const [disabled, setDisabled] = useState(false)
     const classes = useStyles()
 
     useEffect(() => {
         //for application codeset edit, load form data
-        setFormData(props.formData ? props.formData : defaultValues);
+        console.log("FORM DATA: ", props.formData);
+        if (props.viewAltCode === true) {
+            console.log("IT IS HERE WITH ALT CODE: ", props.formData);
+            
+            GetCodesetByCode(props?.formData?.altCode)
+            setDisabled(true)
+        } else{
+            setFormData(props.formData ? props.formData : defaultValues);
+            setDisabled(false)
+        }
         setShowNewCodesetGroup(false);
-    }, [props.formData,  props.showModal]);
+    }, [props.formData,  props.showModal, props.viewAltCode]);
 
     const handleInputChange = e => {
         setFormData ({ ...formData, [e.target.name]: e.target.value});
     }
 
+    const GetCodesetByCode = (code) => {
+        axios
+            .get(`${baseUrl}application-codesets/code/${code}`
+            )
+            .then((response) => {
+                setFormData(response.data)
+            })
+    }
+
     const handleCodesetGroupChange = (newValue) => {
         setFormData ({ ...formData, codesetGroup: newValue.value});
+    };
+
+    const handleAltCodeChange = (newValue) => {
+        setFormData ({ ...formData, altCode: newValue.value});
     };
 
 
@@ -51,6 +75,7 @@ const ModalSample = (props) => {
             const onSuccess = () => {
                 setLoading(false);
                 toast.success("Application codeset saved successfully!")
+                setFormData(defaultValues)
                 props.loadApplicationCodeset();
                 props.toggleModal()
             }
@@ -116,6 +141,7 @@ const ModalSample = (props) => {
                                                 <Input
                                                     type='text'
                                                     name='codesetGroup'
+                                                    disabled={disabled}
                                                     id='codesetGroup'
                                                     placeholder='Enter new codeset group'
                                                     value={formData.codesetGroup}
@@ -133,6 +159,7 @@ const ModalSample = (props) => {
                                             <Input
                                                 type='text'
                                                 name='display'
+                                                disabled={disabled}
                                                 id='display'
                                                 placeholder=' '
                                                 value={formData.display}
@@ -145,9 +172,27 @@ const ModalSample = (props) => {
 
                                     <Col md={12}>
                                         <FormGroup>
+                                            <Label style={{color:'#014d88',fontWeight:'bolder'}}>Description</Label>
+                                            <Input
+                                                type='textarea'
+                                                name='description'
+                                                disabled={disabled}
+                                                id='description'
+                                                placeholder=' '
+                                                value={formData.description}
+                                                onChange={handleInputChange}
+                                                style={{height:"40px",border:'solid 1px #014d88',borderRadius:'5px', fontWeight:'bolder'}}
+                                                required
+                                            />
+                                        </FormGroup>
+                                    </Col>
+
+                                    <Col md={12}>
+                                        <FormGroup>
                                             <Label style={{color:'#014d88',fontWeight:'bolder'}}>Language</Label>
                                             <Input
                                                 type='text'
+                                                disabled={disabled}
                                                 name='language'
                                                 id='language'
                                                 placeholder=' '
@@ -164,6 +209,7 @@ const ModalSample = (props) => {
                                             <Label style={{color:'#014d88',fontWeight:'bolder'}}>Version</Label>
                                             <Input
                                                 type='text'
+                                                disabled={disabled}
                                                 name='version'
                                                 id='version'
                                                 placeholder=' '
@@ -173,6 +219,31 @@ const ModalSample = (props) => {
                                                 required
                                             />
                                         </FormGroup>
+                                    </Col>
+                                    <Col md={12}>
+                                        
+                                            <FormGroup>
+                                                <Label style={{color:'#014d88',fontWeight:'bolder'}}>Alternate Codeset</Label>
+                                                <Select
+                                                    required
+                                                    name="cg"
+                                                    id="cg"
+                                                    isMulti={false}
+                                                    onChange={handleAltCodeChange}
+                                                    style={{height:"40px",border:'solid 1px #014d88',borderRadius:'5px', fontWeight:'bolder',appearance:'auto'}}
+                                                    options={props.applicationCodesetList ? Array.from(new Set(props.applicationCodesetList.map(x => x.code))).sort().map(code => ({
+                                                            value: code,
+                                                            label: code
+                                                    })) : []}
+                                                    isOptionDisabled={option => disabled}
+                                                    value={formData.altCode ? {
+                                                        value: formData.altCode,
+                                                        label: formData.altCode
+                                                    } : ""}
+                                                    isLoading={false}
+
+                                                />
+                                            </FormGroup> 
                                     </Col>
                                 </Row>
 

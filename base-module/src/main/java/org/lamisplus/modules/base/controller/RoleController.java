@@ -96,8 +96,8 @@ public class RoleController {
         return ResponseEntity.ok(userService.getAllUserByRole(id));
     }
 
-//    @PostMapping(path= BASE_URL_VERSION_ONE + "/v2/import", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
-//    public ResponseEntity<?> importRoles(@RequestPart(value = "file") MultipartFile file) throws IOException {
-//        return ResponseEntity.ok(roleService.importRoles(file));
-//    }
+    @PostMapping(path= BASE_URL_VERSION_ONE + "/v2/import", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    public ResponseEntity<?> importRoles(@RequestPart(value = "file") MultipartFile file) throws IOException {
+        return ResponseEntity.ok(roleService.importRoles(file));
+    }
 }

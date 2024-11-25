@@ -9,6 +9,7 @@ import RoleList from "./RolesList";
 //import FilteringTable from "./RoleTable/FilteringTable"
 import PageTitle from "./../../layouts/PageTitle";
 import ImportRolesModal from "./ImportRolesModal";
+import { fetchRoles } from "./../../../actions/role";
 
 
 
@@ -31,15 +32,25 @@ const RolePage = (props) => {
     toggleImportModal()
   }
 
+  const fetchRole =()=>{
+    const onSuccess = () => {
+      // setLoading(false);
+    };
+    const onError = () => {
+      // setLoading(false);
+    };
+    fetchRoles(onSuccess, onError);
+  }
+
   return (
     <div>
        <PageTitle activeMenu="Role List" motherMenu="Roles" />
-       <ImportRolesModal showImportModal={importModal} toggleImportModal={toggleImportModal} refetchRoles={()=> {}} />
+       <ImportRolesModal showImportModal={importModal} toggleImportModal={toggleImportModal}/>
 
       <Card className={classes.cardBottom}>
         <CardContent>
           <div>
-          <Button
+              <Button
                 variant="contained"
                 color="primary"
                 className=" float-end ms-2"

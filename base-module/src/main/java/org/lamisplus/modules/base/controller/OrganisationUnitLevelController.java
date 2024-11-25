@@ -46,6 +46,12 @@ public class OrganisationUnitLevelController {
         return ResponseEntity.ok(organisationUnitLevelService.getAllOrganisationUnitsByOrganizationUnitLevel(id));
     }
 
+    @GetMapping(BASE_URL_VERSION_ONE + "/v2/{id}/organisation-units-assigned")
+    @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete','user', 'all_permission')")
+    public ResponseEntity<List<OrganisationUnit>> getAllOrganisationUnitsAssignedByOrganizationUnitLevel(@PathVariable Long id) {
+        return ResponseEntity.ok(organisationUnitLevelService.getAllAssignedOrganisationUnitsByOrganizationUnitLevel(id));
+    }
+
     @GetMapping(BASE_URL_VERSION_ONE + "/v2/parent-organisation-unit-level/{id}/organisation-units")
     @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete','user', 'all_permission')")
     public ResponseEntity<List<OrganisationUnit>> getAllParentOrganisationUnitsByOrganizationUnitLevel(@PathVariable Long id) {

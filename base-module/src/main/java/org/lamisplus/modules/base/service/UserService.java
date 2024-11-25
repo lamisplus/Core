@@ -62,6 +62,25 @@ public class UserService {
         return SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneWithRoleByUserName);
     }
 
+    @Transactional(readOnly = true)
+    public Optional<User> getCurrentLoggedInUser() {
+        return SecurityUtils.getCurrentUserLogin().flatMap(user -> userRepository.findOneByUserNameOrEmail(user, user));
+    }
+    @Transactional(readOnly = true)
+    public Set<String> getCurrentLoggedInUserPermissions() {
+        Optional<User> user = SecurityUtils.getCurrentUserLogin().flatMap(username -> userRepository.findOneByUserNameOrEmail(username, username));
+        if (user.isPresent()) {
+            Set<String> permissions = new HashSet<>();
+            user.get().getRole().forEach(role -> {
+                role.getPermission().forEach(permission -> {
+                    permissions.add(permission.getName());
+                });
+            });
+            return permissions;
+        }
+        return new HashSet<>();
+    }
+
     public User save(UserDTO userDTO, String password) {
         Optional<User> optionalUser = userRepository.findOneByUserName(userDTO.getUserName());
         optionalUser.ifPresent(existingUser -> {

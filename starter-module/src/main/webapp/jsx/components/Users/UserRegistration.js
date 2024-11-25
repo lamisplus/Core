@@ -129,7 +129,8 @@ const UserRegistration = (props) => {
   const fetchOrganisation=()=>{
     setLoadingFacilities(true)
     axios
-    .get(`${baseUrl}organisation-unit-levels/v2/4/organisation-units`)
+    // .get(`${baseUrl}organisation-unit-levels/v2/4/organisation-units`)
+    .get(`${baseUrl}organisation-unit-levels/v2/4/organisation-units-assigned`)
     .then((response) => {
       // setAllorganisations(response.data);
       setAllorganisations(
@@ -173,7 +174,7 @@ const UserRegistration = (props) => {
 
   const fetchIps= async () =>{
     await axios
-        .get(`${baseUrl}organisation-unit-levels/v2/8/organisation-units`)
+        .get(`${baseUrl}organisation-unit-levels/v2/8/organisation-units-assigned`)
         .then((response) => {
           setIps(
             Object.entries(response.data).map(([key, value]) => ({

@@ -45,6 +45,13 @@ public interface OrganisationUnitRepository extends JpaRepository<OrganisationUn
             "AND ou.archived = ?2", nativeQuery = true)
     List<OrganisationUnit> findByOrganisationsByLevelAndArchived(Long organisationUnitLevelId, int archived);
 
+    @Query(value = "SELECT * FROM base_organisation_unit ou " +
+            "join base_application_user_organisation_unit bauou on ou.id = bauou.organisation_unit_id " +
+            "WHERE ou.organisation_unit_level_id = ?1 " +
+            "AND bauou.application_user_id = ?2 " +
+            "AND ou.archived = ?3", nativeQuery = true)
+    List<OrganisationUnit> findOnlyAssignedOrganisationsByLevelAndArchived(Long organisationUnitLevelId, Long userId, int archived);
+
     @Query(value = "SELECT * FROM base_organisation_unit ou WHERE ou.name ilike ?1 " +
             "AND parent_organisation_unit_id=?2 AND organisation_unit_level_id=?3 AND ou.archived = ?4", nativeQuery = true)
     Optional<OrganisationUnit> findLikeOrganisationUnit(String name, long parentOrganisationUnitId, Integer level, int archived);
@@ -56,5 +63,13 @@ public interface OrganisationUnitRepository extends JpaRepository<OrganisationUn
     @Query(value = "SELECT facility_id AS facilityid, facility_name AS facilityname FROM central_partner_mapping WHERE ip_code=?1",
             nativeQuery = true)
     List<CentralPartnerMapping> findByOrgUnitInIp(Long orgUnit);
+
+    @Query(value = "SELECT DISTINCT facility_id AS facilityid, facility_name AS facilityname " +
+            "FROM central_partner_mapping cpm " +
+            "JOIN base_application_user_organisation_unit bauou on bauou.organisation_unit_id = cpm.facility_id " +
+            "WHERE cpm.ip_code=?1 " +
+            "AND bauou.application_user_id = ?2",
+            nativeQuery = true)
+    List<CentralPartnerMapping> findByOrgUnitInIpAssigned(Long ipCode, Long applicationUserId);
 
 }

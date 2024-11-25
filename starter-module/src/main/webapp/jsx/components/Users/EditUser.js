@@ -117,7 +117,8 @@ const UserRegistration = (props) => {
   const fetchOrganisation=()=>{
     setLoadingFacilities(true)
     axios
-    .get(`${baseUrl}organisation-unit-levels/v2/4/organisation-units`)
+    // .get(`${baseUrl}organisation-unit-levels/v2/4/organisation-units`)
+    .get(`${baseUrl}organisation-unit-levels/v2/4/organisation-units-assigned`)
     .then((response) => {
       // setAllorganisations(response.data);
       setOrganisations(

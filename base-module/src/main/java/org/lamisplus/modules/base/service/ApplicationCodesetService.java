@@ -191,7 +191,6 @@ public class ApplicationCodesetService {
     public ApplicationCodesetDTO getOneByCode(String code) {
         Optional<ApplicationCodeSet> foundCodeset = applicationCodesetRepository.findByCode(code);
         if(!foundCodeset.isPresent()) throw new EntityNotFoundException(ApplicationCodeSet.class,"Code:",code);
-//        return this.convertApplicationCodeSetToDto(foundCodeset.get());
         return ApplicationCodesetDTO.fromEntity(foundCodeset.get());
     }
 

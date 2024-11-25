@@ -704,4 +704,10 @@
         </sql>
     </changeSet>
 
+    <changeSet failOnError="true" id="20241121131000" author="Peter Abiodun">
+        <sql>
+            ALTER TABLE base_application_codeset ADD COLUMN description CHARACTER VARYING;
+        </sql>
+    </changeSet>
+
 </databaseChangeLog>

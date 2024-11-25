@@ -14,7 +14,8 @@ import java.util.Optional;
 @Repository
 public interface MenuRepository extends JpaRepository<Menu, Long>, JpaSpecificationExecutor {
 
-    Optional<Menu> findByIdAndArchived(Long id, int archive);
+    Optional<Menu> findByIdAndArchived(Long id, int archived);
+    Optional<Menu> findByNameAndArchived(String name, int archived);
 
     List<Menu> findAllByArchivedOrderByIdDesc(int archived);
 

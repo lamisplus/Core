@@ -99,10 +99,38 @@ public class RoleService {
         return permissionsSet;
     }
 
+    private HashSet<Permission> getPermissionsOnImport(List<Permission> permissions) {
+        HashSet permissionsSet = new HashSet<>();
+        Permission permissionToAdd = new Permission();
+        for(Permission p : permissions){
+            try {
+                if (null != p.getName()) {
+                    permissionToAdd = permissionRepository.findByNameAndArchived(p.getName(), UN_ARCHIVED).get();
+                    permissionsSet.add(permissionToAdd);
+                }
+            } catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+        return permissionsSet;
+    }
+
     private HashSet<Menu> getMenusById(List<Menu> menus) {
         HashSet<Menu> menuList = new HashSet<>();
         menus.forEach(menu ->{
             Menu menu1 = menuRepository.findByIdAndArchived(menu.getId(), UN_ARCHIVED).orElse(new Menu());
+            while(menu1 != null && menu1.getId() != null){
+                menuList.add(menu1);
+                menu1 = menu1.getParent();
+            }
+        });
+        return menuList;
+    }
+
+    private HashSet<Menu> getMenusByNameOnImport(List<Menu> menus) {
+        HashSet<Menu> menuList = new HashSet<>();
+        menus.forEach(menu ->{
+            Menu menu1 = menuRepository.findByNameAndArchived(menu.getName(), UN_ARCHIVED).orElse(new Menu());
             while(menu1 != null && menu1.getId() != null){
                 menuList.add(menu1);
                 menu1 = menu1.getParent();
@@ -120,33 +148,37 @@ public class RoleService {
     }
 
     public String importRoles(MultipartFile file) throws IOException {
-        List<RoleDTO> listOfRoles = Arrays.asList(objectMapper.readValue(
-                file.getInputStream(), RoleDTO[].class));
+        try {
+            List<RoleDTO> listOfRoles = Arrays.asList(objectMapper.readValue(
+                    file.getInputStream(), RoleDTO[].class));
 
-        for (RoleDTO roleDTO : listOfRoles) {
-            // check if the role already exists. If it doesn't, create it
-            // If it does, update it by updating it's already existing permissions, with the incoming ones.
-            // that means you have to also check to see if each permission already exists, and then create it if it doesn't.
-            // now the permissions get removed from the DB when modules get installed, so I guess we can only assign permissions that exist.
-            Role role;
-            Optional<Role> roleOptional = roleRepository.findByName(roleDTO.getName());
-            role = roleOptional.orElseGet(Role::new);
+            for (RoleDTO roleDTO : listOfRoles) {
+                // check if the role already exists. If it doesn't, create it
+                // If it does, update it. If not, create it.
+                // For permissions and menus, check if they exist, then assign
+                Role role;
+                Optional<Role> roleOptional = roleRepository.findByName(roleDTO.getName());
+                role = roleOptional.orElseGet(Role::new);
 
-            role.setName(roleDTO.getName());
-            HashSet<Permission> permissions = getPermissions(roleDTO.getPermissions());
-            HashSet<Menu> menus = getMenusById(roleDTO.getMenus());
+                role.setName(roleDTO.getName());
+                HashSet<Permission> permissions = getPermissions(roleDTO.getPermissions());
+                HashSet<Menu> menus = getMenusByNameOnImport(roleDTO.getMenus());
 
-            role.setPermission(permissions);
-            role.setMenu(menus);
-            role.setArchived(UN_ARCHIVED);
+                role.setPermission(permissions);
+                role.setMenu(menus);
+                role.setArchived(UN_ARCHIVED);
 
-            if(StringUtils.isBlank(role.getCode())) {
-                role.setCode(UUID.randomUUID().toString());
+                if (StringUtils.isBlank(role.getCode())) {
+                    role.setCode(UUID.randomUUID().toString());
+                }
+                Role savedRole = roleRepository.save(role);
+
             }
-            Role savedRole =  roleRepository.save(role);
-
+        } catch (Exception e){
+            LOG.info("An error occurred when importing roles. {}", e.getMessage());
+            throw new IOException(e.getMessage());
         }
 
-        return "";
+        return "Roles Imported Successfully";
     }
 }
