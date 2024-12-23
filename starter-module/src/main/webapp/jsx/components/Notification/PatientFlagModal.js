@@ -86,8 +86,23 @@ const PatientFlagCreation = (props) => {
 
 
     const handleChange = (e) => {
-        setNotificationObject({ ...notificationObject, [e.target.name]: e.target.value });
-        console.log(e.target.value)
+        const {name, value} = e.target
+        
+        if(name === "surpressionValue"){
+            const cleanedNumber = value.replace(/[^0-9]/g, '').replace('/[^\w\s]/g','').replace('/-/g','').slice(0, 3);
+            if (Number(cleanedNumber) > 999) {
+                setNotificationObject({ ...notificationObject, [name]: 999 });
+            } else if (Number(cleanedNumber) < 0){
+                setNotificationObject({ ...notificationObject, [name]: 0 });
+            } else if (Number(cleanedNumber) === ''){
+                setNotificationObject({ ...notificationObject });
+            } else {
+                setNotificationObject({ ...notificationObject, [name]: cleanedNumber });
+            }
+            // setNotificationObject({ ...notificationObject, [name]: cleanedNumber });
+        } else {
+            setNotificationObject({ ...notificationObject, [name]: 0 });
+        }
     };
     console.log(notificationObject)
 
@@ -143,7 +158,9 @@ const PatientFlagCreation = (props) => {
                         >
                         </span></Label>
                         <Input
-                            type="text"
+                            type="number"
+                            min={"0"}
+                            max={"999"}
                             name="surpressionValue"
                             id="surpressionValue"
                             onChange={handleChange}

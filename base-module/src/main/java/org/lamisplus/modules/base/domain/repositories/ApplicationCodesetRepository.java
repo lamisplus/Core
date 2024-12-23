@@ -29,14 +29,14 @@ public interface ApplicationCodesetRepository extends JpaRepository<ApplicationC
     Optional<ApplicationCodeSet> findByIdAndArchivedNot(Long id, int archive);
 
     @Query(value = "SELECT display, id, codeset_group, language, version, " +
-            "code, date_created, created_by, date_modified, modified_by, archived FROM base_application_codeset " +
+            "code, alt_code, description, date_created, created_by, date_modified, modified_by, archived FROM base_application_codeset " +
             "ORDER BY id ASC", nativeQuery = true)
     List<ApplicationCodeSet> findAllByOrderByIdAsc();
 
     List<ApplicationCodeSet> findAllByArchivedNotOrderByIdAsc(int archived);
 
     @Query(value = "SELECT DISTINCT(display) AS display, id, codeset_group, language, version, " +
-            "code, date_created, created_by, date_modified, modified_by, archived FROM base_application_codeset " +
+            "code, alt_code, description, date_created, created_by, date_modified, modified_by, archived FROM base_application_codeset " +
             "WHERE codeset_group=?1 AND archived=?2", nativeQuery = true)
     List<ApplicationCodeSet> findAllByCodesetGroupAndArchivedOrderByIdAsc(String codeSetGroup, int archived);
 
@@ -46,5 +46,10 @@ public interface ApplicationCodesetRepository extends JpaRepository<ApplicationC
     List<ApplicationCodeSet> findAllByCodeAndArchived(String code, int archived);
 
     Optional<ApplicationCodeSet> findByCode (String code);
+    Optional<ApplicationCodeSet> findByAltCode(String altCode);
+
+    @Modifying
+    @Query(value = "UPDATE base_application_codeset SET alt_code = NULL WHERE alt_code = ?1 ", nativeQuery = true)
+    void findAndDeleteAllAlternateCodesetsByCode(String code);
 
 }

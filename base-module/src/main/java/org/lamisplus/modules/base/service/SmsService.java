@@ -466,7 +466,7 @@ public class SmsService {
                     "&" + URLEncoder.encode("to", "UTF-8") + "=" + URLEncoder.encode(phone, "UTF-8") +
                     "&" + URLEncoder.encode("message", "UTF-8") + "=" + URLEncoder.encode(message, "UTF-8") +
                     "&" + URLEncoder.encode("type", "UTF-8") + "=" + URLEncoder.encode("0", "UTF-8") +
-                    "&" + URLEncoder.encode("routing", "UTF-8") + "=" + URLEncoder.encode("2", "UTF-8") +
+                    "&" + URLEncoder.encode("routing", "UTF-8") + "=" + URLEncoder.encode("3", "UTF-8") +
                     "&" + URLEncoder.encode("token", "UTF-8") + "=" + URLEncoder.encode("ol57UYbSHwG6ez182Ynt5js6mIcgnp4jaQIOrJNR7CDLpgLydd", "UTF-8");
 
             try (OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream())) {
@@ -526,7 +526,7 @@ public class SmsService {
                 .addFormDataPart("to",phoneNumbers)
                 .addFormDataPart("message","Hi, \n"+ message)
                 .addFormDataPart("type","0")
-                .addFormDataPart("routing","6")
+                .addFormDataPart("routing","3")
                 .build();
         Request request = new Request.Builder()
                 .url("https://app.smartsmssolutions.com/io/api/client/v1/sms/")

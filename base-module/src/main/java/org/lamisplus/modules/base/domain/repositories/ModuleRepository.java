@@ -81,6 +81,6 @@ public interface ModuleRepository extends JpaRepository<Module, Long> {
     @Query(value = "SELECT * from base_module where active is true " +
             "and git_hub_link is not null " +
             "and last_successful_update_check is null " +
-            "or last_successful_update_check < (CURRENT_TIMESTAMP - INTERVAL '1 day')", nativeQuery = true)
+            "or last_successful_update_check < (CURRENT_TIMESTAMP - INTERVAL '2 day')", nativeQuery = true)
     List<Module> findAllByActiveAndGitHubLinkIsNotNull();
 }

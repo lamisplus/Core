@@ -44,6 +44,12 @@ public class ApplicationCodeSetController {
         return ResponseEntity.ok(this.applicationCodesetService.getAllApplicationCodeSets(code));
     }
 
+    @GetMapping(BASE_URL_VERSION_ONE+ "/code/{codesetCode}")
+    @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete','user', 'all_permission')")
+    public ResponseEntity<ApplicationCodesetDTO> getOneByCode(@PathVariable String codesetCode) {
+        return ResponseEntity.ok(this.applicationCodesetService.getOneByCode(codesetCode));
+    }
+
     @PostMapping(BASE_URL_VERSION_ONE+ "/v2")
     @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete', 'all_permission')")
     public ResponseEntity<ApplicationCodeSet> save(@Valid @RequestBody ApplicationCodesetDTO applicationCodesetDTO) {

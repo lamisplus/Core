@@ -22,6 +22,8 @@ public interface AppointmentProjectionDto {
 
     LocalDate getAppointmentDate();
 
+    String getCaseManagerName();
+
     Integer getTotalCount();
 
 }

@@ -63,6 +63,12 @@ public class OrganisationUnitController {
         return ResponseEntity.ok(this.organisationUnitService.getOrganisationUnitByParentOrganisationUnitId(id));
     }
 
+//    @GetMapping (BASE_URL_VERSION_ONE + "/parent-organisation-units-assigned/{id}")
+//    @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete','user', 'all_permission')")
+//    public  ResponseEntity<List<OrganisationUnit>>  getOrganisationUnitByParentOrganisationUnitIdAssigned(@PathVariable Long id) {
+//        return ResponseEntity.ok(this.organisationUnitService.getOrganisationUnitByParentOrganisationUnitIdAssigned(id));
+//    }
+
     /*@GetMapping ("/parent-organisation-units/{id}/organisation-units-level/{lid}")
     public  ResponseEntity<List<OrganisationUnit>>  getOrganisationUnitByParentOrganisationUnitIdAndOrganisationUnitLevelId(
             @PathVariable Long id, @PathVariable Long lid) {

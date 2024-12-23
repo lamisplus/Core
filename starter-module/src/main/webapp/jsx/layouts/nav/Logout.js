@@ -18,7 +18,7 @@ function LogoutPage(props){
 
     return(
         <>
-            <Link  className="dropdown-item ai-icon" onClick={logout}>
+            <Link  className="dropdown-item ai-icon" onClick={() => logout()}>
                 <svg
                   id="icon-logout" xmlns="http://www.w3.org/2000/svg"
                   className="text-danger" width={18} height={18} viewBox="0 0 24 24" 

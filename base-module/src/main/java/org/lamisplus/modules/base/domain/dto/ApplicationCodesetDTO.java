@@ -23,11 +23,13 @@ public class ApplicationCodesetDTO {
 
     @NotBlank(message = "display is mandatory")
     private String display;
+    private String description;
 
     @NotBlank(message = "version is mandatory")
     private String version;
 
     private String code;
+    private String altCode;
 
     private Integer archived;
     private String dateModified;
@@ -39,13 +41,15 @@ public class ApplicationCodesetDTO {
     }
 
 
-    public ApplicationCodesetDTO(Long id, String codesetGroup, String language, String display, String version, String code, Integer archived, String dateModified, String dateCreated, String createdBy, String modifiedBy) {
+    public ApplicationCodesetDTO(Long id, String codesetGroup, String language, String display, String description, String version, String code, String altCode, Integer archived, String dateModified, String dateCreated, String createdBy, String modifiedBy) {
         this.id = id;
         this.codesetGroup = codesetGroup;
         this.language = language;
         this.display = display;
+        this.description = description;
         this.version = version;
         this.code = code;
+        this.altCode = altCode;
         this.archived = archived;
         this.dateModified = dateModified;
         this.dateCreated = dateCreated;
@@ -59,8 +63,10 @@ public class ApplicationCodesetDTO {
                 .codesetGroup(applicationCodeSet.getCodesetGroup())
                 .language(applicationCodeSet.getLanguage())
                 .display(applicationCodeSet.getDisplay())
+                .description(applicationCodeSet.getDescription())
                 .version(applicationCodeSet.getVersion())
                 .code(applicationCodeSet.getCode())
+                .altCode(applicationCodeSet.getAltCode())
                 .archived(applicationCodeSet.getArchived())
                 .createdBy(applicationCodeSet.getCreatedBy())
                 .dateCreated(applicationCodeSet.getDateCreated()!= null ? applicationCodeSet.getDateCreated().toString() : "")

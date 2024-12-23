@@ -102,7 +102,7 @@ const UserRegistration = (props) => {
   const [selectedOption, setSelectedOption] = useState(props.location.state.user.roles);
   const [setArr, setSetArr] = useState([]);
   const [designation, setDesignation] = useState([]);
-  const [allOrganisations, setAllorganisations]=useState([]);
+  const [loadingFacilities, setLoadingFacilities] = useState(false);
   const [organisations,setOrganisations] = useState([]);
   const [selectedOrganisations,setSelectedOrganisations] = useState([]);
   const [passwordStrength, setPasswordStrength] = useState("#E6E6E6");
@@ -115,25 +115,31 @@ const UserRegistration = (props) => {
 
 
   const fetchOrganisation=()=>{
+    setLoadingFacilities(true)
     axios
-        .get(`${baseUrl}organisation-unit-levels/v2/4/organisation-units`)
-        .then((response) => {
-          // setAllorganisations(response.data);
-          setOrganisations(
-              Object.entries(response.data).map(([key, value]) => ({
+    // .get(`${baseUrl}organisation-unit-levels/v2/4/organisation-units`)
+    .get(`${baseUrl}organisation-unit-levels/v2/4/organisation-units-assigned`)
+    .then((response) => {
+      // setAllorganisations(response.data);
+      setOrganisations(
+        Object.entries(response.data).map(([key, value]) => ({
                 label: value.name,
                 value: value.id,
               }))
-          );
-          setSelectedOrganisations(
+            );
+            setSelectedOrganisations(
               _.uniq(_.map(userDetail.applicationUserOrganisationUnits, 'organisationUnitId'))
-          )
+            )
 
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-  }
+            setLoadingFacilities(false)
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+          if (loadingFacilities){
+            setLoadingFacilities(false)
+          }
+    }
 
   useEffect(() => {
     getCharacters();
@@ -534,15 +540,20 @@ const UserRegistration = (props) => {
                   <div className="form-group mb-12 col-md-12" >
                     <FormGroup>
                       <Label for="permissions" style={{color:'#014d88',fontWeight:'bolder'}}>Facility*</Label>
-                      <DualListBox
+                      {!loadingFacilities ? (<DualListBox 
                           canFilter
                           options={organisations}
                           onChange={onOrganisationSelect}
                           selected={selectedOrganisations}
                           required
                           disabled={isView}
-                      />
+                      />) : (<div style={{display:'flex', justifyContent:"flex-start", alignItems:'center'}}>
+                        <Spinner/>
+                        <p style={{marginLeft:'10px'}}>Loading Facilities</p>
+                        </div>
+                    )}
                     </FormGroup>
+                      
                   </div>
 
 
@@ -562,7 +573,7 @@ const UserRegistration = (props) => {
                       </FormGroup>
                     </div>
                 
-                  {saving ? <Spinner /> : ""}
+                  {/* {saving ? <Spinner /> : ""} */}
               <br />
               {userDetail ===null ? (
 
@@ -573,12 +584,13 @@ const UserRegistration = (props) => {
                   className={classes.button}
                   startIcon={<SaveIcon />}
                   disabled={saving || !(validPassword && matchingPassword)}
-                  style={{backgroundColor:'#014d88',color:'#fff'}}
+                  style={{backgroundColor: '#014d88',color:'#fff'}}
+                  loading={saving}
                 >
                   {!saving ? (
                     <span style={{ textTransform: "capitalize" }}>Save</span>
                   ) : (
-                    <span style={{ textTransform: "capitalize" }}>Saving...</span>
+                    <span style={{ textTransform: "capitalize" }}><Spinner /> Saving...</span>
                   )}
                 </MatButton>
               )
@@ -596,7 +608,7 @@ const UserRegistration = (props) => {
                 {!saving ? (
                   <span style={{ textTransform: "capitalize" }}>Save</span>
                 ) : (
-                  <span style={{ textTransform: "capitalize" }}>Saving...</span>
+                  <span style={{ textTransform: "capitalize" }}><Spinner /> Saving...</span>
                 )}
               </MatButton>
               )

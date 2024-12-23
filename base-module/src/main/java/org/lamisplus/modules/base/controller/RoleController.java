@@ -9,11 +9,14 @@ import org.lamisplus.modules.base.domain.repositories.RoleRepository;
 import org.lamisplus.modules.base.service.RoleService;
 import org.lamisplus.modules.base.service.UserService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 
 import static org.lamisplus.modules.base.util.Constants.ArchiveStatus.ARCHIVED;
@@ -91,5 +94,10 @@ public class RoleController {
     @GetMapping(BASE_URL_VERSION_ONE + "/v2/{id}/users")
     public ResponseEntity<List<UserDTO>> getAllUserByRole(@PathVariable Long id) {
         return ResponseEntity.ok(userService.getAllUserByRole(id));
+    }
+
+    @PostMapping(path= BASE_URL_VERSION_ONE + "/v2/import", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    public ResponseEntity<?> importRoles(@RequestPart(value = "file") MultipartFile file) throws IOException {
+        return ResponseEntity.ok(roleService.importRoles(file));
     }
 }

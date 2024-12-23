@@ -113,6 +113,7 @@ const UserRegistration = (props) => {
   const [selectedOption, setSelectedOption] = useState();
   const [designation, setDesignation] = useState([]);
   const [ips, setIps] = useState([]);
+  const [loadingFacilities, setLoadingFacilities] = useState(false);
   const [allOrganisations, setAllorganisations]=useState([]);
   const [organisations,setOrganisations] = useState([]);
   const [selectedIp, setSelectedIp] = useState(null);
@@ -126,41 +127,54 @@ const UserRegistration = (props) => {
   const [phoneNumber, setPhoneNumber] = useState(null);
 
   const fetchOrganisation=()=>{
+    setLoadingFacilities(true)
     axios
-        .get(`${baseUrl}organisation-unit-levels/v2/4/organisation-units`)
-        .then((response) => {
-          // setAllorganisations(response.data);
-          setAllorganisations(
-              Object.entries(response.data).map(([key, value]) => ({
-                label: value.name,
-                value: value.id,
-              }))
-          );
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+    // .get(`${baseUrl}organisation-unit-levels/v2/4/organisation-units`)
+    .get(`${baseUrl}organisation-unit-levels/v2/4/organisation-units-assigned`)
+    .then((response) => {
+      // setAllorganisations(response.data);
+      setAllorganisations(
+        Object.entries(response.data).map(([key, value]) => ({
+          label: value.name,
+          value: value.id,
+        }))
+      );
+      setLoadingFacilities(false)
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+    if (loadingFacilities) {
+      setLoadingFacilities(false)
+    }
   }
+
   const fetchOrganisationsUnderIp=()=>{
+    setLoadingFacilities(true)
     axios
-        .get(`${baseUrl}organisation-units/parent-organisation-units/${selectedIp}`)
-        .then((response) => {
-          // setAllorganisations(response.data);
-          setAllorganisations(
-              Object.entries(response.data).map(([key, value]) => ({
-                label: value.name,
-                value: value.id,
-              }))
-          );
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+    .get(`${baseUrl}organisation-units/parent-organisation-units/${selectedIp}`)
+    .then((response) => {
+      // setAllorganisations(response.data);
+      setAllorganisations(
+        Object.entries(response.data).map(([key, value]) => ({
+          label: value.name,
+          value: value.id,
+        }))
+      );
+      setLoadingFacilities(false)
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+    if (loadingFacilities) {
+      setLoadingFacilities(false)
+      
+    }
   }
 
   const fetchIps= async () =>{
     await axios
-        .get(`${baseUrl}organisation-unit-levels/v2/8/organisation-units`)
+        .get(`${baseUrl}organisation-unit-levels/v2/8/organisation-units-assigned`)
         .then((response) => {
           setIps(
             Object.entries(response.data).map(([key, value]) => ({
@@ -383,8 +397,6 @@ const handleInputChangePhoneNumber = (e) => {
 
 };
 
-console.log("values", values);
-
   return (
       <>
         <ToastContainer autoClose={3000} hideProgressBar />
@@ -606,16 +618,20 @@ console.log("values", values);
 
 
                         </div>}
-                        <div className="form-group mb-12 col-md-12">
-                          <FormGroup>
-                            <Label for="permissions" style={{color:'#014d88',fontWeight:'bolder'}}>Facility <span style={{ color:"red"}}> *</span></Label>
-                            <DualListBox
-                                options={allOrganisations}
-                                onChange={onOrganisationSelect}
-                                selected={selectedOrganisations}
-                            />
-                          </FormGroup>
-                        </div>
+                      <div className="form-group mb-12 col-md-12">
+                        <FormGroup>
+                          <Label for="permissions" style={{ color: '#014d88', fontWeight: 'bolder' }}>Facility <span style={{ color: "red" }}> *</span></Label>
+                          {!loadingFacilities ? (<DualListBox canFilter
+                            options={allOrganisations}
+                            onChange={onOrganisationSelect}
+                            selected={selectedOrganisations}
+                          />) : (<div style={{ display: 'flex', justifyContent: "flex-start", alignItems: 'center' }}>
+                            <Spinner />
+                            <p style={{ marginLeft: '10px' }}>Loading Facilities</p>
+                          </div>
+                          )}
+                        </FormGroup>
+                      </div>
 
                         <div className="form-group mb-12 col-md-12">
                           <FormGroup>
@@ -632,25 +648,25 @@ console.log("values", values);
                       </div>
 
 
-                      {saving ? <Spinner /> : ""}
+                      {/* {saving ? <Spinner /> : ""} */}
                       <br />
                       {userDetail ===null ? (
 
-                              <MatButton
-                                  type="submit"
-                                  variant="contained"
-                                  color="primary"
-                                  className={classes.button}
-                                  startIcon={<SaveIcon />}
-                                  disabled={saving || !(validPassword && matchingPassword)}
-                                  style={{backgroundColor:'#014d88',color:'#fff'}}
-                              >
-                                {!saving ? (
-                                    <span style={{ textTransform: "capitalize" }}>Save</span>
-                                ) : (
-                                    <span style={{ textTransform: "capitalize" }}>Saving...</span>
-                                )}
-                              </MatButton>
+                      <MatButton
+                        type="submit"
+                        variant="contained"
+                        color="primary"
+                        className={classes.button}
+                        startIcon={<SaveIcon />}
+                        disabled={saving || !(validPassword && matchingPassword)}
+                        style={{ backgroundColor: '#014d88', color: '#fff' }}
+                      >
+                        {!saving ? (
+                          <span style={{ textTransform: "capitalize" }}>Save</span>
+                        ) : (
+                          <span style={{ textTransform: "capitalize" }}><Spinner /> Saving...</span>
+                        )}
+                      </MatButton>
                           )
                           :
                           (
@@ -661,12 +677,12 @@ console.log("values", values);
                                   className={classes.button}
                                   startIcon={<SaveIcon />}
                                   disabled={!(validPassword && matchingPassword)}
-                                  style={{backgroundColor:'#014d88',color:'#fff'}}
+                                  style={{backgroundColor: '#014d88',color:'#fff'}}
                               >
                                 {!saving ? (
                                     <span style={{ textTransform: "capitalize" }}>Save</span>
                                 ) : (
-                                    <span style={{ textTransform: "capitalize" }}>Saving...</span>
+                                    <span style={{ textTransform: "capitalize" }}><Spinner /> Saving...</span>
                                 )}
                               </MatButton>
                           )

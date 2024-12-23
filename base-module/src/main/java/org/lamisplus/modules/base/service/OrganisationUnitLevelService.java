@@ -8,13 +8,18 @@ import org.lamisplus.modules.base.controller.apierror.RecordExistException;
 import org.lamisplus.modules.base.domain.dto.OrganisationUnitLevelDTO;
 import org.lamisplus.modules.base.domain.entities.OrganisationUnit;
 import org.lamisplus.modules.base.domain.entities.OrganisationUnitLevel;
+import org.lamisplus.modules.base.domain.entities.User;
 import org.lamisplus.modules.base.domain.repositories.OrganisationUnitLevelRepository;
 import org.lamisplus.modules.base.domain.repositories.OrganisationUnitRepository;
+import org.lamisplus.modules.base.security.SecurityUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.lamisplus.modules.base.util.Constants.ArchiveStatus.UN_ARCHIVED;
@@ -27,6 +32,7 @@ public class OrganisationUnitLevelService {
     private final OrganisationUnitLevelRepository organisationUnitLevelRepository;
     private final OrganisationUnitRepository organisationUnitRepository;
     private final OrganisationUnitService organisationUnitService;
+    private final UserService userService;
 
 
     public OrganisationUnitLevelDTO save(OrganisationUnitLevelDTO organisationUnitLevelDTO) {
@@ -93,6 +99,26 @@ public class OrganisationUnitLevelService {
                 .stream ()
                 .map (organisationUnit -> organisationUnitService.findOrganisationUnits (organisationUnit, organisationUnit.getId ()))
                 .collect (Collectors.toList ());
+    }
+
+    public List<OrganisationUnit> getAllAssignedOrganisationUnitsByOrganizationUnitLevel(Long id) {
+        Set<String> permissions = new HashSet<>();
+        Optional<User> loggedInUser = userService.getCurrentLoggedInUser();
+        if (loggedInUser.isPresent()) {
+            loggedInUser.get().getRole().forEach(role -> {
+                role.getPermission().forEach(permission -> {
+                    permissions.add(permission.getName());
+                });
+            });
+            organisationUnitLevelRepository.findByIdAndArchived (id, UN_ARCHIVED)
+                    .orElseThrow (() -> new EntityNotFoundException (OrganisationUnitLevel.class, "Id", id + ""));
+            if (permissions.contains("all_permission")) {
+                return organisationUnitRepository.findByOrganisationsByLevelAndArchived (id, UN_ARCHIVED);
+            } else {
+                return organisationUnitRepository.findOnlyAssignedOrganisationsByLevelAndArchived (id, loggedInUser.get().getId(), UN_ARCHIVED);
+            }
+        }
+        return new ArrayList<>();
     }
 
     public List<OrganisationUnit> getAllParentOrganisationUnitsByOrganizationUnitLevel(Long id) {
