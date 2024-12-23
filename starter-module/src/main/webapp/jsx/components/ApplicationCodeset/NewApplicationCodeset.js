@@ -13,6 +13,7 @@ import { url as baseUrl } from "../../../api";
 import { createApplicationCodeset, updateApplicationCodeset } from './../../../actions/applicationCodeset';
 import { Spinner } from 'reactstrap';
 import Select from "react-select/creatable";
+import NonCreateable from "react-select";
 import axios from 'axios';
 
 
@@ -182,7 +183,6 @@ const ModalSample = (props) => {
                                                 value={formData.description}
                                                 onChange={handleInputChange}
                                                 style={{height:"40px",border:'solid 1px #014d88',borderRadius:'5px', fontWeight:'bolder'}}
-                                                required
                                             />
                                         </FormGroup>
                                     </Col>
@@ -224,16 +224,16 @@ const ModalSample = (props) => {
                                         
                                             <FormGroup>
                                                 <Label style={{color:'#014d88',fontWeight:'bolder'}}>Alternate Codeset</Label>
-                                                <Select
+                                                <NonCreateable
                                                     required
                                                     name="cg"
                                                     id="cg"
                                                     isMulti={false}
                                                     onChange={handleAltCodeChange}
                                                     style={{height:"40px",border:'solid 1px #014d88',borderRadius:'5px', fontWeight:'bolder',appearance:'auto'}}
-                                                    options={props.applicationCodesetList ? Array.from(new Set(props.applicationCodesetList.map(x => x.code))).sort().map(code => ({
-                                                            value: code,
-                                                            label: code
+                                                    options={props.applicationCodesetList ? Array.from(new Set(props.applicationCodesetList)).sort((a,b) => a.display.localeCompare(b.display)).map(each => ({
+                                                            value: each.code,
+                                                            label: each.display
                                                     })) : []}
                                                     isOptionDisabled={option => disabled}
                                                     value={formData.altCode ? {

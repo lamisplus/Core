@@ -115,7 +115,7 @@ public class ApplicationCodesetService {
 
     private void confirmAltCodeExists(ApplicationCodesetDTO applicationCodesetDTO) {
         String altCode  = applicationCodesetDTO.getAltCode();
-        if (altCode != null){
+        if (altCode != null && !altCode.isEmpty()){
             updateAltCode(applicationCodesetDTO);
             Optional<ApplicationCodeSet> applicationCodeSet = applicationCodesetRepository.findByCode(applicationCodesetDTO.getAltCode());
             if (!applicationCodeSet.isPresent()){
@@ -128,6 +128,9 @@ public class ApplicationCodesetService {
         ApplicationCodeSet applicationCodeset = applicationCodesetRepository.findByIdAndArchived(id,UN_ARCHIVED)
                 .orElseThrow(() -> new EntityNotFoundException(ApplicationCodeSet.class,"Display:",id+""));
         applicationCodeset.setArchived(ARCHIVED);
+
+        applicationCodesetRepository.findAndDeleteAllAlternateCodesetsByCode(applicationCodeset.getCode());
+        applicationCodesetRepository.save(applicationCodeset);
     }
 
     public Boolean exist(String display, String codeSetGroup){

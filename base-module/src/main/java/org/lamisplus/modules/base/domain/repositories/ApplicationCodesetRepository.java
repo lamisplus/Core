@@ -48,4 +48,8 @@ public interface ApplicationCodesetRepository extends JpaRepository<ApplicationC
     Optional<ApplicationCodeSet> findByCode (String code);
     Optional<ApplicationCodeSet> findByAltCode(String altCode);
 
+    @Modifying
+    @Query(value = "UPDATE base_application_codeset SET alt_code = NULL WHERE alt_code = ?1 ", nativeQuery = true)
+    void findAndDeleteAllAlternateCodesetsByCode(String code);
+
 }
