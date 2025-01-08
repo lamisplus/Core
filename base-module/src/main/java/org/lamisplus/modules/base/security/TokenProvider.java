@@ -110,10 +110,12 @@ public class TokenProvider {
         String permits="";
         //Get all user permissions
         for (Role role : roles) {
-            if(!StringUtils.isEmpty(permits)) {
+            if(!StringUtils.isEmpty(permits) && !role.getPermission().isEmpty()) {
                 permits = permits +",";
             }
-            permits = permits + role.getPermission().stream().map(Permission::getName).collect(Collectors.joining(","));
+            if (!role.getPermission().isEmpty()){
+                permits = permits + role.getPermission().stream().map(Permission::getName).collect(Collectors.joining(","));
+            }
         }
         //check if no permission then it must be an ordinary user so assign the role as user authority
         if(StringUtils.isEmpty(permits))permits = claims.get(AUTHORITIES_KEY).toString();
