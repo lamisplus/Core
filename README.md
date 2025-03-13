@@ -1,34 +1,70 @@
-# lamisplus-core-enhancement application
-# Run with java version 8.
-## Setting up the database
-This application uses `postgres` database; create a database on postgres 
-and set up the database credentials in the application.yml in lamisplus module
+# LAMISPlus 2.0
 
-## Maven setup
-Use maven 3 upwards, run **mvn dependency:tree** to resolve java dependencies
+## System Requirements
 
-## Starting the website on your local machine
-Just start `coreApplication` with the command **mvn spring-boot:run**.
-This will start up the website using a local database on port **8080**. or another user defined port.
+### Prerequisites to Install
+- IDE of choice (IntelliJ, Eclipse, etc.)
+- Java 8+
+- PostgreSQL 14+
+- `.m2` folder from Google Drive https://drive.google.com/file/d/17F6wHPADVVaDBabajrM9wABUeB04i6D1/view?usp=sharing
 
-Browsing to http://localhost:8080/login should give you the homepage.
+## Run in Development Environment
 
-## Front-end development
-When starting on your local machine, you should get instant reloading of all static files.
-Simply make a change and refresh the page in your browser.
+### How to Install Dependencies
+1. Install Java 8+
+2. Install PostgreSQL 14+
+3. Download and replace the system `.m2` folder.
+4. Clone the git repository:
+    ```bash
+    git clone https://github.com/lamisplus/Core.git
+    ```
+5. Open the project in your IDE of choice.
 
-All front-end related static files are located in `lamisplus/src/main/resources/static`.
+### Update Configuration File
+1. Update database access details in `db-config.yml` file.
+2. Update other Maven application properties as required.
 
-> WARNING: All files in `src/main/resources` will be packaged and deployed with the website.
-> Do not put any files anywhere in that folder if they are not supposed to be deployed!
+### Run Build and Install Commands
+1. Change directory to `starter-module`:
+    ```bash
+    cd starter-module
+    ```
+2. Run Frontend Build Command:
+    ```bash
+    npm run build
+    ```
+3. Run Maven clean install:
+    ```bash
+    mvn clean install
+    ```
 
-### LiveReload integration
-The application supports LiveReload.
-If you have the plugin in your browser, just activating it on the site should be enough.
+## How to Package for Production Environment
+1. Run Maven package command:
+    ```bash
+    mvn clean package
+    ```
 
-### Front end system
-The application is built using react native for frontend.
+## Launch Packaged JAR File
+1. Launch the JAR file:
+    ```bash
+    java -jar <path-to-jar-file>
+    ```
+2. Optionally, run with memory allocation:
+    ```bash
+    java -jar -Xms4096M -Xmx6144M <path-to-jar-file>
+    ```
 
-## Troubleshooting
-### Resetting the database
-Create a database property in the application.yml
+## Visit the Application
+- Visit the application on a browser at the configured port:
+    ```
+    http://localhost:8080
+    ```
+
+## Access Swagger Documentation
+- Visit the application at:
+    ```
+    http://localhost:8080/swagger-ui.html#/
+    ```
+
+## Access Application Logs
+- Application logs can be accessed in the `application-debug` folder.
