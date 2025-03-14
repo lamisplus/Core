@@ -25,7 +25,7 @@
 2. Update other Maven application properties as required.
 
 ### Run Build and Install Commands
-1. Change directory to `starter-module`:
+1. Change the directory to `starter-module`:
     ```bash
     cd starter-module
     ```
@@ -68,3 +68,17 @@
 
 ## Access Application Logs
 - Application logs can be accessed in the `application-debug` folder.
+
+## Authors & Acknowledgments
+### Main contributors
+- Victor Ajor   https://github.com/AJ-DataFI
+- Mathew Adegbite https://github.com/mathewade 
+- Emeka https://github.com/drjavanew
+- Abisayo Peter Abiodun https://github.com/Asquarep
+- John gichangi https://github.com/gichangi
+- Joshua https://github.com/JOSH2019GABRIEL
+- Kennedy Kirui https://github.com/kenkirui
+- Tyav Barnabas https://github.com/tyavbarnabas
+
+### Special mentions
+- Dr Karim Usman https://github.com/drkusman
