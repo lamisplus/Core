@@ -7,7 +7,6 @@ import org.lamisplus.modules.base.domain.repositories.ModuleRepository;
 import org.springframework.boot.configurationprocessor.json.JSONArray;
 import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.*;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -29,33 +28,25 @@ public class ModuleUpdateService {
     private static final String BROWSER_DOWNLOAD_URL = "browser_download_url";
     private static final String DOT_JAR = ".jar";
     private final ModuleRepository moduleRepository;
-    private final InternetConnectivityService internetConnectivityService;
 
     /**
      * Checking for module updates
      */
 //    @Scheduled(fixedRate = 10800000) //10800000 milliseconds = 3 hours
-//    @Scheduled(cron = "14,15,16,17 0-0 ? * * *")
-//    @Scheduled(cron = "0 9,12 * * *")
-//    @Scheduled(cron = "0 */5 * * * *")
-    public void checkForUpdates() {
-        if (internetConnectivityService.isInternetAvailable()){
-            LOG.info("checking for updates...");
-            moduleRepository.findAllByActiveAndGitHubLinkIsNotNull()
-                    .forEach(this::checkUpdates);
+//    public void checkForUpdates() {
+//        LOG.info("checking for updates...");
+//        moduleRepository.findAllByActiveAndGitHubLinkIsNotNull()
+//                .stream()
+//                .map(module -> checkUpdates(module))
 //                .collect(Collectors.toList());
-        } else {
-            LOG.info("Could not check for updates. No internet connection.");
-        }
-    }
+//    }
 
     /**
      * Checks updates
      * @param module
      * @return Module
      */
-    private void checkUpdates(Module module){
-        LOG.info("Attempting to check for updates for {}", module.getName());
+    private Module checkUpdates(Module module){
         ResponseEntity<String> responseEntity;
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
@@ -64,38 +55,33 @@ public class ModuleUpdateService {
         String apiUrl = module.getGitHubLink();
         LOG.info("github url {}", apiUrl);
         HttpEntity<String> requestEntity = new HttpEntity<>(headers);
+        // handle this for case when there is no network, it shouldn't throw and error
+        responseEntity = restTemplate.exchange(apiUrl, HttpMethod.GET, requestEntity, String.class);
+        if (responseEntity.getStatusCode() == HttpStatus.OK) {
 
-        try {
-            responseEntity = restTemplate.exchange(apiUrl, HttpMethod.GET, requestEntity, String.class);
-            if (responseEntity.getStatusCode() == HttpStatus.OK) {
+            try {
+                JSONObject json =  new JSONObject(responseEntity.getBody());
+                String latestVersion = json.getString(TAG_NAME);
+                LOG.info("latestVersion is {}", latestVersion);
+                module.setLatestVersion(latestVersion);
+                JSONArray js = new JSONArray(json.getString(ASSETS));
 
-                try {
-                    JSONObject json = new JSONObject(responseEntity.getBody());
-                    String latestVersion = json.getString(TAG_NAME);
-                    LOG.info("latestVersion is {}", latestVersion);
-                    module.setLatestVersion(latestVersion);
-                    JSONArray js = new JSONArray(json.getString(ASSETS));
-
-                    for (int i = 0; i < js.length(); i++) {
-                        JSONObject downloadUrl = js.getJSONObject(i);
-                        String downloadLink = downloadUrl.getString(BROWSER_DOWNLOAD_URL);
-                        LOG.info("downloadLink is {}", downloadLink);
-                        if (downloadLink.contains(DOT_JAR)) {
-                            module.setDownloadUrl(downloadLink);
-                            module.setLastSuccessfulUpdateCheck(LocalDateTime.now());
-                            break;
-                        }
+                for(int i=0; i < js.length(); i++) {
+                    JSONObject downloadUrl = js.getJSONObject(i);
+                    String downloadLink = downloadUrl.getString(BROWSER_DOWNLOAD_URL);
+                    LOG.info("downloadLink is {}", downloadLink);
+                    if(downloadLink.contains(DOT_JAR)){
+                        module.setDownloadUrl(downloadLink);
+                        module.setLastSuccessfulUpdateCheck(LocalDateTime.now());
+                        break;
                     }
-                } catch (JSONException e) {
-//                    e.printStackTrace();
-                    throw new RuntimeException(e);
                 }
-
+            } catch (JSONException e) {
+                e.printStackTrace();
+                throw new RuntimeException(e);
             }
-            moduleRepository.save(module);
-        } catch (Exception e) {
-            LOG.warn("There was an error checking for updates");
-//            throw new RuntimeException("Could not check for updates");
+
         }
+        return moduleRepository.save(module);
     }
 }
