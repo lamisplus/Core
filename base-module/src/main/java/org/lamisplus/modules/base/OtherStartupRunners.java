@@ -16,6 +16,6 @@ public class OtherStartupRunners {
     @PostConstruct
     public void checkForUpdates() {
         LOG.info("Calling Module Update Service");
-        moduleUpdateService.checkForUpdates();
+        //moduleUpdateService.checkForUpdates();
     }
 }

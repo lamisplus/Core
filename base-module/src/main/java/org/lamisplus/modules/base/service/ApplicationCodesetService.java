@@ -14,11 +14,14 @@ import org.apache.commons.csv.CSVRecord;
 import org.lamisplus.modules.base.controller.apierror.EntityNotFoundException;
 import org.lamisplus.modules.base.controller.apierror.RecordExistException;
 import org.lamisplus.modules.base.domain.dto.ApplicationCodesetDTO;
+import org.lamisplus.modules.base.domain.dto.CodeSetDTO;
 import org.lamisplus.modules.base.domain.entities.ApplicationCodeSet;
 import org.lamisplus.modules.base.domain.repositories.ApplicationCodesetRepository;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import scala.collection.IndexedSeqView;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -32,6 +35,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
+import static liquibase.pro.packaged.kt.e;
+import static liquibase.pro.packaged.kt.g;
 
 @Service
 @Transactional
@@ -332,6 +338,22 @@ public class ApplicationCodesetService {
                 .collect(Collectors.toList());
     }
 
+    @Cacheable(value = "codeSets", key = "#group")
+    public List<CodeSetDTO> getCodeSetByGroup(String group) {
+        List<ApplicationCodeSet> entities = applicationCodesetRepository.findByCodesetGroup(group);
+        List<CodeSetDTO> result = new ArrayList<>();
 
+        for(ApplicationCodeSet e : entities) {
+            result.add(new CodeSetDTO(e.getId(), e.getCode(), e.getDisplay()));
+        }
+        return result;
+    }
+    public Map<String, List<CodeSetDTO>> getMultipleCodeSets(List<String> groups) {
+        Map<String, List<CodeSetDTO>> result = new HashMap<>();
+        for(String group : groups) {
+            result.put(group, getCodeSetByGroup(group));
+        }
+        return result;
+    }
 
 }

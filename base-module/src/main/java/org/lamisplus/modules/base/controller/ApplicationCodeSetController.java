@@ -4,6 +4,7 @@ package org.lamisplus.modules.base.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.lamisplus.modules.base.domain.dto.ApplicationCodesetDTO;
+import org.lamisplus.modules.base.domain.dto.CodeSetDTO;
 import org.lamisplus.modules.base.domain.entities.ApplicationCodeSet;
 import org.lamisplus.modules.base.service.ApplicationCodesetService;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @Slf4j
@@ -106,5 +108,12 @@ public class ApplicationCodeSetController {
         } catch (IOException e) {
             throw new RuntimeException("Error occurred while processing the file: " + e.getMessage());
         }
+    }
+
+    @GetMapping(BASE_URL_VERSION_ONE+ "/v2/codeSets")
+    public ResponseEntity<Map<String, List<CodeSetDTO>>> getCodeSets(
+            @RequestParam List<String> codes
+    ){
+        return ResponseEntity.ok(applicationCodesetService.getMultipleCodeSets(codes));
     }
 }

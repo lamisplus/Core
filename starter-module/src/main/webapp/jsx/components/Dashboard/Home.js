@@ -11,13 +11,10 @@ import LineGraph from "../charts/LineGraph";
 import { ThemeContext } from "../../../context/ThemeContext";
 import GeneralSummaryView from "./GeneralSummaryView";
 import { TabContext, TabList, TabPanel } from "@material-ui/lab";
-import { systemSettingsHelper } from "../../../_services/SystemSettingsHelper";
-import { authentication } from "../../../_services/authentication";
 
 const Home = () => {
   const listOfAllModule = useSelector((state) => state.boostrapmodule.list);
-  const instance = systemSettingsHelper.getSingleSystemSetting("instance")
-  const [isServerInstance, setIsServerInstance] = useState(true);
+  const [hasServerInstalled, setHasServerInstalled] = useState(false);
   const [value, setValue] = React.useState("2");
   const [loading, setLoading] = useState(true);
   const [dashboardDataLoading, setDashboardDataLoading] = useState(false);
@@ -39,11 +36,7 @@ const Home = () => {
       .get(`${url}patient?searchParam=*&pageNo=0&pageSize=10`, {
         headers: { Authorization: `Bearer ${token}` },
       })
-      .then((response) => {
-        if (typeof(response.data) === 'object'){
-          setPatientCount(response.data)
-        }
-      });
+      .then((response) => setPatientCount(response.data));
   };
 
   const getPatientWithBiometricsCount = () => {
@@ -54,72 +47,41 @@ const Home = () => {
           headers: { Authorization: `Bearer ${token}` },
         }
       )
-      .then((response) => {
-        if (typeof(response.data) === 'object'){
-          setPatientBiometricCount(response.data)
-        }
-      });
-    };
-    
-    const getPatientWithNoBiometricsCount = () => {
-      axios
+      .then((response) => setPatientBiometricCount(response.data));
+  };
+
+  const getPatientWithNoBiometricsCount = () => {
+    axios
       .get(
         `${url}patient/getall-patients-with-no-biometric?searchParam=*&pageNo=0&pageSize=10`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       )
-      .then((response) => {
-        if (typeof(response.data) === 'object'){
-          setPatientNoBiometricCount(response.data);
-        }
-      });
-    };
-    
-    const getSexCount = () => {
-      axios
+      .then((response) => setPatientNoBiometricCount(response.data));
+  };
+
+  const getSexCount = () => {
+    axios
       .get(`${url}patient/count-by-sex`, {
         headers: { Authorization: `Bearer ${token}` },
       })
-      .then((response) => {
-        if (typeof(response.data) === 'object'){
-          setSexCount(response.data);
-        }
-      })
-      .catch((error) => {
-        console.log(error)
-        setSexCount([]);
-      });
-    };
-    
-    const getSexYearCount = () => {
-      axios
+      .then((response) => setSexCount(response.data));
+  };
+
+  const getSexYearCount = () => {
+    axios
       .get(`${url}patient/count-by-year-and-sex`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        if (typeof(response.data) === 'object'){
-          const sortByYear = (a, b) => {
-            return a.year - b.year;
-          };
-  
-          setSexYearCount(
-            response.data.sort(sortByYear).filter((entry) => entry.year >= 2010)
-          );
-        }
-      })
-      // .then((response) => {
-      //   const sortByYear = (a, b) => {
-      //     return a.year - b.year;
-      //   };
+        const sortByYear = (a, b) => {
+          return a.year - b.year;
+        };
 
-      //   setSexYearCount(
-      //     response.data.sort(sortByYear).filter((entry) => entry.year >= 2010)
-      //   );
-      // })
-      .catch((error) => {
-        console.log(error);
-        setSexYearCount([]);
+        setSexYearCount(
+          response.data.sort(sortByYear).filter((entry) => entry.year >= 2010)
+        );
       });
   };
 
@@ -133,56 +95,40 @@ const Home = () => {
     setDashboardDataLoading(false);
   }
 
-  // useEffect(() => {
-  //   changeBackground({ value: "light", label: "Light" });
+  useEffect(() => {
+    changeBackground({ value: "light", label: "Light" });
 
-  //   if (listOfAllModule) {
-  //     if (listOfAllModule.length > 0) {
-  //       listOfAllModule.map((item) => {
-  //         if (item.name === "ServerSyncModule") {
-  //           setIsServerInstance(true);
-  //         }
-  //       });
-  //     }
-  //     setLoading(false);
-  //   }
-  //   // if (!patientCount?.totalRecords) {
-  //   //   getPatientCount();
-  //   // }
-
-  //   // if (!patientBiometricCount?.totalRecords) {
-  //   //   getPatientWithBiometricsCount();
-  //   // }
-
-  //   // if (!patientNoBiometricCount?.totalRecords) {
-  //   //   getPatientWithNoBiometricsCount();
-  //   // }
-
-  //   // if (!sexCount[0]?.name) {
-  //   //   getSexCount();
-  //   // }
-
-  //   // if (!sexYearCount[0]?.year) {
-  //   //   getSexYearCount();
-  //   // }
-    
-  // }, [listOfAllModule]);
-
-  useEffect(async ()=> {
-    if (instance !== null && instance !== undefined) {
-      const serverInstance = instance.value === "1"
-      setIsServerInstance(serverInstance)
-      setLoading(false)
-    } else {
-      await systemSettingsHelper.fetchAllSystemSettings()
-      const newInstance = systemSettingsHelper.getSingleSystemSetting("instance")
-      const newServerInstance = newInstance.value === "1"
-      setIsServerInstance(newServerInstance)
-      setLoading(false)
-
+    if (listOfAllModule) {
+      if (listOfAllModule.length > 0) {
+        listOfAllModule.map((item) => {
+          if (item.name === "ServerSyncModule") {
+            setHasServerInstalled(true);
+          }
+        });
+      }
+      setLoading(false);
     }
-    setLoading(false)
-  },[instance])
+    // if (!patientCount?.totalRecords) {
+    //   getPatientCount();
+    // }
+
+    // if (!patientBiometricCount?.totalRecords) {
+    //   getPatientWithBiometricsCount();
+    // }
+
+    // if (!patientNoBiometricCount?.totalRecords) {
+    //   getPatientWithNoBiometricsCount();
+    // }
+
+    // if (!sexCount[0]?.name) {
+    //   getSexCount();
+    // }
+
+    // if (!sexYearCount[0]?.year) {
+    //   getSexYearCount();
+    // }
+    
+  }, [listOfAllModule]);
 
   useEffect(() => {
     fetchDashboardData();
@@ -192,7 +138,7 @@ const Home = () => {
     <>
       {(!loading && !dashboardDataLoading) ? (
         <>
-          {isServerInstance ? (
+          {hasServerInstalled ? (
             <TabContext value={value}>
               {/* <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <TabList onChange={handleTabsChange} aria-label="lab API tabs example">
@@ -247,7 +193,7 @@ const Home = () => {
                         </div>
                         <div className="card-body pt-0 chart-body-wrapper">
                           <h4 className="text-black font-w400 mb-0 m-4">
-                            Total Patients
+                            Active Patients
                           </h4>
                         </div>
                       </div>

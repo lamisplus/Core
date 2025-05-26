@@ -269,14 +269,14 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
      * @param ex the Exception
      * @return the ApiError object
      */
-    @ExceptionHandler(Exception.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ResponseEntity<Object> handleGenericException(Exception ex) {
-        ApiError apiError = new ApiError(BAD_REQUEST);
-        apiError.setStatusCode(BAD_REQUEST.value());
-        apiError.setMessage(ex.getMessage());
-        return buildResponseEntity(apiError);
-    }
+//    @ExceptionHandler(Exception.class)
+//    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+//    public ResponseEntity<Object> handleGenericException(Exception ex) {
+//        ApiError apiError = new ApiError(BAD_REQUEST);
+//        apiError.setStatusCode(BAD_REQUEST.value());
+//        apiError.setMessage(ex.getMessage());
+//        return buildResponseEntity(apiError);
+//    }
 
     /**
      * Handle ClientAbortException, thrown when client aborts request
@@ -284,14 +284,14 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
      * @param ex the ClientAbortException
      * @return the ApiError object
      */
-    @ExceptionHandler(ClientAbortException.class)
-    public ResponseEntity<Object> clientAbortExceptionHandler(HttpServletRequest request, ClientAbortException ex) {
-        LOG.warn("ClientAbortException: message={}", ex.getMessage());
-        ApiError apiError = new ApiError(BAD_REQUEST);
-        apiError.setStatusCode(BAD_REQUEST.value());
-        apiError.setMessage(ex.getMessage());
-        return buildResponseEntity(apiError);
-    }
+//    @ExceptionHandler(ClientAbortException.class)
+//    public ResponseEntity<Object> clientAbortExceptionHandler(HttpServletRequest request, ClientAbortException ex) {
+//        LOG.warn("ClientAbortException: message={}", ex.getMessage());
+//        ApiError apiError = new ApiError(BAD_REQUEST);
+//        apiError.setStatusCode(BAD_REQUEST.value());
+//        apiError.setMessage(ex.getMessage());
+//        return buildResponseEntity(apiError);
+//    }
 
     /**
      * Handle HttpClientErrorException, thrown when client aborts request
@@ -299,14 +299,14 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
      * @param ex the HttpClientErrorException
      * @return the ApiError object
      */
-    @ExceptionHandler(HttpClientErrorException.class)
-    public ResponseEntity<Object> handleHttpClientErrorException(
-            HttpClientErrorException ex) {
-        ApiError apiError = new ApiError(BAD_REQUEST);
-        apiError.setStatusCode(BAD_REQUEST.value());
-        apiError.setMessage(ex.getMessage());
-        return buildResponseEntity(apiError);
-    }
+//    @ExceptionHandler(HttpClientErrorException.class)
+//    public ResponseEntity<Object> handleHttpClientErrorException(
+//            HttpClientErrorException ex) {
+//        ApiError apiError = new ApiError(BAD_REQUEST);
+//        apiError.setStatusCode(BAD_REQUEST.value());
+//        apiError.setMessage(ex.getMessage());
+//        return buildResponseEntity(apiError);
+//    }
 
     /**
      * Handle Exception, handle generic Exception.class
