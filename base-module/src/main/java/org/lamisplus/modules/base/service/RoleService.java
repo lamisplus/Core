@@ -93,7 +93,7 @@ public class RoleService {
                 }
                 permissionsSet.add(permissionToAdd);
             }catch(Exception e){
-                e.printStackTrace();
+//                e.printStackTrace();
             }
         }
         return permissionsSet;
