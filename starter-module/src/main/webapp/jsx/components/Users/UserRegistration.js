@@ -227,12 +227,19 @@ const UserRegistration = (props) => {
       axios
           .get(`${baseUrl}account/roles`)
           .then((response) => {
-            //console.log(response.data)
+            // console.log(response.data)
+            // const rolesConverted = Object.entries(response.data).map(([key, value]) => ({
+            //   label: value.name,
+            //   value: value.name,
+            // }))
+            // .sort((a,b) => a.value.localeCompare(b.value))
+            // console.log(rolesConverted)
             setRole(
                 Object.entries(response.data).map(([key, value]) => ({
-                  label: value.name,
-                  value: value.name,
-                }))
+              label: value.name,
+              value: value.name,
+            }))
+            .sort((a,b) => a.value.localeCompare(b.value))
             );
 
           })
@@ -659,7 +666,7 @@ const handleInputChangePhoneNumber = (e) => {
                         className={classes.button}
                         startIcon={<SaveIcon />}
                         disabled={saving || !(validPassword && matchingPassword)}
-                        style={{ backgroundColor: '#014d88', color: '#fff' }}
+                        style={{ backgroundColor: (saving || !(validPassword && matchingPassword)) ? 'grey' : '#014d88', color: '#fff' }}
                       >
                         {!saving ? (
                           <span style={{ textTransform: "capitalize" }}>Save</span>

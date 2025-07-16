@@ -173,7 +173,7 @@ const UserRegistration = (props) => {
                 Object.entries(response.data).map(([key, value]) => ({
                   label: value.name,
                   value: value.name,
-                }))
+                })).sort((a,b) => a.value.localeCompare(b.value))
             );
           })
           .catch((error) => {

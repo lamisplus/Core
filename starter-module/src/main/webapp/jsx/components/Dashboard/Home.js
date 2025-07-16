@@ -79,8 +79,10 @@ const Home = () => {
           return a.year - b.year;
         };
 
+        const res = typeof response.data === 'object' ? response.data : [];
+
         setSexYearCount(
-          response.data.sort(sortByYear).filter((entry) => entry.year >= 2010)
+          res.sort(sortByYear).filter((entry) => entry.year >= 2010)
         );
       });
   };
