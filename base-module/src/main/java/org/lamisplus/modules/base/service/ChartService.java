@@ -3,6 +3,8 @@ package org.lamisplus.modules.base.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.lamisplus.modules.base.domain.dto.ChartDTO;
+import org.lamisplus.modules.base.domain.dto.ChartQueryDTO;
+import org.lamisplus.modules.base.domain.dto.ChartValueDTO;
 import org.lamisplus.modules.base.domain.entities.Chart;
 import org.lamisplus.modules.base.domain.repositories.ChartRepository;
 import org.lamisplus.modules.base.module.ModuleService;
@@ -50,7 +52,14 @@ public class ChartService {
     public List<ChartDTO> getIndicatorNameAndTypeByLocationNative(String location) {
         List<Object[]> results = chartRepository.findIndicatorNameAndTypeByLocationNative(location);
         return results.stream()
-                .map(result -> new ChartDTO((String) result[0], (String) result[1], (String) result[3]))
+                .map(result -> ChartDTO.builder()
+                        .indicatorName((String) result[0])
+                        .type((String) result[1])
+                        .tableName((String) result[3])
+                        .description((String) result[4])
+                        .displayName((String) result[5])
+                        .icon((String) result[3])
+                        .build())
                 .collect(Collectors.toList());
     }
 
@@ -94,7 +103,8 @@ public class ChartService {
      * @param location the of the chart
      */
     private Set<ChartDTO> getAllChart(String tableName, String location) {
-        String query = String.format("SELECT indicator_name, type FROM %s WHERE location='%s'", tableName, location);
+        String query = String.format("SELECT indicator_name, type, description, display_name, icon" +
+                " FROM %s WHERE location='%s'", tableName, location);
         Set<ChartDTO> chartDTOS = new HashSet<>();
         Connection conn = null;
         try {
@@ -103,19 +113,112 @@ public class ChartService {
                     java.sql.ResultSet.CONCUR_READ_ONLY);
             ResultSet resultSet = stmt.executeQuery(query);
             while (resultSet.next()) {
-                chartDTOS.add(new ChartDTO(resultSet.getString(1), resultSet.getString(2), tableName));
+                ChartDTO chartDTO = ChartDTO.builder()
+                        .indicatorName(resultSet.getString(1))
+                        .type(resultSet.getString(2))
+                        .tableName(tableName)
+                        .description(resultSet.getString(3))
+                        .displayName(resultSet.getString(4))
+                        .icon(resultSet.getString(5))
+                        .build();
+                chartDTOS.add(chartDTO);
             }
         } catch (SQLException e) {
-            LOG.debug("SQL Exception while getting result set is {}", e.getMessage());
+            logSQLExceptions("SQL Exception while getting chartDTOS result set {}", e);
         } finally {
             if (conn != null) {
                 try {
                     conn.close();
                 } catch (SQLException e) {
-                    LOG.debug("Exception while closing connection is {}", e.getMessage());
+                    logSQLExceptions("Exception while closing chartDTOS {}", e);
                 }
             }
         }
         return chartDTOS;
     }
+
+    /**
+     * Get all chart Values For Dashboard display
+     * @param tableName the name of the table
+     * @return list of ChartDTO containing indicator name and type
+     */
+    public List<ChartValueDTO> getAllChartValuesForDashboard(String tableName, String indicatorName) {
+        Set<ChartValueDTO> chartValueDTOS = new HashSet<>();
+        for(ChartQueryDTO chartQueryDTO : getAllChartQuery(tableName, indicatorName)) {
+            chartValueDTOS.addAll(getAllChartValues(indicatorName, chartQueryDTO.getQuery()));
+        }
+        return new ArrayList<>(chartValueDTOS);
+    }
+
+    /**
+     * Delete get all charts values
+     * @param tableName the table name
+     * @param indicatorName the indicatorName of the chart
+     */
+    private Set<ChartQueryDTO> getAllChartQuery(String tableName, String indicatorName) {
+        String query = String.format("SELECT query FROM %s WHERE indicator_name='%s'", tableName, indicatorName);
+        Set<ChartQueryDTO> chartQueryDTOS = new HashSet<>();
+        Connection conn = null;
+        try {
+            conn = dataSource.getConnection();
+            Statement stmt = conn.createStatement(java.sql.ResultSet.TYPE_FORWARD_ONLY,
+                    java.sql.ResultSet.CONCUR_READ_ONLY);
+            ResultSet resultSet = stmt.executeQuery(query);
+            while (resultSet.next()) {
+                chartQueryDTOS.add(new ChartQueryDTO(indicatorName, resultSet.getString(1)));
+            }
+        } catch (SQLException e) {
+            logSQLExceptions("SQL Exception while getting chartQueryDTOS result set {}", e);
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    logSQLExceptions("SQL Exception while closing chartQueryDTOS connection {}", e);
+                }
+            }
+        }
+        return chartQueryDTOS;
+    }
+
+    /**
+     * Get all charts values by indicatorName and query
+     * @param query the table name
+     */
+    private List<ChartValueDTO> getAllChartValues(String indicatorName, String query) {
+        LOG.info("query is {}", query);
+        List<ChartValueDTO> chartValueDTOS = new ArrayList<>();
+        Connection conn = null;
+        try {
+            conn = dataSource.getConnection();
+            Statement stmt = conn.createStatement(java.sql.ResultSet.TYPE_FORWARD_ONLY,
+                    java.sql.ResultSet.CONCUR_READ_ONLY);
+            ResultSet resultSet = stmt.executeQuery(query);
+            while (resultSet.next()) {
+                chartValueDTOS.add(new ChartValueDTO(indicatorName, resultSet.getString(1)));
+            }
+        } catch (SQLException e) {
+            logSQLExceptions("SQL Exception while getting chartValueDTOS result set {}", e);
+
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    logSQLExceptions("Exception while closing chartValueDTOS {}", e);
+                }
+            }
+        }
+        return chartValueDTOS;
+    }
+
+    /**
+     * Logging SQL Exceptions
+     * @param message - the error message
+     * @param sqlException - the sql exception
+     */
+    private void logSQLExceptions(String message, SQLException sqlException){
+        LOG.info(message, sqlException.getMessage());
+    }
+
 }

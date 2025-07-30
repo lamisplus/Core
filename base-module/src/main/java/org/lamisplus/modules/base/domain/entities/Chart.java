@@ -33,6 +33,9 @@ public class Chart {
     @Column(name = "type", nullable = false)
     private String type;
 
+    @Column(name = "icon", nullable = false)
+    private String icon;
+
     @Column(name = "query", nullable = false, length = 5000)
     private String query;
 
