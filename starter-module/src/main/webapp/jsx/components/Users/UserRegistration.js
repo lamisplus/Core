@@ -627,7 +627,7 @@ const handleInputChangePhoneNumber = (e) => {
                         </div>}
                       <div className="form-group mb-12 col-md-12">
                         <FormGroup>
-                          <Label for="permissions" style={{ color: '#014d88', fontWeight: 'bolder' }}>Facility <span style={{ color: "red" }}> *</span></Label>
+                          <Label for="permissions" style={{ color: '#014d88', fontWeight: 'bolder' }}>Facility</Label>
                           {!loadingFacilities ? (<DualListBox canFilter
                             options={allOrganisations}
                             onChange={onOrganisationSelect}
@@ -642,7 +642,7 @@ const handleInputChangePhoneNumber = (e) => {
 
                         <div className="form-group mb-12 col-md-12">
                           <FormGroup>
-                            <Label for="permissions" style={{color:'#014d88',fontWeight:'bolder'}}>Role <span style={{ color:"red"}}> *</span></Label>
+                            <Label for="permissions" style={{color:'#014d88',fontWeight:'bolder'}}>Role</Label>
                             <DualListBox
                                 //canFilter
                                 options={role}
@@ -665,8 +665,13 @@ const handleInputChangePhoneNumber = (e) => {
                         color="primary"
                         className={classes.button}
                         startIcon={<SaveIcon />}
-                        disabled={saving || !(validPassword && matchingPassword)}
-                        style={{ backgroundColor: (saving || !(validPassword && matchingPassword)) ? 'grey' : '#014d88', color: '#fff' }}
+                        disabled={saving || !(validPassword && matchingPassword) 
+                          || !(values.firstName && values.lastName && values.designation 
+                            && values.userName && values.phoneNumber && values.email) }
+                        style={{ backgroundColor: (saving || !(validPassword && matchingPassword)
+                          || !(values.firstName && values.lastName && values.designation 
+                            && values.userName && values.phoneNumber && values.email)) 
+                            ? 'grey' : '#014d88', color: '#fff' }}
                       >
                         {!saving ? (
                           <span style={{ textTransform: "capitalize" }}>Save</span>

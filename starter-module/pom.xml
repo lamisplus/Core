@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.lamisplus</groupId>
 	<artifactId>lamisplus</artifactId>
-	<version>2.2.2.1-poc-test</version>
+	<version>2.2.3.1</version>
 	<packaging>jar</packaging>
 
 	<parent>
