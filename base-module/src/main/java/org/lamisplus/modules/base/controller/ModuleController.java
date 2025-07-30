@@ -281,4 +281,24 @@ public class ModuleController {
     public Boolean exist(@RequestParam String moduleName) {
         return this.moduleService.exist(moduleName);
     }
+
+    /**
+     * Get all module names
+     * @return List of module names
+     */
+    @GetMapping("/names")
+    public ResponseEntity<List<String>> getModuleNames() {
+        List<String> moduleNames = moduleService.getAllModuleNames();
+        return ResponseEntity.ok(moduleNames);
+    }
+
+    /**
+     * Get only active module names
+     * @return List of active module names
+     */
+    @GetMapping("/names/active")
+    public ResponseEntity<List<String>> getActiveModuleNames() {
+        List<String> activeModuleNames = moduleService.getActiveModuleNames();
+        return ResponseEntity.ok(activeModuleNames);
+    }
 }
