@@ -50,7 +50,7 @@ public class ChartService {
     public List<ChartDTO> getIndicatorNameAndTypeByLocationNative(String location) {
         List<Object[]> results = chartRepository.findIndicatorNameAndTypeByLocationNative(location);
         return results.stream()
-                .map(result -> new ChartDTO((String) result[0], (String) result[1]))
+                .map(result -> new ChartDTO((String) result[0], (String) result[1], (String) result[3]))
                 .collect(Collectors.toList());
     }
 
@@ -103,7 +103,7 @@ public class ChartService {
                     java.sql.ResultSet.CONCUR_READ_ONLY);
             ResultSet resultSet = stmt.executeQuery(query);
             while (resultSet.next()) {
-                chartDTOS.add(new ChartDTO(resultSet.getString(1), resultSet.getString(2)));
+                chartDTOS.add(new ChartDTO(resultSet.getString(1), resultSet.getString(2), tableName));
             }
         } catch (SQLException e) {
             LOG.debug("SQL Exception while getting result set is {}", e.getMessage());

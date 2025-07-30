@@ -10,4 +10,5 @@ import lombok.*;
 public class ChartDTO {
     private String indicatorName;
     private String type;
+    private String tableName;
 }
