@@ -12,7 +12,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/charts")
-@CrossOrigin(origins = "*")
 @RequiredArgsConstructor
 public class ChartController {
 

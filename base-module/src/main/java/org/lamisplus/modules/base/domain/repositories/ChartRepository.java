@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface ChartRepository extends JpaRepository<Chart, String> {
 
-    @Query("SELECT new ChartDTO(c.indicatorName, c.type) FROM Chart c WHERE c.location = :location")
+    @Query("SELECT c.indicatorName, c.type FROM Chart c WHERE c.location = :location")
     List<ChartDTO> findIndicatorNameAndTypeByLocation(@Param("location") String location);
 
     // Alternative native query approach
