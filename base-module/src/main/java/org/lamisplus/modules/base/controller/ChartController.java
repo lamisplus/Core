@@ -13,7 +13,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/charts")
+@RequestMapping("/api/v1/charts")
 @RequiredArgsConstructor
 public class ChartController {
 

@@ -106,7 +106,7 @@ public class ChartService {
      */
     private Set<ChartDTO> getAllChart(String tableName, String location) {
         String query = String.format("SELECT indicator_name, type, description, display_name, icon" +
-                " FROM %s WHERE location='%s'", tableName, location);
+                " FROM %s WHERE location='%s' AND archived = 0 ", tableName, location);
         Set<ChartDTO> chartDTOS = new HashSet<>();
         Connection conn = null;
         try {
