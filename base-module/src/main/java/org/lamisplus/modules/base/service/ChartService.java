@@ -21,6 +21,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.springframework.cache.annotation.Cacheable;
 
 @Slf4j
 @Service
@@ -36,6 +37,7 @@ public class ChartService {
      * @param location the location to filter by
      * @return list of ChartDTO containing indicator name and type
      */
+    @Cacheable("core")
     public List<ChartDTO> getIndicatorNameAndTypeByLocation(String location) {
         Set<ChartDTO> chartDTOSet = new HashSet<>();
         for(String moduleName : moduleService.getActiveModuleNames()) {
@@ -142,6 +144,7 @@ public class ChartService {
      * @param tableName the name of the table
      * @return list of ChartDTO containing indicator name and type
      */
+    @Cacheable("core")
     public ChartValueDTO getChartValueForDashboard(String tableName, String indicatorName) {
         return getChartValue(indicatorName, getChartQuery(tableName, indicatorName).getQuery());
     }
