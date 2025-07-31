@@ -49,7 +49,7 @@ public class ChartController {
      * @return list of ChartValueDTO for dashboard display
      */
     @GetMapping("/dashboard/values")
-    public ResponseEntity<List<ChartValueDTO>> getAllChartValuesForDashboard(
+    public ResponseEntity<ChartValueDTO> getAllChartValuesForDashboard(
             @RequestParam("tableName") String tableName,
             @RequestParam("indicatorName") String indicatorName) {
 
@@ -63,17 +63,17 @@ public class ChartController {
         }
 
         try {
-            List<ChartValueDTO> chartValues = chartService.getAllChartValuesForDashboard(tableName, indicatorName);
+            ChartValueDTO chartValue = chartService.getChartValueForDashboard(tableName, indicatorName);
 
-            if (chartValues.isEmpty()) {
+            if (chartValue == null) {
                 return ResponseEntity.noContent().build();
             }
 
-            return ResponseEntity.ok(chartValues);
+            return ResponseEntity.ok(chartValue);
 
         } catch (Exception e) {
             // Log the exception
-            LOG.info("Error getting chart values for dashboard {}", e);
+            LOG.info("Exception getting chart values for dashboard {}", e.getMessage());
             //TODO: correct this
             return ResponseEntity.noContent().build();
         }

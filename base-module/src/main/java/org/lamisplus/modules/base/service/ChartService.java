@@ -138,34 +138,34 @@ public class ChartService {
     }
 
     /**
-     * Get all chart Values For Dashboard display
+     * Get chart Value For Dashboard display
      * @param tableName the name of the table
      * @return list of ChartDTO containing indicator name and type
      */
-    public List<ChartValueDTO> getAllChartValuesForDashboard(String tableName, String indicatorName) {
-        Set<ChartValueDTO> chartValueDTOS = new HashSet<>();
-        for(ChartQueryDTO chartQueryDTO : getAllChartQuery(tableName, indicatorName)) {
-            chartValueDTOS.addAll(getAllChartValues(indicatorName, chartQueryDTO.getQuery()));
-        }
-        return new ArrayList<>(chartValueDTOS);
+    public ChartValueDTO getChartValueForDashboard(String tableName, String indicatorName) {
+        return getChartValue(indicatorName, getChartQuery(tableName, indicatorName).getQuery());
     }
 
     /**
-     * Delete get all charts values
+     * Get charts values
      * @param tableName the table name
      * @param indicatorName the indicatorName of the chart
      */
-    private Set<ChartQueryDTO> getAllChartQuery(String tableName, String indicatorName) {
-        String query = String.format("SELECT query FROM %s WHERE indicator_name='%s'", tableName, indicatorName);
-        Set<ChartQueryDTO> chartQueryDTOS = new HashSet<>();
+    private ChartQueryDTO getChartQuery(String tableName, String indicatorName) {
+        String query = String.format("SELECT query FROM %s WHERE indicator_name='%s' AND archived=0 LIMIT 1", tableName, indicatorName);
+        ChartQueryDTO chartQueryDTO = new ChartQueryDTO();
         Connection conn = null;
         try {
             conn = dataSource.getConnection();
             Statement stmt = conn.createStatement(java.sql.ResultSet.TYPE_FORWARD_ONLY,
                     java.sql.ResultSet.CONCUR_READ_ONLY);
             ResultSet resultSet = stmt.executeQuery(query);
-            while (resultSet.next()) {
-                chartQueryDTOS.add(new ChartQueryDTO(indicatorName, resultSet.getString(1)));
+            if (resultSet.next()) {
+                chartQueryDTO = ChartQueryDTO.builder()
+                        .indicatorName(indicatorName)
+                        .query(resultSet.getString(1))
+                        .build();
+                return chartQueryDTO;
             }
         } catch (SQLException e) {
             logSQLExceptions("SQL Exception while getting chartQueryDTOS result set {}", e);
@@ -178,24 +178,28 @@ public class ChartService {
                 }
             }
         }
-        return chartQueryDTOS;
+        return chartQueryDTO;
     }
 
     /**
-     * Get all charts values by indicatorName and query
+     * Get charts value by indicatorName and query
      * @param query the table name
      */
-    private List<ChartValueDTO> getAllChartValues(String indicatorName, String query) {
+    private ChartValueDTO getChartValue(String indicatorName, String query) {
         LOG.info("query is {}", query);
-        List<ChartValueDTO> chartValueDTOS = new ArrayList<>();
+        ChartValueDTO chartValueDTO = new ChartValueDTO();
         Connection conn = null;
         try {
             conn = dataSource.getConnection();
             Statement stmt = conn.createStatement(java.sql.ResultSet.TYPE_FORWARD_ONLY,
                     java.sql.ResultSet.CONCUR_READ_ONLY);
             ResultSet resultSet = stmt.executeQuery(query);
-            while (resultSet.next()) {
-                chartValueDTOS.add(new ChartValueDTO(indicatorName, resultSet.getString(1)));
+            if (resultSet.next()) {
+                chartValueDTO = ChartValueDTO.builder()
+                        .value(resultSet.getString(1))
+                        .indicatorName(indicatorName)
+                        .build();
+                return chartValueDTO;
             }
         } catch (SQLException e) {
             logSQLExceptions("SQL Exception while getting chartValueDTOS result set {}", e);
@@ -209,7 +213,7 @@ public class ChartService {
                 }
             }
         }
-        return chartValueDTOS;
+        return chartValueDTO;
     }
 
     /**
