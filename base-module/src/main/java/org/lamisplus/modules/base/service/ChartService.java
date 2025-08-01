@@ -44,7 +44,6 @@ public class ChartService {
         Set<ChartDTO> chartDTOSet = new HashSet<>();
         for(String moduleName : moduleService.getActiveModuleNames()) {
             Set<ChartDTO> allCharts = getAllChart(moduleName.toLowerCase() + "_chart", location);
-            LOG.info("Charts: {}", allCharts.size());
             chartDTOSet.addAll(allCharts);
         }
         return new ArrayList<>(chartDTOSet);
@@ -110,7 +109,7 @@ public class ChartService {
      * @param location the of the chart
      */
     private Set<ChartDTO> getAllChart(String tableName, String location) {
-       if (tableExists(tableName) == false){
+       if (!tableExists(tableName)){
            return new HashSet<>();
        }
 
@@ -150,9 +149,7 @@ public class ChartService {
     }
 
     private boolean tableExists(String tableName) {
-
         boolean tableExists = chartRepository.tableExists(tableName);
-        LOG.info("TableName Exists: {}: {}", tableName, tableExists);
         return tableExists;
     }
 
