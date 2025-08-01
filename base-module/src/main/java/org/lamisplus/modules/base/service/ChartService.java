@@ -6,6 +6,7 @@ import org.lamisplus.modules.base.domain.dto.ChartDTO;
 import org.lamisplus.modules.base.domain.dto.ChartQueryDTO;
 import org.lamisplus.modules.base.domain.dto.ChartValueDTO;
 import org.lamisplus.modules.base.domain.entities.Chart;
+import org.lamisplus.modules.base.domain.entities.User;
 import org.lamisplus.modules.base.domain.repositories.ChartRepository;
 import org.lamisplus.modules.base.module.ModuleService;
 import org.springframework.stereotype.Service;
@@ -31,6 +32,7 @@ public class ChartService {
     private final ChartRepository chartRepository;
     private final ModuleService moduleService;
     private final DataSource dataSource;
+    private final UserService userService;
 
     /**
      * Get indicator names and types by location
@@ -145,8 +147,8 @@ public class ChartService {
      * @return list of ChartDTO containing indicator name and type
      */
     @Cacheable("core")
-    public ChartValueDTO getChartValueForDashboard(String tableName, String indicatorName) {
-        return getChartValue(indicatorName, getChartQuery(tableName, indicatorName).getQuery());
+    public ChartValueDTO getChartValueForDashboard(String tableName, String indicatorName, Long facilityId) {
+        return getChartValue(indicatorName, getChartQuery(tableName, indicatorName).getQuery(), facilityId);
     }
 
     /**
@@ -155,7 +157,8 @@ public class ChartService {
      * @param indicatorName the indicatorName of the chart
      */
     private ChartQueryDTO getChartQuery(String tableName, String indicatorName) {
-        String query = String.format("SELECT query FROM %s WHERE indicator_name='%s' AND archived=0 LIMIT 1", tableName, indicatorName);
+        String query = String.format("SELECT query FROM %s " +
+                "WHERE indicator_name='%s' AND archived=0 LIMIT 1", tableName, indicatorName);
         ChartQueryDTO chartQueryDTO = new ChartQueryDTO();
         Connection conn = null;
         try {
@@ -188,8 +191,8 @@ public class ChartService {
      * Get charts value by indicatorName and query
      * @param query the table name
      */
-    private ChartValueDTO getChartValue(String indicatorName, String query) {
-        LOG.info("query is {}", query);
+    private ChartValueDTO getChartValue(String indicatorName, String query, Long facilityId) {
+        query = query.replace("?facilityId", facilityId.toString());
         ChartValueDTO chartValueDTO = new ChartValueDTO();
         Connection conn = null;
         try {
@@ -226,6 +229,14 @@ public class ChartService {
      */
     private void logSQLExceptions(String message, SQLException sqlException){
         LOG.info(message, sqlException.getMessage());
+    }
+
+    /**
+     * get facility id of current login user, to be used for the cron job
+     * @return  Long - the facility id
+     */
+    public Long getFacilityId(){
+        return userService.getCurrentLoggedInUser().map(User::getCurrentOrganisationUnitId).orElse(null);
     }
 
 }

@@ -23,7 +23,7 @@ import java.util.Map;
 @Configuration
 @EnableCaching
 public class CacheConfig {
-    @Value("${cache.name}")
+    @Value("${cache.names}")
     private String cacheName;
 
     @Value("${cache.heap.size}")

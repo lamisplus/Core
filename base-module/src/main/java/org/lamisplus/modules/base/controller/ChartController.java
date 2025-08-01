@@ -51,7 +51,8 @@ public class ChartController {
     @GetMapping("/dashboard/values")
     public ResponseEntity<ChartValueDTO> getAllChartValuesForDashboard(
             @RequestParam("tableName") String tableName,
-            @RequestParam("indicatorName") String indicatorName) {
+            @RequestParam("indicatorName") String indicatorName,
+            @RequestParam("facilityId")Long facilityId) {
 
         // Validate input parameters
         if (tableName == null || tableName.trim().isEmpty()) {
@@ -63,7 +64,7 @@ public class ChartController {
         }
 
         try {
-            ChartValueDTO chartValue = chartService.getChartValueForDashboard(tableName, indicatorName);
+            ChartValueDTO chartValue = chartService.getChartValueForDashboard(tableName, indicatorName, facilityId);
 
             if (chartValue == null) {
                 return ResponseEntity.noContent().build();
