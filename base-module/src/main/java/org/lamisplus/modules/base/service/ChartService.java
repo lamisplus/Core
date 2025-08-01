@@ -43,7 +43,9 @@ public class ChartService {
     public List<ChartDTO> getIndicatorNameAndTypeByLocation(String location) {
         Set<ChartDTO> chartDTOSet = new HashSet<>();
         for(String moduleName : moduleService.getActiveModuleNames()) {
-            chartDTOSet.addAll(getAllChart(moduleName.toLowerCase() + "_chart", location));
+            Set<ChartDTO> allCharts = getAllChart(moduleName.toLowerCase() + "_chart", location);
+            LOG.info("Charts: {}", allCharts.size());
+            chartDTOSet.addAll(allCharts);
         }
         return new ArrayList<>(chartDTOSet);
     }
@@ -108,6 +110,10 @@ public class ChartService {
      * @param location the of the chart
      */
     private Set<ChartDTO> getAllChart(String tableName, String location) {
+       if (tableExists(tableName) == false){
+           return new HashSet<>();
+       }
+
         String query = String.format("SELECT indicator_name, type, description, display_name, icon, position" +
                 " FROM %s WHERE location='%s' AND archived = 0 ", tableName, location);
         Set<ChartDTO> chartDTOS = new HashSet<>();
@@ -141,6 +147,13 @@ public class ChartService {
             }
         }
         return chartDTOS;
+    }
+
+    private boolean tableExists(String tableName) {
+
+        boolean tableExists = chartRepository.tableExists(tableName);
+        LOG.info("TableName Exists: {}: {}", tableName, tableExists);
+        return tableExists;
     }
 
     /**

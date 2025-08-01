@@ -253,7 +253,7 @@ public class ModuleController {
 
     @GetMapping(BASE_URL_VERSION_ONE + "/modules/installed")
     @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete','user', 'all_permission')")
-    @Cacheable(cacheNames = "modules")
+//    @Cacheable(cacheNames = "modules")
     public List<Module> getModules() {
         LOG.debug("Get all installed modules");
         return moduleRepository.findAll().stream()
