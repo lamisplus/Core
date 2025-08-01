@@ -53,4 +53,7 @@ public class Chart {
 
     @Column(name = "archived")
     private Integer archived;
+
+    @Column(name = "position")
+    private Integer position;
 }
