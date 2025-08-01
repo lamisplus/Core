@@ -22,7 +22,7 @@ const LineGraph = ({ LineGraphData, title, xName, yName }) => {
     },
     xAxis: {
       title: {
-        text: xName,
+        // text: xName,
         style: {
           fontSize: "14px",
         },
@@ -36,7 +36,7 @@ const LineGraph = ({ LineGraphData, title, xName, yName }) => {
     },
     yAxis: {
       title: {
-        text: yName,
+        // text: yName,
         style: {
           fontSize: "14px",
         },
@@ -47,10 +47,7 @@ const LineGraph = ({ LineGraphData, title, xName, yName }) => {
         },
       },
     },
-    series: [
-      { name: "Female", data: seriesData.female },
-      { name: "Male", data: seriesData.male },
-    ],
+    series: [...LineGraphData],
     legend: {
       itemStyle: {
         fontSize: "14px",
