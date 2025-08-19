@@ -31,6 +31,7 @@ import java.util.stream.Stream;
 public class TokenProvider {
     private final Logger log = LoggerFactory.getLogger(TokenProvider.class);
     private static final String AUTHORITIES_KEY = "auth";
+    private static final String USER = "user";
 
     @Autowired
     private RoleRepository roleRepository;
@@ -118,7 +119,7 @@ public class TokenProvider {
             }
         }
         //check if no permission then it must be an ordinary user so assign the role as user authority
-        if(StringUtils.isEmpty(permits))permits = claims.get(AUTHORITIES_KEY).toString();
+        if(StringUtils.isEmpty(permits))permits = USER;
 
         return permits;
     }

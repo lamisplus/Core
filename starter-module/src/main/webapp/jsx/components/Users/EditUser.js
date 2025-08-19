@@ -173,7 +173,7 @@ const UserRegistration = (props) => {
                 Object.entries(response.data).map(([key, value]) => ({
                   label: value.name,
                   value: value.name,
-                }))
+                })).sort((a,b) => a.value.localeCompare(b.value))
             );
           })
           .catch((error) => {
@@ -539,7 +539,7 @@ const UserRegistration = (props) => {
 
                   <div className="form-group mb-12 col-md-12" >
                     <FormGroup>
-                      <Label for="permissions" style={{color:'#014d88',fontWeight:'bolder'}}>Facility*</Label>
+                      <Label for="permissions" style={{color:'#014d88',fontWeight:'bolder'}}>Facility</Label>
                       {!loadingFacilities ? (<DualListBox 
                           canFilter
                           options={organisations}
@@ -562,7 +562,7 @@ const UserRegistration = (props) => {
 
                   <div className="form-group mb-12 col-md-12" style={{paddingTop:'20px'}}>
                       <FormGroup>
-                        <Label for="permissions" style={{color:'#014d88',fontWeight:'bolder'}}>Role*</Label>
+                        <Label for="permissions" style={{color:'#014d88',fontWeight:'bolder'}}>Role</Label>
                         <DualListBox
                           canFilter
                           options={role}
@@ -602,8 +602,13 @@ const UserRegistration = (props) => {
                 color="primary"
                 className={classes.button}
                 startIcon={<SaveIcon />}
-                disabled={!(validPassword && matchingPassword) || isView}
-                style={{backgroundColor: isView ? "grey" : '#014d88',color:'#fff'}}
+                disabled={saving || !(validPassword && matchingPassword) 
+                          || !(values.firstName && values.lastName && values.designation 
+                            && values.userName && values.phoneNumber && values.email) }
+                        style={{ backgroundColor: (saving || !(validPassword && matchingPassword)
+                          || !(values.firstName && values.lastName && values.designation 
+                            && values.userName && values.phoneNumber && values.email)) 
+                            ? 'grey' : '#014d88', color: '#fff' }}
               >
                 {!saving ? (
                   <span style={{ textTransform: "capitalize" }}>Save</span>
