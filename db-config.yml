@@ -5,7 +5,7 @@ spring:
         driver-class-name: org.postgresql.Driver
         username: postgres
         password: smilez
-        url: jdbc:postgresql://localhost:5432/amos_db
+        url: jdbc:postgresql://localhost:5432/ty
         hibernate:
             ddl-auto: none
             event.merge.entry_copy_observer: allow
@@ -34,7 +34,7 @@ lamisplus:
             driver-class-name: org.postgresql.Driver
             username: postgres
             password: smilez
-            url: jdbc:postgresql://localhost:5432/amos_db
+            url: jdbc:postgresql://localhost:5432/ty
             hikari:
                     auto-commit: true
                     data-source-properties:
