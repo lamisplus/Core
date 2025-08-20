@@ -732,7 +732,7 @@
             SELECT r.id, m.id
             FROM base_role r
             JOIN base_menu m ON m.archived = 0
-            WHERE r.name = 'RDE';
+            WHERE r.name = 'RDE' AND m.name NOT IN ('TriageModule', 'LaboratoryModule', 'Check-in Setting', 'Consultation', 'Pharmacy');
         </sql>
     </changeSet>
 
