@@ -720,7 +720,7 @@
         </preConditions>
         <sql>
             INSERT INTO public.base_role(id, name, code, date_created, created_by, date_modified, modified_by, archived)
-            VALUES ((SELECT MAX(id) + 1 FROM base_role WHERE archived = 0), 'RDE', gen_random_uuid(), NOW(), 'Joshua Gabriel', NOW(), 'Joshua Gabriel', 0);
+            VALUES ((SELECT MAX(id) + 1 FROM base_role), 'RDE', gen_random_uuid(), NOW(), 'Joshua Gabriel', NOW(), 'Joshua Gabriel', 0);
 
             INSERT INTO public.base_role_permission (role_id, permission_id)
             SELECT r.id, p.id
