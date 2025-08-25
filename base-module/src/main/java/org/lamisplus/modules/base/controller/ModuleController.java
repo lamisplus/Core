@@ -16,6 +16,8 @@ import org.lamisplus.modules.base.domain.repositories.WebModuleRepository;
 import org.lamisplus.modules.base.module.ModuleResponse;
 import org.lamisplus.modules.base.module.ModuleService;
 import org.lamisplus.modules.base.service.MenuService;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -42,7 +44,6 @@ public class ModuleController {
     @GetMapping(BASE_URL_VERSION_ONE+"/modules/{id:\\d+}/web-modules")
     @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete','user', 'all_permission')")
     @Timed
-    //@PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     public List<WebModule> getModulesByType(@PathVariable("id") Long id) {
         LOG.debug("Getting web modules for module: {}", id);
 
@@ -56,7 +57,6 @@ public class ModuleController {
     @GetMapping(BASE_URL_VERSION_ONE+"/modules/{id:\\d+}/menus")
     @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete','user', 'all_permission')")
     @Timed
-    //@PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     public List<MenuDTO> getModulesMenu(@PathVariable("id") Long id) {
         LOG.debug("Getting menus for module: {}", id);
         Module module = new Module();
@@ -119,24 +119,28 @@ public class ModuleController {
         return moduleService.deactivate(module);
     }
 
+    @CacheEvict(value = "module")
     @PostMapping(BASE_URL_VERSION_ONE+"/modules/uninstall")
     @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete', 'all_permission')")
     public ModuleResponse shutdownModule(@RequestBody Module module, Boolean uninstall) {
         return moduleService.uninstall(module, uninstall);
     }
 
+    @CacheEvict(value = "module")
     @PostMapping(BASE_URL_VERSION_ONE+"/modules/update")
     @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete', 'all_permission')")
     public ModuleResponse updateModule(@RequestBody Module module) {
         return moduleService.update(module, false);
     }
 
+    @CacheEvict(value = "module")
     @PostMapping(BASE_URL_VERSION_ONE+"/modules/upload")
     @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete', 'all_permission')")
     public Module uploadModuleData(@RequestParam("file") MultipartFile file) {
         return moduleService.uploadModuleData(file);
     }
 
+    @CacheEvict(value = "module")
     @PostMapping(BASE_URL_VERSION_ONE+ "/modules/install")
     @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete', 'all_permission')")
     public ModuleResponse installModule(final @RequestBody Module module, @RequestParam Boolean install) {
@@ -251,9 +255,10 @@ public class ModuleController {
         return menuItems.stream().distinct().collect(Collectors.toList());
     }
 
+    @Cacheable(value = "module")
     @GetMapping(BASE_URL_VERSION_ONE + "/modules/installed")
     @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete','user', 'all_permission')")
-    @Cacheable(cacheNames = "modules")
+    //@Cacheable(cacheNames = "modules")
     public List<Module> getModules() {
         LOG.debug("Get all installed modules");
         return moduleRepository.findAll().stream()
@@ -286,6 +291,7 @@ public class ModuleController {
      * Get all module names
      * @return List of module names
      */
+    @Cacheable(value = "module")
     @GetMapping("/names")
     public ResponseEntity<List<String>> getModuleNames() {
         List<String> moduleNames = moduleService.getAllModuleNames();
@@ -296,6 +302,7 @@ public class ModuleController {
      * Get only active module names
      * @return List of active module names
      */
+    @Cacheable(value = "module")
     @GetMapping("/names/active")
     public ResponseEntity<List<String>> getActiveModuleNames() {
         List<String> activeModuleNames = moduleService.getActiveModuleNames();

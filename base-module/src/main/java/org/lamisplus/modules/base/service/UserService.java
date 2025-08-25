@@ -21,6 +21,7 @@ import org.lamisplus.modules.base.domain.repositories.RoleRepository;
 import org.lamisplus.modules.base.domain.repositories.UserRepository;
 import org.lamisplus.modules.base.security.RolesConstants;
 import org.lamisplus.modules.base.security.SecurityUtils;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -201,8 +202,8 @@ public class UserService {
         return userRepository.findAllByArchived(pageable, 0).map(UserDTO::new);
     }
     @Transactional(readOnly = true)
+    @Cacheable(value = "user")
     public List<UserDTO> getAllManagedUsers() {
-//        LOG.info("Page size: {}, Page Number: {}", pageable.getPageSize(), pageable.getPageNumber());
         return userRepository.findAllByArchived(0).stream().map(UserDTO::new).collect(Collectors.toList());
     }
 

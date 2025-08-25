@@ -5,13 +5,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.lamisplus.modules.base.domain.entities.Menu;
 
 import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
 
 @Data
 @Slf4j
-public final class MenuDTO {
+public final class MenuDTO implements Serializable {
 
     private Long id;
 
