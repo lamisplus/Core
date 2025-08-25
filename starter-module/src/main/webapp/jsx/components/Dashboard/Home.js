@@ -329,6 +329,7 @@ import LineGraph from "../charts/LineGraph";
 import GeneralSummaryView from "./GeneralSummaryView";
 import { TabContext, TabPanel } from "@material-ui/lab";
 import { systemSettingsHelper } from "../../../_services/SystemSettingsHelper";
+import { authentication } from "../../../_services/authentication";
 
 const Home = () => {
   const initialChartData = [
@@ -440,6 +441,7 @@ const Home = () => {
     setValue(newValue);
   };
   const [loading, setLoading] = useState(true);
+  const [currentOrganisationUnitId, setCurrentOrganisationUnitId] = useState(null);
 
   useEffect(async () => {
     if (instance !== null && instance !== undefined) {
@@ -472,7 +474,7 @@ const Home = () => {
   const [groupedIndicators, setGroupedIndicators] = useState({ line: [], pie: [], bar: [], card: [] });
 
   const fetchIndicatorValues = async (indicator) => {
-    const value = await axios.get(`${url}charts/dashboard/values?tableName=${indicator.tableName}&indicatorName=${indicator.indicatorName}`, {
+    const value = await axios.get(`${url}charts/dashboard/values?tableName=${indicator.tableName}&indicatorName=${indicator.indicatorName}&facilityId=${currentOrganisationUnitId}`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((response) => {
@@ -482,6 +484,11 @@ const Home = () => {
       })
 
     return value;
+  }
+
+  const fetchAndSaveCurrentOrganisationUnitId = async () => {
+    const currentOrg = await authentication.fetchCurrentOrganisationUnitId();
+    setCurrentOrganisationUnitId(currentOrg)
   }
 
   useEffect(() => {
@@ -511,7 +518,8 @@ const Home = () => {
   }, [chartData]);
 
   useEffect(() => {
-    fetchChartData()
+    fetchChartData();
+    fetchAndSaveCurrentOrganisationUnitId()
   }, [])
 
 
@@ -533,7 +541,7 @@ const Home = () => {
                 </div>
                 {groupedIndicators.card.length > 0 &&
                   <div class="d-flex flex-wrap">
-                    {groupedIndicators.card.map((indicator) => (
+                    {groupedIndicators.card.sort((a,b) => a.position - b.position).map((indicator) => (
                       <div
                         className="card text-white mb-3"
                         style={{
@@ -562,7 +570,7 @@ const Home = () => {
 
                 {groupedIndicators.pie.length > 0 &&
                   <div class="d-flex flex-wrap">
-                    {groupedIndicators.pie.map((indicator) => (
+                    {groupedIndicators.pie.sort((a,b) => a.position - b.position).map((indicator) => (
                       <div style={{ padding: "1rem" }}>
                         <div className="card">
                           <div className="card-body pt-0 chart-body-wrapper">
@@ -580,7 +588,7 @@ const Home = () => {
 
                 {groupedIndicators.line.length > 0 &&
                   <div class="d-flex flex-wrap">
-                    {groupedIndicators.line.map((indicator) => (
+                    {groupedIndicators.line.sort((a,b) => a.position - b.position).map((indicator) => (
                       <div style={{ padding: "1rem" }}>
                         <div className="card">
                           <div className="card-body pt-0 chart-body-wrapper">
@@ -599,7 +607,7 @@ const Home = () => {
 
                 {groupedIndicators.bar.length > 0 &&
                   <div class="d-flex flex-wrap">
-                    {groupedIndicators.bar.map((indicator) => (
+                    {groupedIndicators.bar.sort((a,b) => a.position - b.position).map((indicator) => (
                       <div style={{ padding: "1rem" }}>
                         <div className="card">
                           <div className="card-body pt-0 chart-body-wrapper">

@@ -22,7 +22,8 @@ export const authentication = {
     getCurrentUserRole: getCurrentUserRoles,
     getCurrentUser,
     userHasRole: userHasPermission,
-    fetchMe
+    fetchMe,
+    fetchCurrentOrganisationUnitId
 };
 
 function login(username, password, remember) {
@@ -139,6 +140,14 @@ async function fetchMe(){
             });
             return null;
         });
+}
+
+
+async function fetchCurrentOrganisationUnitId(){
+
+    const currentUserLocal = localStorage.getItem('user_account') ? JSON.parse(localStorage.getItem('user_account')) : null
+
+    return currentUserLocal ? currentUserLocal.currentOrganisationUnitId : null;
 }
 
 async function fetchModuleUpdates(){

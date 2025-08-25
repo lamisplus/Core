@@ -9,6 +9,7 @@ import org.lamisplus.modules.base.service.ChartService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -36,7 +37,7 @@ public class ChartController {
         List<ChartDTO> charts = chartService.getIndicatorNameAndTypeByLocation(location);
 
         if (charts.isEmpty()) {
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.ok(new ArrayList<>());
         }
 
         return ResponseEntity.ok(charts);

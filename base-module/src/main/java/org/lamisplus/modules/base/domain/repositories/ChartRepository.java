@@ -16,6 +16,9 @@ public interface ChartRepository extends JpaRepository<Chart, String> {
     List<ChartDTO> findIndicatorNameAndTypeByLocation(@Param("location") String location);
 
     // Alternative native query approach
-    @Query(value = "SELECT indicator_name, type, table_name, description, display_name, icon FROM chart WHERE location = :location", nativeQuery = true)
+    @Query(value = "SELECT indicator_name, type, table_name, description, display_name, icon, position FROM chart WHERE location = :location", nativeQuery = true)
     List<Object[]> findIndicatorNameAndTypeByLocationNative(@Param("location") String location);
+
+    @Query(value = "SELECT EXISTS (SELECT 1 FROM pg_tables WHERE schemaname = 'public' AND tablename = ?1)", nativeQuery = true)
+    boolean tableExists(String tableName);
 }

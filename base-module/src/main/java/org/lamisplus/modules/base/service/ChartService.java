@@ -43,7 +43,8 @@ public class ChartService {
     public List<ChartDTO> getIndicatorNameAndTypeByLocation(String location) {
         Set<ChartDTO> chartDTOSet = new HashSet<>();
         for(String moduleName : moduleService.getActiveModuleNames()) {
-            chartDTOSet.addAll(getAllChart(moduleName.toLowerCase() + "_chart", location));
+            Set<ChartDTO> allCharts = getAllChart(moduleName.toLowerCase() + "_chart", location);
+            chartDTOSet.addAll(allCharts);
         }
         return new ArrayList<>(chartDTOSet);
     }
@@ -63,6 +64,7 @@ public class ChartService {
                         .description((String) result[4])
                         .displayName((String) result[5])
                         .icon((String) result[3])
+                        .position((Integer) result[7])
                         .build())
                 .collect(Collectors.toList());
     }
@@ -107,7 +109,11 @@ public class ChartService {
      * @param location the of the chart
      */
     private Set<ChartDTO> getAllChart(String tableName, String location) {
-        String query = String.format("SELECT indicator_name, type, description, display_name, icon" +
+       if (!tableExists(tableName)){
+           return new HashSet<>();
+       }
+
+        String query = String.format("SELECT indicator_name, type, description, display_name, icon, position" +
                 " FROM %s WHERE location='%s' AND archived = 0 ", tableName, location);
         Set<ChartDTO> chartDTOS = new HashSet<>();
         Connection conn = null;
@@ -124,6 +130,7 @@ public class ChartService {
                         .description(resultSet.getString(3))
                         .displayName(resultSet.getString(4))
                         .icon(resultSet.getString(5))
+                        .position(resultSet.getInt(6))
                         .build();
                 chartDTOS.add(chartDTO);
             }
@@ -139,6 +146,11 @@ public class ChartService {
             }
         }
         return chartDTOS;
+    }
+
+    private boolean tableExists(String tableName) {
+        boolean tableExists = chartRepository.tableExists(tableName);
+        return tableExists;
     }
 
     /**

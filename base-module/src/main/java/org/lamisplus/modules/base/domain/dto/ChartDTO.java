@@ -17,5 +17,6 @@ public class ChartDTO implements Serializable {
     private String description;
     private String displayName;
     private String icon;
+    private Integer position;
 
 }
