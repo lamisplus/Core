@@ -17,49 +17,55 @@ import org.springframework.context.annotation.Configuration;
 
 import javax.cache.Caching;
 import java.time.Duration;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Configuration
 @EnableCaching
 public class CacheConfig {
-    @Value("${cache.name:core}")
-    private String cacheName;
+    @Value("${cache.names}")
+    private List<String> cacheNames;
 
-    @Value("${cache.heap.size:50}")
+    @Value("${cache.heap.size}")
     private int heapSize;
 
-    @Value("${cache.offheap.size:10}")
+    @Value("${cache.offheap.size}")
     private int offheapSize;
 
-    @Value("${cache.offheap.unit:MB}")
+    @Value("${cache.offheap.unit}")
     private String offheapUnit;
 
-    @Value("${cache.expiry.ttl.minutes:60}")
+    @Value("${cache.expiry.ttl.minutes}")
     private int ttlMinutes;
 
-    @Value("${cache.expiry.idle.minutes:60}")
+    @Value("${cache.expiry.idle.minutes}")
     private int idleMinutes;
 
     @Bean
     public CacheManager jCacheCacheManager() {
         Map<String, CacheConfiguration<?, ?>> cacheMap = new HashMap<>();
 
-        ResourcePoolsBuilder resourcePoolsBuilder = ResourcePoolsBuilder
-                .heap(heapSize)
-                .offheap(offheapSize, MemoryUnit.valueOf(offheapUnit));
+        // Configure each cache from properties (both explicit configs and names list)
+        cacheNames.forEach(cacheName -> {
+            ResourcePoolsBuilder resourcePoolsBuilder = ResourcePoolsBuilder
+                    .heap(heapSize)
+                    .offheap(offheapSize, MemoryUnit.valueOf(offheapUnit));
 
-        ExpiryPolicy<Object, Object> expiryPolicy = createExpiryPolicy(
-                Duration.ofMinutes(ttlMinutes),
-                Duration.ofMinutes(idleMinutes)
-        );
+            ExpiryPolicy<Object, Object> expiryPolicy = createExpiryPolicy(
+                    Duration.ofMinutes(ttlMinutes),
+                    Duration.ofMinutes(idleMinutes)
+            );
 
-        CacheConfiguration<Object, Object> cacheConfiguration = CacheConfigurationBuilder
-                .newCacheConfigurationBuilder(Object.class, Object.class, resourcePoolsBuilder)
-                .withExpiry(expiryPolicy)
-                .build();
+            CacheConfiguration<Object, Object> cacheConfiguration = CacheConfigurationBuilder
+                    .newCacheConfigurationBuilder(Object.class, Object.class, resourcePoolsBuilder)
+                    .withExpiry(expiryPolicy)
+                    .build();
 
-        cacheMap.put(cacheName, cacheConfiguration);
+            cacheMap.put(cacheName.trim(), cacheConfiguration);
+        });
+
         EhcacheCachingProvider ehcacheCachingProvider =
                 (EhcacheCachingProvider) Caching.getCachingProvider(EhcacheCachingProvider.class.getName());
 

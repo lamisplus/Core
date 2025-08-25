@@ -8,6 +8,7 @@ import lombok.ToString;
 import org.lamisplus.modules.base.domain.entities.*;
 
 import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -16,7 +17,7 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 @NoArgsConstructor
-public class UserDTO {
+public class UserDTO implements Serializable {
     private Long id;
 
     @NotBlank(message = "userName is mandatory")
@@ -49,7 +50,7 @@ public class UserDTO {
     private Long ipCode;
 
     @ToString.Exclude
-    private List<ApplicationUserOrganisationUnit> applicationUserOrganisationUnits = new ArrayDeque<>();
+    private transient List<ApplicationUserOrganisationUnit> applicationUserOrganisationUnits = new ArrayDeque<>();
 
     private Set<Long> facilityIds = new HashSet<>();
 

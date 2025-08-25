@@ -7,6 +7,7 @@ import org.hibernate.annotations.Type;
 import org.lamisplus.modules.base.security.SecurityUtils;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -18,7 +19,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 @Table(name = "base_application_user")
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class User {
+public class User implements Serializable {
     @Id
     @Column(name = "id", updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
