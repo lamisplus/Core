@@ -110,7 +110,7 @@ public class ApplicationCodeSetController {
         }
     }
 
-    @GetMapping(BASE_URL_VERSION_ONE+ "/v2/codeSets")
+    @GetMapping(BASE_URL_VERSION_ONE+ "/v2/codeSets") 
     public ResponseEntity<Map<String, List<CodeSetDTO>>> getCodeSets(
             @RequestParam List<String> codes
     ){
