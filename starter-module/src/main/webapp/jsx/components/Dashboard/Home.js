@@ -332,108 +332,6 @@ import { systemSettingsHelper } from "../../../_services/SystemSettingsHelper";
 import { authentication } from "../../../_services/authentication";
 
 const Home = () => {
-  const initialChartData = [
-    {
-      indicatorName: "HEART_RATE_MONITOR",
-      data: null,
-      displayName: "HEART RATE MONITOR",
-      description: "Tracks the patient's heart rate in real-time.",
-      location: "patient",
-      icon: "fa-line-chart",
-      type: "line",
-      position: 1
-    },
-    {
-      indicatorName: "PATIENT_FEEDBACK_SCORE",
-      data: null,
-      displayName: "PATIENT FEEDBACK SCORE",
-      description: "Average score of patient satisfaction survey.",
-      location: "core",
-      icon: "bi-chat-dots",
-      type: "bar",
-      position: 2
-    },
-    {
-      indicatorName: "MEDICATION_ADHERENCE",
-      data: null,
-      displayName: "MEDICATION ADHERENCE",
-      description: "Percentage of patients following prescribed medication schedules.",
-      location: "core",
-      icon: "bi-capsule",
-      type: "pie",
-      position: 3
-    },
-    {
-      indicatorName: "TEMPERATURE_TREND",
-      data: null,
-      displayName: "TEMPERATURE TREND",
-      description: "Daily tracking of patient body temperature.",
-      location: "patient",
-      icon: "fa-line-chart",
-      type: "line",
-      position: 4
-    },
-    {
-      indicatorName: "BED_OCCUPANCY_RATE",
-      data: null,
-      displayName: "BED OCCUPANCY RATE",
-      description: "Current percentage of hospital bed usage.",
-      location: "core",
-      icon: "fa-bed",
-      type: "card",
-      position: 5
-    },
-    {
-      indicatorName: "BLOOD_PRESSURE_OVERVIEW",
-      data: null,
-      displayName: "BLOOD PRESSURE OVERVIEW",
-      description: "Summarized blood pressure data for all patients.",
-      location: "core",
-      icon: "bi-activity",
-      type: "bar",
-      position: 6
-    },
-    {
-      indicatorName: "GLUCOSE_LEVEL_TREND",
-      data: null,
-      displayName: "GLUCOSE LEVEL TREND",
-      description: "Tracks glucose level fluctuations throughout the day.",
-      location: "patient",
-      icon: "fa-line-chart",
-      type: "line",
-      position: 7
-    },
-    {
-      indicatorName: "STAFF_PERFORMANCE_INDEX",
-      data: null,
-      displayName: "STAFF PERFORMANCE INDEX",
-      description: "Rating index based on medical staff performance metrics.",
-      location: "core",
-      icon: "bi-award",
-      type: "card",
-      position: 8
-    },
-    {
-      indicatorName: "VACCINATION_COVERAGE",
-      data: null,
-      displayName: "VACCINATION COVERAGE",
-      description: "Percentage of patients vaccinated against key diseases.",
-      location: "core",
-      icon: "bi-shield-check",
-      type: "pie",
-      position: 9
-    },
-    {
-      indicatorName: "RESPIRATORY_RATE_MONITOR",
-      data: null,
-      displayName: "RESPIRATORY RATE MONITOR",
-      description: "Real-time monitoring of patient respiratory rate.",
-      location: "patient",
-      icon: "fa-line-chart",
-      type: "line",
-      position: 10
-    }
-  ]
   const instance = systemSettingsHelper.getSingleSystemSetting("instance")
   const [isServerInstance, setIsServerInstance] = useState(true);
   const [value, setValue] = React.useState("2");
@@ -474,7 +372,8 @@ const Home = () => {
   const [groupedIndicators, setGroupedIndicators] = useState({ line: [], pie: [], bar: [], card: [] });
 
   const fetchIndicatorValues = async (indicator) => {
-    const value = await axios.get(`${url}charts/dashboard/values?tableName=${indicator.tableName}&indicatorName=${indicator.indicatorName}&facilityId=${currentOrganisationUnitId}`, {
+    // const value = await axios.get(`${url}charts/dashboard/values?tableName=${indicator.tableName}&indicatorName=${indicator.indicatorName}&facilityId=${currentOrganisationUnitId}`, {
+    const value = await axios.get(`${url}charts/dashboard/values?indicatorName=${indicator.indicatorName}&facilityId=${currentOrganisationUnitId}`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((response) => {

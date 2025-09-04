@@ -8,6 +8,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 @Repository
 public interface ChartRepository extends JpaRepository<Chart, String> {
@@ -21,4 +23,15 @@ public interface ChartRepository extends JpaRepository<Chart, String> {
 
     @Query(value = "SELECT EXISTS (SELECT 1 FROM pg_tables WHERE schemaname = 'public' AND tablename = ?1)", nativeQuery = true)
     boolean tableExists(String tableName);
+
+    @Query(value = "SELECT * FROM chart WHERE indicator_name = ?1 LIMIT 1", nativeQuery = true)
+    Optional<Chart> findOneByIndicatorName(String indicatorName);
+
+    void deleteByIndicatorName(String indicatorName);
+
+    @Query(value = "SELECT * FROM chart WHERE location = ?1 ", nativeQuery = true)
+    Set<Chart> getAllChartsByLocation(String location);
+
+    @Query(value = "SELECT query FROM chart WHERE indicator_name = ?1 ", nativeQuery = true)
+    String getChartQuery(String indicatorName);
 }

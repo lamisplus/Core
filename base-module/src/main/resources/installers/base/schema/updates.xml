@@ -710,4 +710,30 @@
         </sql>
     </changeSet>
 
+    <changeSet failOnError="true" id="20250819343" author="Joshua Gabriel">
+        <preConditions onFail="MARK_RAN" >
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*)
+                FROM base_role
+                WHERE name = 'RDE';
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO public.base_role(id, name, code, date_created, created_by, date_modified, modified_by, archived)
+            VALUES ((SELECT MAX(id) + 1 FROM base_role), 'RDE', gen_random_uuid(), NOW(), 'Joshua Gabriel', NOW(), 'Joshua Gabriel', 0);
+
+            INSERT INTO public.base_role_permission (role_id, permission_id)
+            SELECT r.id, p.id
+            FROM base_role r
+            JOIN base_permission p ON p.archived = 0
+            WHERE r.name = 'RDE' AND p.id IN (1,2,3,4, 166);;
+
+            INSERT INTO base_role_menu (role_id, menu_id)
+            SELECT r.id, m.id
+            FROM base_role r
+            JOIN base_menu m ON m.archived = 0
+            WHERE r.name = 'RDE' AND m.name NOT IN ('TriageModule', 'LaboratoryModule', 'Check-in Setting', 'Consultation', 'Pharmacy');
+        </sql>
+    </changeSet>
+
 </databaseChangeLog>
