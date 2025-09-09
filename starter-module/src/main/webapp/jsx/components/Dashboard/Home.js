@@ -335,7 +335,7 @@ const Home = () => {
   const instance = systemSettingsHelper.getSingleSystemSetting("instance")
   const [isServerInstance, setIsServerInstance] = useState(true);
   const [value, setValue] = React.useState("2");
-    const handleTabsChange = (event, newValue) => {
+  const handleTabsChange = (event, newValue) => {
     setValue(newValue);
   };
   const [loading, setLoading] = useState(true);
@@ -377,8 +377,7 @@ const Home = () => {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((response) => {
-        console.log("Value: ", response.data.value);
-        
+        console.log("Value consoled here: ", response.data.value);
         return response.data.value ? response.data.value : null;
       })
 
@@ -401,7 +400,6 @@ const Home = () => {
           setGroupedIndicators((prevGroups) => {
             const groupType = updatedIndicator.type;
             const existingGroup = prevGroups[groupType] || [];
-
             return {
               ...prevGroups,
               [groupType]: [...existingGroup, updatedIndicator],
@@ -438,9 +436,10 @@ const Home = () => {
               <div className="col-xl-12">
                 <div className="row">
                 </div>
+
                 {groupedIndicators.card.length > 0 &&
-                  <div class="d-flex flex-wrap">
-                    {groupedIndicators.card.sort((a,b) => a.position - b.position).map((indicator) => (
+                  <div className="d-flex flex-wrap">
+                    {groupedIndicators.card.sort((a, b) => a.position - b.position).map((indicator) => (
                       <div
                         className="card text-white mb-3"
                         style={{
@@ -469,7 +468,7 @@ const Home = () => {
 
                 {groupedIndicators.pie.length > 0 &&
                   <div class="d-flex flex-wrap">
-                    {groupedIndicators.pie.sort((a,b) => a.position - b.position).map((indicator) => (
+                    {groupedIndicators.pie.sort((a, b) => a.position - b.position).map((indicator) => (
                       <div style={{ padding: "1rem" }}>
                         <div className="card">
                           <div className="card-body pt-0 chart-body-wrapper">
@@ -487,7 +486,7 @@ const Home = () => {
 
                 {groupedIndicators.line.length > 0 &&
                   <div class="d-flex flex-wrap">
-                    {groupedIndicators.line.sort((a,b) => a.position - b.position).map((indicator) => (
+                    {groupedIndicators.line.sort((a, b) => a.position - b.position).map((indicator) => (
                       <div style={{ padding: "1rem" }}>
                         <div className="card">
                           <div className="card-body pt-0 chart-body-wrapper">
@@ -506,7 +505,7 @@ const Home = () => {
 
                 {groupedIndicators.bar.length > 0 &&
                   <div class="d-flex flex-wrap">
-                    {groupedIndicators.bar.sort((a,b) => a.position - b.position).map((indicator) => (
+                    {groupedIndicators.bar.sort((a, b) => a.position - b.position).map((indicator) => (
                       <div style={{ padding: "1rem" }}>
                         <div className="card">
                           <div className="card-body pt-0 chart-body-wrapper">
@@ -522,6 +521,8 @@ const Home = () => {
                     ))}
 
                   </div>}
+
+
                 {(groupedIndicators.card.length < 1
                   && groupedIndicators.line.length < 1
                   && groupedIndicators.pie.length < 1
