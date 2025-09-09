@@ -1,8 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
-import { url as baseUrl, url, token } from "../../../api";
-import axios from "axios";
 
 const Pie = ({ plotData, title, seriesName }) => {
   const options = {
