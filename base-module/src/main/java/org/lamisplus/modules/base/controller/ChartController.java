@@ -156,7 +156,7 @@ public class ChartController {
     /**
      * Get chart data for visualization
      */
-    @GetMapping("/data")
+    @GetMapping("/dashboard/data")
     public ResponseEntity<ChartValueDTO<ChartConfigDTO>> getChartData(
             @RequestParam("indicatorName") String indicatorName,
             @RequestParam(value = "facilityId", required = false) Long facilityId) {
