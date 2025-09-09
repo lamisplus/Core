@@ -2,6 +2,8 @@
 ### Java template
 *.class
 
+db-config.yml
+package-lock.json
 # BlueJ files
 *.ctxt
 
