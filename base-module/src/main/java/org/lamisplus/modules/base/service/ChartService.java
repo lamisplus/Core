@@ -6,10 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.lamisplus.modules.base.domain.dto.ChartDTO;
-import org.lamisplus.modules.base.domain.dto.ChartQueryDTO;
-import org.lamisplus.modules.base.domain.dto.ChartRequestDto;
-import org.lamisplus.modules.base.domain.dto.ChartValueDTO;
+import org.lamisplus.modules.base.domain.dto.*;
 import org.lamisplus.modules.base.domain.entities.Chart;
 import org.lamisplus.modules.base.domain.entities.User;
 import org.lamisplus.modules.base.domain.repositories.ChartRepository;
@@ -26,15 +23,12 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.multipart.MultipartFile;
+
+import static org.reflections.Reflections.log;
 
 @Slf4j
 @Service
@@ -375,5 +369,199 @@ public class ChartService {
     public Long getFacilityId(){
         return userService.getCurrentLoggedInUser().map(User::getCurrentOrganisationUnitId).orElse(null);
     }
+
+
+
+
+
+
+
+
+        /**
+         * Get chart data for visualization
+         * @param indicatorName the indicator name
+         * @param facilityId the facility ID for filtering
+         * @return ChartDataDTO formatted for Highcharts
+         */
+        public ChartValueDTO<ChartConfigDTO> getChartData(String indicatorName, Long facilityId) {
+
+            Chart chart = chartRepository.findByIndicatorName(indicatorName);
+            if (chart == null) {
+                throw new IllegalArgumentException("Chart not found: " + indicatorName);
+            }
+
+            String processedQuery = chart.getQuery().replace("?facilityId", facilityId.toString());
+
+            try (Connection conn = dataSource.getConnection();
+                 Statement stmt = conn.createStatement();
+                 ResultSet resultSet = stmt.executeQuery(processedQuery)) {
+
+                // build chart config
+                ChartConfigDTO chartConfig = processResultSet(resultSet, chart);
+
+                // wrap in ChartValueDTO
+                return ChartValueDTO.<ChartConfigDTO>builder()
+                        .indicatorName(chart.getIndicatorName())
+                        .value(chartConfig)
+                        .build();
+
+            } catch (SQLException e) {
+                log.error("SQL Exception while executing query for chart: {}", indicatorName, e);
+                throw new RuntimeException("Failed to execute chart query", e);
+            }
+        }
+
+
+
+    private ChartConfigDTO processResultSet(ResultSet resultSet, Chart chart) throws SQLException {
+        String chartType = chart.getType().toLowerCase();
+        List<SeriesDTO> seriesList = new ArrayList<>();
+        List<String> categories = new ArrayList<>();
+        Object xAxis = null;
+        Object yAxis = null;
+
+        switch (chartType) {
+            case "pie":
+                seriesList.add(processPieData(resultSet, chart));
+                break;
+
+            case "column":
+            case "bar":
+                CategoricalDataResult barResult = processBarColumnData(resultSet, chart);
+                seriesList.add(barResult.getSeries());
+                categories = barResult.getCategories();
+                break;
+
+            case "line":
+                TimeSeriesResult timeSeriesResult = processTimeSeriesData(resultSet, chart);
+                seriesList.addAll(timeSeriesResult.getSeriesList());
+                categories = timeSeriesResult.getCategories();
+                break;
+
+            default:
+                throw new IllegalArgumentException("Unsupported chart type: " + chartType);
+        }
+
+        // Build xAxis with categories for non-pie charts
+        if (!chartType.equals("pie") && !categories.isEmpty()) {
+            Map<String, Object> xAxisMap = new HashMap<>();
+            xAxisMap.put("categories", categories);
+            xAxis = xAxisMap;
+        }
+
+        // Build yAxis with title for non-pie charts
+        if (!chartType.equals("pie")) {
+            Map<String, Object> yAxisTitleMap = new HashMap<>();
+            yAxisTitleMap.put("text", getYAxisTitle(chart));
+
+            Map<String, Object> yAxisMap = new HashMap<>();
+            yAxisMap.put("title", yAxisTitleMap);
+            yAxis = yAxisMap;
+        }
+
+        // Build chart type map
+        Map<String, Object> chartMap = new HashMap<>();
+        chartMap.put("type", chartType);
+
+        // Build title map
+        Map<String, Object> titleMap = new HashMap<>();
+        titleMap.put("text", chart.getDisplayName());
+
+        return ChartConfigDTO.builder()
+                .chart(chartMap)
+                .title(titleMap)
+                .xAxis(xAxis)
+                .yAxis(yAxis)
+                .series(seriesList)
+                .build();
+    }
+
+    private String getYAxisTitle(Chart chart) {
+        // Use yAxisField if available, otherwise provide a default
+        return chart.getYAxisField() != null ? chart.getYAxisField() : "Value";
+    }
+
+
+
+    /**
+     * Process data for pie charts
+     */
+    private SeriesDTO processPieData(ResultSet resultSet, Chart chart) throws SQLException {
+        List<Object> data = new ArrayList<>();
+
+        while (resultSet.next()) {
+            String name = resultSet.getString(chart.getXAxisField());
+            Number value = resultSet.getBigDecimal(chart.getYAxisField());
+
+            Map<String, Object> dataPoint = new HashMap<>();
+            dataPoint.put("name", name);
+            dataPoint.put("y", value);
+            data.add(dataPoint);
+        }
+
+        return SeriesDTO.builder()
+                .name(chart.getIndicatorName())
+                .data(data)
+                .build();
+    }
+
+    /**
+     * Process data for bar/column charts
+     */
+    private CategoricalDataResult processBarColumnData(ResultSet resultSet, Chart chart) throws SQLException {
+        List<Object> data = new ArrayList<>();
+        List<String> categories = new ArrayList<>();
+
+        while (resultSet.next()) {
+            String name = resultSet.getString(chart.getXAxisField());
+            Number value = resultSet.getBigDecimal(chart.getYAxisField());
+
+            data.add(value);
+            categories.add(name);
+        }
+
+        SeriesDTO series = SeriesDTO.builder()
+                .name(chart.getIndicatorName())
+                .data(data)
+                .build();
+
+        return new CategoricalDataResult(series, categories);
+    }
+
+    /**
+     * Process data for time series charts (line)
+     */
+    private TimeSeriesResult processTimeSeriesData(ResultSet resultSet, Chart chart) throws SQLException {
+        Map<String, List<Object>> seriesDataMap = new HashMap<>();
+        Set<String> categories = new LinkedHashSet<>();
+
+        while (resultSet.next()) {
+            String category = resultSet.getString(chart.getXAxisField());
+            Number value = resultSet.getBigDecimal(chart.getYAxisField());
+            String seriesName = chart.getSeriesNameField() != null ?
+                    resultSet.getString(chart.getSeriesNameField()) : chart.getIndicatorName();
+
+            categories.add(category);
+
+            if (!seriesDataMap.containsKey(seriesName)) {
+                seriesDataMap.put(seriesName, new ArrayList<>());
+            }
+            seriesDataMap.get(seriesName).add(value);
+        }
+
+        List<SeriesDTO> seriesList = new ArrayList<>();
+        for (Map.Entry<String, List<Object>> entry : seriesDataMap.entrySet()) {
+            seriesList.add(SeriesDTO.builder()
+                    .name(entry.getKey())
+                    .data(entry.getValue())
+                    .build());
+        }
+
+        return new TimeSeriesResult(seriesList, new ArrayList<>(categories));
+    }
+
+
+
+
 
 }

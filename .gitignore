@@ -40,3 +40,4 @@ starter-module/src/main/resources/static/*
 starter-module/build/*
 starter-module/node/*
 base-module/node/*
+db-config.yml
