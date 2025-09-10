@@ -385,7 +385,7 @@ const UserRegistration = (props) => {
   }
   };
 
-  const onPermissionSelect = (selectedValues) => {
+  const onRoleSelect = (selectedValues) => {
     setSelectedOption(selectedValues);
   };
   const onOrganisationSelect = (selectedValues) => {
@@ -642,11 +642,11 @@ const handleInputChangePhoneNumber = (e) => {
 
                         <div className="form-group mb-12 col-md-12">
                           <FormGroup>
-                            <Label for="permissions" style={{color:'#014d88',fontWeight:'bolder'}}>Role</Label>
+                            <Label for="roles" style={{color:'#014d88',fontWeight:'bolder'}}>Role</Label>
                             <DualListBox
                                 //canFilter
                                 options={role}
-                                onChange={onPermissionSelect}
+                                onChange={onRoleSelect}
                                 selected={selectedOption}
                                 sx={{border:'solid 1px #014d88',borderRadius:'5px'}}
                             />

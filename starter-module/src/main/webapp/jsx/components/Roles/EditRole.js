@@ -74,6 +74,7 @@ const useStyles = makeStyles((theme) => ({
 const AddRole = (props) => {
   const classes = useStyles();
   const { values, setValues, handleInputChange, resetForm } = useForm({
+    id: props.location && props.location.state.row ? props.location.state.row.id : "",
     name: props.location && props.location.state.row ? props.location.state.row.name : "",
     permissions: props.location && props.location.state.row ? props.location.state.row.permission :[],
     menus:props.location && props.location.state.row ? props.location.state.row.menu :[],
@@ -104,7 +105,6 @@ const AddRole = (props) => {
       axios
         .get(`${baseUrl}permissions`)
         .then((response) => {
-          console.log(Object.entries(response.data));
           setPermissions(
             Object.entries(response.data).map(([key, value]) => ({
               label: value.description,
@@ -124,7 +124,6 @@ const AddRole = (props) => {
         axios
             .get(`${baseUrl}menus?withChild=true`)
             .then((response) => {
-                //console.log(response.data)
                 setMenuList(
                     Object.entries(response.data).map(([key, value]) => ({
                         label: value.name,
@@ -134,7 +133,7 @@ const AddRole = (props) => {
                 //menuobj = menList
             })
             .catch((error) => {
-                //console.log(error);
+                // console.error(error);
             });
       }
       
@@ -146,11 +145,10 @@ const AddRole = (props) => {
         axios
             .get(`${baseUrl}roles`)
             .then((response) => {
-                //console.log(response.data)
                 const excludeRolesFiltered = Object.entries(response.data).map(([key, value]) => ({
                         label: value.name,
-                        value: value.name,
-                    })).filter((each) => each.value !== values.name)
+                        value: value.id.toString(),
+                    })).filter((each) => each.value !== values.id.toString())
                 setRoles(excludeRolesFiltered)
 
                 const currentSelectedExcludeRoles = 
@@ -162,14 +160,12 @@ const AddRole = (props) => {
                 
             })
             .catch((error) => {
-                //console.log(error);
+                // console.error(error);
             });
       }
       
       getRoles();
   }, []);
-
-console.log("rolesList: ", values.excludeRoles);
 
 
   const onPermissionSelect = (selectedValues) => {
@@ -181,6 +177,7 @@ console.log("rolesList: ", values.excludeRoles);
   const onExcludeRolesSelect = (selectedValues) => {
     setExcludeRolesList(selectedValues);
   };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     let permissions = [];
@@ -271,7 +268,7 @@ console.log("rolesList: ", values.excludeRoles);
                 <br/>
                 <Col md={12}>
                   <FormGroup>
-                    <Label for="permissions" style={{color:'#014d88',fontWeight:'bolder'}}><b>Menu Items</b></Label>
+                    <Label for="menus" style={{color:'#014d88',fontWeight:'bolder'}}><b>Menu Items</b></Label>
                     <DualListBox
                       canFilter
                       options={menList}
@@ -283,7 +280,7 @@ console.log("rolesList: ", values.excludeRoles);
                 <br/>
                 <Col md={12}>
                   <FormGroup>
-                    <Label for="permissions" style={{color:'#014d88',fontWeight:'bolder'}}><b>Exclude Roles</b></Label>
+                    <Label for="exclude_roles" style={{color:'#014d88',fontWeight:'bolder'}}><b>Exclude Roles</b></Label>
                     <DualListBox
                       canFilter
                       options={roles}
