@@ -10,7 +10,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
-public class ChartValueDTO implements Serializable {
+public class ChartValueDTO<T> implements Serializable {
     private String indicatorName;
-    private String value;
+    private T value;
 }

@@ -3,18 +3,19 @@ package org.lamisplus.modules.base.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.lamisplus.modules.base.domain.dto.ChartDTO;
-import org.lamisplus.modules.base.domain.dto.ChartRequestDto;
-import org.lamisplus.modules.base.domain.dto.ChartValueDTO;
+import org.lamisplus.modules.base.domain.dto.*;
 import org.lamisplus.modules.base.service.ChartService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static org.reflections.Reflections.log;
 
 @Slf4j
 @RestController
@@ -151,6 +152,55 @@ public class ChartController {
     public ResponseEntity<List<ChartDTO>> getAllCharts(){
         return ResponseEntity.ok(chartService.getAllChartsAsList());
     }
+
+
+
+
+
+
+    /**
+     * Get chart data for visualization
+     */
+    @GetMapping("/dashboard/data")
+    public ResponseEntity<ChartValueDTO<ChartConfigDTO>> getChartData(
+            @RequestParam("indicatorName") String indicatorName,
+            @RequestParam(value = "facilityId", required = false) Long facilityId) {
+
+        try {
+            ChartValueDTO<ChartConfigDTO> chartData = chartService.getChartData(indicatorName, facilityId);
+            return ResponseEntity.ok(chartData);
+
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.notFound().build();
+
+        } catch (Exception e) {
+            // Build error response using Java 8 compatible methods
+            Map<String, Object> errorTitleMap = new HashMap<>();
+            errorTitleMap.put("text", "Error");
+
+            SeriesDTO errorSeries = SeriesDTO.builder()
+                    .name("Error")
+                    .data("Failed to execute chart query: " + e.getMessage())
+                    .build();
+
+            List<SeriesDTO> errorSeriesList = new ArrayList<>();
+            errorSeriesList.add(errorSeries);
+
+            ChartConfigDTO errorConfig = ChartConfigDTO.builder()
+                    .title(errorTitleMap)
+                    .series(errorSeriesList)
+                    .build();
+
+            ChartValueDTO<ChartConfigDTO> response = ChartValueDTO.<ChartConfigDTO>builder()
+                    .indicatorName(indicatorName)
+                    .value(errorConfig)
+                    .build();
+
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
+
 
 
 }
