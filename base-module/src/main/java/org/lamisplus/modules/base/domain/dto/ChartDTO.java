@@ -54,6 +54,26 @@ public class ChartDTO implements Serializable {
                 .build();
     }
 
+    public static ChartDTO fromEntitySafe(Chart chart){
+
+        return ChartDTO.builder()
+                .id(chart.getId())
+                .indicatorName(chart.getIndicatorName())
+                .description(chart.getDescription())
+                .displayName(chart.getDisplayName())
+                .module(chart.getModule())
+                .location(chart.getLocation())
+                .type(chart.getType())
+                .icon(chart.getIcon())
+                .createdDate(chart.getCreatedDate())
+                .createdBy(chart.getCreatedBy())
+                .lastModifiedDate(chart.getLastModifiedDate())
+                .lastModifiedBy(chart.getLastModifiedBy())
+                .archived(chart.getArchived())
+                .position(chart.getPosition())
+                .build();
+    }
+
 
 
 }

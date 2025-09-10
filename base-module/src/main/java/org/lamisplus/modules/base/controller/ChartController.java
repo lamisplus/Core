@@ -147,5 +147,10 @@ public class ChartController {
         chartService.getChartsFile(response.getOutputStream());
     }
 
+    @GetMapping
+    public ResponseEntity<List<ChartDTO>> getAllCharts(){
+        return ResponseEntity.ok(chartService.getAllChartsAsList());
+    }
+
 
 }

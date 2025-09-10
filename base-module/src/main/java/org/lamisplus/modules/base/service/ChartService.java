@@ -103,6 +103,14 @@ public class ChartService {
     }
 
     /**
+     * Get all charts
+     * @return list of all Charts as DTOs
+     */
+    public List<ChartDTO> getAllChartsAsList() {
+        return chartRepository.findAll().stream().map(ChartDTO::fromEntitySafe).collect(Collectors.toList());
+    }
+
+    /**
      * Get chart by indicator name
      * @param indicatorName the indicator name (primary key)
      * @return Chart entity or null if not found
