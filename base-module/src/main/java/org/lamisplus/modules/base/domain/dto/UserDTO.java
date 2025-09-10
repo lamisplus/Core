@@ -24,6 +24,7 @@ public class UserDTO implements Serializable {
     private String userName;
 
     private Set<String> roles;
+    private Set<Long> roleIds = new HashSet<>();
 
     private Set<String> permissions;
 
@@ -65,6 +66,7 @@ public class UserDTO implements Serializable {
         this.roles = user.getRole().stream().map(Role::getName).collect(Collectors.toSet());
         permissions = new HashSet<>();
         user.getRole().forEach(roles1 ->{
+            this.roleIds.add(roles1.getId());
             permissions.addAll(roles1.getPermission().stream().filter(p -> p.getArchived() == 0)
                     .map(Permission::getName).collect(Collectors.toSet()));
         });

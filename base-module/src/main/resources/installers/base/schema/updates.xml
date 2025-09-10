@@ -735,5 +735,15 @@
             WHERE r.name = 'RDE' AND m.name NOT IN ('TriageModule', 'LaboratoryModule', 'Check-in Setting', 'Consultation', 'Pharmacy');
         </sql>
     </changeSet>
+    <changeSet failOnError="true" id="20250915155900" author="Peter Abiodun">
+        <preConditions>
+            <not>
+                <columnExists tableName="base_role" columnName="exclude_roles"/>
+            </not>
+        </preConditions>
+        <sql>
+            ALTER TABLE base_role ADD COLUMN exclude_roles CHARACTER VARYING;
+        </sql>
+    </changeSet>
 
 </databaseChangeLog>

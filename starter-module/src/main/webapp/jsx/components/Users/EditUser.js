@@ -93,13 +93,15 @@ const UserRegistration = (props) => {
   );
   const [gender, setGender] = useState([]);
   const [role, setRole] = useState([]);
+  const [exclusionSet, setExclusionSet] = useState(new Set());
+  const [filteredRoles, setFilteredRoles] = useState([]);
   const [confirm, setConfirm] = useState(null);
   const [matchingPassword, setMatchingPassword] = useState(false);
   const [validPassword, setValidPassword] = useState(false);
   const [matchingPasswordClass, setMatchingPasswordClass] = useState("");
   const [validPasswordClass, setValidPasswordClass] = useState("");
   const [saving, setSaving] = useState(false);
-  const [selectedOption, setSelectedOption] = useState(props.location.state.user.roles);
+  const [selectedRoles, setSelectedRoles] = useState(props.location.state.user.roleIds);
   const [setArr, setSetArr] = useState([]);
   const [designation, setDesignation] = useState([]);
   const [loadingFacilities, setLoadingFacilities] = useState(false);
@@ -173,6 +175,8 @@ const UserRegistration = (props) => {
                 Object.entries(response.data).map(([key, value]) => ({
                   label: value.name,
                   value: value.name,
+                  excludeRoles: value.excludeRoles,
+                  id: value.id,
                 })).sort((a,b) => a.value.localeCompare(b.value))
             );
           })
@@ -202,8 +206,8 @@ const UserRegistration = (props) => {
   }, [props.location.state.isUpdate])
 
 
-  const onPermissionSelect = (selectedValues) => {
-    setSelectedOption(selectedValues);
+  const onRoleSelect = (selectedValues) => {
+    setSelectedRoles(selectedValues);
   };
   const onOrganisationSelect = (selectedValues) => {
     setSelectedOrganisations(selectedValues);
@@ -307,7 +311,7 @@ const UserRegistration = (props) => {
     if (validate()) {
       const dateOfBirth = moment(values.dateOfBirth).format("YYYY-MM-DD");
       values["dateOfBirth"] = dateOfBirth;
-      values["roles"] = selectedOption
+      values["roles"] = selectedRoles
       values["facilityIds"] = selectedOrganisations
       setSaving(true);
       const onSuccess = () => {
@@ -324,6 +328,44 @@ const UserRegistration = (props) => {
       
       props.update(userDetail.id,values, onSuccess, onError);
     }
+  };
+
+  useEffect(() => {
+      const filtered = role.filter(
+        role => !exclusionSet.has(parseInt(role.id)) || selectedRoles.includes(role.id.toString())
+      );
+      const formatted = filtered.map(role => ({
+        value: role.id,
+        label: role.label,
+      }));
+  
+      setFilteredRoles(formatted);
+    // }, [exclusionSet, selectedRoles, role]);
+    }, [exclusionSet, role]);
+  // Handle selection changes
+  const handleRoleChange = (newSelected) => {
+    console.log("roles: ", role);
+    console.log("filtered: ", filteredRoles);
+    console.log("excluded: ", exclusionSet);
+    
+    const newExclusions = new Set();
+
+    // Build new exclusion list from selected roles
+    newSelected.forEach(id => {
+      const thisRole = role.find(r => r.id === id);
+      if (thisRole?.excludeRoles) {
+        thisRole.excludeRoles
+          .split(',')
+          .map(str => parseInt(str.trim()))
+          .forEach(exId => newExclusions.add(exId));
+      }
+    });
+
+    // Remove any roles from selection that are now excluded
+    const cleanedSelection = newSelected.filter(id => !newExclusions.has(id));
+
+    setSelectedRoles(cleanedSelection);
+    setExclusionSet(newExclusions);
   };
 
 
@@ -565,9 +607,11 @@ const UserRegistration = (props) => {
                         <Label for="permissions" style={{color:'#014d88',fontWeight:'bolder'}}>Role</Label>
                         <DualListBox
                           canFilter
-                          options={role}
-                          onChange={onPermissionSelect}
-                          selected={selectedOption}
+                          // options={role}
+                          options={filteredRoles}
+                          // onChange={onRoleSelect}
+                          onChange={handleRoleChange}
+                          selected={selectedRoles}
                           disabled={isView}
                         />
                       </FormGroup>

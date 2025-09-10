@@ -18,5 +18,6 @@ public class RoleDTO {
     private String name;
     private String code;
     private List<Permission> permissions;
+    private String excludeRoles;
     private List<Menu> menus;
 }

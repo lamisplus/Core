@@ -48,6 +48,7 @@ public class RoleService {
         role.setPermission(permissions);
         role.setMenu(menus);
         role.setArchived(UN_ARCHIVED);
+        role.setExcludeRoles(roleDTO.getExcludeRoles());
 
         if(StringUtils.isBlank(role.getCode())) {
             role.setCode(UUID.randomUUID().toString());
@@ -165,6 +166,7 @@ public class RoleService {
                 HashSet<Menu> menus = getMenusByNameOnImport(roleDTO.getMenus());
 
                 role.setPermission(permissions);
+                role.setExcludeRoles(role.getExcludeRoles());
                 role.setMenu(menus);
                 role.setArchived(UN_ARCHIVED);
 
@@ -181,4 +183,23 @@ public class RoleService {
 
         return "Roles Imported Successfully";
     }
+
+    public Role updateRole(long id, RoleDTO roleDTO) {
+        Optional<Role> roleOptional = roleRepository.findById(id);
+        if(!roleOptional.isPresent())throw new EntityNotFoundException(Role.class, "Id", id +"");
+        Role updatedRole = roleOptional.get();
+
+        try{
+            HashSet<Permission> permissionsSet = getPermissions(roleDTO.getPermissions());
+            updatedRole.setPermission(permissionsSet);
+            updatedRole.setName(roleDTO.getName());
+            updatedRole.setMenu(getMenusById(roleDTO.getMenus()));
+            updatedRole.setExcludeRoles(roleDTO.getExcludeRoles());
+        } catch (Exception e){
+            LOG.info("Error updating role: {}", e.getMessage());
+            throw new RuntimeException(e.getMessage());
+        }
+        return roleRepository.save(updatedRole);
+    }
+
 }
