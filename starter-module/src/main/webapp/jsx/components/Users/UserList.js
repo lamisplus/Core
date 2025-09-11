@@ -10,18 +10,18 @@ import { ToastContainer, toast } from "react-toastify";
 import SaveIcon from "@material-ui/icons/Save";
 import CancelIcon from "@material-ui/icons/Cancel";
 import MatButton from "@material-ui/core/Button";
-import {  Badge} from "react-bootstrap";
+import { Badge } from "react-bootstrap";
 
 import { makeStyles } from "@material-ui/core/styles";
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
 import AssignFacilityModal from "./AssignFacilityModal";
 import { forwardRef } from 'react';
-import {  Modal } from "react-bootstrap";
-import {  Icon, Label} from 'semantic-ui-react';
+import { Modal } from "react-bootstrap";
+import { Icon, Label } from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.min.css';
-import {Link, useHistory} from 'react-router-dom'
-import { Button} from "react-bootstrap";
+import { Link, useHistory } from 'react-router-dom'
+import { Button } from "react-bootstrap";
 
 import AddBox from '@material-ui/icons/AddBox';
 import ArrowUpward from '@material-ui/icons/ArrowUpward';
@@ -38,28 +38,28 @@ import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
-import {FaEye} from "react-icons/fa";
-import {MdModeEdit, MdPerson} from "react-icons/md";
+import { FaEye } from "react-icons/fa";
+import { MdModeEdit, MdPerson } from "react-icons/md";
 import SplitActionButton from "../Button/SplitActionButton";
 
 const tableIcons = {
-Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
-Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
-Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
-Delete: forwardRef((props, ref) => <DeleteOutline {...props} ref={ref} />),
-DetailPanel: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
-Edit: forwardRef((props, ref) => <Edit {...props} ref={ref} />),
-Export: forwardRef((props, ref) => <SaveAlt {...props} ref={ref} />),
-Filter: forwardRef((props, ref) => <FilterList {...props} ref={ref} />),
-FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref} />),
-LastPage: forwardRef((props, ref) => <LastPage {...props} ref={ref} />),
-NextPage: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
-PreviousPage: forwardRef((props, ref) => <ChevronLeft {...props} ref={ref} />),
-ResetSearch: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
-Search: forwardRef((props, ref) => <Search {...props} ref={ref} />),
-SortArrow: forwardRef((props, ref) => <ArrowUpward {...props} ref={ref} />),
-ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
-ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
+  Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
+  Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
+  Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
+  Delete: forwardRef((props, ref) => <DeleteOutline {...props} ref={ref} />),
+  DetailPanel: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
+  Edit: forwardRef((props, ref) => <Edit {...props} ref={ref} />),
+  Export: forwardRef((props, ref) => <SaveAlt {...props} ref={ref} />),
+  Filter: forwardRef((props, ref) => <FilterList {...props} ref={ref} />),
+  FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref} />),
+  LastPage: forwardRef((props, ref) => <LastPage {...props} ref={ref} />),
+  NextPage: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
+  PreviousPage: forwardRef((props, ref) => <ChevronLeft {...props} ref={ref} />),
+  ResetSearch: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
+  Search: forwardRef((props, ref) => <Search {...props} ref={ref} />),
+  SortArrow: forwardRef((props, ref) => <ArrowUpward {...props} ref={ref} />),
+  ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
+  ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -72,7 +72,7 @@ let userId = 0;
 let currentUser = {};
 
 const UserList = (props) => {
-    let history = useHistory();
+  let history = useHistory();
   const classes = useStyles();
   const [loading, setLoading] = useState(true);
   const [modal, setModal] = useState(false);
@@ -83,8 +83,8 @@ const UserList = (props) => {
   useEffect(() => {
     fetchUsers()
   }, []);
-    const handleClose = () => setModal(false);
-  const fetchUsers = ()=> {
+  const handleClose = () => setModal(false);
+  const fetchUsers = () => {
     const onSuccess = () => {
       setLoading(false);
     };
@@ -131,43 +131,43 @@ const UserList = (props) => {
       //toast.error("Something went wrong");
       return;
     };
-    props.deleteUser(id, onSuccess,onError);  
-      
-      
+    props.deleteUser(id, onSuccess, onError);
+
+
   };
-    function actionItems(row){
-        return  [
-            {
-                type:'link',
-                name:'View',
-                icon:<FaEye  size="22"/>,
-                to:{
-                    pathname: "/edit-user",
-                    state: { user: row, defRole: roles, isUpdate: false }
-                }
-            },
-            {
-                type:'link',
-                name:'Edit',
-                icon:<MdPerson size="20" color='#014d88' />,
-                to:{
-                    pathname: "/edit-user",
-                    state: { user: row, defRole: roles, isUpdate: true }
-                }
-            },
-            {
-                type:'button',
-                name:'Delete',
-                icon:<MdModeEdit size="20" color='#014d88' />,
-                onClick:(() => deleteUserModal( row.id))
-            }
-        ]
-    }
+  function actionItems(row) {
+    return [
+      {
+        type: 'link',
+        name: 'View',
+        icon: <FaEye size="22" />,
+        to: {
+          pathname: "/edit-user",
+          state: { user: row, defRole: roles, isUpdate: false }
+        }
+      },
+      {
+        type: 'link',
+        name: 'Edit',
+        icon: <MdPerson size="20" color='#014d88' />,
+        to: {
+          pathname: "/edit-user",
+          state: { user: row, defRole: roles, isUpdate: true }
+        }
+      },
+      {
+        type: 'button',
+        name: 'Delete',
+        icon: <MdModeEdit size="20" color='#014d88' />,
+        onClick: (() => deleteUserModal(row.id))
+      }
+    ]
+  }
   return (
     <div>
       <ToastContainer autoClose={3000} hideProgressBar />
       <MaterialTable
-      icons={tableIcons}
+        icons={tableIcons}
         title="Users"
         columns={[
           { title: "Name", field: "name" },
@@ -180,34 +180,22 @@ const UserList = (props) => {
         data={props.usersList.map((row) => ({
           name: row.firstName + " " + row.lastName,
           userName: row.userName,
-          //gender: row.gender,
-          designation: ( <Badge variant="primary badge-xs light">{row.designation}</Badge>),
+          designation: (<Badge variant="primary badge-xs light">{row.designation}</Badge>),
           actions: (
             <div>
-                <SplitActionButton actions={actionItems(row)} />
-{/*                <Link to={{pathname: "/edit-user", state: { user: row, defRole: roles  }}}
-                >
-                <Label as='a' color='blue' className="ms-1" size='mini'>
-                    <Icon name='pencil' /> Edit
-                </Label>
-                </Link>
-                <Label as='a' color='red' onClick={() => deleteUserModal( row.id)} size='mini'>
-                    <Icon name='trash' /> Delete
-                </Label>*/}
-
-             
+              <SplitActionButton actions={actionItems(row)} />
             </div>
 
           ),
         }))}
         options={{
-            headerStyle: {
-                zIndex:'3',
-                backgroundColor: "#014d88",
-                color: "#fff",
-                fontSize:'16px',
-                padding:'10px'
-            },
+          headerStyle: {
+            zIndex: '3',
+            backgroundColor: "#014d88",
+            color: "#fff",
+            fontSize: '16px',
+            padding: '10px'
+          },
           searchFieldStyle: {
             width: "300%",
             margingLeft: "250px",
@@ -217,47 +205,47 @@ const UserList = (props) => {
           searchFieldAlignment: "left",
         }}
       />
-       <Modal show={modal}>
+      <Modal show={modal}>
 
-          <Modal.Header>
-              <Modal.Title>Delete User</Modal.Title>
-              <Button
-                  variant=""
-                  className="btn-close"
-                  onClick={() => setModal(false)}
-              >
+        <Modal.Header>
+          <Modal.Title>Delete User</Modal.Title>
+          <Button
+            variant=""
+            className="btn-close"
+            onClick={() => setModal(false)}
+          >
 
-              </Button>
-          </Modal.Header>
-          <Modal.Body>
-            <p>Are you sure you want to delete User</p>
-          </Modal.Body>
-          <Modal.Footer>
-            <MatButton
-              type="submit"
-              variant="contained"
-              color="primary"
-              className={classes.button}
-              startIcon={<SaveIcon />}
-              
-              onClick={() => onDelete(userId)}
-            >
+          </Button>
+        </Modal.Header>
+        <Modal.Body>
+          <p>Are you sure you want to delete User</p>
+        </Modal.Body>
+        <Modal.Footer>
+          <MatButton
+            type="submit"
+            variant="contained"
+            color="primary"
+            className={classes.button}
+            startIcon={<SaveIcon />}
+
+            onClick={() => onDelete(userId)}
+          >
             Yes
-            </MatButton>
-            <MatButton
-              variant="contained"
-              className={classes.button}
-              startIcon={<CancelIcon />}
-              onClick={() => setModal(false)}
-            >
-              <span style={{ textTransform: "capitalize" }}>
-                Cancel
-              </span>
-            </MatButton>
-          </Modal.Footer>
-          </Modal>
+          </MatButton>
+          <MatButton
+            variant="contained"
+            className={classes.button}
+            startIcon={<CancelIcon />}
+            onClick={() => setModal(false)}
+          >
+            <span style={{ textTransform: "capitalize" }}>
+              Cancel
+            </span>
+          </MatButton>
+        </Modal.Footer>
+      </Modal>
       <AssignFacilityModal
-          showModal={assignFacilityModal} toggleModal={() => setAssignFacilityModal(!assignFacilityModal)} user={currentUser}/>
+        showModal={assignFacilityModal} toggleModal={() => setAssignFacilityModal(!assignFacilityModal)} user={currentUser} />
     </div>
   );
 };

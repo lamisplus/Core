@@ -2,36 +2,20 @@ import React from "react";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 
-const Pie = ({ plotData, title, seriesName }) => {
-  const options = {
-    "chart": {
-      "type": "pie"
-    },
-    "title": {
-      "text": "sync_queue_status_example"
-    },
-    "series": [
-      {
-        "name": "Sync_Queue_Status",
-        "data": [
-          {
-            "name": "Error while processing",
-            "y": 24
-          },
-          {
-            "name": "Incomplete Uploads",
-            "y": 37
-          }
-        ]
-      }
-    ],
-    "yaxis": null,
-    "xaxis": null
+const Pie = ({ chartData }) => {
+
+  if (!chartData || !chartData.series) {
+    return (
+      <div style={{ padding: '20px', color: '#6c757d', textAlign: 'center' }}>
+        Invalid chart data
+      </div>
+    );
   }
+
 
   return (
     <div>
-      <HighchartsReact highcharts={Highcharts} options={options} />
+      <HighchartsReact highcharts={Highcharts} options={chartData} />
     </div>
   );
 };

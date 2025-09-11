@@ -10,6 +10,9 @@ import { fetchChartData } from "../../../_services/fetchChartData";
 import { fetchIndicatorValues } from "../../../_services/fetchIndicatorValues";
 import { fetchCurrentOrganisationUnitId } from "../../../_services/fetchCurrentOrganisationUnitId";
 import BarGraph from "../charts/BarGraph";
+import ChartErrorBoundary from "./ChartErrorBoundary/ChartErrorBoundary";
+
+
 
 const Home = () => {
   const [value, setValue] = React.useState("2");
@@ -47,13 +50,13 @@ const Home = () => {
   );
 
   const groupedIndicators = useMemo(() => {
-    const groups = { line: [], pie: [], bar: [], card: [] };
+    const groups = { line: [], pie: [], column: [], card: [] };
 
     if (chartData && indicatorValuesQueries.every(query => query.isSuccess)) {
       chartData.forEach((indicator, index) => {
-        const value = indicatorValuesQueries[index].data;
+        const value = indicatorValuesQueries?.[index]?.data;
         const updatedIndicator = { ...indicator, data: value };
-        groups[updatedIndicator.type].push(updatedIndicator);
+        groups[updatedIndicator?.type]?.push?.(updatedIndicator);
       });
     }
 
@@ -72,7 +75,7 @@ const Home = () => {
     Object.values(groupedIndicators).every(arr => arr.length === 0);
 
   return (
-    <>
+    <ChartErrorBoundary>
       {isAnyQueryLoading ? (
         <div
           style={{
@@ -96,77 +99,76 @@ const Home = () => {
             </TabContext>
           ) : (
             <>
-              <div className="row">
-                {groupedIndicators.card.length > 0 && (
-                  <div className="col-6">
-                    {groupedIndicators.card
-                      .sort((a, b) => a.position - b.position)
-                      .map((indicator) => (
-                        <IndicatorCard key={indicator.indicatorName} indicator={indicator} />
-                      ))}
-                  </div>
-                )}
-              </div>
+              {groupedIndicators?.card?.length > 0 && (
+                <div className="row">
+                  {groupedIndicators?.card
+                    ?.sort?.((a, b) => a.position - b.position)
+                    ?.map?.((indicator) => (
+                      <div className="col-4">
+                        <ChartErrorBoundary>
+                          <IndicatorCard key={indicator?.indicatorName || ""} indicator={indicator} />
+                        </ChartErrorBoundary>
+                      </div>
+                    ))}
+                </div>
+              )}
 
-              <div className="row">
-                {groupedIndicators.pie.length > 0 && (
-                  <div className="col-6">
-                    {groupedIndicators.pie
-                      .sort((a, b) => a.position - b.position)
-                      .map((indicator) => (
-                        <ChartContainer key={indicator.indicatorName}>
-                          <Pie
-                            plotData={[{ male: 20, female: 30 }]}
-                            title={indicator.displayName}
-                          />
-                        </ChartContainer>
-                      ))}
-                  </div>
-                )}
-              </div>
 
-              <div className="row">
-                {groupedIndicators.line.length > 0 && (
-                  <div className="col-6">
-                    {groupedIndicators.line
-                      .sort((a, b) => a.position - b.position)
-                      .map((indicator) => (
-                        <ChartContainer key={indicator.indicatorName}>
-                          <LineGraph
-                            LineGraphData={[]}
-                            title={indicator.displayName}
-                            xName="Year"
-                            yName="Patient"
-                          />
-                        </ChartContainer>
-                      ))}
-                  </div>
-                )}
-              </div>
+              {groupedIndicators?.pie?.length > 0 && (
+                <div className="row">
+                  {groupedIndicators?.pie
+                    .sort((a, b) => a.position - b.position)
+                    .map((indicator) => (
+                      <div className="col-6">
+                        <ChartErrorBoundary>
+                          <ChartContainer key={indicator?.indicatorName || ""}>
+                            <Pie
+                              chartData={indicator.data}
+                              title={indicator?.displayName || ""}
+                            />
+                          </ChartContainer>
+                        </ChartErrorBoundary>
+                      </div>
+                    ))}
+                </div>
+              )}
 
-              <div className="row">
-                {groupedIndicators.bar.length > 0 && (
-                  <div className="col-6">
-                    {groupedIndicators.bar
-                      .sort((a, b) => a.position - b.position)
-                      .map((indicator) => (
-                        <ChartContainer key={indicator.indicatorName}>
-                          <BarGraph
-                            title={indicator.displayName}
-                            xName="Category"
-                            yName="Value"
-                            barGraphData={[
-                              { category: "Q1", value: 45 },
-                              { category: "Q2", value: 65 },
-                              { category: "Q3", value: 32 },
-                              { category: "Q4", value: 58 }
-                            ]}
-                          />
-                        </ChartContainer>
-                      ))}
-                  </div>
-                )}
-              </div>
+
+              {groupedIndicators?.line?.length > 0 && (
+                <div className="row">
+                  {groupedIndicators?.line
+                    .sort((a, b) => a.position - b.position)
+                    .map((indicator) => (
+                      <div className="col-6">
+                        <ChartErrorBoundary>
+                          <ChartContainer key={indicator?.indicatorName || ""}>
+                            <LineGraph
+                              chartData={indicator?.data}
+                            />
+                          </ChartContainer>
+                        </ChartErrorBoundary>
+                      </div>
+                    ))}
+                </div>
+              )}
+
+              {groupedIndicators?.column?.length > 0 && (
+                <div className="row">
+                  {groupedIndicators?.column
+                    .sort((a, b) => a.position - b.position)
+                    .map((indicator) => (
+                      <div className="col-6">
+                        <ChartErrorBoundary>
+                          <ChartContainer key={indicator?.indicatorName || ""}>
+                            <BarGraph
+                              chartData={indicator?.data}
+                            />
+                          </ChartContainer>
+                        </ChartErrorBoundary>
+                      </div>
+                    ))}
+                </div>
+              )}
 
               <div className="row">
                 {hasNoChartData && <NoDataPlaceholder />}
@@ -175,7 +177,7 @@ const Home = () => {
           )}
         </>
       )}
-    </>
+    </ChartErrorBoundary>
   );
 };
 
@@ -207,7 +209,7 @@ const IndicatorCard = ({ indicator }) => (
 const ChartContainer = ({ children }) => (
   <div style={{ padding: "10px" }}>
     <div className="card">
-      <div className="card-body pt-0 chart-body-wrapper">{children}</div>
+      <div className="card-body pt-0">{children}</div>
     </div>
   </div>
 );
