@@ -104,13 +104,14 @@ const UserRegistration = (props) => {
 
   //const [gender, setGender] = useState([]);
   const [role, setRole] = useState([]);
+  const [filteredRoles, setFilteredRoles] = useState([]);
   const [confirm, setConfirm] = useState("");
   const [matchingPassword, setMatchingPassword] = useState(false);
   const [validPassword, setValidPassword] = useState(false);
   const [matchingPasswordClass, setMatchingPasswordClass] = useState("");
   const [validPasswordClass, setValidPasswordClass] = useState("");
   const [saving, setSaving] = useState(false);
-  const [selectedOption, setSelectedOption] = useState();
+  const [selectedRoles, setSelectedRoles] = useState([]);
   const [designation, setDesignation] = useState([]);
   const [ips, setIps] = useState([]);
   const [loadingFacilities, setLoadingFacilities] = useState(false);
@@ -238,6 +239,8 @@ const UserRegistration = (props) => {
                 Object.entries(response.data).map(([key, value]) => ({
               label: value.name,
               value: value.name,
+              excludeRoles: value.excludeRoles,
+              id: value.id.toString(),
             }))
             .sort((a,b) => a.value.localeCompare(b.value))
             );
@@ -365,7 +368,7 @@ const UserRegistration = (props) => {
     if (validate()) {
       const dateOfBirth = moment(values.dateOfBirth).format("YYYY-MM-DD");
       values["dateOfBirth"] = dateOfBirth;
-      values["roles"] = selectedOption
+      values["roles"] = selectedRoles
       values["facilityIds"] = selectedOrganisations
       setSaving();
 
@@ -386,7 +389,7 @@ const UserRegistration = (props) => {
   };
 
   const onRoleSelect = (selectedValues) => {
-    setSelectedOption(selectedValues);
+    setSelectedRoles(selectedValues);
   };
   const onOrganisationSelect = (selectedValues) => {
     setSelectedOrganisations(selectedValues);
@@ -403,6 +406,85 @@ const handleInputChangePhoneNumber = (e) => {
   setValues({ ...values, phoneNumber: cleanedNumber });
 
 };
+
+useEffect(() => {
+    // Convert roles to DualListBox format
+    const allOptions = role
+    // .map(role => ({
+    //   value: role.id,
+    //   label: role.name,
+    // }));
+
+    const exclusionSet = new Set();
+    // Build exclusion set from selected roles
+    selectedRoles.forEach(name => {
+      const thisRole = role.find(r => r.value === name);
+      if (thisRole?.excludeRoles) {
+        thisRole.excludeRoles
+          .split(',')
+          .map(str => parseInt(str.trim()))
+          .forEach(exId => exclusionSet.add(exId));
+      }
+    });
+
+    // Filter out excluded roles unless they are already selected
+    const filtered = allOptions.filter(
+      opt => !exclusionSet.has(opt.id) || selectedRoles.includes(opt.id)
+    );
+
+
+    console.log(exclusionSet);
+    
+
+    setFilteredRoles(filtered);
+  }, [selectedRoles, role]);
+
+  // const [exclusionSet, setExclusionSet] = useState(new Set());
+
+  // Convert roles to DualListBox format
+  // const allOptions = role.map(role => ({
+  //   value: role.id,
+  //   label: role.name,
+  // }));
+
+  // Update filtered roles whenever exclusionSet or selectedRoles changes
+  // useEffect(() => {
+  //   const filtered = role.filter(
+  //     role => !exclusionSet.has(role.id) || selectedRoles.includes(role.id)
+  //   );
+
+  //   const formatted = filtered.map(role => ({
+  //     value: role.name,
+  //     label: role.name,
+  //   }));
+
+  //   setFilteredRoles(formatted);
+  // }, [exclusionSet, selectedRoles, role]);
+
+  // // Handle selection changes
+  // const handleRoleChange = (newSelected) => {
+  //   const newExclusions = new Set(exclusionSet);
+
+  //   // Build new exclusion list from selected roles
+  //   newSelected.forEach(id => {
+  //     const thisRole = role.find(r => r.id === id);
+  //     if (thisRole?.excludeRoles) {
+  //       thisRole.excludeRoles
+  //         .split(',')
+  //         .map(str => parseInt(str.trim()))
+  //         .forEach(exId => newExclusions.add(exId));
+  //     }
+  //   });
+
+  //   // Remove any roles from selection that are now excluded
+  //   const cleanedSelection = newSelected.filter(id => !newExclusions.has(id));
+
+  //   setSelectedRoles(cleanedSelection);
+  //   setExclusionSet(newExclusions);
+  // };
+  console.log(filteredRoles);
+  // console.log(exclusionSet);
+  
 
   return (
       <>
@@ -645,9 +727,11 @@ const handleInputChangePhoneNumber = (e) => {
                             <Label for="roles" style={{color:'#014d88',fontWeight:'bolder'}}>Role</Label>
                             <DualListBox
                                 //canFilter
-                                options={role}
+                                // options={role}
+                                options={filteredRoles}
                                 onChange={onRoleSelect}
-                                selected={selectedOption}
+                                // onChange={handleRoleChange}
+                                selected={selectedRoles}
                                 sx={{border:'solid 1px #014d88',borderRadius:'5px'}}
                             />
                           </FormGroup>
