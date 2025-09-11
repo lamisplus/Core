@@ -384,7 +384,7 @@ const ChartConfigPage = (props) => {
                             <span style={{ textTransform: "capitalize", color: '#fff', fontWeight: 'bolder' }}>Export config</span>
                         </ButtonMui>
                     </div>
-                   
+
 
                     <div>
                         <MaterialTable
@@ -567,7 +567,7 @@ const ChartConfigForm = React.forwardRef(({ handleSubmit, values, errors, touche
                 >
                     <option value="">Select Type</option>
                     <option value="pie">Pie Chart</option>
-                    <option value="bar">Bar Chart</option>
+                    <option value="column">Bar Chart</option>
                     <option value="line">Line Chart</option>
                 </Input>
                 <ErrorMessage name="type" component="div" className={classes.errorText} />
@@ -665,19 +665,3 @@ const ChartConfigForm = React.forwardRef(({ handleSubmit, values, errors, touche
         </Form>
     );
 });
-
-
-const SubmitButton = ({ isLoading }) => {
-    const { submitForm } = useFormikContext();
-
-    return (
-        <MuiButton
-            onClick={submitForm}
-            color="primary"
-            variant="contained"
-            disabled={isLoading}
-        >
-            {isLoading ? 'Updating...' : 'Save Changes'}
-        </MuiButton>
-    );
-};
