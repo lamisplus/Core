@@ -5,7 +5,7 @@ import PageTitle from "./../../layouts/PageTitle";
 import { ToastContainer } from "react-toastify";
 import "semantic-ui-css/semantic.min.css";
 import "@reach/menu-button/styles.css";
-import { FaUserPlus } from "react-icons/fa";
+import { FaDownload, FaUpload, FaUserPlus } from "react-icons/fa";
 import AddBox from '@material-ui/icons/AddBox';
 import ArrowUpward from '@material-ui/icons/ArrowUpward';
 import Check from '@material-ui/icons/Check';
@@ -31,6 +31,7 @@ import { queryClient } from "../../../_helpers/queryClient";
 import { Button, Form, FormGroup, Label, Input } from "reactstrap";
 import { Formik, Field, ErrorMessage, useFormikContext } from 'formik';
 import * as Yup from 'yup';
+import ButtonMui from "@material-ui/core/Button";
 import { MdSaveAlt } from "react-icons/md";
 import "react-toastify/dist/ReactToastify.css";
 import "react-toastify/dist/ReactToastify.css";
@@ -362,33 +363,30 @@ const ChartConfigPage = (props) => {
             <Card className={classes.cardBottom}>
                 <CardContent>
                     <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
-                        <Button
-                            variant="contained"
+                        <ButtonMui variant="contained"
                             color="primary"
-                            className="me-2"
-                            startIcon={<FaUserPlus style={{ color: '#fff' }} />}
-                            style={{ backgroundColor: 'green', borderRadius: 4 }}
+                            startIcon={<FaUpload size="10" />}
                             onClick={handleImportClick}
+                            disable={importing}
+                            style={{ backgroundColor: '#014d88', margin: '10px' }}
                         >
                             <span style={{ textTransform: "capitalize", color: '#fff', fontWeight: 'bolder' }}>
                                 Import config
                             </span>
-                        </Button>
+                        </ButtonMui>
 
-                        <Button
-                            variant="contained"
-                            color="success"
-                            startIcon={<MdSaveAlt style={{ color: '#fff' }} />}
-                            style={{ backgroundColor: '#014d88', borderRadius: 4 }}
+                        <ButtonMui variant="contained"
+                            color="primary"
+                            startIcon={<FaDownload size="10" />}
                             onClick={exportChart}
+                            style={{ backgroundColor: '#014d88', margin: '10px' }}
                         >
                             <span style={{ textTransform: "capitalize", color: '#fff', fontWeight: 'bolder' }}>Export config</span>
-                        </Button>
+                        </ButtonMui>
                     </div>
-                    <br />
-                    <br />
+                   
 
-                    <div style={{ marginTop: "20px" }}>
+                    <div>
                         <MaterialTable
                             icons={tableIcons}
                             title="Chart Config"
