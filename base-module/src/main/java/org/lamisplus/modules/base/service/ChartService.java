@@ -446,19 +446,26 @@ public class ChartService {
                 categories = timeSeriesResult.getCategories();
                 break;
 
+            case "card":
+                // Handle card type - single value display
+                SeriesDTO cardSeries = processCardData(resultSet, chart);
+                seriesList.add(cardSeries);
+                break;
+
+
             default:
                 throw new IllegalArgumentException("Unsupported chart type: " + chartType);
         }
 
-        // Build xAxis with categories for non-pie charts
-        if (!chartType.equals("pie") && !categories.isEmpty()) {
+        // Build xAxis with categories for non-pie and non-card charts
+        if (!chartType.equals("pie") && !chartType.equals("card") && !categories.isEmpty()) {
             Map<String, Object> xAxisMap = new HashMap<>();
             xAxisMap.put("categories", categories);
             xAxis = xAxisMap;
         }
 
-        // Build yAxis with title for non-pie charts
-        if (!chartType.equals("pie")) {
+
+        if (!chartType.equals("pie") && !chartType.equals("card")) {
             Map<String, Object> yAxisTitleMap = new HashMap<>();
             yAxisTitleMap.put("text", getYAxisTitle(chart));
 
@@ -467,9 +474,13 @@ public class ChartService {
             yAxis = yAxisMap;
         }
 
-        // Build chart type map
         Map<String, Object> chartMap = new HashMap<>();
-        chartMap.put("type", chartType);
+        if (!chartType.equals("card")) {
+            chartMap.put("type", chartType);
+        } else {
+
+            chartMap.put("type", null);
+        }
 
         // Build title map
         Map<String, Object> titleMap = new HashMap<>();
@@ -481,6 +492,7 @@ public class ChartService {
                 .xAxis(xAxis)
                 .yAxis(yAxis)
                 .series(seriesList)
+                .chartType(chartType) // Set the chart type
                 .build();
     }
 
@@ -566,6 +578,32 @@ public class ChartService {
         }
 
         return new TimeSeriesResult(seriesList, new ArrayList<>(categories));
+    }
+
+
+    /**
+     * Process data for card charts (single value display)
+     */
+    private SeriesDTO processCardData(ResultSet resultSet, Chart chart) throws SQLException {
+        Object value = null;
+
+        if (resultSet.next()) {
+            value = resultSet.getObject(1); // Get first column
+
+            if (value instanceof Number) {
+            } else if (value instanceof String) {
+            } else {
+                value = value != null ? value.toString() : "N/A";
+            }
+        } else {
+            // No data found
+            value = 0; // or "N/A" or whatever default you prefer
+        }
+
+        return SeriesDTO.builder()
+                .name(chart.getIndicatorName())
+                .data(value)
+                .build();
     }
 
 

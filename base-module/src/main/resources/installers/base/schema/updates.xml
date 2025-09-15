@@ -750,4 +750,58 @@
         </sql>
     </changeSet>
 
+
+
+    <changeSet failOnError="true" id="20250915170000" author="tyav barnabas">
+
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="chart" />
+            </not>
+        </preConditions>
+        <sql>
+            CREATE TABLE IF NOT EXISTS chart
+            (
+                id uuid DEFAULT uuid_generate_v4(),
+                indicator_name character varying(255) ,
+                display_name character varying(255),
+                description character varying(255),
+                location character varying(255),
+                module character varying(255),
+                type character varying(255),
+                icon character varying(255) ,
+                query character varying(5000),
+                created_date timestamp without time zone,
+                created_by character varying(255),
+                last_modified_date timestamp without time zone,
+                last_modified_by character varying(255),
+                x_axis_field character varying(255),
+                y_axis_field character varying(255),
+                series_name_field character varying(255),
+                archived integer,
+                "position" integer DEFAULT 0,
+                CONSTRAINT pk_chart PRIMARY KEY (indicator_name),
+                CONSTRAINT id_chart_unique UNIQUE (id)
+                );
+            INSERT INTO public.chart(
+                id, indicator_name, display_name, description, location, module, type, icon, query, created_date, created_by, last_modified_date, last_modified_by, x_axis_field, y_axis_field, series_name_field, archived, "position")
+            VALUES ('2835c31b-604f-46f1-8314-034e4d04b8e8','Files_Processed_Over_Time','sync_queue_over_time','Shows files processed over time (last 7 days)','core','sync_module','line','trending_up','SELECT date_created AS processing_date, COALESCE(file_count,0) AS file_count, status FROM sync_queue WHERE organisation_unit_id > 1000',null,null,null,null,'processing_date','file_count','status',0,6);
+            INSERT INTO public.chart(
+                id, indicator_name, display_name, description, location, module, type, icon, query, created_date, created_by, last_modified_date, last_modified_by, x_axis_field, y_axis_field, series_name_field, archived, "position")
+                VALUES ('966e2e84-2f81-4f9c-8570-bcff13157a30','Sync_Duration_by_Type','sync_duration_by_type','Shows average sync duration by generation type','core','sync_module','bar','bar_chart','SELECT generation_type AS sync_type, AVG(EXTRACT(EPOCH FROM (sync_end_date - sync_start_date))) AS avg_duration FROM sync_queue WHERE organisation_unit_id = ?facilityId AND sync_end_date IS NOT NULL AND sync_start_date IS NOT NULL GROUP BY generation_type',null,null,null,null,'sync_type','avg_duration',null,0,5);
+            INSERT INTO public.chart(
+                id, indicator_name, display_name, description, location, module, type, icon, query, created_date, created_by, last_modified_date, last_modified_by, x_axis_field, y_axis_field, series_name_field, archived, "position")
+            VALUES ('123ab624-6947-49be-a90b-a4999b62a7fb','Sync_Queue_Status','sync_queue_status','Shows sync queue processing status','core','sync_module','pie','sync','SELECT status, SUM(file_count) AS count FROM sync_queue WHERE organisation_unit_id = ?facilityId GROUP BY status',null,null,null,null,'status','count',null,0,4);
+            INSERT INTO public.chart(
+                id, indicator_name, display_name, description, location, module, type, icon, query, created_date, created_by, last_modified_date, last_modified_by, x_axis_field, y_axis_field, series_name_field, archived, "position")
+            VALUES ('123ab624-6947-49be-a90b-a4999b62a7fc','File_count','File_count','Shows sync queue file count status','core','sync_module','card','sync','SELECT SUM(file_count) AS file_count FROM sync_queue WHERE organisation_unit_id = ?facilityId',null,null,null,null,null,'total_count',null,0,1);
+            INSERT INTO public.chart(
+                id, indicator_name, display_name, description, location, module, type, icon, query, created_date, created_by, last_modified_date, last_modified_by, x_axis_field, y_axis_field, series_name_field, archived, "position")
+            VALUES ('123ab624-6947-49be-a90b-a4999b62a7fe','Error_while_processing','Error_while_processing','Shows sync queue  Error while processing file for a facility','core','sync_module','card','sync','SELECT COUNT(*) AS error_while_processing FROM sync_queue WHERE organisation_unit_id = ?facilityId AND status = ''Error while processing''',null,null,null,null,null,'error_count',null,0,2);
+            INSERT INTO public.chart(
+                id, indicator_name, display_name, description, location, module, type, icon, query, created_date, created_by, last_modified_date, last_modified_by, x_axis_field, y_axis_field, series_name_field, archived, "position")
+            VALUES ('123ab624-6947-49be-a90b-a4999b62a8fe','Incomplete_uploads','Incomplete_uploads','Shows sync queue Incomplete_upload for a facility','core','sync_module','card','sync','SELECT COUNT(*) AS error_while_processing FROM sync_queue WHERE organisation_unit_id = ?facilityId AND status = ''Incomplete Uploads''',null,null,null,null,'null','imcomplete_count',null,0,3);
+        </sql>
+    </changeSet>
+
 </databaseChangeLog>
