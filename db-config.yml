@@ -5,7 +5,7 @@ spring:
         driver-class-name: org.postgresql.Driver
         username: postgres
         password: admin
-        url: jdbc:postgresql://localhost:5432/sync_database
+        url: jdbc:postgresql://localhost:5432/chart_db
         hibernate:
             ddl-auto: none
             event.merge.entry_copy_observer: allow
@@ -34,7 +34,7 @@ lamisplus:
             driver-class-name: org.postgresql.Driver
             username: postgres
             password: admin
-            url: jdbc:postgresql://localhost:5432/sync_database
+            url: jdbc:postgresql://localhost:5432/chart_db
             hikari:
                     auto-commit: true
                     data-source-properties:
@@ -54,7 +54,6 @@ lamisplus:
             quality: 80
 server:
     port: 9090
-
 
 cache:
     names: core,module,server_sync

@@ -745,7 +745,7 @@
         <sql>
             INSERT INTO public.base_menu(
                 name, state, type, level, "position", icon, code, uuid, tooltip, breadcrumb, disabled, module_id, parent_id, archived, url)
-            VALUES ('Chart Config', '', '', '', 1, '', '', '44b1c981-312d-461a-999a-5b2cc6fe0ab0', 'Chart Configuration', '', false, null, 15, 0, 'chart');
+            VALUES ('Chart Config', '', '', '', 1, '', '', '44b1c981-312d-461a-999a-5b2cc6fe0ab0', 'Chart Configuration', '', false, null, 15, 0, 'chart-config');
 
         </sql>
     </changeSet>
