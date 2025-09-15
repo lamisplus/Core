@@ -492,7 +492,6 @@ public class ChartService {
                 .xAxis(xAxis)
                 .yAxis(yAxis)
                 .series(seriesList)
-                .chartType(chartType) // Set the chart type
                 .build();
     }
 

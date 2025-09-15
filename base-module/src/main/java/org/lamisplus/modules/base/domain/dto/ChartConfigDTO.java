@@ -17,11 +17,4 @@ public class ChartConfigDTO {
     private Object xAxis;
     private Object yAxis;
     private List<SeriesDTO> series;
-
-    private String chartType; // Add this field to explicitly track chart type
-
-    // Helper method to check if it's a card
-    public boolean isCard() {
-        return "card".equalsIgnoreCase(chartType);
-    }
 }
