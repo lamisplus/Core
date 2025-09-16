@@ -2,7 +2,7 @@ import React from "react";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 
-const Pie = ({ chartData }) => {
+const BarGraph = ({ chartData }) => {
 
   if (!chartData || !chartData.series) {
     return (
@@ -20,7 +20,4 @@ const Pie = ({ chartData }) => {
   );
 };
 
-export default Pie;
-
-
-
+export default BarGraph;

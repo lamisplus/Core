@@ -70,6 +70,17 @@ public class Chart {
     @Column(name = "position")
     private Integer position;
 
+    //added fields
+
+    @Column(name = "x_axis_field")
+    private String xAxisField;
+
+    @Column(name = "y_axis_field")
+    private String yAxisField;
+
+    @Column(name = "series_name_field")
+    private String seriesNameField;
+
     @PrePersist
     void setIdIfNull(){
         if (this.id == null){

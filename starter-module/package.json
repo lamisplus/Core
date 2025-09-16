@@ -81,6 +81,7 @@
     "react-overlay-loading": "^1.0.3",
     "react-perfect-scrollbar": "^1.5.8",
     "react-phone-input-2": "^2.15.1",
+    "react-query": "^3.19.0",
     "react-redux": "^7.2.4",
     "react-resize-detector": "^5.2.0",
     "react-router-dom": "^5.2.0",
@@ -114,8 +115,8 @@
     "yup": "^0.32.8"
   },
   "scripts": {
-    "start": "react-scripts --openssl-legacy-provider start",
-    "build": "react-scripts --openssl-legacy-provider build && xcopy /s /y build src\\main\\resources\\static",
+    "start": "react-scripts start",
+    "build": "react-scripts build && xcopy /s /y build src\\main\\resources\\static",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

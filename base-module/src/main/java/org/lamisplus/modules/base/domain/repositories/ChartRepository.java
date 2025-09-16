@@ -34,4 +34,6 @@ public interface ChartRepository extends JpaRepository<Chart, String> {
 
     @Query(value = "SELECT query FROM chart WHERE indicator_name = ?1 ", nativeQuery = true)
     String getChartQuery(String indicatorName);
+
+    Chart findByIndicatorName(String indicatorName);
 }

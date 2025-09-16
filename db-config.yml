@@ -4,8 +4,8 @@ spring:
     datasource:
         driver-class-name: org.postgresql.Driver
         username: postgres
-        password: smilez
-        url: jdbc:postgresql://localhost:5432/ty
+        password: admin
+        url: jdbc:postgresql://localhost:5432/sync-database2
         hibernate:
             ddl-auto: none
             event.merge.entry_copy_observer: allow
@@ -33,8 +33,8 @@ lamisplus:
         module:
             driver-class-name: org.postgresql.Driver
             username: postgres
-            password: smilez
-            url: jdbc:postgresql://localhost:5432/ty
+            password: admin
+            url: jdbc:postgresql://localhost:5432/sync-database2
             hikari:
                     auto-commit: true
                     data-source-properties:
@@ -54,4 +54,19 @@ lamisplus:
             quality: 80
 server:
     port: 9090
+
+
+cache:
+    names: core,module,server_sync
+    heap:
+        size: 100
+    off-heap:
+        size: 50
+        unit: MB
+    expiry:
+        ttl:
+            minutes: 1
+        idle:
+            minutes: 1
+
     
