@@ -93,7 +93,7 @@ public class Module implements Serializable, Persistable<Long> {
     @Transient
     private String message;
 
-    @OneToMany(mappedBy = "module", cascade = {CascadeType.ALL})
+    @OneToMany(mappedBy = "module", cascade = {CascadeType.MERGE})
     private Set<Permission> Permissions = new HashSet<>();
 
     private String gitHubLink;

@@ -32,6 +32,9 @@ public class ChartDTO implements Serializable {
     private String createdBy;
     private LocalDateTime lastModifiedDate;
     private String lastModifiedBy;
+    private String xAxisField;
+    private String yAxisField;
+    private String seriesNameField;
 
     public static ChartDTO fromEntity(Chart chart){
 
@@ -51,6 +54,9 @@ public class ChartDTO implements Serializable {
                 .lastModifiedBy(chart.getLastModifiedBy())
                 .archived(chart.getArchived())
                 .position(chart.getPosition())
+                .xAxisField(chart.getXAxisField())
+                .yAxisField(chart.getYAxisField())
+                .seriesNameField(chart.getSeriesNameField())
                 .build();
     }
 
@@ -71,6 +77,9 @@ public class ChartDTO implements Serializable {
                 .lastModifiedBy(chart.getLastModifiedBy())
                 .archived(chart.getArchived())
                 .position(chart.getPosition())
+                .xAxisField(chart.getXAxisField())
+                .yAxisField(chart.getYAxisField())
+                .seriesNameField(chart.getSeriesNameField())
                 .build();
     }
 

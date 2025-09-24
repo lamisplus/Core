@@ -18,4 +18,6 @@ public interface PermissionRepository extends JpaRepository<Permission, Long> {
     List<Permission> findAllByArchived(int archived);
 
     Optional<Permission> findByDescriptionAndArchived(String description, int archived);
+
+    Optional<Permission> findByName(String description);
 }

@@ -745,6 +745,19 @@
             ALTER TABLE base_role ADD COLUMN exclude_roles CHARACTER VARYING;
         </sql>
     </changeSet>
+    <changeSet failOnError="true" id="20250916110100" author="Peter Abiodun">
+        <sql>
+            ALTER TABLE base_permission
+            DROP CONSTRAINT module_name_fk;
+
+            ALTER TABLE base_permission
+                ADD CONSTRAINT module_name_fk FOREIGN KEY (module_name)
+                    REFERENCES base_module (name)
+                    ON UPDATE NO ACTION
+                    ON DELETE SET NULL
+                NOT VALID;
+        </sql>
+    </changeSet>
 
     <changeSet failOnError="true" id="20251116170000" author="tyav barnabas">
         <preConditions onFail="MARK_RAN">
@@ -793,24 +806,111 @@
                 CONSTRAINT pk_chart PRIMARY KEY (indicator_name),
                 CONSTRAINT id_chart_unique UNIQUE (id)
                 );
+
             INSERT INTO public.chart(
-                id, indicator_name, display_name, description, location, module, type, icon, query, created_date, created_by, last_modified_date, last_modified_by, x_axis_field, y_axis_field, series_name_field, archived, "position")
-            VALUES ('2835c31b-604f-46f1-8314-034e4d04b8e8','Files_Processed_Over_Time','sync_queue_over_time','Shows files processed over time (last 7 days)','core','sync_module','line','trending_up','SELECT date_created AS processing_date, COALESCE(file_count,0) AS file_count, status FROM sync_queue WHERE organisation_unit_id > 1000',null,null,null,null,'processing_date','file_count','status',0,6);
+                id, indicator_name, display_name, description, location, position, type, icon, query, created_date, created_by, last_modified_date, last_modified_by, archived, x_axis_field, y_axis_field, series_name_field, module
+            ) VALUES ('71f2ee2b-6299-41db-9bd0-bb60f1a1410b', 'TOTAL_RECORDS', 'Total Records', 'Total Records', 'core', 0, 'card', 'fa-users', 'SELECT COUNT(1) FROM patient_person WHERE facility_id=?facilityId AND archived=0', '2025-07-30 14:24:28.86492', 'Schema', '2025-07-30 14:24:28.86492', 'Schema', 0, null, null, null, 'PatientModule');
+
             INSERT INTO public.chart(
-                id, indicator_name, display_name, description, location, module, type, icon, query, created_date, created_by, last_modified_date, last_modified_by, x_axis_field, y_axis_field, series_name_field, archived, "position")
-                VALUES ('966e2e84-2f81-4f9c-8570-bcff13157a30','Sync_Duration_by_Type','sync_duration_by_type','Shows average sync duration by generation type','core','sync_module','bar','bar_chart','SELECT generation_type AS sync_type, AVG(EXTRACT(EPOCH FROM (sync_end_date - sync_start_date))) AS avg_duration FROM sync_queue WHERE organisation_unit_id = ?facilityId AND sync_end_date IS NOT NULL AND sync_start_date IS NOT NULL GROUP BY generation_type',null,null,null,null,'sync_type','avg_duration',null,0,5);
+                id, indicator_name, display_name, description, location, position, type, icon, query, created_date, created_by, last_modified_date, last_modified_by, archived, x_axis_field, y_axis_field, series_name_field, module
+            ) VALUES ('bdd208a4-a646-486d-9898-c30cd7e907d2', 'TOTAL_TESTED_FOR_HIV', 'Total tested For HIV', 'Total Tested For Hiv', 'core', 1,'card', 'fa-user-md', 'SELECT COUNT (uuid) totalHTSCount FROM hts_client WHERE archived = 0 AND person_uuid IS NOT NULL AND hiv_test_result IS NOT NULL AND facility_id=?facilityId', '2025-07-30 14:24:28.86492', 'Schema', '2025-07-30 14:24:28.86492', 'Schema', 0, null, null, null, 'HtsModule');
+
             INSERT INTO public.chart(
-                id, indicator_name, display_name, description, location, module, type, icon, query, created_date, created_by, last_modified_date, last_modified_by, x_axis_field, y_axis_field, series_name_field, archived, "position")
-            VALUES ('123ab624-6947-49be-a90b-a4999b62a7fb','Sync_Queue_Status','sync_queue_status','Shows sync queue processing status','core','sync_module','pie','sync','SELECT status, SUM(file_count) AS count FROM sync_queue WHERE organisation_unit_id = ?facilityId GROUP BY status',null,null,null,null,'status','count',null,0,4);
+                id, indicator_name, display_name, description, location, position, type, icon, query, created_date, created_by, last_modified_date, last_modified_by, archived, x_axis_field, y_axis_field, series_name_field, module
+            ) VALUES ('d43cffcf-8690-4b55-a7a4-d2c404fb0fe7', 'TOTAL_POSITIVE', 'Total HIV Positive', 'Total Positive', 'core', 2,'card', 'fa-plus-square',
+                      'SELECT COUNT (uuid) totalHTSCount FROM hts_client
+                    WHERE archived = 0 AND person_uuid IS NOT NULL AND hiv_test_result IS NOT NULL
+                    AND hiv_test_result ILIKE ''%Positive%''
+                    AND facility_id=?facilityId
+                ', '2025-07-30 14:24:28.86492', 'Schema', '2025-07-30 14:24:28.86492', 'Schema', 0, null, null, null, 'HtsModule');
+
             INSERT INTO public.chart(
-                id, indicator_name, display_name, description, location, module, type, icon, query, created_date, created_by, last_modified_date, last_modified_by, x_axis_field, y_axis_field, series_name_field, archived, "position")
-            VALUES ('123ab624-6947-49be-a90b-a4999b62a7fc','File_count','File_count','Shows sync queue file count status','core','sync_module','card','sync','SELECT SUM(file_count) AS file_count FROM sync_queue WHERE organisation_unit_id = ?facilityId',null,null,null,null,null,'total_count',null,0,1);
+                id, indicator_name, display_name, description, location, position, type, icon, query, created_date, created_by, last_modified_date, last_modified_by, archived, x_axis_field, y_axis_field, series_name_field, module
+            ) VALUES ('c1ecbdab-ef42-4435-af2a-5e16d283b097', 'EVER_ENROLLED', 'Ever Enrolled Into HIV', 'Ever Enrolled', 'core', 3,'card', 'fa-heartbeat',
+                      'SELECT COUNT(1) FROM hiv_enrollment WHERE facility_id=?facilityId AND archived=0', '2025-07-30 14:24:28.86492', 'Schema', '2025-07-30 14:24:28.86492', 'Schema', 0, null, null, null, 'HivModule');
+
             INSERT INTO public.chart(
-                id, indicator_name, display_name, description, location, module, type, icon, query, created_date, created_by, last_modified_date, last_modified_by, x_axis_field, y_axis_field, series_name_field, archived, "position")
-            VALUES ('123ab624-6947-49be-a90b-a4999b62a7fe','Error_while_processing','Error_while_processing','Shows sync queue  Error while processing file for a facility','core','sync_module','card','sync','SELECT COUNT(*) AS error_while_processing FROM sync_queue WHERE organisation_unit_id = ?facilityId AND status = ''Error while processing''',null,null,null,null,null,'error_count',null,0,2);
+                id, indicator_name, display_name, description, location, position, type, icon, query, created_date, created_by, last_modified_date, last_modified_by, archived, x_axis_field, y_axis_field, series_name_field, module
+            ) VALUES ('94224e17-df1a-42a5-8d51-db9592a5a016', 'PATIENT_ENROLLMENT_BY_SEX', 'Patient Enrollment By Sex', 'Patient Enrollment By Sex', 'core', 0,'pie', 'fa-heartbeat',
+                      'SELECT
+                    CASE WHEN sex = ''Female'' THEN ''Female''
+                    WHEN sex = ''Male'' THEN ''Male''
+                    ELSE ''Others'' END AS name,
+                    COUNT(*) AS count
+                    FROM patient_person WHERE facility_id=?facilityId  GROUP BY sex', '2025-07-30 14:24:28.86492', 'Schema', '2025-07-30 14:24:28.86492', 'Schema', 0, null, null, null, 'PatientModule');
+
             INSERT INTO public.chart(
-                id, indicator_name, display_name, description, location, module, type, icon, query, created_date, created_by, last_modified_date, last_modified_by, x_axis_field, y_axis_field, series_name_field, archived, "position")
-            VALUES ('123ab624-6947-49be-a90b-a4999b62a8fe','Incomplete_uploads','Incomplete_uploads','Shows sync queue Incomplete_upload for a facility','core','sync_module','card','sync','SELECT COUNT(*) AS error_while_processing FROM sync_queue WHERE organisation_unit_id = ?facilityId AND status = ''Incomplete Uploads''',null,null,null,null,'null','imcomplete_count',null,0,3);
+                id, indicator_name, display_name, description, location, position, type, icon, query, created_date, created_by, last_modified_date, last_modified_by, archived, x_axis_field, y_axis_field, series_name_field, module
+            ) VALUES ('a835aec0-d41c-48d9-8ec8-382d051fa76d', 'PATIENT_ENROLLMENT_TRENDS_BY_YEAR_AND_SEX', 'Patient Enrollment Trends By Year and Sex', 'Patient Enrollment Trends By Year and Sex', 'core', 0,'line', 'fa-heartbeat',
+                      'SELECT EXTRACT(YEAR FROM date_of_registration) AS year,
+                        SUM(CASE WHEN sex = ''Male'' THEN 1 ELSE 0 END) AS male,
+                        SUM(CASE WHEN sex = ''Female'' THEN 1 ELSE 0 END) AS female
+                        FROM patient_person WHERE facility_id=?facilityId
+                        GROUP BY EXTRACT(YEAR FROM date_of_registration) order by year', '2025-07-30 14:24:28.86492', 'Schema', '2025-07-30 14:24:28.86492', 'Schema', 0, 'year', null, null, 'PatientModule');
+
+            INSERT INTO public.chart(
+                id,indicator_name, display_name, description, location, module, type, icon, query,
+                created_date, created_by, last_modified_date, last_modified_by,
+                x_axis_field, y_axis_field, series_name_field, archived, "position"
+            )
+            VALUES (
+                       gen_random_uuid(),
+                       'Age_Distribution_Positive_ART',
+                       'Age Distribution of HIV Positive Clients on ART',
+                       'Shows distribution of HIV positive clients on ART by age groups for the fiscal year',
+                       'core',
+                       'hts_module',
+                       'bar',
+                       'groups',
+                       '(
+                           WITH fy AS (
+                               SELECT
+                                   CASE
+                                       WHEN EXTRACT(MONTH FROM CURRENT_DATE) &gt;= 10
+                                           THEN MAKE_DATE(CAST(EXTRACT(YEAR FROM CURRENT_DATE) AS INTEGER), 10, 1)
+                                       ELSE
+                                           MAKE_DATE((CAST(EXTRACT(YEAR FROM CURRENT_DATE) AS INTEGER) - 1), 10, 1)
+                                   END AS start_date,
+
+                                   CASE
+                                       WHEN EXTRACT(MONTH FROM CURRENT_DATE) &gt;= 10
+                                           THEN MAKE_DATE((CAST(EXTRACT(YEAR FROM CURRENT_DATE) AS INTEGER) + 1), 10, 1)
+                                       ELSE
+                                           MAKE_DATE(CAST(EXTRACT(YEAR FROM CURRENT_DATE) AS INTEGER), 10, 1)
+                                   END AS end_date
+                           )
+                           SELECT
+                               SUM(CASE WHEN EXTRACT(YEAR FROM AGE(NOW(), pp.date_of_birth)) BETWEEN 0 AND 14 THEN 1 ELSE 0 END) AS age_0_14,
+                               SUM(CASE WHEN EXTRACT(YEAR FROM AGE(NOW(), pp.date_of_birth)) BETWEEN 15 AND 19 THEN 1 ELSE 0 END) AS age_15_19,
+                               SUM(CASE WHEN EXTRACT(YEAR FROM AGE(NOW(), pp.date_of_birth)) BETWEEN 20 AND 24 THEN 1 ELSE 0 END) AS age_20_24,
+                               SUM(CASE WHEN EXTRACT(YEAR FROM AGE(NOW(), pp.date_of_birth)) BETWEEN 25 AND 29 THEN 1 ELSE 0 END) AS age_25_29,
+                               SUM(CASE WHEN EXTRACT(YEAR FROM AGE(NOW(), pp.date_of_birth)) BETWEEN 30 AND 34 THEN 1 ELSE 0 END) AS age_30_34,
+                               SUM(CASE WHEN EXTRACT(YEAR FROM AGE(NOW(), pp.date_of_birth)) BETWEEN 35 AND 39 THEN 1 ELSE 0 END) AS age_35_39,
+                               SUM(CASE WHEN EXTRACT(YEAR FROM AGE(NOW(), pp.date_of_birth)) BETWEEN 40 AND 44 THEN 1 ELSE 0 END) AS age_40_44,
+                               SUM(CASE WHEN EXTRACT(YEAR FROM AGE(NOW(), pp.date_of_birth)) BETWEEN 45 AND 49 THEN 1 ELSE 0 END) AS age_45_49,
+                               SUM(CASE WHEN EXTRACT(YEAR FROM AGE(NOW(), pp.date_of_birth)) &gt;= 50 THEN 1 ELSE 0 END) AS age_50_plus
+                           FROM hts_client hc
+                           JOIN hiv_art_clinical hac
+                                ON hac.person_uuid = hc.person_uuid
+                               AND hac.is_commencement IS TRUE
+                           JOIN patient_person pp
+                                ON pp.uuid = hc.person_uuid
+                           JOIN fy ON TRUE
+                           WHERE hc.hiv_test_result = ''Positive''
+                             AND hc.date_visit &gt;= fy.start_date
+                             AND hc.date_visit &lt; fy.end_date
+                             AND hc.facility_id = ?facilityId
+                       )',
+                       null,
+                       null,
+                       null,
+                       null,
+                       null,
+                       'age_distribution',
+                       null,
+                       0,
+                       8
+                   );
         </sql>
     </changeSet>
 

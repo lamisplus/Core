@@ -32,6 +32,9 @@ public interface ChartRepository extends JpaRepository<Chart, String> {
     @Query(value = "SELECT * FROM chart WHERE location = ?1 ", nativeQuery = true)
     Set<Chart> getAllChartsByLocation(String location);
 
+    @Query(value = "SELECT * FROM chart WHERE location = ?1 AND module in (SELECT m.name FROM base_module m WHERE m.active = true) AND archived = 0", nativeQuery = true)
+    Set<Chart> getAllActiveChartsByLocation(String location);
+
     @Query(value = "SELECT query FROM chart WHERE indicator_name = ?1 ", nativeQuery = true)
     String getChartQuery(String indicatorName);
 

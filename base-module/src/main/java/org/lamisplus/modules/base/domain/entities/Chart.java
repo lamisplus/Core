@@ -107,6 +107,9 @@ public class Chart {
                 .lastModifiedBy(chartDTO.getLastModifiedBy())
                 .archived(chartDTO.getArchived())
                 .position(chartDTO.getPosition())
+                .xAxisField(chartDTO.getXAxisField())
+                .yAxisField(chartDTO.getYAxisField())
+                .seriesNameField(chartDTO.getSeriesNameField())
                 .build();
     }
 }

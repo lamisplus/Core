@@ -78,23 +78,18 @@ public class ChartController {
      * @return list of ChartValueDTO for dashboard display
      */
     @GetMapping("/dashboard/values")
-    public ResponseEntity<ChartValueDTO> getAllChartValuesForDashboard(
+    public ResponseEntity<ChartValueDTO<?>> getAllChartValuesForDashboard(
 //            @RequestParam("tableName") String tableName,
             @RequestParam("indicatorName") String indicatorName,
             @RequestParam("facilityId")Long facilityId) {
 
-        // Validate input parameters
-//        if (tableName == null || tableName.trim().isEmpty()) {
-//            return ResponseEntity.badRequest().build();
-//        }
 
         if (indicatorName == null || indicatorName.trim().isEmpty()) {
             return ResponseEntity.badRequest().build();
         }
 
         try {
-//            ChartValueDTO chartValue = chartService.getChartValueForDashboard(tableName, indicatorName, facilityId);
-            ChartValueDTO chartValue = chartService.getChartValueForDashboard(indicatorName, facilityId);
+            ChartValueDTO<?> chartValue = chartService.getChartValueForDashboard(indicatorName, facilityId);
 
             if (chartValue == null) {
                 return ResponseEntity.noContent().build();
@@ -162,12 +157,12 @@ public class ChartController {
      * Get chart data for visualization
      */
     @GetMapping("/dashboard/data")
-    public ResponseEntity<ChartValueDTO<ChartConfigDTO>> getChartData(
+    public ResponseEntity<ChartValueDTO<?>> getChartData(
             @RequestParam("indicatorName") String indicatorName,
             @RequestParam(value = "facilityId", required = false) Long facilityId) {
 
         try {
-            ChartValueDTO<ChartConfigDTO> chartData = chartService.getChartData(indicatorName, facilityId);
+            ChartValueDTO<?> chartData = chartService.getChartData(indicatorName, facilityId);
             return ResponseEntity.ok(chartData);
 
         } catch (IllegalArgumentException e) {

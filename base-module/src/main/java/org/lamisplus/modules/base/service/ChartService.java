@@ -21,8 +21,10 @@ import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Types;
 import java.util.*;
 import java.util.stream.Collectors;
 import org.springframework.cache.annotation.Cacheable;
@@ -63,7 +65,8 @@ public class ChartService {
      */
     @Cacheable("core")
     public List<ChartDTO> getIndicatorNameAndTypeByLocation(String location) {
-        return chartRepository.getAllChartsByLocation(location)
+//        return chartRepository.getAllChartsByLocation(location)
+        return chartRepository.getAllActiveChartsByLocation(location)
                 .stream().map(ChartDTO::fromEntity)
                 .collect(Collectors.toList());
     }
@@ -206,11 +209,11 @@ public class ChartService {
      * @param facilityId the id of the facility
      * @return list of ChartDTO containing indicator name and type
      */
-    @Cacheable("core")
+    // @Cacheable("core")
 //    public ChartValueDTO getChartValueForDashboard(String tableName, String indicatorName, Long facilityId) {
-    public ChartValueDTO getChartValueForDashboard(String indicatorName, Long facilityId) {
+    public ChartValueDTO<?> getChartValueForDashboard(String indicatorName, Long facilityId) {
 //        return getChartValue(indicatorName, getChartQuery(tableName, indicatorName).getQuery(), facilityId);
-        return getChartValue(indicatorName, chartRepository.getChartQuery(indicatorName), facilityId);
+        return getChartValue(indicatorName, facilityId);
     }
 
     /**
@@ -251,24 +254,28 @@ public class ChartService {
 
     /**
      * Get charts value by indicatorName and query
-     * @param query the table name
+     * @param facilityId the facility ID
      */
-    private ChartValueDTO getChartValue(String indicatorName, String query, Long facilityId) {
-        query = query.replace("?facilityId", facilityId.toString());
-        ChartValueDTO chartValueDTO = new ChartValueDTO();
+    private ChartValueDTO<?> getChartValue(String indicatorName, Long facilityId) {
+        Chart chart = chartRepository.findByIndicatorName(indicatorName);
+        if (chart == null) {
+            throw new IllegalArgumentException("Chart not found: " + indicatorName);
+        }
+
+        String processedQuery = chart.getQuery().replace("?facilityId", facilityId.toString());
+//        query = query.replace("?facilityId", facilityId.toString());
+        ChartValueDTO<?> chartValueDTO = new ChartValueDTO<>();
         Connection conn = null;
         try {
             conn = dataSource.getConnection();
             Statement stmt = conn.createStatement(java.sql.ResultSet.TYPE_FORWARD_ONLY,
                     java.sql.ResultSet.CONCUR_READ_ONLY);
-            ResultSet resultSet = stmt.executeQuery(query);
-            if (resultSet.next()) {
-                chartValueDTO = ChartValueDTO.builder()
-                        .value(resultSet.getString(1))
-                        .indicatorName(indicatorName)
-                        .build();
-                return chartValueDTO;
-            }
+            ResultSet resultSet = stmt.executeQuery(processedQuery);
+
+
+            chartValueDTO = processResultSet(resultSet, chart);
+
+            return chartValueDTO;
         } catch (SQLException e) {
             logSQLExceptions("SQL Exception while getting chartValueDTOS result set {}", e);
 
@@ -391,7 +398,7 @@ public class ChartService {
          * @param facilityId the facility ID for filtering
          * @return ChartDataDTO formatted for Highcharts
          */
-        public ChartValueDTO<ChartConfigDTO> getChartData(String indicatorName, Long facilityId) {
+        public ChartValueDTO<?> getChartData(String indicatorName, Long facilityId) {
 
             Chart chart = chartRepository.findByIndicatorName(indicatorName);
             if (chart == null) {
@@ -405,10 +412,10 @@ public class ChartService {
                  ResultSet resultSet = stmt.executeQuery(processedQuery)) {
 
                 // build chart config
-                ChartConfigDTO chartConfig = processResultSet(resultSet, chart);
+                ChartValueDTO<?> chartConfig = processResultSet(resultSet, chart);
 
                 // wrap in ChartValueDTO
-                return ChartValueDTO.<ChartConfigDTO>builder()
+                return ChartValueDTO.builder()
                         .indicatorName(chart.getIndicatorName())
                         .value(chartConfig)
                         .build();
@@ -421,36 +428,101 @@ public class ChartService {
 
 
 
-    private ChartConfigDTO processResultSet(ResultSet resultSet, Chart chart) throws SQLException {
+    private ChartValueDTO<?> processResultSet(ResultSet resultSet, Chart chart) throws SQLException {
         String chartType = chart.getType().toLowerCase();
         List<SeriesDTO> seriesList = new ArrayList<>();
         List<String> categories = new ArrayList<>();
         Object xAxis = null;
         Object yAxis = null;
+        Map<String, Object> yAxisTitleMap = new HashMap<>();
+        Map<String, Object> yAxisMap = new HashMap<>();
+        Map<String, Object> xAxisMap = new HashMap<>();
+        Map<String, Object> chartMap = new HashMap<>();
+        Map<String, Object> titleMap = new HashMap<>();
+
+        ChartConfigDTO chartConfigDTO;
 
         switch (chartType) {
             case "pie":
                 seriesList.add(processPieData(resultSet, chart));
-                break;
+                titleMap.put("text", chart.getDisplayName());
+                chartConfigDTO = ChartConfigDTO.builder()
+                        .chart(chartMap)
+                        .title(titleMap)
+                        .series(seriesList)
+                        .build();
+                chartMap.put("type", chartType);
 
+                return ChartValueDTO.builder()
+                        .value(chartConfigDTO)
+                        .indicatorName(chart.getIndicatorName())
+                        .build();
             case "column":
             case "bar":
                 CategoricalDataResult barResult = processBarColumnData(resultSet, chart);
                 seriesList.add(barResult.getSeries());
                 categories = barResult.getCategories();
-                break;
+
+                xAxisMap.put("categories", categories);
+                xAxis = xAxisMap;
+
+                yAxisTitleMap.put("text", getYAxisTitle(chart));
+
+                yAxisMap.put("title", yAxisTitleMap);
+                yAxis = yAxisMap;
+
+                chartMap.put("type", chartType);
+
+                titleMap.put("text", chart.getDisplayName());
+                chartConfigDTO = ChartConfigDTO.builder()
+                        .chart(chartMap)
+                        .title(titleMap)
+                        .xAxis(xAxisMap)
+                        .yAxis(yAxisMap)
+                        .series(seriesList)
+                        .build();
+
+                return ChartValueDTO.builder()
+                        .value(chartConfigDTO)
+                        .indicatorName(chart.getIndicatorName())
+                        .build();
 
             case "line":
                 TimeSeriesResult timeSeriesResult = processTimeSeriesData(resultSet, chart);
                 seriesList.addAll(timeSeriesResult.getSeriesList());
                 categories = timeSeriesResult.getCategories();
-                break;
+                yAxisTitleMap.put("text", getYAxisTitle(chart));
+                xAxisMap.put("categories", categories);
+                yAxisMap.put("title", yAxisTitleMap);
+                yAxis = yAxisMap;
+                xAxis = xAxisMap;
+
+                chartMap.put("type", chartType);
+
+                titleMap.put("text", chart.getDisplayName());
+                chartConfigDTO = ChartConfigDTO.builder()
+                        .chart(chartMap)
+                        .title(titleMap)
+                        .xAxis(xAxisMap)
+                        .yAxis(yAxisMap)
+                        .series(seriesList)
+                        .build();
+
+                return ChartValueDTO.builder()
+                        .value(chartConfigDTO)
+                        .indicatorName(chart.getIndicatorName())
+                        .build();
 
             case "card":
                 // Handle card type - single value display
-                SeriesDTO cardSeries = processCardData(resultSet, chart);
-                seriesList.add(cardSeries);
-                break;
+                Object value = processCardData(resultSet, chart);
+//                seriesList.add(cardSeries);
+                // chartvalueDto
+                return ChartValueDTO.builder()
+                        .value(value)
+                        .indicatorName(chart.getIndicatorName())
+                        .build();
+//                break;
 
 
             default:
@@ -458,41 +530,49 @@ public class ChartService {
         }
 
         // Build xAxis with categories for non-pie and non-card charts
-        if (!chartType.equals("pie") && !chartType.equals("card") && !categories.isEmpty()) {
-            Map<String, Object> xAxisMap = new HashMap<>();
-            xAxisMap.put("categories", categories);
-            xAxis = xAxisMap;
-        }
+//        if (!chartType.equals("pie") && !chartType.equals("card") && !categories.isEmpty()) {
+//            Map<String, Object> xAxisMap = new HashMap<>();
+//            xAxisMap.put("categories", categories);
+//            xAxis = xAxisMap;
+//        }
+//
+//
+//        if (!chartType.equals("pie") && !chartType.equals("card")) {
+//            Map<String, Object> yAxisTitleMap = new HashMap<>();
+//            yAxisTitleMap.put("text", getYAxisTitle(chart));
+//
+//            Map<String, Object> yAxisMap = new HashMap<>();
+//            yAxisMap.put("title", yAxisTitleMap);
+//            yAxis = yAxisMap;
+//        }
+//
+//        Map<String, Object> chartMap = new HashMap<>();
+//        if (!chartType.equals("card")) {
+//            chartMap.put("type", chartType);
+//        } else {
+//
+//            chartMap.put("type", null);
+//        }
+//
+//        // Build title map
+//        Map<String, Object> titleMap = new HashMap<>();
+//        titleMap.put("text", chart.getDisplayName());
 
-
-        if (!chartType.equals("pie") && !chartType.equals("card")) {
-            Map<String, Object> yAxisTitleMap = new HashMap<>();
-            yAxisTitleMap.put("text", getYAxisTitle(chart));
-
-            Map<String, Object> yAxisMap = new HashMap<>();
-            yAxisMap.put("title", yAxisTitleMap);
-            yAxis = yAxisMap;
-        }
-
-        Map<String, Object> chartMap = new HashMap<>();
-        if (!chartType.equals("card")) {
-            chartMap.put("type", chartType);
-        } else {
-
-            chartMap.put("type", null);
-        }
-
-        // Build title map
-        Map<String, Object> titleMap = new HashMap<>();
-        titleMap.put("text", chart.getDisplayName());
-
-        return ChartConfigDTO.builder()
-                .chart(chartMap)
-                .title(titleMap)
-                .xAxis(xAxis)
-                .yAxis(yAxis)
-                .series(seriesList)
-                .build();
+//        ChartValueDTO<?> chartValueDTO = new ChartValueDTO<>();
+//        chartValueDTO.setIndicatorName(chart.getIndicatorName());
+//
+//        chartConfigDTO = ChartConfigDTO.builder()
+//                .chart(chartMap)
+//                .title(titleMap)
+//                .xAxis(xAxis)
+//                .yAxis(yAxis)
+//                .series(seriesList)
+//                .build();
+//
+//        return ChartValueDTO.builder()
+//                        .value(chartConfigDTO)
+//                        .indicatorName(chart.getIndicatorName())
+//                        .build();
     }
 
     private String getYAxisTitle(Chart chart) {
@@ -550,40 +630,104 @@ public class ChartService {
     /**
      * Process data for time series charts (line)
      */
+//    private TimeSeriesResult processTimeSeriesData(ResultSet resultSet, Chart chart) throws SQLException {
+//        Map<String, List<Object>> seriesDataMap = new HashMap<>();
+//        Set<String> categories = new LinkedHashSet<>();
+//
+//        while (resultSet.next()) {
+//            String category = resultSet.getString(chart.getXAxisField());
+//            Number value = resultSet.getBigDecimal(chart.getYAxisField());
+//            String seriesName = chart.getSeriesNameField() != null ?
+//                    resultSet.getString(chart.getSeriesNameField()) : chart.getIndicatorName();
+//
+//            categories.add(category);
+//
+//            if (!seriesDataMap.containsKey(seriesName)) {
+//                seriesDataMap.put(seriesName, new ArrayList<>());
+//            }
+//            seriesDataMap.get(seriesName).add(value);
+//        }
+//
+//        List<SeriesDTO> seriesList = new ArrayList<>();
+//        for (Map.Entry<String, List<Object>> entry : seriesDataMap.entrySet()) {
+//            seriesList.add(SeriesDTO.builder()
+//                    .name(entry.getKey())
+//                    .data(entry.getValue())
+//                    .build());
+//        }
+//
+//        return new TimeSeriesResult(seriesList, new ArrayList<>(categories));
+//    }
+
     private TimeSeriesResult processTimeSeriesData(ResultSet resultSet, Chart chart) throws SQLException {
-        Map<String, List<Object>> seriesDataMap = new HashMap<>();
-        Set<String> categories = new LinkedHashSet<>();
+        List<String> categories = new ArrayList<>();
+        Map<String, List<Object>> seriesDataMap = new LinkedHashMap<>();
+
+        ResultSetMetaData metaData = resultSet.getMetaData();
+        int columnCount = metaData.getColumnCount();
+
+        // X-axis column (e.g. year, date_created, processing_date, etc.)
+        String xAxisField = chart.getXAxisField();
+
+        // Detect numeric columns (exclude xAxis + non-numeric fields)
+        List<String> seriesColumns = new ArrayList<>();
+        for (int i = 1; i <= columnCount; i++) {
+            String colName = metaData.getColumnLabel(i);
+            int colType = metaData.getColumnType(i);
+
+            if (!colName.equalsIgnoreCase(xAxisField) && isNumericType(colType)) {
+                seriesColumns.add(colName);
+                seriesDataMap.put(colName, new ArrayList<>());
+            }
+        }
 
         while (resultSet.next()) {
-            String category = resultSet.getString(chart.getXAxisField());
-            Number value = resultSet.getBigDecimal(chart.getYAxisField());
-            String seriesName = chart.getSeriesNameField() != null ?
-                    resultSet.getString(chart.getSeriesNameField()) : chart.getIndicatorName();
-
+            String category = resultSet.getString(xAxisField);
             categories.add(category);
 
-            if (!seriesDataMap.containsKey(seriesName)) {
-                seriesDataMap.put(seriesName, new ArrayList<>());
+            for (String col : seriesColumns) {
+                Number value = resultSet.getBigDecimal(col);
+                seriesDataMap.get(col).add(value != null ? value : 0);
             }
-            seriesDataMap.get(seriesName).add(value);
         }
 
         List<SeriesDTO> seriesList = new ArrayList<>();
         for (Map.Entry<String, List<Object>> entry : seriesDataMap.entrySet()) {
             seriesList.add(SeriesDTO.builder()
-                    .name(entry.getKey())
+                    .name(capitalize(entry.getKey()))
                     .data(entry.getValue())
                     .build());
         }
 
-        return new TimeSeriesResult(seriesList, new ArrayList<>(categories));
+        return new TimeSeriesResult(seriesList, categories);
     }
 
+    private boolean isNumericType(int sqlType) {
+        switch (sqlType) {
+            case Types.INTEGER:
+            case Types.BIGINT:
+            case Types.DECIMAL:
+            case Types.DOUBLE:
+            case Types.FLOAT:
+            case Types.NUMERIC:
+            case Types.REAL:
+            case Types.SMALLINT:
+            case Types.TINYINT:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    private String capitalize(String str) {
+        if (str == null || str.isEmpty()) return str;
+        return str.substring(0, 1).toUpperCase() + str.substring(1).toLowerCase();
+    }
 
     /**
      * Process data for card charts (single value display)
      */
-    private SeriesDTO processCardData(ResultSet resultSet, Chart chart) throws SQLException {
+    private Object processCardData(ResultSet resultSet, Chart chart) throws SQLException {
         Object value = null;
 
         if (resultSet.next()) {
@@ -599,10 +743,11 @@ public class ChartService {
             value = 0; // or "N/A" or whatever default you prefer
         }
 
-        return SeriesDTO.builder()
-                .name(chart.getIndicatorName())
-                .data(value)
-                .build();
+//        return SeriesDTO.builder()
+//                .name(chart.getIndicatorName())
+//                .data(value)
+//                .build();
+        return value;
     }
 
 

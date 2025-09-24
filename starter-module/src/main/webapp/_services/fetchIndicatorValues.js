@@ -5,7 +5,7 @@ import { token, url } from "../api";
 
 export const fetchIndicatorValues = async (indicator, currentOrganisationUnitId) => {
     const { data } = await axios.get(
-        `${url}charts/dashboard/data?indicatorName=${indicator.indicatorName}&facilityId=${currentOrganisationUnitId}`,
+        `${url}charts/dashboard/values?indicatorName=${indicator.indicatorName}&facilityId=${currentOrganisationUnitId}`,
         {
             headers: { Authorization: `Bearer ${token}` },
         }

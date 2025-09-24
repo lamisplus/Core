@@ -11,13 +11,12 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.lamisplus.modules.base.controller.apierror.EntityNotFoundException;
 import org.lamisplus.modules.base.domain.entities.*;
-import org.lamisplus.modules.base.domain.entities.Module.Type;
 import org.lamisplus.modules.base.domain.repositories.MenuRepository;
 import org.lamisplus.modules.base.domain.repositories.ModuleArtifactRepository;
 import org.lamisplus.modules.base.domain.repositories.ModuleDependencyRepository;
 import org.lamisplus.modules.base.domain.repositories.ModuleRepository;
+import org.lamisplus.modules.base.domain.repositories.PermissionRepository;
 import org.lamisplus.modules.base.util.UnsatisfiedDependencyException;
-import org.lamisplus.modules.base.yml.ConfigSchemaValidator;
 import org.lamisplus.modules.base.yml.ModuleConfig;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,6 +44,7 @@ import static org.lamisplus.modules.base.util.Constants.ArchiveStatus.ARCHIVED;
 public class ModuleService {
     private final ModuleManager moduleManager;
     private final ModuleRepository moduleRepository;
+    private final PermissionRepository permissionRepository;
     private final MenuRepository menuRepository;
     private final ModuleArtifactRepository moduleArtifactRepository;
     private final ModuleDependencyRepository moduleDependencyRepository;
@@ -223,10 +223,49 @@ public class ModuleService {
             module.setUmdLocation(config.getUmdLocation());
             module.setBasePackage(config.getBasePackage());
             if(config.getGitHubLink() != null) module.setGitHubLink(config.getGitHubLink());
-            module.setPermissions(config.getPermissions()
-                    .stream()
-                    .map(permission -> {permission.setModuleName(config.getName()); return permission;})
-                            .collect(Collectors.toSet()));
+
+            List<Permission> permsToPersist = config.getPermissions().stream()
+                            .map(permission -> {
+
+                                Permission foundPerm = permissionRepository.findByName(permission.getName())
+                                        .orElse(null);
+                                if (foundPerm != null) {
+                                    return foundPerm;
+                                } else {
+                                    foundPerm = permission;
+                                    foundPerm.setId(null);
+                                    foundPerm.setModuleName(null);
+                                    return foundPerm;
+                                }
+                            }).collect(Collectors.toList());
+
+            Set<Permission> permissions = permissionRepository.saveAll(permsToPersist).stream().map(perm -> {
+                perm.setModuleName(config.getName());
+                return perm;
+            }).collect(Collectors.toSet());
+
+            module.setPermissions(permissions);
+
+//            module.setPermissions(config.getPermissions()
+//                    .stream()
+//                    .map(permission -> {
+//                        // find the perm, if found, update it, if not found create it
+//
+//                        Permission foundPerm = permissionRepository.findByName(permission.getName())
+//                                        .orElse(null);
+//                        if (foundPerm != null) {
+//                            foundPerm.setModuleName(config.getName());
+//                            LOG.info("Perm found: {}", foundPerm.toString());
+//                            return foundPerm;
+//                        } else {
+//                            foundPerm = permission;
+//                            foundPerm.setModuleName(config.getName());
+//                            LOG.info("Perm not found: {}", foundPerm.toString());
+//                            return foundPerm;
+//                        }
+////                        permission.setModuleName(config.getName()); return permission;
+//                    })
+//                            .collect(Collectors.toSet()));
             module.setPriority(config.getPriority());
             if(!config.getDependencies().isEmpty()){
                 config.getDependencies().forEach((k, v)->{
