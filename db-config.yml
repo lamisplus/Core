@@ -56,17 +56,18 @@ server:
     port: 9090
 
 
+
 cache:
-    names: core,module,server_sync
+    names: core,module,server_sync,user   # The cache regions/names
     heap:
-        size: 100
+        size: 100                         # Heap size (number of entries)
     off-heap:
-        size: 50
-        unit: MB
+        size: 50                          # Off-heap storage size
+        unit: MB                          # Unit is MB
     expiry:
-        ttl:
+        ttl:                              # Time-to-live (absolute expiration)
             minutes: 1
-        idle:
+        idle:                             # Time-to-idle (inactive expiration)
             minutes: 1
 
     
