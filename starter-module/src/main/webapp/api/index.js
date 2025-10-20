@@ -1,7 +1,12 @@
 export const url =
 process.env.NODE_ENV === "development"
-? "http://localhost:9090/api/v1/"
+? "http://localhost:8383/api/v1/"
 : "/api/v1/";
+
+export const wsUrl =
+  process.env.NODE_ENV === "development"
+    ? "http://localhost:8383/websocket"
+    : "/websocket";
 
 export const token =
   process.env.NODE_ENV === "development"
