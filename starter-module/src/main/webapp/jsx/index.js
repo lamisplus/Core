@@ -54,6 +54,7 @@ import AddFacility from "./components/FaciltyConfig/AddFacility";
 import FacilitySetup from "./pages/FacilitySetup";
 import WebLog from "./components/weblog/WebLog";
 import Unauthorised from "./components/utils/UnauthorisedPage";
+import ChartConfigPage from "./components/ChartConfig/ChartConfigPage";
 
 const Markup = () => {
   const [user, setUser] = useState(null);
@@ -100,6 +101,7 @@ const Markup = () => {
     { url: "biometrics", component: BiometricList },
     { url: "facility", component: FacilitiesList },
     { url: "facility-config", component: AddFacility },
+    { url: "chart-config", component: ChartConfigPage },
     { url: "weblog", component: WebLog },
     { url: "unauthorised", component: Unauthorised },
   ];
@@ -153,9 +155,8 @@ const Markup = () => {
             <>
               <div
                 id={`${!pagePath ? "main-wrapper" : ""}`}
-                className={`${!pagePath ? "show" : "mh100vh"}  ${
-                  menuToggle ? "menu-toggle" : ""
-                }`}
+                className={`${!pagePath ? "show" : "mh100vh"}  ${menuToggle ? "menu-toggle" : ""
+                  }`}
               >
                 {!pagePath && <Nav />}
 

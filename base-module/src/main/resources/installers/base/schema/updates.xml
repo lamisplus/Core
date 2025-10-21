@@ -720,7 +720,7 @@
         </preConditions>
         <sql>
             INSERT INTO public.base_role(id, name, code, date_created, created_by, date_modified, modified_by, archived)
-            VALUES ((SELECT MAX(id) + 1 FROM base_role WHERE archived = 0), 'RDE', gen_random_uuid(), NOW(), 'Joshua Gabriel', NOW(), 'Joshua Gabriel', 0);
+            VALUES ((SELECT MAX(id) + 1 FROM base_role), 'RDE', gen_random_uuid(), NOW(), 'Joshua Gabriel', NOW(), 'Joshua Gabriel', 0);
 
             INSERT INTO public.base_role_permission (role_id, permission_id)
             SELECT r.id, p.id
@@ -732,7 +732,21 @@
             SELECT r.id, m.id
             FROM base_role r
             JOIN base_menu m ON m.archived = 0
-            WHERE r.name = 'RDE';
+            WHERE r.name = 'RDE' AND m.name NOT IN ('TriageModule', 'LaboratoryModule', 'Check-in Setting', 'Consultation', 'Pharmacy');
+        </sql>
+    </changeSet>
+
+    <changeSet failOnError="true" id="20251116170000" author="tyav barnabas">
+        <preConditions onFail="MARK_RAN">
+                <sqlCheck expectedResult="0">
+                    SELECT COUNT(*) FROM public.base_menu WHERE UUID ='44b1c981-312d-461a-999a-5b2cc6fe0ab0';
+                </sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO public.base_menu(
+                name, state, type, level, "position", icon, code, uuid, tooltip, breadcrumb, disabled, module_id, parent_id, archived, url)
+            VALUES ('Chart Config', '', '', '', 1, '', '', '44b1c981-312d-461a-999a-5b2cc6fe0ab0', 'Chart Configuration', '', false, null, 15, 0, 'chart');
+
         </sql>
     </changeSet>
 

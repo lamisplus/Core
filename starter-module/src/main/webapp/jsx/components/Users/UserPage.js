@@ -5,12 +5,9 @@ import { Card, CardContent } from "@material-ui/core";
 import {  FaUserPlus } from "react-icons/fa";
 import { makeStyles } from "@material-ui/core/styles";
 import UserList from "./UserList";
-//import FilteringTable from "./FilteringTable/FilteringTable"
 import PageTitle from "./../../layouts/PageTitle";
-//import UiModal from "./modaltest"
 import { ToastContainer} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import CancelIcon from "@material-ui/icons/Cancel";
 
 const useStyles = makeStyles((theme) => ({
   card: {

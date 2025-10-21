@@ -1,44 +1,26 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
-import { url as baseUrl, url, token } from "../../../api";
-import axios from "axios";
 
-const Pie = ({ plotData, title, seriesName }) => {
-  const options = {
-    chart: {
-      type: "pie",
-    },
-    title: {
-      text: title,
-    },
-    plotOptions: {
-      pie: {
-        dataLabels: {
-          style: {
-            fontSize: "14px",
-          },
-        },
-      },
-    },
-    legend: {
-      itemStyle: {
-        fontSize: "14px",
-      },
-    },
-    series: [
-      {
-        name: seriesName,
-        data: plotData,
-      },
-    ],
-  };
+const Pie = ({ chartData }) => {
+
+  if (!chartData || !chartData.series) {
+    return (
+      <div style={{ padding: '20px', color: '#6c757d', textAlign: 'center' }}>
+        Invalid chart data
+      </div>
+    );
+  }
+
 
   return (
     <div>
-      <HighchartsReact highcharts={Highcharts} options={options} />
+      <HighchartsReact highcharts={Highcharts} options={chartData} />
     </div>
   );
 };
 
 export default Pie;
+
+
+

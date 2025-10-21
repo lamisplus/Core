@@ -362,4 +362,20 @@ public class ModuleService {
         moduleName = "%"+moduleName+"%";
         return moduleRepository.findLikeByMenu(moduleName).isPresent();
     }
+
+    /**
+     * Get all module names
+     * @return List of module names
+     */
+    public List<String> getAllModuleNames() {
+        return moduleRepository.findAllModuleNames();
+    }
+
+    /**
+     * Get only active module names
+     * @return List of active module names
+     */
+    public List<String> getActiveModuleNames() {
+        return moduleRepository.findActiveModuleNames();
+    }
 }

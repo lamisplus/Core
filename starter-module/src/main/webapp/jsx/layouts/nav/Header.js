@@ -37,6 +37,7 @@ import {
 import ServerInstalled from "../../Utils/ServerInstalled";
 import { FaBell } from "react-icons/fa";
 import { systemSettingsHelper } from "../../../_services/SystemSettingsHelper";
+import ChatModal from "../../components/chatBroadcast/ChatModal";
 
 
 
@@ -385,10 +386,7 @@ const Header = (props) => {
                                         </svg>
                                         <span className="ms-2">Account </span>
                                     </Link>
-
-
-
-
+                                    
                                     <React.Fragment>
                                         <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center',marginLeft:'5px' }}>
                                             {/* <Tooltip title="Account settings"> */}
@@ -451,21 +449,6 @@ const Header = (props) => {
                                         </Menu>
                                     </React.Fragment>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                                     <LogoutPage />
                                 </Dropdown.Menu>
                             </Dropdown>
@@ -474,7 +457,7 @@ const Header = (props) => {
                 </nav>
             </div >
             {/* <AssignFacilityModal showModal={assignFacilityModal} toggleModal={() => setAssignFacilityModal(!assignFacilityModal)} user={user}/> */}
-
+        {currentUser && <ChatModal username={currentUser.name} />}
         </div >
     );
 };

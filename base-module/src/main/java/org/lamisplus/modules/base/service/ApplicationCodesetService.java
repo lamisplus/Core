@@ -341,7 +341,8 @@ public class ApplicationCodesetService {
     @Cacheable(value = "codeSets", key = "#group")
     public List<CodeSetDTO> getCodeSetByGroup(String group) {
         List<ApplicationCodeSet> entities = applicationCodesetRepository.findByCodesetGroup(group)
-                .stream().filter(distinctByKey(ApplicationCodeSet::getDisplay))
+                .stream()
+                .filter(distinctByKey(ApplicationCodeSet::getDisplay))
                 .collect(Collectors.toList());
         List<CodeSetDTO> result = new ArrayList<>();
 

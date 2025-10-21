@@ -1,10 +1,14 @@
-//Online Server
-//export const url =  'http://www.lamisplus.org/base-module/api/';
+export const url =
+process.env.NODE_ENV === "development"
+? "http://localhost:8383/api/v1/"
+: "/api/v1/";
 
-//Local Server
-// export const url = "http://localhost:9091/api/v1/";
-// export const token =
-// "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBYmlvZHVuQFBldGVyIiwiYXV0aCI6IlN1cGVyIEFkbWluLE92ZXJhbGwgQWRtaW4iLCJuYW1lIjoiUGV0ZXIgQWJpb2R1biIsImV4cCI6MTc1MzgxMTAzM30.xDsYzdeuaq8UkdrWddQLowmH-SFcgRBJJlw-43o1LTXUkA7ttu5MPexIUd9Bj1zO1GtzDODHFMfqFwFsmxHhig";
+export const wsUrl =
+  process.env.NODE_ENV === "development"
+    ? "http://localhost:8383/websocket"
+    : "/websocket";
 
-export const token = new URLSearchParams(window.location.search).get("jwt");
-export const url = "/api/v1/";
+export const token =
+  process.env.NODE_ENV === "development"
+    ? "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJndWVzdEBsYW1pc3BsdXMub3JnIiwiYXV0aCI6IlN1cGVyIEFkbWluLEZhY2lsaXR5IEFkbWluLERhdGEgQ2xlcmssT25seUFkbWluUmVhZCxIYXNCb3RoQWRtaW5SZWFkQW5kV3JpdGUsVXNlcixSb2xlIFNhbXBsZSIsIm5hbWUiOiJHdWVzdCBHdWVzdCIsImV4cCI6MTc1NzU1MTExM30.M-vFcVnwzrs-NdZ77slfFoR3OkiBKfMP026t07CU8E5Ioay6PAR8tT-XkzES6-00gJsjpvCiizLKFf8b_khN7A"
+    : new URLSearchParams(window.location.search).get("jwt");
