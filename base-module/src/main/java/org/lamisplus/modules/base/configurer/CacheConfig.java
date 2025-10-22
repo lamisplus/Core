@@ -25,22 +25,22 @@ import java.util.Map;
 @Configuration
 @EnableCaching
 public class CacheConfig {
-    @Value("${cache.names}")
+    @Value("${cache.names:core,module,server_sync,user}")
     private List<String> cacheNames;
 
-    @Value("${cache.heap.size}")
+    @Value("${cache.heap.size:100}")
     private int heapSize;
 
-    @Value("${cache.offheap.size}")
+    @Value("${cache.offheap.size:50}")
     private int offheapSize;
 
-    @Value("${cache.offheap.unit}")
+    @Value("${cache.offheap.unit:MB}")
     private String offheapUnit;
 
-    @Value("${cache.expiry.ttl.minutes}")
+    @Value("${cache.expiry.ttl.minutes:1}")
     private int ttlMinutes;
 
-    @Value("${cache.expiry.idle.minutes}")
+    @Value("${cache.expiry.idle.minutes:1}")
     private int idleMinutes;
 
     @Bean

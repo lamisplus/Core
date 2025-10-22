@@ -43,20 +43,6 @@ public class ChartService {
     private final UserService userService;
     private final ObjectMapper objectMapper;
 
-//    /**
-//     * Get indicator names and types by location
-//     * @param location the location to filter by
-//     * @return list of ChartDTO containing indicator name and type
-//     */
-//    @Cacheable("core")
-//    public List<ChartDTO> getIndicatorNameAndTypeByLocation(String location) {
-//        Set<ChartDTO> chartDTOSet = new HashSet<>();
-//        for(String moduleName : moduleService.getActiveModuleNames()) {
-//            Set<ChartDTO> allCharts = getAllChart(moduleName.toLowerCase() + "_chart", location);
-//            chartDTOSet.addAll(allCharts);
-//        }
-//        return new ArrayList<>(chartDTOSet);
-//    }
 
     /**
      * Get indicator names and types by location
@@ -67,7 +53,7 @@ public class ChartService {
     public List<ChartDTO> getIndicatorNameAndTypeByLocation(String location) {
 //        return chartRepository.getAllChartsByLocation(location)
         return chartRepository.getAllActiveChartsByLocation(location)
-                .stream().map(ChartDTO::fromEntity)
+                .stream().map(ChartDTO::fromEntitySafe)
                 .collect(Collectors.toList());
     }
 
@@ -257,7 +243,7 @@ public class ChartService {
      * @param facilityId the facility ID
      */
     private ChartValueDTO<?> getChartValue(String indicatorName, Long facilityId) {
-        Chart chart = chartRepository.findByIndicatorName(indicatorName);
+        Chart chart = chartRepository.findByIndicatorName(indicatorName).orElse(null);
         if (chart == null) {
             throw new IllegalArgumentException("Chart not found: " + indicatorName);
         }
@@ -400,7 +386,7 @@ public class ChartService {
          */
         public ChartValueDTO<?> getChartData(String indicatorName, Long facilityId) {
 
-            Chart chart = chartRepository.findByIndicatorName(indicatorName);
+            Chart chart = chartRepository.findByIndicatorName(indicatorName).orElse(null);
             if (chart == null) {
                 throw new IllegalArgumentException("Chart not found: " + indicatorName);
             }
