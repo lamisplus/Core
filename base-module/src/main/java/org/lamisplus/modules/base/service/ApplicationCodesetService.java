@@ -338,7 +338,7 @@ public class ApplicationCodesetService {
                 .collect(Collectors.toList());
     }
 
-    @Cacheable(value = "codeSets", key = "#group")
+    //@Cacheable(value = "codeSets", key = "#group")
     public List<CodeSetDTO> getCodeSetByGroup(String group) {
         List<ApplicationCodeSet> entities = applicationCodesetRepository.findByCodesetGroup(group)
                 .stream()

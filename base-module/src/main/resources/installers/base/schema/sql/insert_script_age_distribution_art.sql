@@ -1,6 +1,6 @@
 INSERT INTO public.chart(
     id, indicator_name, display_name, description, location, position, type, icon, query, created_date, created_by, last_modified_date, last_modified_by, archived, x_axis_field, y_axis_field, series_name_field, module
-) VALUES ('93ac4f85-2dce-498e-8536-1e5bf4d943b4', 'AGE_DISTRIBUTION_POSITIVE_ART', 'Age Distribution Positive On ART', 'Age Distribution Positive On ART', 'core', 0,'column', 'fa-heartbeat',
+) VALUES ('93ac4f85-2dce-498e-8536-1e5bf4d943b4', 'AGE_DISTRIBUTION_POSITIVE_ART', 'Age Distribution Positive On ART for a fiscal year', 'Age Distribution Positive On ART', 'core', 0,'column', 'fa-heartbeat',
           'WITH fy AS (
   SELECT
     CASE
@@ -130,3 +130,5 @@ WHERE hc.hiv_test_result = ''Positive''
   AND hc.date_visit >= fy.start_date
   AND hc.date_visit < fy.end_date
   AND hc.facility_id = ?facilityId', '2025-07-30 14:24:28.86492', 'Schema', '2025-07-30 14:24:28.86492', 'Schema', 0, 'age_distribution', 'count', null, 'HivModule');
+
+

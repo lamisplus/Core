@@ -49,7 +49,7 @@ public class ChartService {
      * @param location the location to filter by
      * @return list of ChartDTO containing indicator name and type
      */
-    @Cacheable("core")
+    //@Cacheable("core")
     public List<ChartDTO> getIndicatorNameAndTypeByLocation(String location) {
 //        return chartRepository.getAllChartsByLocation(location)
         return chartRepository.getAllActiveChartsByLocation(location)
