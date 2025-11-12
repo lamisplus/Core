@@ -38,7 +38,7 @@ public class UserController {
         return ResponseEntity.ok(userRepository.findById(id).map(UserDTO::new).get());
     }
 
-    @CacheEvict(value = "user")
+    //@CacheEvict(value = "user")
     @PostMapping(BASE_URL_VERSION_ONE + "/{id}/roles")
     @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete', 'all_permission')")
     public ResponseEntity<Object[]> updateRoles(@Valid @RequestBody List<Role> roles, @PathVariable Long id) throws Exception {
@@ -72,7 +72,7 @@ public class UserController {
         return  allPrincipals.size();
     }
 
-    @CacheEvict(value = "user")
+    //@CacheEvict(value = "user")
     @PostMapping(BASE_URL_VERSION_ONE)
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete', 'all_permission')")
@@ -81,7 +81,7 @@ public class UserController {
         return userService.save(managedUserVM, managedUserVM.getPassword()).getId();
     }
 
-    @CacheEvict(value = "user")
+    //@CacheEvict(value = "user")
     @PutMapping(BASE_URL_VERSION_ONE + "/{id}")
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete', 'user','all_permission')")
@@ -89,7 +89,7 @@ public class UserController {
         userService.update(id, managedUserVM, managedUserVM.getPassword());
     }
 
-    @CacheEvict(value = "user")
+    //@CacheEvict(value = "user")
     @DeleteMapping(BASE_URL_VERSION_ONE + "/{id}")
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete','all_permission')")

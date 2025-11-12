@@ -785,7 +785,7 @@
         <sql>
             CREATE TABLE IF NOT EXISTS chart
             (
-                id uuid DEFAULT uuid_generate_v4(),
+                id uuid,
                 indicator_name character varying(255) ,
                 display_name character varying(255),
                 description character varying(255),
@@ -859,6 +859,7 @@
                  stripComments="true"/>
     </changeSet>
 
+
     <changeSet failOnError="true" id="20251002111300" author="Peter Abiodun">
         <sql>
             INSERT INTO public.base_application_user_role (user_id, role_id)
@@ -875,5 +876,28 @@
               );
         </sql>
     </changeSet>
+
+    <changeSet failOnError="true" id="20251109111300" author="Joshua Gabriel">
+        <sql>
+            INSERT INTO base_application_user_role (user_id, role_id)
+            SELECT id, (SELECT id from base_role where name = 'RDE')
+            FROM base_application_user bau
+            WHERE bau.archived = 0
+              AND NOT EXISTS (
+            SELECT 1
+            FROM base_application_user_role r
+            WHERE r.user_id = bau.id AND r.role_id = (SELECT id from base_role where name = 'RDE')
+            );
+        </sql>
+    </changeSet>
+
+    <changeSet failOnError="true" author="tyav barnabas" id="200509301945">
+        <sqlFile dbms="postgresql"
+                 path="sql/insert_script_for_dashboard_charts.sql"
+                 relativeToChangelogFile="true"
+                 splitStatements="false"
+                 stripComments="true"/>
+    </changeSet>
+
 
 </databaseChangeLog>

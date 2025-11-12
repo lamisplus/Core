@@ -119,28 +119,28 @@ public class ModuleController {
         return moduleService.deactivate(module);
     }
 
-    @CacheEvict(value = "module")
+    //@CacheEvict(value = "module")
     @PostMapping(BASE_URL_VERSION_ONE+"/modules/uninstall")
     @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete', 'all_permission')")
     public ModuleResponse shutdownModule(@RequestBody Module module, Boolean uninstall) {
         return moduleService.uninstall(module, uninstall);
     }
 
-    @CacheEvict(value = "module")
+    //@CacheEvict(value = "module")
     @PostMapping(BASE_URL_VERSION_ONE+"/modules/update")
     @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete', 'all_permission')")
     public ModuleResponse updateModule(@RequestBody Module module) {
         return moduleService.update(module, false);
     }
 
-    @CacheEvict(value = "module")
+    //@CacheEvict(value = "module")
     @PostMapping(BASE_URL_VERSION_ONE+"/modules/upload")
     @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete', 'all_permission')")
     public Module uploadModuleData(@RequestParam("file") MultipartFile file) {
         return moduleService.uploadModuleData(file);
     }
 
-    @CacheEvict(value = "module")
+    //@CacheEvict(value = "module")
     @PostMapping(BASE_URL_VERSION_ONE+ "/modules/install")
     @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete', 'all_permission')")
     public ModuleResponse installModule(final @RequestBody Module module, @RequestParam Boolean install) {
@@ -255,7 +255,7 @@ public class ModuleController {
         return menuItems.stream().distinct().collect(Collectors.toList());
     }
 
-    @Cacheable(value = "module")
+    //@Cacheable(value = "module")
     @GetMapping(BASE_URL_VERSION_ONE + "/modules/installed")
     @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete','user', 'all_permission')")
     //@Cacheable(cacheNames = "modules")
@@ -291,7 +291,7 @@ public class ModuleController {
      * Get all module names
      * @return List of module names
      */
-    @Cacheable(value = "module")
+    //@Cacheable(value = "module")
     @GetMapping("/names")
     public ResponseEntity<List<String>> getModuleNames() {
         List<String> moduleNames = moduleService.getAllModuleNames();
@@ -302,7 +302,7 @@ public class ModuleController {
      * Get only active module names
      * @return List of active module names
      */
-    @Cacheable(value = "module")
+    //@Cacheable(value = "module")
     @GetMapping("/names/active")
     public ResponseEntity<List<String>> getActiveModuleNames() {
         List<String> activeModuleNames = moduleService.getActiveModuleNames();
