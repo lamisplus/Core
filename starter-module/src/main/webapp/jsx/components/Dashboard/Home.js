@@ -196,18 +196,28 @@ const IndicatorCard = ({ indicator }) => (
       height: "100px",
       margin: "1rem",
       borderRadius: "0.75rem",
+        color: "rgb(51,51,51)",
+        fill:"rgb(51,51,51)"
     }}
   >
     <div className="card-header border-1 pb-0 d-flex justify-content-between align-items-center">
       <div>
-        <h2 className="font-w700 mb-0">{indicator.data}</h2>
+        <h2 className="font-w700 mb-0" style={{
+            color: "rgb(51,51,51)",
+            fill:"rgb(51,51,51)"
+
+        }}>{indicator.data}</h2>
       </div>
       <div>
-        <i style={{ color: "#3d4465" }} className={`fa-solid ${indicator.icon} fa-2x`}></i>
+        <i style={{color: "rgb(51,51,51)",
+            fill:"rgb(51,51,51)"
+        }} className={`fa-solid ${indicator.icon} fa-2x`}></i>
       </div>
     </div>
     <div className="card-body pt-0 chart-body-wrapper">
-      <h5 className="mt-2">{indicator.displayName}</h5>
+      <h5 className="mt-2" style={{fontSize: "18px", fontWeight: 300, color: "rgb(51,51,51)",
+          fill:"rgb(51,51,51)"
+      }}>{indicator.displayName}</h5>
     </div>
   </div>
 );
