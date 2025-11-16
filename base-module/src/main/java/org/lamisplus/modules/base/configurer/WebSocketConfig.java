@@ -19,12 +19,15 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registry.addEndpoint("/websocket")
                 .setAllowedOrigins("*")
                 .withSockJS();
+        registry.addEndpoint("/websocket-chat")
+                .setAllowedOrigins("*")
+                .withSockJS();
     }
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
         config.setApplicationDestinationPrefixes("/app");
-        config.enableSimpleBroker("/topic");
+        config.enableSimpleBroker("/topic", "specific");
     }
 }
 
