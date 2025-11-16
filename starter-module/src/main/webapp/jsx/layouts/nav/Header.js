@@ -37,6 +37,7 @@ import {
 import ServerInstalled from "../../Utils/ServerInstalled";
 import { FaBell } from "react-icons/fa";
 import { systemSettingsHelper } from "../../../_services/SystemSettingsHelper";
+import ChatModal from "../../components/chatBroadcast/ChatModal";
 
 
 
@@ -65,15 +66,15 @@ const Header = (props) => {
 
     useEffect(async ()=> {
         if (instance !== null && instance !== undefined) {
-          const serverInstance = instance.value === "1"
-          setIsServerInstance(serverInstance)
+            const serverInstance = instance.value === "1"
+            setIsServerInstance(serverInstance)
         } else {
             await systemSettingsHelper.fetchAllSystemSettings()
             const newInstance = systemSettingsHelper.getSingleSystemSetting("instance")
             const newServerInstance = newInstance.value === "1"
             setIsServerInstance(newServerInstance)
-          }
-      },[instance])
+        }
+    },[instance])
 
     useEffect(() => {
         if(isAuthorised) {
@@ -145,11 +146,11 @@ const Header = (props) => {
 
         }
         const onError = () => {
-            // setLoading(false)     
+            // setLoading(false)
         }
         await dispatch(fetchAllBootstrapModule(onSuccess, onError));
     }
-    
+
     useEffect(() => {
         if(isAuthorised && isServerInstance === false) {
             const intervalId = setInterval(() => {
@@ -159,10 +160,10 @@ const Header = (props) => {
             }, 30 * 60 * 1000); // 30 seconds in milliseconds
 
             return () => {
-              clearInterval(intervalId); // Cleanup the interval on component unmount
+                clearInterval(intervalId); // Cleanup the interval on component unmount
             };
         }
-      }, []);
+    }, []);
     // }
     const currentUser = authentication.getCurrentUser();
     useEffect(() => {
@@ -200,7 +201,7 @@ const Header = (props) => {
     useEffect(()=>{
         // notificationConfigList.length
     },[notificationConfigList])
-   
+
 
     const handleAppointment = () => {
         if (!Array.isArray(appointmentList)) {
@@ -209,7 +210,7 @@ const Header = (props) => {
         }
 
         let csvContent = 'ID,First Name,Surname,Age,Sex,Hospital Number,Regimen,Last Visit,Refill Duration,Appointment Date, Case Manager Name\n';
- 
+
         appointmentList.forEach(appointment => {
             // Clean up field values to remove commas and newline characters
             const cleanFields = {
@@ -316,7 +317,7 @@ const Header = (props) => {
                                 {user && user.currentOrganisationUnitName ?
                                     <div>
                                         <span style={{ color: '#d9fbff', fontSize: '18px', fontWeight: 'bold' }}>{'Welcome'} </span><
-                                            span>&nbsp;:</span>
+                                        span>&nbsp;:</span>
                                         <span>&nbsp;</span>
                                         <span style={{ color: '#fff', fontSize: '24px', fontWeight: 'bold', marginLeft: '10px' }}>{user.currentOrganisationUnitName}</span>
                                     </div>
@@ -329,15 +330,15 @@ const Header = (props) => {
                         <ul className="navbar-nav header-right main-notification">
                             <Dropdown as="li" className="nav-item dropdown header-profile">
                                 <Dropdown.Toggle variant="" as="a" className="nav-link i-false c-pointer"
-                                    role="button" data-toggle="dropdown"
+                                                 role="button" data-toggle="dropdown"
                                 >
                                     {/* <div className="header-info me-3">
 
                                         <small className="text-end fs-14 font-w400" style={{ color: '#ffffff' }}>{currentUser.name}</small>
                                     </div> */}
                                     <Badge color="secondary" badgeContent={notificationConfigList.length} showZero>
-                                    {/* <img src={belle} alt="" style={{ height: '45px', width: '45px' }} onClick={reloadWithAdditionalData} /> */}
-                                    <FaBell size={35} style={{color: 'white' }} onClick={reloadWithAdditionalData}/>
+                                        {/* <img src={belle} alt="" style={{ height: '45px', width: '45px' }} onClick={reloadWithAdditionalData} /> */}
+                                        <FaBell size={35} style={{color: 'white' }} onClick={reloadWithAdditionalData}/>
                                     </Badge>
                                 </Dropdown.Toggle>
 
@@ -360,7 +361,7 @@ const Header = (props) => {
 
                             <Dropdown as="li" className="nav-item dropdown header-profile">
                                 <Dropdown.Toggle variant="" as="a" className="nav-link i-false c-pointer"
-                                    role="button" data-toggle="dropdown"
+                                                 role="button" data-toggle="dropdown"
                                 >
                                     <div className="header-info me-3">
 
@@ -386,23 +387,20 @@ const Header = (props) => {
                                         <span className="ms-2">Account </span>
                                     </Link>
 
-
-
-
                                     <React.Fragment>
                                         <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center',marginLeft:'5px' }}>
                                             {/* <Tooltip title="Account settings"> */}
-                                                <IconButton
-                                                    onClick={handleClick}
-                                                    size="small"
-                                                    sx={{ ml: 2 }}
-                                                    aria-controls={open ? 'account-menu' : undefined}
-                                                    aria-haspopup="true"
-                                                    aria-expanded={open ? 'true' : undefined}
-                                                >
-                                                    <i className="fa fa-bolt" style={{ color: '#992E62' }} aria-hidden="true"></i>
-                                                    <span className="ms-2" style={{ color: '#992E62' }}>Switch Facility</span>
-                                                </IconButton>
+                                            <IconButton
+                                                onClick={handleClick}
+                                                size="small"
+                                                sx={{ ml: 2 }}
+                                                aria-controls={open ? 'account-menu' : undefined}
+                                                aria-haspopup="true"
+                                                aria-expanded={open ? 'true' : undefined}
+                                            >
+                                                <i className="fa fa-bolt" style={{ color: '#992E62' }} aria-hidden="true"></i>
+                                                <span className="ms-2" style={{ color: '#992E62' }}>Switch Facility</span>
+                                            </IconButton>
                                             {/* </Tooltip> */}
                                         </Box>
                                         <Menu
@@ -451,21 +449,6 @@ const Header = (props) => {
                                         </Menu>
                                     </React.Fragment>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                                     <LogoutPage />
                                 </Dropdown.Menu>
                             </Dropdown>
@@ -474,7 +457,7 @@ const Header = (props) => {
                 </nav>
             </div >
             {/* <AssignFacilityModal showModal={assignFacilityModal} toggleModal={() => setAssignFacilityModal(!assignFacilityModal)} user={user}/> */}
-
+            {currentUser && <ChatModal username={currentUser.name} />}
         </div >
     );
 };
