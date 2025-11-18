@@ -5,7 +5,7 @@ spring:
         driver-class-name: org.postgresql.Driver
         username: postgres
         password: admin
-        url: jdbc:postgresql://localhost:5432/lamisplusItoro
+        url: jdbc:postgresql://localhost:5432/testing
         hibernate:
             ddl-auto: none
             event.merge.entry_copy_observer: allow
@@ -34,7 +34,7 @@ lamisplus:
             driver-class-name: org.postgresql.Driver
             username: postgres
             password: admin
-            url: jdbc:postgresql://localhost:5432/lamisplusItoro
+            url: jdbc:postgresql://localhost:5432/testing
             hikari:
                     auto-commit: true
                     data-source-properties:
