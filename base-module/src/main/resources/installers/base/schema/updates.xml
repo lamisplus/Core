@@ -900,4 +900,22 @@
     </changeSet>
 
 
+    <changeSet failOnError="true" author="tyav barnabas" id="200519321945">
+        <sqlFile dbms="postgresql"
+                 path="sql/update_patient_enrollment_trends_chart.sql"
+                 relativeToChangelogFile="true"
+                 splitStatements="false"
+                 stripComments="true"/>
+    </changeSet>
+
+    <changeSet failOnError="true" author="tyav barnabas" id="200516321549">
+        <sqlFile dbms="postgresql"
+                 path="sql/update_base_organisation_unit.sql"
+                 relativeToChangelogFile="true"
+                 splitStatements="false"
+                 stripComments="true"/>
+    </changeSet>
+
+
+
 </databaseChangeLog>
