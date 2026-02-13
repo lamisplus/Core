@@ -6,6 +6,8 @@ import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class UserPrincipal implements UserDetails {
 
@@ -14,15 +16,30 @@ public class UserPrincipal implements UserDetails {
 
     public UserPrincipal(User user) {
         this.user = user;
-        String[] permissions = user.getRole().stream()
-                .flatMap(role -> role.getPermission().stream())
-                .map(permission -> permission.getName())
+        // Store ROLE NAMES as the Spring Security authorities.
+        // Permission resolution happens server-side via RolePermissionCacheService
+        // on every authenticated API request — not here at login time.
+        // This keeps the JWT auth claim small ("Super Admin,RDE") and free of
+        // internal permission names.
+        String[] roleNames = user.getRole().stream()
+                .map(role -> role.getName())
                 .toArray(String[]::new);
-        this.authorities = AuthorityUtils.createAuthorityList(permissions);
+        this.authorities = AuthorityUtils.createAuthorityList(roleNames);
     }
 
     public User getUser() {
         return user;
+    }
+
+    /** Role names already in memory — no DB call needed. */
+    public List<String> getRoleNames() {
+        return user.getRole().stream()
+                .map(role -> role.getName())
+                .collect(Collectors.toList());
+    }
+
+    public String getFullName() {
+        return user.getFirstName() + " " + user.getLastName();
     }
 
     @Override

@@ -23,9 +23,9 @@ import java.util.List;
 import java.util.Map;
 
 @Configuration
-//@EnableCaching
+@EnableCaching
 public class CacheConfig {
-    @Value("${cache.names:core,module,server_sync,user}")
+    @Value("${cache.names:core,module,server_sync,user,role_permissions}")
     private List<String> cacheNames;
 
     @Value("${cache.heap.size:100}")

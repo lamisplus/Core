@@ -759,17 +759,38 @@
         </sql>
     </changeSet>
 
+    <changeSet failOnError="true" id="20251116165900" author="peter abiodun">
+        <!-- Fix fk_menu_parent_id which was incorrectly created referencing base_module
+             instead of base_menu (self-reference). Drop and recreate it correctly. -->
+        <sql>
+            ALTER TABLE base_menu DROP CONSTRAINT IF EXISTS fk_menu_parent_id;
+            ALTER TABLE base_menu
+                ADD CONSTRAINT fk_menu_parent_id FOREIGN KEY (parent_id)
+                    REFERENCES base_menu (id) MATCH SIMPLE
+                    ON UPDATE NO ACTION
+                    ON DELETE NO ACTION
+                NOT VALID;
+        </sql>
+    </changeSet>
+
     <changeSet failOnError="true" id="20251116170000" author="tyav barnabas">
         <preConditions onFail="MARK_RAN">
                 <sqlCheck expectedResult="0">
                     SELECT COUNT(*) FROM public.base_menu WHERE UUID ='44b1c981-312d-461a-999a-5b2cc6fe0ab0';
                 </sqlCheck>
         </preConditions>
-        <sql>
+        <sql splitStatements="true">
+            ALTER TABLE base_menu DROP CONSTRAINT IF EXISTS fk_menu_parent_id;
+            ALTER TABLE base_menu
+                ADD CONSTRAINT fk_menu_parent_id FOREIGN KEY (parent_id)
+                    REFERENCES base_menu (id) MATCH SIMPLE
+                    ON UPDATE NO ACTION
+                    ON DELETE NO ACTION
+                NOT VALID;
+
             INSERT INTO public.base_menu(
                 name, state, type, level, "position", icon, code, uuid, tooltip, breadcrumb, disabled, module_id, parent_id, archived, url)
             VALUES ('Chart Config', '', '', '', 1, '', '', '44b1c981-312d-461a-999a-5b2cc6fe0ab0', 'Chart Configuration', '', false, null, 15, 0, 'chart-config');
-
         </sql>
     </changeSet>
 

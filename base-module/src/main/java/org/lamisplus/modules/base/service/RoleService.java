@@ -30,6 +30,7 @@ public class RoleService {
     private final RolePermissionRepository rolePermissionRepository;
     private final RoleMenuRepository roleMenuRepository;
     private final MenuRepository menuRepository;
+    private final RolePermissionCacheService rolePermissionCacheService;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     /*@PersistenceContext
@@ -52,7 +53,8 @@ public class RoleService {
         if(StringUtils.isBlank(role.getCode())) {
             role.setCode(UUID.randomUUID().toString());
         }
-        Role savedRole =  roleRepository.save(role);
+        Role savedRole = roleRepository.save(role);
+        rolePermissionCacheService.evictAll();
     }
 
     public Role get(Long id) {
@@ -76,7 +78,9 @@ public class RoleService {
         Role updatedRole = roleOptional.get();
         HashSet<Permission> permissionsSet = getPermissions(permissions);
         updatedRole.setPermission(permissionsSet);
-        return roleRepository.save(updatedRole);
+        Role saved = roleRepository.save(updatedRole);
+        rolePermissionCacheService.evictAll();
+        return saved;
     }
 
     private HashSet<Permission> getPermissions(List<Permission> permissions) {
@@ -144,7 +148,9 @@ public class RoleService {
                 .orElseThrow(()-> new EntityNotFoundException(Role.class, "Id", id +""));
         HashSet<Menu> menuHashSet = this.getMenusById(menus);
         updatedRole.setMenu(menuHashSet);
-        return roleRepository.save(updatedRole);
+        Role saved = roleRepository.save(updatedRole);
+        rolePermissionCacheService.evictAll();
+        return saved;
     }
 
     public String importRoles(MultipartFile file) throws IOException {
@@ -184,6 +190,7 @@ public class RoleService {
             throw new IOException(e.getMessage());
         }
 
+        rolePermissionCacheService.evictAll();
         return "Roles Imported Successfully";
     }
 
@@ -202,7 +209,9 @@ public class RoleService {
             LOG.info("Error updating role: {}", e.getMessage());
             throw new RuntimeException(e.getMessage());
         }
-        return roleRepository.save(updatedRole);
+        Role saved = roleRepository.save(updatedRole);
+        rolePermissionCacheService.evictAll();
+        return saved;
     }
 
     private String getExcludedRoleIdsFromNames(String names) {
