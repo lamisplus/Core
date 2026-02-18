@@ -14,10 +14,10 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.jcache.JCacheCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 
 import javax.cache.Caching;
 import java.time.Duration;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,7 +44,8 @@ public class CacheConfig {
     private int idleMinutes;
 
     @Bean
-    public CacheManager jCacheCacheManager() {
+    @Primary
+    public CacheManager cacheManager() {
         Map<String, CacheConfiguration<?, ?>> cacheMap = new HashMap<>();
 
         // Configure each cache from properties (both explicit configs and names list)

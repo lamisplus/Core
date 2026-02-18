@@ -774,6 +774,8 @@
     </changeSet>
 
     <changeSet failOnError="true" id="20251116170000" author="tyav barnabas">
+        <validCheckSum>8:4b9deb9c0d81645e75bc97145eee6d71</validCheckSum>
+        <validCheckSum>8:3782b62c20c0db170caf7e1155be9461</validCheckSum>
         <preConditions onFail="MARK_RAN">
                 <sqlCheck expectedResult="0">
                     SELECT COUNT(*) FROM public.base_menu WHERE UUID ='44b1c981-312d-461a-999a-5b2cc6fe0ab0';
@@ -943,6 +945,19 @@
                 FROM base_organisation_unit_identifier boui
             WHERE bou.id = boui.organisation_unit_id AND boui.code = 'cmkm8UQpvWk';
         </sql>
+    </changeSet>
+
+    <changeSet failOnError="false" id="20260213000001" author="taiwo gboyegun">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="1">
+                SELECT COUNT(*) FROM base_role WHERE name = 'RDE'
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            DELETE FROM base_application_user_role
+            WHERE role_id = (SELECT id FROM base_role WHERE name = 'RDE');
+        </sql>
+        <rollback/>
     </changeSet>
 
 

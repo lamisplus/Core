@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.lamisplus</groupId>
 	<artifactId>lamisplus</artifactId>
-	<version>2.3.0.2</version>
+	<version>2.3.0</version>
 	<packaging>jar</packaging>
 
 	<parent>
@@ -132,23 +132,6 @@
 			<groupId>com.foreach.across</groupId>
 			<artifactId>across-autoconfigure</artifactId>
 		</dependency>
-
-		<!--<dependency>
-			<groupId>com.foreach.across</groupId>
-			<artifactId>across-web</artifactId>
-			<scope>provided</scope>
-			<exclusions>
-				<exclusion>
-					<groupId>org.slfj</groupId>
-					<artifactId>*</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.springframework</groupId>
-					<artifactId>spring-core</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>-->
-
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
@@ -167,12 +150,6 @@
 			<version>2.7.0</version>
 			<scope>test</scope>
 		</dependency>
-
-		<!--<dependency>
-			<groupId>com.foreach.across.modules</groupId>
-			<artifactId>across-hibernate-module</artifactId>
-			<version>4.1.0.RELEASE</version>
-		</dependency>-->
 
 		<dependency>
 			<groupId>org.projectlombok</groupId>
@@ -242,11 +219,6 @@
 			<version>${jpmml.version}</version>
 		</dependency>
 
-		<!--		<dependency>-->
-		<!--			<groupId>org.springframework.boot</groupId>-->
-		<!--			<artifactId>spring-boot-starter-jdbc</artifactId>-->
-		<!--		</dependency>-->
-
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-web</artifactId>
@@ -283,12 +255,6 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-mail</artifactId>
 		</dependency>
-
-		<!--<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-log4j2</artifactId>
-		</dependency>-->
-
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-quartz</artifactId>
@@ -356,18 +322,6 @@
 			<artifactId>commons-collections4</artifactId>
 			<version>4.4</version>
 		</dependency>
-
-		<!--<dependency>
-			<groupId>org.tukaani</groupId>
-			<artifactId>xz</artifactId>
-			<version>1.6</version>
-		</dependency>-->
-
-		<!--<dependency>
-			<groupId>com.github.jhonnymertz</groupId>
-			<artifactId>java-wkhtmltopdf-wrapper</artifactId>
-			<version>1.1.10-RELEASE</version>
-		</dependency>-->
 
 		<dependency>
 			<groupId>org.apache.commons</groupId>
@@ -495,11 +449,6 @@
 			<artifactId>springfox-swagger-ui</artifactId>
 			<version>2.8.0</version>
 		</dependency>
-		<!--<dependency>
-			<groupId>com.foreach.across</groupId>
-			<artifactId>across-test</artifactId>
-			<scope>test</scope>
-		</dependency>-->
 
 		<dependency>
 			<groupId>jakarta.validation</groupId>
@@ -596,34 +545,6 @@
 				<artifactId>frontend-maven-plugin</artifactId>
 				<version>1.12.1</version>
 				<executions>
-					<!--<execution>
-						<id>install node and npm</id>
-						<goals>
-							<goal>install-node-and-npm</goal>
-						</goals>
-						<configuration>
-							<nodeVersion>v16.13.2</nodeVersion>
-							<npmVersion>8.1.2</npmVersion>
-						</configuration>
-					</execution>
-					<execution>
-						<id>npm install</id>
-						<goals>
-							<goal>npm</goal>
-						</goals>
-						<configuration>
-							<arguments>install</arguments>
-						</configuration>
-					</execution>-->
-					<!--<execution>
-						<id>npm run build</id>
-						<goals>
-							<goal>npm</goal>
-						</goals>
-						<configuration>
-							<arguments>run build</arguments>
-						</configuration>
-					</execution>-->
 				</executions>
 			</plugin>
 

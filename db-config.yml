@@ -5,7 +5,7 @@ spring:
         driver-class-name: org.postgresql.Driver
         username: postgres
         password: admin
-        url: jdbc:postgresql://localhost:5432/chart_db
+        url: jdbc:postgresql://localhost:5432/regimen_fix_db
         hibernate:
             ddl-auto: none
             event.merge.entry_copy_observer: allow
@@ -34,7 +34,7 @@ lamisplus:
             driver-class-name: org.postgresql.Driver
             username: postgres
             password: admin
-            url: jdbc:postgresql://localhost:5432/chart_db
+            url: jdbc:postgresql://localhost:5432/regimen_fix_db
             hikari:
                     auto-commit: true
                     data-source-properties:
@@ -58,7 +58,7 @@ server:
 
 
 cache:
-    names: core,module,server_sync,user   # The cache regions/names
+    names: core,module,server_sync,user,role_permissions   # The cache regions/names
     heap:
         size: 100                         # Heap size (number of entries)
     off-heap:
