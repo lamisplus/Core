@@ -201,7 +201,7 @@ public class UserService {
         return userRepository.findAllByArchived(pageable, 0).map(UserDTO::new);
     }
     @Transactional(readOnly = true)
-    @Cacheable(value = "user")
+//    @Cacheable(value = "user")
     public List<UserDTO> getAllManagedUsers() {
         return userRepository.findAllByArchived(0).stream().map(UserDTO::new).collect(Collectors.toList());
     }
