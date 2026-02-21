@@ -19,7 +19,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "react-widgets/dist/css/react-widgets.css";
 import { connect } from "react-redux";
-import { updateRole } from "./../../../actions/role";
+import { fetchRoles, updateRole } from "./../../../actions/role";
 import { url as baseUrl } from "./../../../api";
 import useForm from "./../Functions/UseForm";
 import { Spinner } from "reactstrap";
@@ -72,17 +72,21 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const AddRole = (props) => {
-  console.log(props.location.state.row)
   const classes = useStyles();
   const { values, setValues, handleInputChange, resetForm } = useForm({
+    id: props.location && props.location.state.row ? props.location.state.row.id : "",
     name: props.location && props.location.state.row ? props.location.state.row.name : "",
     permissions: props.location && props.location.state.row ? props.location.state.row.permission :[],
     menus:props.location && props.location.state.row ? props.location.state.row.menu :[],
+    excludeRoles:props.location && props.location.state.row && props.location.state.row.excludeRoles !== null 
+    ? props.location.state.row.excludeRoles.split(",") :[],
   });
   const [permissions, setPermissions] = useState([]);
   const [selectedPermissions, setselectedPermissions] = useState([]);
   const [menList, setMenuList] = useState([])
+  const [roles, setRoles] = useState([])
   const [selectedMenuList, setselectedMenuList] = useState([]);
+  const [excludeRolesList, setExcludeRolesList] = useState([]);
   const [saving, setSaving] = useState(false);
  
   useEffect(() => {
@@ -101,7 +105,6 @@ const AddRole = (props) => {
       axios
         .get(`${baseUrl}permissions`)
         .then((response) => {
-          console.log(Object.entries(response.data));
           setPermissions(
             Object.entries(response.data).map(([key, value]) => ({
               label: value.description,
@@ -121,7 +124,6 @@ const AddRole = (props) => {
         axios
             .get(`${baseUrl}menus?withChild=true`)
             .then((response) => {
-                //console.log(response.data)
                 setMenuList(
                     Object.entries(response.data).map(([key, value]) => ({
                         label: value.name,
@@ -131,11 +133,40 @@ const AddRole = (props) => {
                 //menuobj = menList
             })
             .catch((error) => {
-                //console.log(error);
+                // console.error(error);
             });
       }
+      
       getMenus();
   }, []);
+
+  useEffect(() => {
+    async function getRoles() {
+        axios
+            .get(`${baseUrl}roles`)
+            .then((response) => {
+                const excludeRolesFiltered = Object.entries(response.data).map(([key, value]) => ({
+                        label: value.name,
+                        value: value.id.toString(),
+                    })).filter((each) => each.value !== values.id.toString())
+                setRoles(excludeRolesFiltered)
+
+                const currentSelectedExcludeRoles = 
+                props.location && props.location.state.row && props.location.state.row.excludeRoles !== null 
+    ? props.location.state.row.excludeRoles.split(",") : []
+
+    setExcludeRolesList(currentSelectedExcludeRoles);
+
+                
+            })
+            .catch((error) => {
+                // console.error(error);
+            });
+      }
+      
+      getRoles();
+  }, []);
+
 
   const onPermissionSelect = (selectedValues) => {
     setselectedPermissions(selectedValues);
@@ -143,6 +174,10 @@ const AddRole = (props) => {
   const onMenuItemSelect = (selectedValues) => {
     setselectedMenuList(selectedValues);
   };
+  const onExcludeRolesSelect = (selectedValues) => {
+    setExcludeRolesList(selectedValues);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     let permissions = [];
@@ -161,6 +196,7 @@ const AddRole = (props) => {
     });
     values["permissions"] = permissions;
     values["menus"] = menuItems;
+    values["excludeRoles"] = excludeRolesList.join(",");
     setSaving(true);
     const onSuccess = () => {
       setSaving(false);
@@ -232,12 +268,24 @@ const AddRole = (props) => {
                 <br/>
                 <Col md={12}>
                   <FormGroup>
-                    <Label for="permissions" style={{color:'#014d88',fontWeight:'bolder'}}><b>Menu Items</b></Label>
+                    <Label for="menus" style={{color:'#014d88',fontWeight:'bolder'}}><b>Menu Items</b></Label>
                     <DualListBox
                       canFilter
                       options={menList}
                       onChange={onMenuItemSelect}
                       selected={selectedMenuList}
+                    />
+                  </FormGroup>
+                </Col>
+                <br/>
+                <Col md={12}>
+                  <FormGroup>
+                    <Label for="exclude_roles" style={{color:'#014d88',fontWeight:'bolder'}}><b>Exclude Roles</b></Label>
+                    <DualListBox
+                      canFilter
+                      options={roles}
+                      onChange={onExcludeRolesSelect}
+                      selected={excludeRolesList}
                     />
                   </FormGroup>
                 </Col>
@@ -282,5 +330,9 @@ const mapStateToProps = (state) => ({
   //role: state.roles.role,
   role: [],
 });
+const mapActionToProps = {
+  fetchAllRoles: fetchRoles,
+  updateRole: updateRole
+};
 
-export default connect(mapStateToProps, { updateRole })(AddRole);
+export default connect(mapStateToProps, mapActionToProps)(AddRole);

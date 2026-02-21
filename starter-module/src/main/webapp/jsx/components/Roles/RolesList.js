@@ -152,7 +152,9 @@ const fetchRole =()=>{
           { title: "Actions", field: "actions", filtering: false },
         ]}
         isLoading={loading}
-        data={props.rolesList.map((row) => ({
+        data={props.rolesList
+          .sort((a,b) => a.name.localeCompare(b.name))
+          .map((row) => ({
           id: row.id,
           name: row.name,
          

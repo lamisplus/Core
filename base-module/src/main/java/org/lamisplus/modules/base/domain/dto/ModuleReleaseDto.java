@@ -4,11 +4,12 @@ import lombok.Builder;
 import lombok.Data;
 import org.lamisplus.modules.base.domain.entities.ModuleRelease;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 @Data
 @Builder
-public class ModuleReleaseDto {
+public class ModuleReleaseDto implements Serializable {
     private Long id;
 
     private String name;

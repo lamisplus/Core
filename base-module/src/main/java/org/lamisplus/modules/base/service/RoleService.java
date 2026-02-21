@@ -14,10 +14,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.lamisplus.modules.base.util.Constants.ArchiveStatus.UN_ARCHIVED;
 
@@ -48,6 +47,7 @@ public class RoleService {
         role.setPermission(permissions);
         role.setMenu(menus);
         role.setArchived(UN_ARCHIVED);
+        role.setExcludeRoles(roleDTO.getExcludeRoles());
 
         if(StringUtils.isBlank(role.getCode())) {
             role.setCode(UUID.randomUUID().toString());
@@ -93,7 +93,7 @@ public class RoleService {
                 }
                 permissionsSet.add(permissionToAdd);
             }catch(Exception e){
-                e.printStackTrace();
+//                e.printStackTrace();
             }
         }
         return permissionsSet;
@@ -164,9 +164,13 @@ public class RoleService {
                 HashSet<Permission> permissions = getPermissions(roleDTO.getPermissions());
                 HashSet<Menu> menus = getMenusByNameOnImport(roleDTO.getMenus());
 
+                LOG.info(roleDTO.toString());
+
                 role.setPermission(permissions);
+                role.setExcludeRoles(getExcludedRoleIdsFromNames(roleDTO.getExcludeRoles()));
                 role.setMenu(menus);
                 role.setArchived(UN_ARCHIVED);
+                LOG.info("Role: {}", role.toString());
 
                 if (StringUtils.isBlank(role.getCode())) {
                     role.setCode(UUID.randomUUID().toString());
@@ -176,9 +180,48 @@ public class RoleService {
             }
         } catch (Exception e){
             LOG.info("An error occurred when importing roles. {}", e.getMessage());
+            e.printStackTrace();
             throw new IOException(e.getMessage());
         }
 
         return "Roles Imported Successfully";
     }
+
+    public Role updateRole(long id, RoleDTO roleDTO) {
+        Optional<Role> roleOptional = roleRepository.findById(id);
+        if(!roleOptional.isPresent())throw new EntityNotFoundException(Role.class, "Id", id +"");
+        Role updatedRole = roleOptional.get();
+
+        try{
+            HashSet<Permission> permissionsSet = getPermissions(roleDTO.getPermissions());
+            updatedRole.setPermission(permissionsSet);
+            updatedRole.setName(roleDTO.getName());
+            updatedRole.setMenu(getMenusById(roleDTO.getMenus()));
+            updatedRole.setExcludeRoles(roleDTO.getExcludeRoles());
+        } catch (Exception e){
+            LOG.info("Error updating role: {}", e.getMessage());
+            throw new RuntimeException(e.getMessage());
+        }
+        return roleRepository.save(updatedRole);
+    }
+
+    private String getExcludedRoleIdsFromNames(String names) {
+        LOG.info(names);
+        if (names == null){
+            return null;
+        }
+        if (!names.isEmpty()) {
+
+            Set<String> roleNames = Arrays.stream(names.split(","))
+                    .map(String::trim)
+                    .filter(name -> !name.isEmpty())
+                    .collect(Collectors.toSet());
+
+            return roleRepository.findAllInRolesNames(roleNames).stream()
+                    .map(each-> String.valueOf(each.getId()))
+                    .collect(Collectors.joining(","));
+        }
+        return null;
+    }
+
 }

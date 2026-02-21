@@ -2,6 +2,8 @@ package org.lamisplus.modules.base.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.lamisplus.modules.base.domain.dto.OrganisationUnitIdentifierDto;
+import org.lamisplus.modules.base.domain.mapper.OrganisationUnitIdentifierMapper;
 import org.springframework.beans.BeanUtils;
 import org.lamisplus.modules.base.controller.apierror.EntityNotFoundException;
 import org.lamisplus.modules.base.controller.apierror.IllegalTypeException;
@@ -34,6 +36,7 @@ public class OrganisationUnitService {
     private final OrganisationUnitRepository organisationUnitRepository;
     private final OrganisationUnitIdentifierRepository organisationUnitIdentifierRepository;
     private final OrganisationUnitHierarchyRepository organisationUnitHierarchyRepository;
+    private final OrganisationUnitIdentifierMapper identifierMapper;
 
     public List<OrganisationUnit> save(
             Long parentOrganisationUnitId,
@@ -118,6 +121,14 @@ public class OrganisationUnitService {
         if (! organizationOptional.isPresent ())
             throw new EntityNotFoundException (OrganisationUnit.class, "Id", id + "");
         return organizationOptional.get ();
+    }
+
+    public Page<OrganisationUnitIdentifierDto> searchOrganizationUnit(String search, Pageable pageable) {
+        String searchInput = search.equals("*") ? "%%" :  "%"+ search + "%";
+
+        return organisationUnitIdentifierRepository
+                .searchOrganisationUnitsPage(searchInput, pageable)
+                .map(identifierMapper::identifierToDto);
     }
 
     public List<OrganisationUnit> getOrganisationUnitByParentOrganisationUnitId(Long id) {

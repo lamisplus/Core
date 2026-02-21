@@ -8,7 +8,6 @@ import org.lamisplus.modules.base.controller.apierror.EntityNotFoundException;
 import org.lamisplus.modules.base.controller.apierror.RecordExistException;
 import org.lamisplus.modules.base.domain.dto.ApplicationUserOrganisationUnitDTO;
 import org.lamisplus.modules.base.domain.dto.FacilitySetupDTO;
-import org.lamisplus.modules.base.domain.dto.ManagementDto;
 import org.lamisplus.modules.base.domain.dto.UserDTO;
 import org.lamisplus.modules.base.domain.entities.ApplicationUserOrganisationUnit;
 import org.lamisplus.modules.base.domain.entities.OrganisationUnit;
@@ -21,6 +20,7 @@ import org.lamisplus.modules.base.domain.repositories.RoleRepository;
 import org.lamisplus.modules.base.domain.repositories.UserRepository;
 import org.lamisplus.modules.base.security.RolesConstants;
 import org.lamisplus.modules.base.security.SecurityUtils;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +31,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static org.lamisplus.modules.base.util.Constants.ArchiveStatus.ARCHIVED;
 import static org.lamisplus.modules.base.util.Constants.ArchiveStatus.UN_ARCHIVED;
 
 
@@ -138,7 +137,8 @@ public class UserService {
                 roles.add(defaultUserRole);
             newUser.setRole(roles);
         } else {
-            HashSet<Role> userRoles = getRolesFromStringSet(userDTO.getRoles());
+//            HashSet<Role> userRoles = getRolesFromStringSet(userDTO.getRoles());
+            HashSet<Role> userRoles = getRolesFromIdSet(userDTO.getRoles());
             if (defaultUserRole != null)
                 userRoles.add(defaultUserRole);
 
@@ -201,8 +201,8 @@ public class UserService {
         return userRepository.findAllByArchived(pageable, 0).map(UserDTO::new);
     }
     @Transactional(readOnly = true)
+//    @Cacheable(value = "user")
     public List<UserDTO> getAllManagedUsers() {
-//        LOG.info("Page size: {}, Page Number: {}", pageable.getPageSize(), pageable.getPageNumber());
         return userRepository.findAllByArchived(0).stream().map(UserDTO::new).collect(Collectors.toList());
     }
 
@@ -222,6 +222,24 @@ public class UserService {
                 roleToAdd = roleRepository.findByName(r).get();
                 if (null == roleToAdd && NumberUtils.isParsable(r))
                     roleToAdd = roleRepository.findById(Long.valueOf(r)).get();
+            } else {
+                ResponseEntity.badRequest();
+                return null;
+            }
+            roleSet.add(roleToAdd);
+        }
+        return roleSet;
+    }
+    private HashSet<Role> getRolesFromIdSet(Set<String> roles) {
+        HashSet roleSet = new HashSet<>();
+        Role roleToAdd = new Role();
+        for (String r : roles) {
+            // add roles by either id or name
+            if (null != r) {
+                roleToAdd = roleRepository.findById(Long.valueOf(r)).orElseThrow(
+                        () -> new RuntimeException("Role not found by ID: " + r)
+                );
+
             } else {
                 ResponseEntity.badRequest();
                 return null;

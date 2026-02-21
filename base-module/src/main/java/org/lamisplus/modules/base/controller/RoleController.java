@@ -61,15 +61,17 @@ public class RoleController {
     public ResponseEntity<Role> update(@Valid @RequestBody RoleDTO role, @PathVariable Long id) {
         try {
             Role updatedRole = new Role();
-            if (!role.getPermissions().isEmpty()){
-                updatedRole = roleService.updatePermissions(id, role.getPermissions());
-            }
-            if (role.getName() != null){
-                updatedRole = roleService.updateName(id, role.getName());
-            }
-            if(!role.getMenus().isEmpty()){
-                updatedRole = roleService.updateMenus(id, role.getMenus());
-            }
+//            if (!role.getPermissions().isEmpty()){
+//                updatedRole = roleService.updatePermissions(id, role.getPermissions());
+//            }
+//            if (role.getName() != null){
+//                updatedRole = roleService.updateName(id, role.getName());
+//            }
+//            if(!role.getMenus().isEmpty()){
+//                updatedRole = roleService.updateMenus(id, role.getMenus());
+//            }
+
+            updatedRole = roleService.updateRole(id, role);
             return ResponseEntity.ok(updatedRole);
         } catch (Exception e) {
             ResponseEntity.status(HttpStatus.BAD_REQUEST);

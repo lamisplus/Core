@@ -49,6 +49,11 @@ public class Role extends Audit<String> {
 
     @Getter
     @Setter
+    @Column(name = "exclude_roles")
+    private String excludeRoles;
+
+    @Getter
+    @Setter
     @ManyToMany(cascade = CascadeType.PERSIST)
     private Set<Menu> menu;
 
@@ -80,6 +85,7 @@ public class Role extends Audit<String> {
                 ", name='" + name + '\'' +
                 ", dateModified='" + dateModified + '\'' +
                 ", permissions=" + permission +
+                ", excludeRoles=" + excludeRoles +
                 '}';
     }
 }

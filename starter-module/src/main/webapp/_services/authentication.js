@@ -1,5 +1,5 @@
 import { BehaviorSubject } from 'rxjs';
-import {url as baseUrl, url} from "../api";
+import { url as baseUrl, url } from "../api";
 import { handleResponse } from '../_helpers';
 import store from './../store';
 import * as ACTION_TYPES from "../actions/types";
@@ -17,12 +17,13 @@ export const authentication = {
     login,
     logout,
     currentUser: currentUserSubject.asObservable(),
-    get currentUserValue () { return currentUserSubject.value },
+    get currentUserValue() { return currentUserSubject.value },
     getCurrentUserPermissions: getCurrentUserPermissions,
     getCurrentUserRole: getCurrentUserRoles,
     getCurrentUser,
     userHasRole: userHasPermission,
-    fetchMe
+    fetchMe,
+    fetchCurrentOrganisationUnitId
 };
 
 function login(username, password, remember) {
@@ -34,7 +35,7 @@ function login(username, password, remember) {
 
     return fetch(`${url}authenticate`, requestOptions)
         .then(handleResponse)
-        .then( async user => {
+        .then(async user => {
             dispatch({
                 type: ACTION_TYPES.AUTHENTICATION,
                 payload: "Authenticated"
@@ -49,30 +50,30 @@ function login(username, password, remember) {
         });
 }
 
-async function saveToLocalStorage(key, value){
+async function saveToLocalStorage(key, value) {
     localStorage.setItem(key, value);
 }
 
 function logout(history) {
 
-            currentUserSubject.next(null);
-            localStorage.clear();
-            // you can also like localStorage.removeItem('Token');
-            window.location.href = "/login";
-            // console.log(history)
-            // history.push('/login');
-             // remove user from local storage to log user out
+    currentUserSubject.next(null);
+    localStorage.clear();
+    // you can also like localStorage.removeItem('Token');
+    window.location.href = "/login";
+    // console.log(history)
+    // history.push('/login');
+    // remove user from local storage to log user out
 }
 
 function getCurrentUserPermissions() {
 
     const currentUserPermissions = localStorage.getItem('currentUser_Permission') != null ? JSON.parse(localStorage.getItem('currentUser_Permission')) : null;
-    if(!currentUserPermissions){
+    if (!currentUserPermissions) {
         return [];
     }
     // fetch all the permissions of the logged in user
     const permissions = currentUserPermissions;
-    if(!permissions || permissions.length < 1){
+    if (!permissions || permissions.length < 1) {
         return [];
     }
     return permissions;
@@ -81,28 +82,28 @@ function getCurrentUserPermissions() {
 function getCurrentUserRoles() {
 
     const currentUserRoles = localStorage.getItem('currentUser_Role') != null ? JSON.parse(localStorage.getItem('currentUser_Role')) : null;
-    if(!currentUserRoles){
+    if (!currentUserRoles) {
         return [];
     }
     // fetch all the permissions of the logged in user
     const roles = currentUserRoles;
-    if(!roles || roles.length < 1){
+    if (!roles || roles.length < 1) {
         return [];
     }
     return roles;
 }
 
-function userHasPermission(perm){
+function userHasPermission(perm) {
     const permissions = getCurrentUserPermissions();
-    if(perm && perm.length > 0 && _.intersection(perm, permissions).length === 0){
+    if (perm && perm.length > 0 && _.intersection(perm, permissions).length === 0) {
         return false;
     }
     return true;
 }
 
-function getCurrentUser(){
+function getCurrentUser() {
     const user = currentUserSubject.value;
-    if(!user || !user.id_token){
+    if (!user || !user.id_token) {
         return [];
     }
 
@@ -113,7 +114,7 @@ function getCurrentUser(){
     return decoded;
 }
 
-async function fetchMe(){
+async function fetchMe() {
 
     await axios
         .get(`${baseUrl}account`)
@@ -121,7 +122,7 @@ async function fetchMe(){
             const roles = JSON.stringify(response.data.roles);
             const perms = JSON.stringify(response.data.permissions);
             const userAccount = JSON.stringify(response.data);
-            
+
             await saveToLocalStorage('currentUser_Roles', roles);
             await saveToLocalStorage('currentUser_Permission', perms);
             await saveToLocalStorage('user_account', userAccount);
@@ -141,9 +142,17 @@ async function fetchMe(){
         });
 }
 
-async function fetchModuleUpdates(){
 
-   await axios
+async function fetchCurrentOrganisationUnitId() {
+
+    const currentUserLocal = localStorage.getItem('user_account') ? JSON.parse(localStorage.getItem('user_account')) : null
+
+    return currentUserLocal ? currentUserLocal.currentOrganisationUnitId : null;
+}
+
+async function fetchModuleUpdates() {
+
+    await axios
         .get(`${baseUrl}module-releases
         `)
         .then((response) => {

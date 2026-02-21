@@ -827,4 +827,11 @@
                 ADD CONSTRAINT unique_base_application_codeset_code UNIQUE (code);
         </sql>
     </changeSet>
+
+    <changeSet failOnError="true" id="20260128784875489" author="Joshua Gabriel">
+        <sql>
+            DELETE FROM public.databasechangelog
+            WHERE md5sum = '8:e8a114aca332bb978c7b03eec7793e97';
+        </sql>
+    </changeSet>
 </databaseChangeLog>

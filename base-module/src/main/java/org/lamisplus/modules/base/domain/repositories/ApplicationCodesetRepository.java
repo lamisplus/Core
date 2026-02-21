@@ -52,4 +52,9 @@ public interface ApplicationCodesetRepository extends JpaRepository<ApplicationC
     @Query(value = "UPDATE base_application_codeset SET alt_code = NULL WHERE alt_code = ?1 ", nativeQuery = true)
     void findAndDeleteAllAlternateCodesetsByCode(String code);
 
+    @Query(value = "SELECT DISTINCT(display) AS display, id, codeset_group, language, version, " +
+            "code, alt_code, description, date_created, created_by, date_modified, modified_by, archived FROM base_application_codeset " +
+            "WHERE codeset_group=?1 AND archived=0", nativeQuery = true)
+    List<ApplicationCodeSet> findByCodesetGroup(String codesetGroup);
+
 }

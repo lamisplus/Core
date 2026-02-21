@@ -8,6 +8,7 @@ import lombok.ToString;
 import org.lamisplus.modules.base.domain.entities.*;
 
 import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -16,13 +17,14 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 @NoArgsConstructor
-public class UserDTO {
+public class UserDTO implements Serializable {
     private Long id;
 
     @NotBlank(message = "userName is mandatory")
     private String userName;
 
     private Set<String> roles;
+    private Set<Long> roleIds = new HashSet<>();
 
     private Set<String> permissions;
 
@@ -49,7 +51,7 @@ public class UserDTO {
     private Long ipCode;
 
     @ToString.Exclude
-    private List<ApplicationUserOrganisationUnit> applicationUserOrganisationUnits = new ArrayDeque<>();
+    private transient List<ApplicationUserOrganisationUnit> applicationUserOrganisationUnits = new ArrayDeque<>();
 
     private Set<Long> facilityIds = new HashSet<>();
 
@@ -64,6 +66,7 @@ public class UserDTO {
         this.roles = user.getRole().stream().map(Role::getName).collect(Collectors.toSet());
         permissions = new HashSet<>();
         user.getRole().forEach(roles1 ->{
+            this.roleIds.add(roles1.getId());
             permissions.addAll(roles1.getPermission().stream().filter(p -> p.getArchived() == 0)
                     .map(Permission::getName).collect(Collectors.toSet()));
         });

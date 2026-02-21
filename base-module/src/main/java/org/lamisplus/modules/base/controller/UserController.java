@@ -1,27 +1,20 @@
 package org.lamisplus.modules.base.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.lamisplus.modules.base.controller.apierror.EntityNotFoundException;
 import org.lamisplus.modules.base.controller.vm.ManagedUserVM;
 import org.lamisplus.modules.base.domain.dto.FacilitySetupDTO;
-import org.lamisplus.modules.base.domain.dto.ManagementDto;
 import org.lamisplus.modules.base.domain.dto.UserDTO;
 import org.lamisplus.modules.base.domain.entities.Role;
 import org.lamisplus.modules.base.domain.entities.User;
 import org.lamisplus.modules.base.domain.repositories.RoleRepository;
 import org.lamisplus.modules.base.domain.repositories.UserRepository;
 import org.lamisplus.modules.base.service.UserService;
-import org.lamisplus.modules.base.util.PaginationUtil;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpHeaders;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
 import javax.validation.Valid;
 import java.util.HashSet;
 import java.util.List;
@@ -38,12 +31,14 @@ public class UserController {
     private final String BASE_URL_VERSION_ONE = "/api/v1/users";
 
 
+
     @GetMapping(BASE_URL_VERSION_ONE + "/{id}")
     @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete','user', 'all_permission')")
     public ResponseEntity<UserDTO> get(@PathVariable Long id) {
         return ResponseEntity.ok(userRepository.findById(id).map(UserDTO::new).get());
     }
 
+    //@CacheEvict(value = "user")
     @PostMapping(BASE_URL_VERSION_ONE + "/{id}/roles")
     @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete', 'all_permission')")
     public ResponseEntity<Object[]> updateRoles(@Valid @RequestBody List<Role> roles, @PathVariable Long id) throws Exception {
@@ -71,24 +66,13 @@ public class UserController {
         }
     }
 
-
-    /*@PostMapping("/organisationUnit/{id}")
-    public ResponseEntity<UserDTO> getAllUsers(@PathVariable Long id) {
-        UserDTO userDTO = userService
-                .getUserWithRoles()
-                .map(UserDTO::new)
-                .orElseThrow(() -> new EntityNotFoundException(User.class, "Not Found", ""));
-        return ResponseEntity.ok(userService.changeOrganisationUnit(id, userDTO));
-    }*/
-
     @GetMapping("/logged-in/count")
     public Integer getNumberOfLoggedInUsers() {
         final List<Object> allPrincipals = sessionRegistry.getAllPrincipals();
         return  allPrincipals.size();
     }
 
-
-
+    //@CacheEvict(value = "user")
     @PostMapping(BASE_URL_VERSION_ONE)
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete', 'all_permission')")
@@ -97,6 +81,7 @@ public class UserController {
         return userService.save(managedUserVM, managedUserVM.getPassword()).getId();
     }
 
+    //@CacheEvict(value = "user")
     @PutMapping(BASE_URL_VERSION_ONE + "/{id}")
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete', 'user','all_permission')")
@@ -104,6 +89,7 @@ public class UserController {
         userService.update(id, managedUserVM, managedUserVM.getPassword());
     }
 
+    //@CacheEvict(value = "user")
     @DeleteMapping(BASE_URL_VERSION_ONE + "/{id}")
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete','all_permission')")
@@ -111,16 +97,10 @@ public class UserController {
         userService.delete(id);
     }
 
-//    @GetMapping(BASE_URL_VERSION_ONE)
-//    public ResponseEntity<List<UserDTO>> getAllUsers(Pageable pageable) {
-//        final Page<UserDTO> page = userService.getAllManagedUsers(pageable);
-//        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
-//        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
-//    }
+
     @GetMapping(BASE_URL_VERSION_ONE)
     public ResponseEntity<List<UserDTO>> getAllUsers() {
         final List<UserDTO> page = userService.getAllManagedUsers();
-//        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return new ResponseEntity<>(page, HttpStatus.OK);
     }
 

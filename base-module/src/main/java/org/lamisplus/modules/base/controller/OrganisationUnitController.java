@@ -3,6 +3,7 @@ package org.lamisplus.modules.base.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.lamisplus.modules.base.domain.dto.OrganisationUnitDTO;
+import org.lamisplus.modules.base.domain.dto.OrganisationUnitIdentifierDto;
 import org.lamisplus.modules.base.domain.entities.OrganisationUnit;
 import org.lamisplus.modules.base.service.OrganisationUnitService;
 import org.lamisplus.modules.base.util.PaginationUtil;
@@ -94,4 +95,12 @@ public class OrganisationUnitController {
     public  ResponseEntity<List>  getAll() {
         return ResponseEntity.ok(this.organisationUnitService.getAll());
     }*/
+
+    @GetMapping(BASE_URL_VERSION_ONE + "/search")
+    @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete','user', 'all_permission')")
+    public ResponseEntity<Page<OrganisationUnitIdentifierDto>> searchOrganizationUnit(
+            @RequestParam(value = "search", defaultValue = "*") String search, @PageableDefault(page = 0, size = 10) Pageable pageable
+    ) {
+        return ResponseEntity.ok(organisationUnitService.searchOrganizationUnit(search, pageable));
+    }
 }

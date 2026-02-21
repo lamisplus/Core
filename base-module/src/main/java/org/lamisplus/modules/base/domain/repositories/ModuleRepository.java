@@ -14,19 +14,11 @@ public interface ModuleRepository extends JpaRepository<Module, Long> {
 
     Optional<Module> findByName(String name);
 
-    /*List<Module> findByProcessConfigIsTrue();
+    @Query("SELECT m.name FROM Module m")
+    List<String> findAllModuleNames();
 
-    List<Module> findByUninstallIsTrue();
-
-    List<Module> findByActiveIsTrue();*/
-
-    //List<Module> findByActiveIsTrueAndStartedIsTrue();
-
-    //List<Module> findAllByStatusNot(int status);
-
-    //Optional<Module> findByIdAndStatus(String id, int status);
-
-    //List<Module> findAllByModuleType(int moduleType);
+    @Query("SELECT m.name FROM Module m WHERE m.active = true")
+    List<String> findActiveModuleNames();
 
     List<Module> findByActiveIsTrueOrderByPriority();
 

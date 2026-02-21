@@ -104,13 +104,15 @@ const UserRegistration = (props) => {
 
   //const [gender, setGender] = useState([]);
   const [role, setRole] = useState([]);
+  const [exclusionSet, setExclusionSet] = useState(new Set());
+  const [filteredRoles, setFilteredRoles] = useState([]);
   const [confirm, setConfirm] = useState("");
   const [matchingPassword, setMatchingPassword] = useState(false);
   const [validPassword, setValidPassword] = useState(false);
   const [matchingPasswordClass, setMatchingPasswordClass] = useState("");
   const [validPasswordClass, setValidPasswordClass] = useState("");
   const [saving, setSaving] = useState(false);
-  const [selectedOption, setSelectedOption] = useState();
+  const [selectedRoles, setSelectedRoles] = useState([]);
   const [designation, setDesignation] = useState([]);
   const [ips, setIps] = useState([]);
   const [loadingFacilities, setLoadingFacilities] = useState(false);
@@ -227,12 +229,21 @@ const UserRegistration = (props) => {
       axios
           .get(`${baseUrl}account/roles`)
           .then((response) => {
-            //console.log(response.data)
+            // console.log(response.data)
+            // const rolesConverted = Object.entries(response.data).map(([key, value]) => ({
+            //   label: value.name,
+            //   value: value.name,
+            // }))
+            // .sort((a,b) => a.value.localeCompare(b.value))
+            // console.log(rolesConverted)
             setRole(
                 Object.entries(response.data).map(([key, value]) => ({
-                  label: value.name,
-                  value: value.name,
-                }))
+              label: value.name,
+              value: value.name,
+              excludeRoles: value.excludeRoles,
+              id: value.id,
+            }))
+            .sort((a,b) => a.value.localeCompare(b.value))
             );
 
           })
@@ -303,28 +314,6 @@ const UserRegistration = (props) => {
     // check if password and confirm password match
     handleConfirmPassword(e, false);
   };
-  // const updateUserOrganisations=(userId)=>{
-  //   if(selectedOrganisations.length >0){
-  //     //Add Organisations
-  //     let facilityDetails = [];
-  //     selectedOrganisations.map((organisation) =>{
-  //       var orgDetails = _.find(allOrganisations, {name:organisation});
-  //       facilityDetails.push({
-  //         "applicationUserId": userId,
-  //         "organisationUnitId": orgDetails.id
-  //       })
-
-  //     });
-  //     axios.post(`${baseUrl}application_user_organisation_unit`, facilityDetails)
-  //         .then(response => {
-  //           toast.success(`successfully added`);
-  //         }) .catch((error) => {
-  //       toast.error(`An error occurred, adding facility`);
-  //     });
-  //     return true;
-  //   }
-  //   return false;
-  // }
 
   const validate = () => {
     let temp = { ...errors };
@@ -358,7 +347,7 @@ const UserRegistration = (props) => {
     if (validate()) {
       const dateOfBirth = moment(values.dateOfBirth).format("YYYY-MM-DD");
       values["dateOfBirth"] = dateOfBirth;
-      values["roles"] = selectedOption
+      values["roles"] = selectedRoles
       values["facilityIds"] = selectedOrganisations
       setSaving();
 
@@ -378,8 +367,8 @@ const UserRegistration = (props) => {
   }
   };
 
-  const onPermissionSelect = (selectedValues) => {
-    setSelectedOption(selectedValues);
+  const onRoleSelect = (selectedValues) => {
+    setSelectedRoles(selectedValues);
   };
   const onOrganisationSelect = (selectedValues) => {
     setSelectedOrganisations(selectedValues);
@@ -396,6 +385,42 @@ const handleInputChangePhoneNumber = (e) => {
   setValues({ ...values, phoneNumber: cleanedNumber });
 
 };
+
+useEffect(() => {
+    const filtered = role.filter(
+      role => !exclusionSet.has(parseInt(role.id)) || selectedRoles.includes(role.id.toString())
+    );
+    const formatted = filtered.map(role => ({
+      value: role.id,
+      label: role.label,
+    }));
+
+    setFilteredRoles(formatted);
+  // }, [exclusionSet, selectedRoles, role]);
+  }, [exclusionSet, role]);
+
+  // Handle selection changes
+  const handleRoleChange = (newSelected) => {
+    
+    const newExclusions = new Set();
+
+    // Build new exclusion list from selected roles
+    newSelected.forEach(id => {
+      const thisRole = role.find(r => r.id === id);
+      if (thisRole?.excludeRoles) {
+        thisRole.excludeRoles
+          .split(',')
+          .map(str => parseInt(str.trim()))
+          .forEach(exId => newExclusions.add(exId));
+      }
+    });
+
+    // Remove any roles from selection that are now excluded
+    const cleanedSelection = newSelected.filter(id => !newExclusions.has(id));
+
+    setSelectedRoles(cleanedSelection);
+    setExclusionSet(newExclusions);
+  };
 
   return (
       <>
@@ -620,7 +645,7 @@ const handleInputChangePhoneNumber = (e) => {
                         </div>}
                       <div className="form-group mb-12 col-md-12">
                         <FormGroup>
-                          <Label for="permissions" style={{ color: '#014d88', fontWeight: 'bolder' }}>Facility <span style={{ color: "red" }}> *</span></Label>
+                          <Label for="permissions" style={{ color: '#014d88', fontWeight: 'bolder' }}>Facility</Label>
                           {!loadingFacilities ? (<DualListBox canFilter
                             options={allOrganisations}
                             onChange={onOrganisationSelect}
@@ -635,12 +660,14 @@ const handleInputChangePhoneNumber = (e) => {
 
                         <div className="form-group mb-12 col-md-12">
                           <FormGroup>
-                            <Label for="permissions" style={{color:'#014d88',fontWeight:'bolder'}}>Role <span style={{ color:"red"}}> *</span></Label>
+                            <Label for="roles" style={{color:'#014d88',fontWeight:'bolder'}}>Role</Label>
                             <DualListBox
                                 //canFilter
-                                options={role}
-                                onChange={onPermissionSelect}
-                                selected={selectedOption}
+                                // options={role}
+                                options={filteredRoles}
+                                // onChange={onRoleSelect}
+                                onChange={handleRoleChange}
+                                selected={selectedRoles}
                                 sx={{border:'solid 1px #014d88',borderRadius:'5px'}}
                             />
                           </FormGroup>
@@ -658,8 +685,13 @@ const handleInputChangePhoneNumber = (e) => {
                         color="primary"
                         className={classes.button}
                         startIcon={<SaveIcon />}
-                        disabled={saving || !(validPassword && matchingPassword)}
-                        style={{ backgroundColor: '#014d88', color: '#fff' }}
+                        disabled={saving || !(validPassword && matchingPassword) 
+                          || !(values.firstName && values.lastName && values.designation 
+                            && values.userName && values.phoneNumber && values.email) }
+                        style={{ backgroundColor: (saving || !(validPassword && matchingPassword)
+                          || !(values.firstName && values.lastName && values.designation 
+                            && values.userName && values.phoneNumber && values.email)) 
+                            ? 'grey' : '#014d88', color: '#fff' }}
                       >
                         {!saving ? (
                           <span style={{ textTransform: "capitalize" }}>Save</span>

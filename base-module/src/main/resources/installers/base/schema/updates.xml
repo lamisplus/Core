@@ -710,4 +710,220 @@
         </sql>
     </changeSet>
 
+    <changeSet failOnError="true" id="20250819343" author="Joshua Gabriel">
+        <preConditions onFail="MARK_RAN" >
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*)
+                FROM base_role
+                WHERE name = 'RDE';
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO public.base_role(id, name, code, date_created, created_by, date_modified, modified_by, archived)
+            VALUES ((SELECT MAX(id) + 1 FROM base_role), 'RDE', gen_random_uuid(), NOW(), 'Joshua Gabriel', NOW(), 'Joshua Gabriel', 0);
+
+            INSERT INTO public.base_role_permission (role_id, permission_id)
+            SELECT r.id, p.id
+            FROM base_role r
+            JOIN base_permission p ON p.archived = 0
+            WHERE r.name = 'RDE' AND p.id IN (1,2,3,4, 166);;
+
+            INSERT INTO base_role_menu (role_id, menu_id)
+            SELECT r.id, m.id
+            FROM base_role r
+            JOIN base_menu m ON m.archived = 0
+            WHERE r.name = 'RDE' AND m.name NOT IN ('TriageModule', 'LaboratoryModule', 'Check-in Setting', 'Consultation', 'Pharmacy');
+        </sql>
+    </changeSet>
+    <changeSet failOnError="true" id="20250915155900" author="Peter Abiodun">
+        <preConditions>
+            <not>
+                <columnExists tableName="base_role" columnName="exclude_roles"/>
+            </not>
+        </preConditions>
+        <sql>
+            ALTER TABLE base_role ADD COLUMN exclude_roles CHARACTER VARYING;
+        </sql>
+    </changeSet>
+    <changeSet failOnError="true" id="20250916110100" author="Peter Abiodun">
+        <sql>
+            ALTER TABLE base_permission
+            DROP CONSTRAINT module_name_fk;
+
+            ALTER TABLE base_permission
+                ADD CONSTRAINT module_name_fk FOREIGN KEY (module_name)
+                    REFERENCES base_module (name)
+                    ON UPDATE NO ACTION
+                    ON DELETE SET NULL
+                NOT VALID;
+        </sql>
+    </changeSet>
+
+    <changeSet failOnError="true" id="20251116170000" author="tyav barnabas">
+        <preConditions onFail="MARK_RAN">
+                <sqlCheck expectedResult="0">
+                    SELECT COUNT(*) FROM public.base_menu WHERE UUID ='44b1c981-312d-461a-999a-5b2cc6fe0ab0';
+                </sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO public.base_menu(
+                name, state, type, level, "position", icon, code, uuid, tooltip, breadcrumb, disabled, module_id, parent_id, archived, url)
+            VALUES ('Chart Config', '', '', '', 1, '', '', '44b1c981-312d-461a-999a-5b2cc6fe0ab0', 'Chart Configuration', '', false, null, 15, 0, 'chart-config');
+
+        </sql>
+    </changeSet>
+
+
+
+    <changeSet failOnError="true" id="20250915170000" author="tyav barnabas">
+
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="chart" />
+            </not>
+        </preConditions>
+        <sql>
+            CREATE TABLE IF NOT EXISTS chart
+            (
+                id uuid,
+                indicator_name character varying(255) ,
+                display_name character varying(255),
+                description character varying(255),
+                location character varying(255),
+                module character varying(255),
+                type character varying(255),
+                icon character varying(255) ,
+                query character varying(10000),
+                created_date timestamp without time zone,
+                created_by character varying(255),
+                last_modified_date timestamp without time zone,
+                last_modified_by character varying(255),
+                x_axis_field character varying(255),
+                y_axis_field character varying(255),
+                series_name_field character varying(255),
+                archived integer,
+                "position" integer DEFAULT 0,
+                CONSTRAINT pk_chart PRIMARY KEY (indicator_name),
+                CONSTRAINT id_chart_unique UNIQUE (id)
+                );
+
+            INSERT INTO public.chart(
+                id, indicator_name, display_name, description, location, position, type, icon, query, created_date, created_by, last_modified_date, last_modified_by, archived, x_axis_field, y_axis_field, series_name_field, module
+            ) VALUES ('71f2ee2b-6299-41db-9bd0-bb60f1a1410b', 'TOTAL_RECORDS', 'Total Records', 'Total Records', 'core', 0, 'card', 'fa-users', 'SELECT COUNT(1) FROM patient_person WHERE facility_id=?facilityId AND archived=0', '2025-07-30 14:24:28.86492', 'Schema', '2025-07-30 14:24:28.86492', 'Schema', 0, null, null, null, 'PatientModule');
+
+            INSERT INTO public.chart(
+                id, indicator_name, display_name, description, location, position, type, icon, query, created_date, created_by, last_modified_date, last_modified_by, archived, x_axis_field, y_axis_field, series_name_field, module
+            ) VALUES ('bdd208a4-a646-486d-9898-c30cd7e907d2', 'TOTAL_TESTED_FOR_HIV', 'Total tested For HIV', 'Total Tested For Hiv', 'core', 1,'card', 'fa-user-md', 'SELECT COUNT (uuid) totalHTSCount FROM hts_client WHERE archived = 0 AND person_uuid IS NOT NULL AND hiv_test_result IS NOT NULL AND facility_id=?facilityId', '2025-07-30 14:24:28.86492', 'Schema', '2025-07-30 14:24:28.86492', 'Schema', 0, null, null, null, 'HtsModule');
+
+            INSERT INTO public.chart(
+                id, indicator_name, display_name, description, location, position, type, icon, query, created_date, created_by, last_modified_date, last_modified_by, archived, x_axis_field, y_axis_field, series_name_field, module
+            ) VALUES ('d43cffcf-8690-4b55-a7a4-d2c404fb0fe7', 'TOTAL_POSITIVE', 'Total HIV Positive', 'Total Positive', 'core', 2,'card', 'fa-plus-square',
+                      'SELECT COUNT (uuid) totalHTSCount FROM hts_client
+                    WHERE archived = 0 AND person_uuid IS NOT NULL AND hiv_test_result IS NOT NULL
+                    AND hiv_test_result ILIKE ''%Positive%''
+                    AND facility_id=?facilityId
+                ', '2025-07-30 14:24:28.86492', 'Schema', '2025-07-30 14:24:28.86492', 'Schema', 0, null, null, null, 'HtsModule');
+
+            INSERT INTO public.chart(
+                id, indicator_name, display_name, description, location, position, type, icon, query, created_date, created_by, last_modified_date, last_modified_by, archived, x_axis_field, y_axis_field, series_name_field, module
+            ) VALUES ('c1ecbdab-ef42-4435-af2a-5e16d283b097', 'EVER_ENROLLED', 'Ever Enrolled Into HIV', 'Ever Enrolled', 'core', 3,'card', 'fa-heartbeat',
+                      'SELECT COUNT(1) FROM hiv_enrollment WHERE facility_id=?facilityId AND archived=0', '2025-07-30 14:24:28.86492', 'Schema', '2025-07-30 14:24:28.86492', 'Schema', 0, null, null, null, 'HivModule');
+
+            INSERT INTO public.chart(
+                id, indicator_name, display_name, description, location, position, type, icon, query, created_date, created_by, last_modified_date, last_modified_by, archived, x_axis_field, y_axis_field, series_name_field, module
+            ) VALUES ('94224e17-df1a-42a5-8d51-db9592a5a016', 'PATIENT_ENROLLMENT_BY_SEX', 'Patient Enrollment By Sex', 'Patient Enrollment By Sex', 'core', 0,'pie', 'fa-heartbeat',
+                      'SELECT
+                    CASE WHEN sex = ''Female'' THEN ''Female''
+                    WHEN sex = ''Male'' THEN ''Male''
+                    ELSE ''Others'' END AS name,
+                    COUNT(*) AS count
+                    FROM patient_person WHERE facility_id=?facilityId  GROUP BY sex', '2025-07-30 14:24:28.86492', 'Schema', '2025-07-30 14:24:28.86492', 'Schema', 0, 'name', 'count', null, 'PatientModule');
+
+            INSERT INTO public.chart(
+                id, indicator_name, display_name, description, location, position, type, icon, query, created_date, created_by, last_modified_date, last_modified_by, archived, x_axis_field, y_axis_field, series_name_field, module
+            ) VALUES ('a835aec0-d41c-48d9-8ec8-382d051fa76d', 'PATIENT_ENROLLMENT_TRENDS_BY_YEAR_AND_SEX', 'Patient Enrollment Trends By Year and Sex', 'Patient Enrollment Trends By Year and Sex', 'core', 0,'line', 'fa-heartbeat',
+                      'SELECT EXTRACT(YEAR FROM date_of_registration) AS year,
+                        SUM(CASE WHEN sex = ''Male'' THEN 1 ELSE 0 END) AS male,
+                        SUM(CASE WHEN sex = ''Female'' THEN 1 ELSE 0 END) AS female
+                        FROM patient_person WHERE facility_id=?facilityId
+                        GROUP BY EXTRACT(YEAR FROM date_of_registration) order by year', '2025-07-30 14:24:28.86492', 'Schema', '2025-07-30 14:24:28.86492', 'Schema', 0, 'year', null, null, 'PatientModule');
+
+
+        </sql>
+    </changeSet>
+    <changeSet failOnError="true" author="Peter Abiodun" id="202509301830">
+        <sqlFile dbms="postgresql"
+                 path="sql/insert_script_age_distribution_art.sql"
+                 relativeToChangelogFile="true"
+                 splitStatements="false"
+                 stripComments="true"/>
+    </changeSet>
+
+
+    <changeSet failOnError="true" id="20251002111300" author="Peter Abiodun">
+        <sql>
+            INSERT INTO public.base_application_user_role (user_id, role_id)
+            SELECT bau.id, rde.id
+            FROM public.base_application_user bau
+                     JOIN public.base_application_user_role baur ON bau.id = baur.user_id
+                     JOIN public.base_role br ON br.id = baur.role_id
+                     JOIN public.base_role rde ON rde.name = 'RDE'
+            WHERE br.name ILIKE 'Super Admin'
+              AND NOT EXISTS (
+                SELECT 1
+                FROM public.base_application_user_role existing
+                WHERE existing.user_id = bau.id AND existing.role_id = rde.id
+              );
+        </sql>
+    </changeSet>
+
+    <changeSet failOnError="true" id="20251109111300" author="Joshua Gabriel">
+        <sql>
+            INSERT INTO base_application_user_role (user_id, role_id)
+            SELECT id, (SELECT id from base_role where name = 'RDE')
+            FROM base_application_user bau
+            WHERE bau.archived = 0
+              AND NOT EXISTS (
+            SELECT 1
+            FROM base_application_user_role r
+            WHERE r.user_id = bau.id AND r.role_id = (SELECT id from base_role where name = 'RDE')
+            );
+        </sql>
+    </changeSet>
+
+    <changeSet failOnError="true" author="tyav barnabas" id="200509301945">
+        <sqlFile dbms="postgresql"
+                 path="sql/insert_script_for_dashboard_charts.sql"
+                 relativeToChangelogFile="true"
+                 splitStatements="false"
+                 stripComments="true"/>
+    </changeSet>
+
+
+    <changeSet failOnError="true" author="tyav barnabas" id="200519321945">
+        <sqlFile dbms="postgresql"
+                 path="sql/update_patient_enrollment_trends_chart.sql"
+                 relativeToChangelogFile="true"
+                 splitStatements="false"
+                 stripComments="true"/>
+    </changeSet>
+
+    <changeSet failOnError="true" author="tyav barnabas" id="200516321549">
+        <sqlFile dbms="postgresql"
+                 path="sql/update_base_organisation_unit.sql"
+                 relativeToChangelogFile="true"
+                 splitStatements="false"
+                 stripComments="true"/>
+    </changeSet>
+
+    <changeSet failOnError="true" id="20251212111300" author="Peter Abiodun">
+        <sql>
+            UPDATE public.base_organisation_unit bou SET name = 'Jalingo Community Center'
+                FROM base_organisation_unit_identifier boui
+            WHERE bou.id = boui.organisation_unit_id AND boui.code = 'cmkm8UQpvWk';
+        </sql>
+    </changeSet>
+
+
+
 </databaseChangeLog>

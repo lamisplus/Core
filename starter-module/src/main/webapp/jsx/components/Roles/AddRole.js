@@ -79,7 +79,9 @@ const AddRole = (props) => {
   const [permissions, setPermissions] = useState([]);
   const [selectedPermissions, setselectedPermissions] = useState([]);
   const [menList, setMenuList] = useState([])
+  const [roles, setRoles] = useState([])
   const [selectedMenuList, setselectedMenuList] = useState([]);
+  const [excludeRolesList, setExcludeRolesList] = useState([]);
   const [saving, setSaving] = useState(false);
 
   /* Get list of Permissions from the server */
@@ -124,11 +126,35 @@ const AddRole = (props) => {
     getMenus();
 }, []);
 
+
+  useEffect(() => {
+    async function getRoles() {
+        axios
+            .get(`${baseUrl}roles`)
+            .then((response) => {
+                const excludeRolesFiltered = Object.entries(response.data).map(([key, value]) => ({
+                        label: value.name,
+                        value: value.id.toString(),
+                    }))
+                setRoles(excludeRolesFiltered)
+            })
+            .catch((error) => {
+                //console.log(error);
+            });
+      }
+      
+      getRoles();
+  }, []);
+
   const onPermissionSelect = (selectedValues) => {
     setselectedPermissions(selectedValues);
   };
   const onMenuItemSelect = (selectedValues) => {
     setselectedMenuList(selectedValues);
+  };
+
+  const onExcludeRolesSelect = (selectedValues) => {
+    setExcludeRolesList(selectedValues);
   };
 
   const handleSubmit = (e) => {
@@ -149,6 +175,7 @@ const AddRole = (props) => {
     });
     values["permissions"] = permissions;
     values["menus"] = menuItems;
+    values["excludeRoles"] = excludeRolesList.join(",");
     setSaving(true);
     const onSuccess = () => {
       setSaving(false);
@@ -220,13 +247,25 @@ const AddRole = (props) => {
                 <br/>
                 <Col md={12}>
                   <FormGroup>
-                    <Label for="permissions" style={{color:'#014d88',fontWeight:'bolder'}}><b>Menu Items</b></Label>
+                    <Label for="menus" style={{color:'#014d88',fontWeight:'bolder'}}><b>Menu Items</b></Label>
                     <DualListBox
                       canFilter
                       options={menList}
                       onChange={onMenuItemSelect}
                       selected={selectedMenuList}
                       style={{backgroundColor:'#014d88'}}
+                    />
+                  </FormGroup>
+                </Col>
+                <br />
+                <Col md={12}>
+                  <FormGroup>
+                    <Label for="exclude_roles" style={{ color: '#014d88', fontWeight: 'bolder' }}><b>Exclude Roles</b></Label>
+                    <DualListBox
+                      canFilter
+                      options={roles}
+                      onChange={onExcludeRolesSelect}
+                      selected={excludeRolesList}
                     />
                   </FormGroup>
                 </Col>
