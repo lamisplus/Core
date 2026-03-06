@@ -947,18 +947,6 @@
         </sql>
     </changeSet>
 
-    <changeSet failOnError="false" id="20260213000001" author="taiwo gboyegun">
-        <preConditions onFail="MARK_RAN">
-            <sqlCheck expectedResult="1">
-                SELECT COUNT(*) FROM base_role WHERE name = 'RDE'
-            </sqlCheck>
-        </preConditions>
-        <sql>
-            DELETE FROM base_application_user_role
-            WHERE role_id = (SELECT id FROM base_role WHERE name = 'RDE');
-        </sql>
-        <rollback/>
-    </changeSet>
 
 
 
