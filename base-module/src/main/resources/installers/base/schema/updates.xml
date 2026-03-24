@@ -947,6 +947,12 @@
         </sql>
     </changeSet>
 
+    <changeSet failOnError="true" id="20260323120400" author="Peter Abiodun">
+        <sql>
+            SELECT pg_catalog.setval('base_role_id_seq', (select max(id) from base_role), true);
+        </sql>
+    </changeSet>
+
 
 
 
