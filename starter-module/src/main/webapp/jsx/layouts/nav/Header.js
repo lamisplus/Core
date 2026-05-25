@@ -68,10 +68,7 @@ const Header = (props) => {
           const serverInstance = instance.value === "1"
           setIsServerInstance(serverInstance)
         } else {
-            await systemSettingsHelper.fetchAllSystemSettings()
-            const newInstance = systemSettingsHelper.getSingleSystemSetting("instance")
-            const newServerInstance = newInstance.value === "1"
-            setIsServerInstance(newServerInstance)
+            setIsServerInstance(false)
           }
       },[instance])
 

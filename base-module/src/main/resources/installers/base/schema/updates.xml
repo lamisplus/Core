@@ -953,6 +953,19 @@
         </sql>
     </changeSet>
 
+    <changeSet failOnError="true" id="20260521130360" author="Peter Abiodun">
+        <sql>
+            CREATE TABLE blacklisted_tokens (
+                id BIGSERIAL PRIMARY KEY,
+                token TEXT NOT NULL,
+                created_by VARCHAR(255) NOT NULL,
+                date_created TIMESTAMP NOT NULL,
+                modified_by VARCHAR(255),
+                date_modified TIMESTAMP
+            );
+        </sql>
+    </changeSet>
+
 
 
 

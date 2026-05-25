@@ -18,6 +18,7 @@ public class Constants {
         public static String ART_LOST = "Lost to Follow Up";
         public static String ART_STOP = "Stopped Treatment";
         public static String ART_DEAD = "Known Death";
+        public static String AUTHORIZATION_HEADER = "Authorization";
     }
 
     public static class TxMlStatus {

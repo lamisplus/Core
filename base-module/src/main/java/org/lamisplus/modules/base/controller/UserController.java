@@ -99,6 +99,7 @@ public class UserController {
 
 
     @GetMapping(BASE_URL_VERSION_ONE)
+    @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete','all_permission')")
     public ResponseEntity<List<UserDTO>> getAllUsers() {
         final List<UserDTO> page = userService.getAllManagedUsers();
         return new ResponseEntity<>(page, HttpStatus.OK);

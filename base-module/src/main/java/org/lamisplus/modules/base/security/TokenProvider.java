@@ -4,6 +4,7 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
+import org.lamisplus.modules.base.service.BlacklistService;
 import org.lamisplus.modules.base.service.RolePermissionCacheService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,6 +47,13 @@ public class TokenProvider {
      */
     @Autowired
     private RolePermissionCacheService rolePermissionCacheService;
+
+    /**
+     * Token blacklist service. used to check if a token has been blacklisted before authorizing a user
+     * BlacklistService
+     */
+    @Autowired
+    private BlacklistService blacklistService;
 
     /**
      * Creates a signed JWT that stores the user's ROLE NAMES in the "auth" claim.
@@ -133,6 +141,9 @@ public class TokenProvider {
     }
 
     public boolean validateToken(String authToken) {
+        if (blacklistService.tokenExist(authToken)){
+            return false;
+        }
         try {
             Jwts.parserBuilder().setSigningKey(this.getSigningKey()).build().parseClaimsJws(authToken);
             return true;

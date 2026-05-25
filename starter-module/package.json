@@ -32,7 +32,7 @@
     "@tinymce/tinymce-react": "^3.10.1",
     "@y0c/react-datepicker": "^1.0.4",
     "apexcharts": "^3.22.2",
-    "axios": "^0.21.1",
+    "axios": "^1.16.1",
     "bootstrap": "^4.6.1",
     "bootstrap-daterangepicker": "^3.1.0",
     "chart.js": "^2.9.4",
@@ -115,8 +115,8 @@
     "yup": "^0.32.8"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build && mkdir -p src/main/resources/static && cp -r build/* src/main/resources/static",
+    "start": "react-scripts --openssl-legacy-provider start",
+    "build": "react-scripts --openssl-legacy-provider build && xcopy /s /y build src\\main\\resources\\static",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

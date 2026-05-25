@@ -1,10 +1,9 @@
 import React  from 'react';
-//import {connect, useDispatch } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
-
-//import { logout } from '../../../store/actions/AuthActions';
-//import { isAuthenticated } from '../../../store/selectors/AuthSelectors';
+import { url } from '../../../api';
 import { authentication } from "./../../../_services/authentication";
+import { DEACTIVATE_BOOSTRAP_MODULE } from '../../../actions/types';
+import axios from 'axios';
 
 function LogoutPage(props){
     //const dispatch = useDispatch();
@@ -12,13 +11,17 @@ function LogoutPage(props){
     //    dispatch(logout(props.history));
     //    // window.location.reload();
     // }
-    const logout = () => {
-        authentication.logout(props.history);
+    const logout = async () => {
+        const response = await axios.post(`${url}logout`);
+        if (response.status === 200){
+            authentication.logout(props.history);
+        }
+
       }
 
     return(
         <>
-            <Link  className="dropdown-item ai-icon" onClick={() => logout()}>
+            <div style={{cursor:"pointer"}} className="dropdown-item ai-icon" onClick={() => logout()}>
                 <svg
                   id="icon-logout" xmlns="http://www.w3.org/2000/svg"
                   className="text-danger" width={18} height={18} viewBox="0 0 24 24" 
@@ -29,7 +32,7 @@ function LogoutPage(props){
                     <line x1={21} y1={12} x2={9} y2={12} />
                 </svg>
                 <span className="ms-2" >Logout </span>
-            </Link>
+            </div>
         </>
     )
 } 

@@ -94,11 +94,13 @@ public class RoleController {
     }
 
     @GetMapping(BASE_URL_VERSION_ONE + "/v2/{id}/users")
+    @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete','user', 'all_permission')")
     public ResponseEntity<List<UserDTO>> getAllUserByRole(@PathVariable Long id) {
         return ResponseEntity.ok(userService.getAllUserByRole(id));
     }
 
     @PostMapping(path= BASE_URL_VERSION_ONE + "/v2/import", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete','user', 'all_permission')")
     public ResponseEntity<?> importRoles(@RequestPart(value = "file") MultipartFile file) throws IOException {
         return ResponseEntity.ok(roleService.importRoles(file));
     }
