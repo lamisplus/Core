@@ -1,5 +1,6 @@
 package org.lamisplus.modules.base.domain.repositories;
 
+import org.lamisplus.modules.base.domain.dto.SimpleUserProjection;
 import org.lamisplus.modules.base.domain.entities.Role;
 import org.lamisplus.modules.base.domain.entities.User;
 import org.springframework.data.domain.Page;
@@ -29,6 +30,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Page<User> findAllByArchived(Pageable pageable, int archived);
 
     List<User> findAllByArchived(int archived);
+
+    @Query(value = "SELECT id, first_name AS firstName, last_name AS lastName FROM public.base_application_user where archived = 0 ", nativeQuery = true)
+    List<SimpleUserProjection> getAllUsersSimplified();
 
     Optional<User> findByIdAndArchived(Long id, int archived);
 

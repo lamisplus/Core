@@ -3,6 +3,7 @@ package org.lamisplus.modules.base.controller;
 import lombok.RequiredArgsConstructor;
 import org.lamisplus.modules.base.controller.vm.ManagedUserVM;
 import org.lamisplus.modules.base.domain.dto.FacilitySetupDTO;
+import org.lamisplus.modules.base.domain.dto.SimpleUserProjection;
 import org.lamisplus.modules.base.domain.dto.UserDTO;
 import org.lamisplus.modules.base.domain.entities.Role;
 import org.lamisplus.modules.base.domain.entities.User;
@@ -103,6 +104,12 @@ public class UserController {
     public ResponseEntity<List<UserDTO>> getAllUsers() {
         final List<UserDTO> page = userService.getAllManagedUsers();
         return new ResponseEntity<>(page, HttpStatus.OK);
+    }
+    @GetMapping(BASE_URL_VERSION_ONE + "/simple")
+    @PreAuthorize("hasAnyAuthority('admin_write', 'admin_read', 'admin_delete','all_permission')")
+    public ResponseEntity<List<SimpleUserProjection>> getAllUsersSimplified() {
+        final List<SimpleUserProjection> allUsersSimplified = userService.getAllUsersSimplified();
+        return new ResponseEntity<>(allUsersSimplified, HttpStatus.OK);
     }
 
     @PostMapping(BASE_URL_VERSION_ONE + "/organisationUnit/{id}")

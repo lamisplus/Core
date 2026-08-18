@@ -8,6 +8,7 @@ import org.lamisplus.modules.base.controller.apierror.EntityNotFoundException;
 import org.lamisplus.modules.base.controller.apierror.RecordExistException;
 import org.lamisplus.modules.base.domain.dto.ApplicationUserOrganisationUnitDTO;
 import org.lamisplus.modules.base.domain.dto.FacilitySetupDTO;
+import org.lamisplus.modules.base.domain.dto.SimpleUserProjection;
 import org.lamisplus.modules.base.domain.dto.UserDTO;
 import org.lamisplus.modules.base.domain.entities.ApplicationUserOrganisationUnit;
 import org.lamisplus.modules.base.domain.entities.OrganisationUnit;
@@ -204,6 +205,11 @@ public class UserService {
 //    @Cacheable(value = "user")
     public List<UserDTO> getAllManagedUsers() {
         return userRepository.findAllByArchived(0).stream().map(UserDTO::new).collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<SimpleUserProjection> getAllUsersSimplified() {
+        return userRepository.getAllUsersSimplified();
     }
 
     public User update(Long id, User user) {
