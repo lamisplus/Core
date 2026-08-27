@@ -966,6 +966,14 @@
         </sql>
     </changeSet>
 
+    <changeSet failOnError="true" author="Peter Abiodun" id="202608260836">
+        <sqlFile dbms="postgresql"
+                 path="sql/update_script_dashboard_charts.sql"
+                 relativeToChangelogFile="true"
+                 splitStatements="false"
+                 stripComments="true"/>
+    </changeSet>
+
 
 
 
