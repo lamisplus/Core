@@ -522,7 +522,7 @@ public class SmsService {
         MediaType mediaType = MediaType.parse("text/plain");
         MultipartBody body = new MultipartBody.Builder().setType(MultipartBody.FORM)
                 .addFormDataPart("token","ol57UYbSHwG6ez182Ynt5js6mIcgnp4jaQIOrJNR7CDLpgLydd")
-                .addFormDataPart("sender","Data.FI")
+                .addFormDataPart("sender","AFGHS-P")
                 .addFormDataPart("to",phoneNumbers)
                 .addFormDataPart("message","Hi, \n"+ message)
                 .addFormDataPart("type","0")

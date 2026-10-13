@@ -21,7 +21,7 @@ import org.lamisplus.modules.base.domain.repositories.RoleRepository;
 import org.lamisplus.modules.base.domain.repositories.UserRepository;
 import org.lamisplus.modules.base.security.RolesConstants;
 import org.lamisplus.modules.base.security.SecurityUtils;
-import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -87,6 +87,17 @@ public class UserService {
                     throw new RecordExistException(User.class, "Name", userDTO.getUserName());
         });
         return this.registerOrUpdateUser(userDTO, password, true);
+    }
+
+    @CacheEvict(value = "userFacilities", key = "#username")
+    public User updateAndCacheEvict(Long id, UserDTO userDTO, String username, String password) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(User.class, "id", ""+id));
+        userDTO.setId(id);
+        if(!StringUtils.isEmpty(password)){
+            return this.registerOrUpdateUser(userDTO, password, true);
+        }
+        return this.registerOrUpdateUser(userDTO, user.getPassword(), false);
     }
 
     public User registerOrUpdateUser(UserDTO userDTO, String password, Boolean updatePassword){
@@ -181,13 +192,14 @@ public class UserService {
     }
 
     public User update(Long id, UserDTO userDTO, String password){
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(User.class, "id", ""+id));
-        userDTO.setId(id);
-        if(!StringUtils.isEmpty(password)){
-            return this.registerOrUpdateUser(userDTO, password, true);
-        }
-        return this.registerOrUpdateUser(userDTO, user.getPassword(), false);
+//        User user = userRepository.findById(id)
+//                .orElseThrow(() -> new EntityNotFoundException(User.class, "id", ""+id));
+//        userDTO.setId(id);
+//        if(!StringUtils.isEmpty(password)){
+//            return this.registerOrUpdateUser(userDTO, password, true);
+//        }
+//        return this.registerOrUpdateUser(userDTO, user.getPassword(), false);
+        return updateAndCacheEvict(id, userDTO, userDTO.getUserName(), password);
     }
 
     public void delete(Long id){

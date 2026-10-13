@@ -6,9 +6,9 @@ const Footer = () => {
     <div className="footer">
       <div className="copyright">
         <p>
-          Copyright © LAMISPlus 2.3.1 &amp; Developed by{" "}
+          Copyright © LAMISPlus 2.3.2 &amp; Developed by{" "}
           <a href="" target="_blank" rel="noreferrer">
-            Data.FI
+            AFGHS-P
           </a>{" "}
           {d.getFullYear()}
         </p>
