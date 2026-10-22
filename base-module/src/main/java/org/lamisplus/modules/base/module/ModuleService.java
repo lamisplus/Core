@@ -10,6 +10,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.lamisplus.modules.base.controller.apierror.EntityNotFoundException;
+import org.lamisplus.modules.base.domain.dto.Version;
 import org.lamisplus.modules.base.domain.entities.*;
 import org.lamisplus.modules.base.domain.repositories.MenuRepository;
 import org.lamisplus.modules.base.domain.repositories.ModuleArtifactRepository;
@@ -272,18 +273,39 @@ public class ModuleService {
                     if(!moduleManager.isInstalled(k)){
                         module.setType(ERROR);
                         module.setMessage(module.getName() + " depends on " + k +" "+ v);
-                    } else if (moduleManager.isInstalled(k)){
+//                    } else if (moduleManager.isInstalled(k)){
+//                        Optional<Module> optionalModule = moduleRepository.findByNameAndActive(k, true);
+//                        if(optionalModule.isPresent()){
+//                            Module module1 = optionalModule.get();
+//                            int installedVersion = Integer.valueOf(module1.getVersion().replace(".", ""));
+//                            int uploadedVersion = Integer.valueOf(v.replace(".", ""));
+//                            if(installedVersion > uploadedVersion){
+//                                module.setType(SUCCESS);
+//                                module.setMessage(module.getName() + " [ depends on " + k +" "+ v +" which is a lower version]");
+//                                String desc = module.getDescription() + " " + module.getName() + " [ depends on " + k +" "+ v +" which is a lower version]";
+//                                module.setDescription(desc);
+//                            } else  if(uploadedVersion > installedVersion){
+//                                module.setType(ERROR);
+//                                module.setMessage(module.getName() + " depends on " + k +" "+ v);
+//                            }
+//                        }
+                    } else {
                         Optional<Module> optionalModule = moduleRepository.findByNameAndActive(k, true);
                         if(optionalModule.isPresent()){
                             Module module1 = optionalModule.get();
-                            int installedVersion = Integer.valueOf(module1.getVersion().replace(".", ""));
-                            int uploadedVersion = Integer.valueOf(v.replace(".", ""));
-                            if(installedVersion > uploadedVersion){
+
+                            Version installedVersion = Version.createVersion(module1.getVersion());
+                            Version checkVersion = Version.createVersion(v);
+
+                            // Compare the versions using version comparator
+                            int comparisonResult = installedVersion.compareTo(checkVersion);
+
+                            if(comparisonResult > 0){
                                 module.setType(SUCCESS);
                                 module.setMessage(module.getName() + " [ depends on " + k +" "+ v +" which is a lower version]");
                                 String desc = module.getDescription() + " " + module.getName() + " [ depends on " + k +" "+ v +" which is a lower version]";
                                 module.setDescription(desc);
-                            } else  if(uploadedVersion > installedVersion){
+                            } else if(comparisonResult < 0){
                                 module.setType(ERROR);
                                 module.setMessage(module.getName() + " depends on " + k +" "+ v);
                             }

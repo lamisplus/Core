@@ -6,7 +6,7 @@ const Footer = () => {
     <div className="footer">
       <div className="copyright">
         <p>
-          Copyright © LAMISPlus 2.3.2 &amp; Developed by{" "}
+          Copyright © LAMISPlus 2.4.0 &amp; Developed by{" "}
           <a href="" target="_blank" rel="noreferrer">
             AFGHS-P
           </a>{" "}
