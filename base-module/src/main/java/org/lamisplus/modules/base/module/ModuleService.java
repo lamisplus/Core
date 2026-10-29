@@ -11,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.lamisplus.modules.base.controller.apierror.EntityNotFoundException;
 import org.lamisplus.modules.base.domain.dto.Version;
+import org.lamisplus.modules.base.domain.entities.Module;
 import org.lamisplus.modules.base.domain.entities.*;
 import org.lamisplus.modules.base.domain.repositories.MenuRepository;
 import org.lamisplus.modules.base.domain.repositories.ModuleArtifactRepository;

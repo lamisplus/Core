@@ -162,11 +162,12 @@ public class ModuleManager {
 
         ClassPathScanningCandidateComponentProvider provider =
                 new ClassPathScanningCandidateComponentProvider(false);
+        provider.setResourceLoader(new org.springframework.core.io.DefaultResourceLoader(ModuleUtils.getModuleClassLoader()));
         provider.addIncludeFilter(new AssignableTypeFilter(ModuleLifecycle.class));
         Set<BeanDefinition> beans = provider.findCandidateComponents(module.getBasePackage());
         for (BeanDefinition bd : beans) {
             try {
-                Class<?> clz = ModuleLifecycle.class.getClassLoader().loadClass(bd.getBeanClassName());
+                Class<?> clz = ModuleUtils.getModuleClassLoader().loadClass(bd.getBeanClassName());
                 Object object = clz.newInstance();
                 ((ModuleLifecycle) object).preInstall();
             } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
@@ -335,9 +336,10 @@ public class ModuleManager {
         if (context[0] != null) {
             ClassPathScanningCandidateComponentProvider provider =
                     new ClassPathScanningCandidateComponentProvider(false);
+            provider.setResourceLoader(new org.springframework.core.io.DefaultResourceLoader(ModuleUtils.getModuleClassLoader()));
             provider.addIncludeFilter(new AssignableTypeFilter(ModuleLifecycle.class));
             Set<BeanDefinition> beans = provider.findCandidateComponents(module.getBasePackage());
-            ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+            ClassLoader classLoader = ModuleUtils.getModuleClassLoader();
             for (BeanDefinition bd : beans) {
                 try {
                     Class<?> clz = classLoader.loadClass(bd.getBeanClassName());
@@ -390,6 +392,7 @@ public class ModuleManager {
                     .forEach(simpMessageMappingInfo -> unregisterMessagingMapping(
                             webSocketAnnotationMethodMessageHandler, simpMessageMappingInfo));
 
+            context[0].shutdown();
             context[0] = null;
 
         }
@@ -443,6 +446,12 @@ public class ModuleManager {
         LOG.debug("Removing: {}", bn);
         BeanDefinitionRegistry registry = (BeanDefinitionRegistry) parent.getParentApplicationContext()
                 .getAutowireCapableBeanFactory();
+        try {
+            if (registry.containsBeanDefinition(bn)) {
+                registry.removeBeanDefinition(bn);
+            }
+        } catch (Exception ignored) {
+        }
         BeanFactory bf = ((DefaultListableBeanFactory) registry).getParentBeanFactory();
         if (bf != null) {
             try {

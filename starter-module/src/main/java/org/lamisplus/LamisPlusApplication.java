@@ -7,6 +7,8 @@ import org.lamisplus.modules.base.BaseModule;
 import org.lamisplus.restart.RestartModule;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.liquibase.LiquibaseAutoConfiguration;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -24,6 +26,17 @@ import java.io.File;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@SpringBootApplication(
+        scanBasePackages = {
+                "org.lamisplus.modules.base",
+                "org.lamisplus.restart",
+                "org.lamisplus",
+                "com.foreach.across"
+        },
+        exclude = {
+                LiquibaseAutoConfiguration.class
+        }
+)
 @AcrossApplication(
         modules = {
                 BaseModule.NAME,

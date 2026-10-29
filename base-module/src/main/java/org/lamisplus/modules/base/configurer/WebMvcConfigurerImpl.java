@@ -28,6 +28,24 @@ public class WebMvcConfigurerImpl implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/across/resources/**")
+                .addResourceLocations("classpath:/views/")
+                .resourceChain(false)
+                .addResolver(new ResourceResolver() {
+                    @Override
+                    public Resource resolveResource(HttpServletRequest request, String requestPath, List<? extends Resource> locations, ResourceResolverChain chain) {
+                        java.net.URL url = org.lamisplus.modules.base.module.ModuleUtils.getModuleClassLoader().getResource("views/" + requestPath);
+                        if (url != null) {
+                            return new org.springframework.core.io.UrlResource(url);
+                        }
+                        return chain.resolveResource(request, requestPath, locations);
+                    }
+
+                    @Override
+                    public String resolveUrlPath(String resourcePath, List<? extends Resource> locations, ResourceResolverChain chain) {
+                        return resourcePath;
+                    }
+                });
         registry.addResourceHandler("/**")
                 .addResourceLocations("classpath:/static/")
                 .resourceChain(false)
