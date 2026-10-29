@@ -58,11 +58,28 @@ public class ModuleUtils {
         }
     }
 
+    public static class DynamicModuleClassLoader extends URLClassLoader {
+        public DynamicModuleClassLoader(ClassLoader parent) {
+            super(new URL[0], parent);
+        }
+
+        @Override
+        public void addURL(URL url) {
+            super.addURL(url);
+        }
+    }
+
+    private static final DynamicModuleClassLoader MODULE_CLASS_LOADER =
+            new DynamicModuleClassLoader(ModuleUtils.class.getClassLoader());
+
+    public static ClassLoader getModuleClassLoader() {
+        return MODULE_CLASS_LOADER;
+    }
+
     static void addClassPathUrl(URL url, ClassLoader classLoader) {
         try {
-            Method method = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
-            method.setAccessible(true);
-            method.invoke(classLoader, url);
+            MODULE_CLASS_LOADER.addURL(url);
+            Thread.currentThread().setContextClassLoader(MODULE_CLASS_LOADER);
         } catch (Exception e) {
             e.printStackTrace();
         }
