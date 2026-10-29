@@ -9,9 +9,9 @@
 	<packaging>jar</packaging>
 
 	<parent>
-		<groupId>com.foreach.across</groupId>
-		<artifactId>across-application-parent</artifactId>
-		<version>5.1.0.RELEASE</version>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.3.5.RELEASE</version>
 		<relativePath/>
 	</parent>
 
@@ -47,20 +47,18 @@
 
 	<properties>
 		<jhipster-dependencies.version>2.0.29</jhipster-dependencies.version>
-		<across.platform.version>3.0.0.M1</across.platform.version>
-		<lombok.version>1.18.22</lombok.version>
+		<spring-framework.version>5.3.9</spring-framework.version>
+		<lombok.version>1.18.38</lombok.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<timestamp>${maven.build.timestamp}</timestamp>
 		<build.revision>development</build.revision>
 		<maven.build.timestamp.format>yyyyMMdd-HHmm</maven.build.timestamp.format>
-		<maven-compiler-plugin.version>3.8.0</maven-compiler-plugin.version>
-		<maven.compiler.target>1.8</maven.compiler.target>
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<mapstruct.version>1.4.2.Final</mapstruct.version>
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<maven.compiler.target>1.8</maven.compiler.target>
+		<maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
+		<maven.compiler.target>17</maven.compiler.target>
+		<maven.compiler.source>17</maven.compiler.source>
+		<mapstruct.version>1.5.5.Final</mapstruct.version>
 		<jjwt.version>0.11.2</jjwt.version>
-		<java.version>1.8</java.version>
+		<java.version>17</java.version>
 		<blaze-persistence.version>1.6.3</blaze-persistence.version>
 		<jpmml.version>1.5.16</jpmml.version>
 	</properties>
@@ -86,8 +84,26 @@
 		</dependency>
 
 		<dependency>
-			<groupId>com.foreach.across.modules</groupId>
-			<artifactId>application-info-module</artifactId>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.liquibase</groupId>
+			<artifactId>liquibase-core</artifactId>
+			<version>3.8.9</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.glassfish.jaxb</groupId>
+			<artifactId>jaxb-runtime</artifactId>
+			<version>2.3.5</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<version>5.3.9</version>
 		</dependency>
 
 		<dependency>
@@ -128,10 +144,6 @@
 			<scope>test</scope>
 		</dependency>
 
-		<dependency>
-			<groupId>com.foreach.across</groupId>
-			<artifactId>across-autoconfigure</artifactId>
-		</dependency>
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
@@ -478,12 +490,6 @@
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-core</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>com.foreach.across</groupId>
-			<artifactId>across-core</artifactId>
-			<version>5.1.0.RELEASE</version>
-			<scope>compile</scope>
-		</dependency>
 
 	</dependencies>
 
@@ -502,12 +508,20 @@
 				<configuration>
 					<skip>false</skip>
 					<includeSystemScope>true</includeSystemScope>
+					<mainClass>org.lamisplus.LamisPlusApplication</mainClass>
 				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>org.springframework</groupId>
+						<artifactId>spring-core</artifactId>
+						<version>5.3.9</version>
+					</dependency>
+				</dependencies>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
-				<version>2.6</version>
+				<version>3.3.0</version>
 				<configuration>
 					<archive>
 						<manifest>
@@ -522,7 +536,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.8.0</version>
+				<version>3.11.0</version>
 				<configuration>
 					<source>${java.version}</source>
 					<target>${java.version}</target>

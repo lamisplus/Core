@@ -8,23 +8,26 @@
 	<version>2.4.0.1</version>
 	<packaging>pom</packaging>
 	<parent>
-		<groupId>com.foreach.across</groupId>
-		<artifactId>across-application-parent</artifactId>
-		<version>5.1.0.RELEASE</version>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.3.5.RELEASE</version>
 		<relativePath/>
 	</parent>
 
 	<properties>
 		<!-- The main class to start by executing "java -jar" -->
 		<start-class>org.lamisplus.LamisPlusApplication</start-class>
+		<java.version>17</java.version>
+		<maven.compiler.source>17</maven.compiler.source>
+		<maven.compiler.target>17</maven.compiler.target>
 	</properties>
 
 	<name>Lamisplus core</name>
 	<description>Lamisplus core</description>
 
 		<modules>
-			<module>starter-module</module>
 			<module>base-module</module>
+			<module>starter-module</module>
 		</modules>
 
 	<build>
