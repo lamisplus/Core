@@ -1,6 +1,5 @@
 package org.lamisplus.modules.base.domain.dto;
 
-import kotlin.collections.ArrayDeque;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -9,6 +8,7 @@ import org.lamisplus.modules.base.domain.entities.*;
 
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -51,7 +51,7 @@ public class UserDTO implements Serializable {
     private Long ipCode;
 
     @ToString.Exclude
-    private transient List<ApplicationUserOrganisationUnit> applicationUserOrganisationUnits = new ArrayDeque<>();
+    private transient List<ApplicationUserOrganisationUnit> applicationUserOrganisationUnits = new ArrayList<>();
 
     private Set<Long> facilityIds = new HashSet<>();
 
