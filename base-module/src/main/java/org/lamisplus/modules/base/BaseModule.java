@@ -2,11 +2,9 @@ package org.lamisplus.modules.base;
 
 import com.foreach.across.core.AcrossModule;
 import com.foreach.across.core.annotations.AcrossDepends;
-import com.foreach.across.core.context.configurer.ComponentScanConfigurer;
 import com.foreach.across.modules.hibernate.jpa.AcrossHibernateJpaModule;
 import com.foreach.across.modules.web.AcrossWebModule;
 
-import com.foreach.across.config.AcrossApplication;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -26,22 +24,6 @@ public class BaseModule extends AcrossModule {
 
     public BaseModule() {
         super ();
-        addApplicationContextConfigurer (
-                new ComponentScanConfigurer (
-                        getClass ().getPackage ().getName () + ".configurer",
-                        getClass ().getPackage ().getName () + ".module",
-                        getClass ().getPackage ().getName () + ".controller",
-                        getClass ().getPackage ().getName () + ".domain",
-                        getClass ().getPackage ().getName () + ".domain.mapper",
-                        getClass ().getPackage ().getName () + ".repositories",
-                        getClass ().getPackage ().getName () + ".service",
-                        getClass ().getPackage ().getName () + ".yml",
-                        getClass ().getPackage ().getName () + ".util",
-                        getClass ().getPackage ().getName () + ".security",
-                        getClass ().getPackage ().getName () + ".interceptor",
-                        getClass ().getPackage ().getName () + ".extensions",
-                        "org.springframework.web.socket"
-                ));
     }
 
     @Override
