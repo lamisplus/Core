@@ -24,11 +24,6 @@
 			<url>https://jitpack.io</url>
 		</repository>
 		<repository>
-			<id>foreach-nexus</id>
-			<name>Foreach nexus</name>
-			<url>https://repository.foreach.be/nexus/repository/public/</url>
-		</repository>
-		<repository>
 			<releases>
 				<enabled>true</enabled>
 			</releases>
