@@ -200,14 +200,22 @@ public class AcrossContext {
             emfBean.afterPropertiesSet();
 
             EntityManagerFactory emf = emfBean.getObject();
-            childCtx.registerBean("entityManagerFactory", EntityManagerFactory.class, () -> emf);
+            childCtx.registerBean("entityManagerFactory", EntityManagerFactory.class, () -> emf, bd -> bd.setPrimary(true));
 
             JpaTransactionManager txManager = new JpaTransactionManager(emf);
             childCtx.registerBean("transactionManager", JpaTransactionManager.class, () -> txManager);
         }
 
-        // 5. Collect packages to scan from ApplicationContextConfigurers
+        // 5. Collect packages to scan (default Across/LAMISPlus subpackages + ApplicationContextConfigurers)
         Set<String> scanPackages = new LinkedHashSet<>();
+        String[] defaultSubpackages = {
+                ".config", ".configurer", ".controllers", ".controller", ".web",
+                ".services", ".service", ".repositories", ".repository",
+                ".domain", ".mapper", ".extensions", ".util", ".utility", ".utils", ".component"
+        };
+        for (String sub : defaultSubpackages) {
+            scanPackages.add(basePackage + sub);
+        }
         for (ApplicationContextConfigurer configurer : module.getApplicationContextConfigurers()) {
             if (configurer != null && configurer.getComponentScanPackages() != null) {
                 for (String pkg : configurer.getComponentScanPackages()) {
@@ -217,9 +225,6 @@ public class AcrossContext {
                     }
                 }
             }
-        }
-        if (scanPackages.isEmpty()) {
-            scanPackages.add(basePackage);
         }
 
         childCtx.scan(scanPackages.toArray(new String[0]));
